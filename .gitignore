@@ -6,3 +6,10 @@ client/package-lock.json
 client/package.json
 client/app.json
 
+client/.vscode/launch.json
+client/.vscode/.react/node_modules%5Cexpo%5CAppEntry.bundle
+client/.vscode/.react/debuggerWorker.js
+client/.vscode/.react/AppEntry.map
+client/.expo/settings.json
+client/.expo/README.md
+client/.expo/packager-info.json
