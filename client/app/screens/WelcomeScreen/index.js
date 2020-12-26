@@ -80,10 +80,11 @@ export default function Welcome({ navigation }) {
                         width: 100,
                     }}>
                         <Text onPress={() => {
-                            carouselRef.current.snapToNext();
-                            if (activeIndex == 2) {
+                            if (activeIndex == 2)
                                 navigation.navigate('Auth');
-                            }
+                            else
+                                carouselRef.current.snapToNext();
+
                         }}
                             style={
                                 [

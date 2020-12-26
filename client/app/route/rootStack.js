@@ -10,12 +10,23 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 
 const AppStack = createStackNavigator(
     {
-        Home: Home
+        Home: {
+            screen: Home,
+            navigationOptions: {
+                headerTransparent: true
+            }
+        }
     }
 );
 const AuthStack = createStackNavigator(
     {
-        Register: Register
+        Register: {
+            screen: Register,
+            navigationOptions: {
+                headerTitle: '',
+                headerTransparent: true
+            }
+        }
     }
 );
 
@@ -37,7 +48,8 @@ export default createAppContainer(createAnimatedSwitchNavigator(
                 />
                 <Transition.In
                     type="fade"
-                    durationMs={500} />
+                    durationMs={500}
+                    interpolation="easeOut" />
             </Transition.Together>
         ),
     }
