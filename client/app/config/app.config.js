@@ -1,8 +1,16 @@
-export const AuthService = {
-    host: 'localhost:',
+// Development Server
+export const HostServer = {
+    host: '192.168.1.104:',
     port: '8080'
 }
 
+// Production Server
+// export const HostServer = {
+//     host: '192.168.1.104:',
+//     port: '8080'
+// }
+
+// Application style configuration
 export const AppStyle = {
     main_color: '#463275',
     sub_main_color: '#DD4095',

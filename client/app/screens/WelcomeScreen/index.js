@@ -1,11 +1,16 @@
-import React, { useState, useRef } from 'react'
-import { StyleSheet, Text, Dimensions, View, Button, TouchableHighlight, TouchableOpacity, Alert } from 'react-native'
-import { AppStyle } from '../../config/app.config'
+import React, { useState, useRef } from 'react';
 import Carousel from 'react-native-snap-carousel';
+import { AppStyle } from '../../config/app.config';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity
+} from 'react-native';
 
-export default function Welcome() {
+export default function Welcome({ navigation }) {
+
     const carouselRef = useRef(null);
-
     const [activeIndex, setActive] = useState(0)
 
     let caraouselData = [
@@ -74,7 +79,18 @@ export default function Welcome() {
                     <TouchableOpacity style={{
                         width: 100,
                     }}>
-                        <Text onPress={() => { carouselRef.current.snapToNext(); }} style={[styles.button, { backgroundColor: AppStyle.sub_main_color }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
+                        <Text onPress={() => {
+                            carouselRef.current.snapToNext();
+                            if (activeIndex == 2) {
+                                navigation.navigate('Auth');
+                            }
+                        }}
+                            style={
+                                [
+                                    styles.button,
+                                    { backgroundColor: AppStyle.sub_main_color }
+                                ]
+                            }>{activeIndex == 0 ? "Start" : "Next"}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
