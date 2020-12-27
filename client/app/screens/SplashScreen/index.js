@@ -1,16 +1,16 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { HostServer } from '../../config/app.config';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { animated, useTransition } from 'react-spring';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 const AnimatedView = animated(View)
-
-var cancelSource;
 
 const api = axios.create({
     baseURL: "http://" + HostServer.host + HostServer.port + "/"
 })
+
+var cancelSource
 
 const Splash = ({ navigation }) => {
 
@@ -34,6 +34,7 @@ const Splash = ({ navigation }) => {
             })
             .catch(error => {
                 if (axios.isCancel(error)) {
+                    // TODO: development only
                     console.log('Request canceled', error.message);
                 } else {
                     if (error.response.status === 401) {

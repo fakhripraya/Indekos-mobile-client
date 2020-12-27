@@ -2,9 +2,11 @@ import React from 'react';
 import Home from '../screens/HomeScreen';
 import Splash from '../screens/SplashScreen';
 import Welcome from '../screens/WelcomeScreen';
-import Register from '../screens/RegisterScreen';
 import { Transition } from 'react-native-reanimated';
 import { createAppContainer } from 'react-navigation';
+import Register from '../screens/RegisterScreen/start';
+import RegisterOtp from '../screens/RegisterScreen/otp';
+import RegisterFinal from '../screens/RegisterScreen/final';
 import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 
@@ -26,6 +28,20 @@ const AuthStack = createStackNavigator(
                 headerTitle: '',
                 headerTransparent: true
             }
+        },
+        RegisterOtp: {
+            screen: RegisterOtp,
+            navigationOptions: {
+                headerTitle: '',
+                headerTransparent: true
+            }
+        },
+        RegisterFinal: {
+            screen: RegisterFinal,
+            navigationOptions: {
+                headerTitle: '',
+                headerTransparent: true
+            }
         }
     }
 );
@@ -42,14 +58,14 @@ export default createAppContainer(createAnimatedSwitchNavigator(
         transition: (
             <Transition.Together>
                 <Transition.Out
-                    type="fade"
+                    type="scale"
                     durationMs={500}
-                    interpolation="easeIn"
+                    interpolation="easeInOut"
                 />
                 <Transition.In
-                    type="fade"
+                    type="scale"
                     durationMs={500}
-                    interpolation="easeOut" />
+                    interpolation="easeInOut" />
             </Transition.Together>
         ),
     }

@@ -10,7 +10,9 @@ import {
 
 export default function Welcome({ navigation }) {
 
+    // Function refs
     const carouselRef = useRef(null);
+    // Function states
     const [activeIndex, setActive] = useState(0)
 
     let caraouselData = [
@@ -64,20 +66,20 @@ export default function Welcome({ navigation }) {
                     ref={carouselRef}
                     layout={"default"}
                     data={caraouselData}
-                    sliderWidth={300} // TODO: change to dynamic
-                    itemWidth={300} // TODO: change to dynamic
+                    sliderWidth={AppStyle.screenSize.width}
+                    itemWidth={AppStyle.screenSize.width}
                     renderItem={_renderItem}
                     onSnapToItem={(index) => {
                         setActive(index);
                     }} />
                 <View style={styles.buttonWrapper}>
                     <TouchableOpacity style={[{
-                        width: 100,
+                        width: AppStyle.screenSize.width / 3,
                     }, activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]}>
                         <Text onPress={() => { carouselRef.current.snapToPrev(); }} style={[styles.button, { backgroundColor: AppStyle.fifth_main_color }]}>Prev</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
-                        width: 100,
+                        width: AppStyle.screenSize.width / 3,
                     }}>
                         <Text onPress={() => {
                             if (activeIndex == 2)
