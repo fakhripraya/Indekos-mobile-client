@@ -44,11 +44,11 @@ export default function Welcome({ navigation }) {
                     <View style={activeIndex == 2 ? styles.dotStyleFlag : styles.dotStyle} />
                 </View>
                 <View>
-                    <Text style={{ fontSize: 30, color: 'white' }}>{item.title}
+                    <Text style={{ fontSize: 30 - (AppStyle.font_scaled_ratio * 30), color: 'white' }}>{item.title}
                         <Text style={{ color: AppStyle.third_main_color }}> {item.sub_title}</Text>
                     </Text>
                     <Text style={[
-                        { fontSize: 30, color: AppStyle.third_main_color },
+                        { fontSize: 30 - (AppStyle.font_scaled_ratio * 30), color: AppStyle.third_main_color },
                         activeIndex == 2 ? { display: 'flex' } : { display: 'none' }
                     ]}>{item.second_sub_title}
                         <Text style={{ color: 'white' }}> {item.second_title}</Text>
@@ -73,27 +73,46 @@ export default function Welcome({ navigation }) {
                         setActive(index);
                     }} />
                 <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={[{
-                        width: AppStyle.screenSize.width / 3,
-                    }, activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]}>
-                        <Text onPress={() => { carouselRef.current.snapToPrev(); }} style={[styles.button, { backgroundColor: AppStyle.fifth_main_color }]}>Prev</Text>
+                    <TouchableOpacity
+                        onPress={() => { carouselRef.current.snapToPrev(); }}
+                        style={[
+                            { width: AppStyle.screenSize.width / 3 },
+                            activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]
+                        }>
+                        <Text
+                            style={
+                                [
+                                    styles.button,
+                                    {
+                                        backgroundColor: AppStyle.fifth_main_color,
+                                        fontSize: 16 - (AppStyle.font_scaled_ratio * 16)
+                                    }
+                                ]
+                            }>Prev</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{
-                        width: AppStyle.screenSize.width / 3,
-                    }}>
-                        <Text onPress={() => {
+                    <TouchableOpacity
+                        onPress={() => {
                             if (activeIndex == 2)
                                 navigation.navigate('Auth');
                             else
                                 carouselRef.current.snapToNext();
 
                         }}
+                        style={{
+                            width: AppStyle.screenSize.width / 3,
+                        }}>
+                        <Text
                             style={
                                 [
                                     styles.button,
-                                    { backgroundColor: AppStyle.sub_main_color }
+                                    {
+                                        backgroundColor: AppStyle.sub_main_color,
+                                        fontSize: 16 - (AppStyle.font_scaled_ratio * 16)
+                                    }
                                 ]
-                            }>{activeIndex == 0 ? "Start" : "Next"}</Text>
+                            }>
+                            {activeIndex == 0 ? "Start" : "Next"}
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>

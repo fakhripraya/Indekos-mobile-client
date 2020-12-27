@@ -1,8 +1,16 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { HostServer } from '../../config/app.config';
-import { animated, useTransition } from 'react-spring';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {
+    animated,
+    useTransition
+} from 'react-spring';
+import {
+    ActivityIndicator,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
 
 const AnimatedView = animated(View)
 

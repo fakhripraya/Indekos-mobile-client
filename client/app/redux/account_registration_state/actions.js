@@ -1,10 +1,10 @@
 import { NEW_ACCOUNT_INPUT } from './types'
 
-export const accountRegistrationChange = (newAcc) => {
+export const accountRegistrationChange = ({ username, password, otp_code }) => {
     return {
         type: NEW_ACCOUNT_INPUT,
-        username: newAcc.username,
-        password: newAcc.password,
-        otp_code: newAcc.otp_code
+        username: username,
+        password: password,
+        otp_code: otp_code,
     }
 }

@@ -1,7 +1,14 @@
 import React from 'react';
 import { AppStyle } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
-import { TextInput, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import {
+    TextInput,
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    TouchableOpacity
+} from 'react-native';
 
 export default function RegisterFinal({ navigation }) {
 
