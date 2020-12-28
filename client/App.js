@@ -6,8 +6,10 @@ import { Provider } from 'react-redux';
 import store from './app/redux/store'
 import PromiseSpinner from './app/promise/promise_tracker'
 
+// set axios withCredentials to true to handle cors
 axios.defaults.withCredentials = true;
 
+// the root of all the applications root
 export default function App() {
   return (
     <Provider store={store}>
@@ -19,14 +21,15 @@ export default function App() {
   );
 }
 
+// the render elements style
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   spinner: {
     flex: 1,
-    justifyContent: 'center',
+    alignSelf: 'center',
     alignContent: 'center',
-    alignSelf: 'center'
+    justifyContent: 'center',
   }
 });

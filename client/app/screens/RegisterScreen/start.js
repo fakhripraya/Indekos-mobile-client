@@ -17,40 +17,44 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+// creates the promised base http client
 const api = axios.create({
     baseURL: "http://" + HostServer.host + HostServer.port + "/"
 })
 
+// Register is the root of registration stack
 export default function Register({ navigation }) {
-    console.log("punya screem ")
-    console.log(AppStyle.screenSize)
-    console.log("punya window")
-    console.log(AppStyle.windowSize)
 
-    // Redux 
+    // Redux dispatch
     const dispatch = useDispatch()
     // Function state
     const [inputValue, setInput] = useState('')
 
     function handleSubmit() {
 
+        // dispatch the accountRegistrationChange actions to store new user credentials  
         dispatch(accountRegistrationChange({ username: inputValue, password: "", otp_code: "" }))
+
+        // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(
-            api.post('/register', { username: inputValue })
+            api.post(
+                '/register',
+                { username: inputValue }
+            )
                 .then(response => {
-                    // TODO: set the state to logged in
-                    console.log(response.status);
-                    navigation.push('RegisterOtp');
+                    if (response.status === 200) {
+                        navigation.push('RegisterOtp');
+                    }
                 })
                 .catch(error => {
                     if (error.response.status !== 200) {
-                        // TODO: delete after development and change to !== 401
                         console.log(error.response.data.message);
                     }
-                }));
-
+                })
+        );
     }
 
+    // Renders the Register screen
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
@@ -87,52 +91,23 @@ export default function Register({ navigation }) {
                                         </View>
                                     </View>
                                     <View style={styles.o2AuthWrapper}>
-                                        <TouchableOpacity style={
-                                            {
-                                                width: AppStyle.screenSize.width / 6,
-                                                marginRight: 5
-                                            }
-                                        }>
-                                            <SocialIcon
-                                                button
-                                                type='google'
-                                            />
+                                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6, marginRight: 5 }}>
+                                            <SocialIcon button type='google' />
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={
-                                            { width: AppStyle.screenSize.width / 6 }
-                                        }>
-                                            <SocialIcon
-                                                button
-                                                type='facebook'
-                                            />
+                                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6 }}>
+                                            <SocialIcon button type='facebook' />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View style={styles.submitBtn}>
-                                    <TouchableOpacity style={
-                                        { width: AppStyle.screenSize.width / 3 }
-                                    }
-                                        onPress={() =>
-                                            handleSubmit()
-                                        }>
-                                        <Text
-                                            style={
-                                                [
-                                                    styles.button,
-                                                    {
-                                                        backgroundColor: AppStyle.sub_main_color,
-                                                        fontSize: 16 - (AppStyle.font_scaled_ratio * 16),
-                                                    }
-                                                ]
-                                            }>
+                                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
+                                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>
                                             Submit
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.loginBtn}>
-                                    <Text style={{
-                                        fontSize: 14 - (AppStyle.font_scaled_ratio * 12),
-                                    }} >
+                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 12) }} >
                                         Have an account ? <Text style={{ color: AppStyle.fourt_main_color }}>login</Text>
                                     </Text>
                                 </View>
@@ -145,11 +120,12 @@ export default function Register({ navigation }) {
     )
 }
 
+// the render elements style
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     backgroundContainer: {
         flex: 0.40,
@@ -160,24 +136,24 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     background_1: {
+        position: 'absolute',
+        alignSelf: 'center',
+        borderRadius: 200 / 2,
         height: AppStyle.screenSize.height * 0.3,
         width: AppStyle.screenSize.width * 0.6,
         top: (AppStyle.screenSize.height * 0.2),
         right: (AppStyle.screenSize.width * 0.70),
-        position: 'absolute',
-        alignSelf: 'center',
-        borderRadius: 200 / 2,
-        backgroundColor: AppStyle.fourt_main_color
+        backgroundColor: AppStyle.fourt_main_color,
     },
     background_2: {
-        height: AppStyle.screenSize.height * 0.3,
-        width: AppStyle.screenSize.width * 0.9,
-        transform: [{ scaleX: 2 }, { scaleY: 3 }, { rotate: '5deg' }],
-        left: (AppStyle.screenSize.width) * 0.6,
-        bottom: (AppStyle.screenSize.height * 0.375),
         position: 'absolute',
         borderRadius: 300 / 2,
-        backgroundColor: AppStyle.main_color
+        height: AppStyle.screenSize.height * 0.3,
+        width: AppStyle.screenSize.width * 0.9,
+        left: (AppStyle.screenSize.width) * 0.6,
+        bottom: (AppStyle.screenSize.height * 0.375),
+        backgroundColor: AppStyle.main_color,
+        transform: [{ scaleX: 2 }, { scaleY: 3 }, { rotate: '5deg' }],
     },
     wrapper: {
         flex: 1,
@@ -186,65 +162,65 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     inputContainer: {
-        maxWidth: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        maxHeight: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.5),
         flex: 7,
+        elevation: 5,
+        borderRadius: 15,
         paddingLeft: '5%',
         paddingRight: '5%',
         alignItems: 'center',
-        justifyContent: 'space-around',
-        elevation: 5,
-        borderRadius: 15,
         backgroundColor: 'white',
-        bottom: AppStyle.screenSize.height / 4.5
+        justifyContent: 'space-around',
+        bottom: AppStyle.screenSize.height / 4.5,
+        maxWidth: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
+        maxHeight: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.5),
     },
     warnMessage: {
-        maxWidth: AppStyle.screenSize.width * 0.75,
-        maxHeight: AppStyle.screenSize.height * 0.25,
-        width: AppStyle.screenSize.width * 0.75,
         paddingTop: '5%',
-        backgroundColor: AppStyle.fourt_main_color,
-        paddingBottom: '5%',
-        justifyContent: 'center',
-        alignItems: 'center',
         borderRadius: 15,
+        paddingBottom: '5%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: AppStyle.screenSize.width * 0.75,
+        maxWidth: AppStyle.screenSize.width * 0.75,
+        backgroundColor: AppStyle.fourt_main_color,
+        maxHeight: AppStyle.screenSize.height * 0.25,
     },
     authInput: {
+        height: 45,
+        borderWidth: 1,
+        borderRadius: 7.5,
+        borderColor: 'gray',
+        flexDirection: 'row',
         alignSelf: 'flex-start',
         maxWidth: AppStyle.screenSize.width * 0.75,
         maxHeight: AppStyle.screenSize.height * 0.10,
-        height: 45,
-        borderColor: 'gray',
-        borderWidth: 1,
-        borderRadius: 7.5,
-        flexDirection: 'row',
     },
     o2AuthWrapper: {
         flexDirection: 'row',
     },
     submitBtn: {
         flex: 1,
-        bottom: AppStyle.screenSize.height / 7
+        bottom: AppStyle.screenSize.height / 7,
     },
     loginBtn: {
         flex: 1,
         flexDirection: 'row',
-        bottom: AppStyle.screenSize.height / 9
+        bottom: AppStyle.screenSize.height / 9,
     },
     button: {
         paddingTop: 15,
-        paddingBottom: 15,
-        color: '#fff',
-        textAlign: 'center',
+        color: 'white',
         borderRadius: 50,
-        borderColor: '#fff'
+        paddingBottom: 15,
+        textAlign: 'center',
+        borderColor: 'white',
     },
     authButton: {
         paddingTop: 10,
-        paddingBottom: 10,
-        color: '#fff',
-        textAlign: 'center',
+        color: 'white',
         borderRadius: 10,
-        borderColor: '#fff'
+        paddingBottom: 10,
+        textAlign: 'center',
+        borderColor: 'white',
     }
 })

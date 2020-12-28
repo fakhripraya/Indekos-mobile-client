@@ -1,6 +1,13 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
-import { SocialIcon } from 'react-native-elements';
+import { SocialIcon, withTheme } from 'react-native-elements';
+import { HostServer } from '../../config/app.config';
+import { trackPromise } from 'react-promise-tracker'
+import {
+    accountRegistrationChange
+} from '../../redux'
 import {
     TextInput,
     StyleSheet,
@@ -10,12 +17,48 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-export default function RegisterFinal({ navigation }) {
+// creates the promised base http client
+const api = axios.create({
+    baseURL: "http://" + HostServer.host + HostServer.port + "/"
+})
 
+// Register is the root of registration stack
+export default function Register({ navigation }) {
+
+    // Redux dispatch
+    const dispatch = useDispatch()
+    // Function state
+    const [inputValue, setInput] = useState('')
+
+    function handleSubmit() {
+
+        // dispatch the accountRegistrationChange actions to store new user credentials  
+        dispatch(accountRegistrationChange({ username: inputValue, password: "", otp_code: "" }))
+
+        // triggers the http post request to /register url in the authentication service to process the registration
+        trackPromise(
+            api.post(
+                '/register',
+                { username: inputValue }
+            )
+                .then(response => {
+                    if (response.status === 200) {
+                        navigation.push('RegisterOtp');
+                    }
+                })
+                .catch(error => {
+                    if (error.response.status !== 200) {
+                        console.log(error.response.data.message);
+                    }
+                })
+        );
+    }
+
+    // Renders the Register screen
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
-                <View style={{ width: '100%', height: AppStyle.windowSize.height }}>
+                <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
                     <View style={styles.container}>
                         <View style={styles.backgroundContainer} >
                             <View style={styles.background_1} />
@@ -25,59 +68,46 @@ export default function RegisterFinal({ navigation }) {
                             <View style={styles.wrapper}>
                                 <View style={styles.inputContainer}>
                                     <View style={styles.warnMessage}>
-                                        <Text style={{ textAlign: 'center', color: 'white' }} >
+                                        <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
                                             Make sure you have whatsapp
                                         </Text>
-                                        <Text style={{ textAlign: 'center', color: 'white' }} >
+                                        <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
                                             account when you logging in with
                                         </Text>
-                                        <Text style={{ textAlign: 'center', color: 'white' }} >
+                                        <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
                                             phone number
                                         </Text>
                                     </View>
                                     <View>
-                                        <Text style={{ alignSelf: 'flex-start', bottom: 5 }}>
+                                        <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), alignSelf: 'flex-start', bottom: 5 }}>
                                             Phone / Email
                                         </Text>
                                         <View style={styles.authInput}>
-                                            <TextInput textAlign="center" style={{ flex: 1, fontSize: 16 }} />
+                                            <TextInput
+                                                onChangeText={(newVal) => setInput(newVal)}
+                                                value={inputValue}
+                                                textAlign="center"
+                                                style={{ flex: 1, fontSize: 16 }} />
                                         </View>
                                     </View>
                                     <View style={styles.o2AuthWrapper}>
-                                        <TouchableOpacity style={{
-                                            width: AppStyle.screenSize.width / 6,
-                                            marginRight: 5
-                                        }}>
-                                            <SocialIcon
-                                                button
-                                                type='google'
-                                            />
+                                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6, marginRight: 5 }}>
+                                            <SocialIcon button type='google' />
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={{
-                                            width: AppStyle.screenSize.width / 6,
-                                        }}>
-                                            <SocialIcon
-                                                button
-                                                type='facebook'
-                                            />
+                                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6 }}>
+                                            <SocialIcon button type='facebook' />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View style={styles.submitBtn}>
-                                    <TouchableOpacity style={{
-                                        width: AppStyle.screenSize.width / 3,
-                                    }}>
-                                        <Text
-                                            style={
-                                                [
-                                                    styles.button,
-                                                    { backgroundColor: AppStyle.sub_main_color }
-                                                ]
-                                            }>Submit</Text>
+                                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
+                                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>
+                                            Submit
+                                        </Text>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.loginBtn}>
-                                    <Text >
+                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 12) }} >
                                         Have an account ? <Text style={{ color: AppStyle.fourt_main_color }}>login</Text>
                                     </Text>
                                 </View>
@@ -86,14 +116,15 @@ export default function RegisterFinal({ navigation }) {
                     </View>
                 </View>
             </ScrollView>
-        </View>
-
+        </View >
     )
 }
 
+// the render elements style
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
         backgroundColor: 'white'
     },
     backgroundContainer: {
@@ -105,88 +136,91 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     background_1: {
-        height: 100,
-        width: 100,
-        top: (AppStyle.screenSize.height * 0.45) - 100,
-        transform: [{ scale: AppStyle.screenSize.scale / 2 }],
         position: 'absolute',
-        alignSelf: 'flex-start',
-        borderRadius: 100 / 2,
+        alignSelf: 'center',
+        borderRadius: 200 / 2,
+        height: AppStyle.screenSize.height * 0.3,
+        width: AppStyle.screenSize.width * 0.6,
+        top: (AppStyle.screenSize.height * 0.2),
+        right: (AppStyle.screenSize.width * 0.70),
         backgroundColor: AppStyle.fourt_main_color
     },
     background_2: {
-        height: 100,
-        width: 100,
-        transform: [{ scale: AppStyle.screenSize.scale * 2 }],
-        left: (AppStyle.screenSize.width) * 0.8,
-        bottom: (AppStyle.screenSize.height * 0.45),
         position: 'absolute',
-        alignSelf: 'flex-end',
-        borderRadius: 100 / 2,
-        backgroundColor: AppStyle.main_color
+        borderRadius: 300 / 2,
+        height: AppStyle.screenSize.height * 0.3,
+        width: AppStyle.screenSize.width * 0.9,
+        left: (AppStyle.screenSize.width) * 0.6,
+        bottom: (AppStyle.screenSize.height * 0.375),
+        backgroundColor: AppStyle.main_color,
+        transform: [{ scaleX: 2 }, { scaleY: 3 }, { rotate: '5deg' }]
     },
     wrapper: {
         flex: 1,
         bottom: 20,
         alignItems: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     inputContainer: {
         flex: 7,
+        elevation: 5,
+        borderRadius: 15,
         paddingLeft: '5%',
         paddingRight: '5%',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
-        elevation: 5,
-        borderRadius: 15,
         backgroundColor: 'white',
-        bottom: AppStyle.screenSize.height / 5
+        justifyContent: 'space-around',
+        bottom: AppStyle.screenSize.height / 4.5,
+        maxWidth: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
+        maxHeight: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.5),
     },
     warnMessage: {
         paddingTop: '5%',
-        backgroundColor: AppStyle.fourt_main_color,
-        paddingBottom: '5%',
-        paddingRight: '13%',
-        paddingLeft: '13%',
-        justifyContent: 'center',
-        alignItems: 'center',
         borderRadius: 15,
+        paddingBottom: '5%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: AppStyle.screenSize.width * 0.75,
+        maxWidth: AppStyle.screenSize.width * 0.75,
+        backgroundColor: AppStyle.fourt_main_color,
+        maxHeight: AppStyle.screenSize.height * 0.25,
     },
     authInput: {
-        alignSelf: 'flex-start',
-        width: '90%',
         height: 45,
-        borderColor: 'gray',
         borderWidth: 1,
         borderRadius: 7.5,
+        borderColor: 'gray',
         flexDirection: 'row',
+        alignSelf: 'flex-start',
+        maxWidth: AppStyle.screenSize.width * 0.75,
+        maxHeight: AppStyle.screenSize.height * 0.10,
     },
     o2AuthWrapper: {
         flexDirection: 'row',
     },
     submitBtn: {
         flex: 1,
-        bottom: AppStyle.screenSize.height / 6
+        bottom: AppStyle.screenSize.height / 7
     },
     loginBtn: {
         flex: 1,
         flexDirection: 'row',
-        bottom: AppStyle.screenSize.height / 8
+        bottom: AppStyle.screenSize.height / 9
     },
     button: {
-        paddingTop: 10,
-        paddingBottom: 10,
-        color: '#fff',
-        textAlign: 'center',
+        paddingTop: 15,
+        color: 'white',
         borderRadius: 50,
-        borderColor: '#fff'
+        paddingBottom: 15,
+        textAlign: 'center',
+        borderColor: 'white'
     },
     authButton: {
         paddingTop: 10,
-        paddingBottom: 10,
-        color: '#fff',
-        textAlign: 'center',
+        color: 'white',
         borderRadius: 10,
-        borderColor: '#fff'
+        paddingBottom: 10,
+        textAlign: 'center',
+        borderColor: 'white'
     }
 })

@@ -9,7 +9,10 @@ import {
 
 const AnimatedView = animated(View)
 
+// PromiseSpinner is a spinner that triggers while the application doang the http request
 const PromiseSpinner = (props) => {
+
+    // Function Hooks
     const { promiseInProgress } = usePromiseTracker();
     const transitions = useTransition(null, null, {
         from: { opacity: 0 },
@@ -17,6 +20,8 @@ const PromiseSpinner = (props) => {
         leave: { opacity: 0 },
         config: { duration: 3000 }
     })
+
+    // Renders the Promise Spinner component
     return transitions.map(({ key, props }) =>
         promiseInProgress &&
         <AnimatedView key={key} style={[props, styles.container]}>
@@ -25,6 +30,7 @@ const PromiseSpinner = (props) => {
     )
 }
 
+// the render elements style
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',

@@ -10,6 +10,7 @@ import RegisterFinal from '../screens/RegisterScreen/final';
 import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 
+// AppStack is the application main stack that roots on the home page
 const AppStack = createStackNavigator(
     {
         Home: {
@@ -20,7 +21,9 @@ const AppStack = createStackNavigator(
         }
     }
 );
-const AuthStack = createStackNavigator(
+
+// RegistrationStack is the application registration stack that roots on the register page
+const RegistrationStack = createStackNavigator(
     {
         Register: {
             screen: Register,
@@ -48,10 +51,10 @@ const AuthStack = createStackNavigator(
 
 export default createAppContainer(createAnimatedSwitchNavigator(
     {
-        Splash: Splash,
-        Welcome: Welcome,
-        Auth: AuthStack,
-        App: AppStack
+        Splash: Splash, // Shows application splash screen as the root
+        Welcome: Welcome, // Shows application welcome screen 
+        Registration: RegistrationStack, // Shows application registration stack
+        App: AppStack // Shows application main stack
     },
     {
         initialRouteName: 'Splash',

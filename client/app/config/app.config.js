@@ -1,12 +1,12 @@
 import { Dimensions } from 'react-native';
 
-// Development Server
+// Development server
 export const HostServer = {
     host: '192.168.1.104:',
     port: '8080'
 }
 
-// Production Server
+// Production server
 // export const HostServer = {
 //     host: '192.168.1.104:',
 //     port: '8080'

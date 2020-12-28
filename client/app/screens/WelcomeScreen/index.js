@@ -8,6 +8,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+// Welcome is the root of Welcome stack
 export default function Welcome({ navigation }) {
 
     // Function refs
@@ -15,6 +16,7 @@ export default function Welcome({ navigation }) {
     // Function states
     const [activeIndex, setActive] = useState(0)
 
+    // the fixed data for the carousel view
     let caraouselData = [
         {
             title: "Find your",
@@ -35,6 +37,7 @@ export default function Welcome({ navigation }) {
         },
     ]
 
+    // Renders the elements of the carousel view
     function _renderItem({ item, index }) {
         return (
             <View style={styles.textWrapper}>
@@ -59,6 +62,7 @@ export default function Welcome({ navigation }) {
         )
     }
 
+    // Renders the elements of the Welcome screen
     return (
         <View style={styles.container}>
             <View style={styles.wrapper}>
@@ -69,9 +73,8 @@ export default function Welcome({ navigation }) {
                     sliderWidth={AppStyle.screenSize.width}
                     itemWidth={AppStyle.screenSize.width}
                     renderItem={_renderItem}
-                    onSnapToItem={(index) => {
-                        setActive(index);
-                    }} />
+                    onSnapToItem={(index) => { setActive(index) }}
+                />
                 <View style={styles.buttonWrapper}>
                     <TouchableOpacity
                         onPress={() => { carouselRef.current.snapToPrev(); }}
@@ -79,40 +82,18 @@ export default function Welcome({ navigation }) {
                             { width: AppStyle.screenSize.width / 3 },
                             activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]
                         }>
-                        <Text
-                            style={
-                                [
-                                    styles.button,
-                                    {
-                                        backgroundColor: AppStyle.fifth_main_color,
-                                        fontSize: 16 - (AppStyle.font_scaled_ratio * 16)
-                                    }
-                                ]
-                            }>Prev</Text>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>Prev</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
                             if (activeIndex == 2)
-                                navigation.navigate('Auth');
+                                navigation.navigate('Registration');
                             else
                                 carouselRef.current.snapToNext();
 
                         }}
-                        style={{
-                            width: AppStyle.screenSize.width / 3,
-                        }}>
-                        <Text
-                            style={
-                                [
-                                    styles.button,
-                                    {
-                                        backgroundColor: AppStyle.sub_main_color,
-                                        fontSize: 16 - (AppStyle.font_scaled_ratio * 16)
-                                    }
-                                ]
-                            }>
-                            {activeIndex == 0 ? "Start" : "Next"}
-                        </Text>
+                        style={{ width: AppStyle.screenSize.width / 3 }}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -120,55 +101,56 @@ export default function Welcome({ navigation }) {
     )
 }
 
+// the render elements style
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: AppStyle.main_color,
-        justifyContent: 'flex-end',
         alignItems: 'center',
+        justifyContent: 'flex-end',
+        backgroundColor: AppStyle.main_color,
     },
     wrapper: {
         flex: 0.6,
-        height: '100%',
         width: '100%',
-        justifyContent: 'center',
+        height: '100%',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     textWrapper: {
         flex: 1,
         padding: 20,
-        justifyContent: 'space-between',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     buttonWrapper: {
-        width: '100%',
         flex: 1,
+        top: 30,
+        width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-around',
         alignItems: 'center',
-        top: 30
+        justifyContent: 'space-around',
     },
     dotStyle: {
-        marginRight: 10,
-        height: 10,
         width: 10,
+        height: 10,
+        marginRight: 10,
         borderRadius: 1000,
         backgroundColor: 'white',
     },
     dotStyleFlag: {
-        marginRight: 10,
-        transform: [{ scaleX: 2 }],
-        height: 10,
         width: 10,
+        height: 10,
+        marginRight: 10,
         borderRadius: 1000,
+        transform: [{ scaleX: 2 }],
         backgroundColor: AppStyle.sub_main_color,
     },
     button: {
+        color: 'white',
         paddingTop: 10,
-        paddingBottom: 10,
-        color: '#fff',
-        textAlign: 'center',
         borderRadius: 50,
-        borderColor: '#fff'
+        paddingBottom: 10,
+        textAlign: 'center',
+        borderColor: 'white',
     }
 });
