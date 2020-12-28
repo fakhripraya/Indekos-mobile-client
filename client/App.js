@@ -4,6 +4,7 @@ import store from './app/redux/store';
 import { Provider } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 import AppStack from './app/route/app_stack.js';
+import LoginStack from './app/route/login_stack';
 import SplashStack from './app/route/splash_stack';
 import WelcomeStack from './app/route/welcome_stack';
 import PromiseSpinner from './app/promise/promise_tracker';
@@ -30,8 +31,8 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <RootStack.Screen
-              name="AppStack"
-              component={AppStack}
+              name="WelcomeStack"
+              component={WelcomeStack}
               options={{ headerShown: false }}
             />
             <RootStack.Screen
@@ -40,8 +41,13 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <RootStack.Screen
-              name="WelcomeStack"
-              component={WelcomeStack}
+              name="LoginStack"
+              component={LoginStack}
+              options={{ headerShown: false }}
+            />
+            <RootStack.Screen
+              name="AppStack"
+              component={AppStack}
               options={{ headerShown: false }}
             />
           </RootStack.Navigator>

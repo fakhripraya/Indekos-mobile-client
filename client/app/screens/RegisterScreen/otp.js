@@ -48,7 +48,7 @@ export default function Register({ navigation }) {
             )
                 .then(response => {
                     if (response.status === 200) {
-                        navigation.push('RegisterOtp');
+                        navigation.push('RegisterFinal');
                     }
                 })
                 .catch(error => {
@@ -110,7 +110,7 @@ export default function Register({ navigation }) {
                                     </View>
                                 </View>
                                 <Text style={{ flex: 0.15, color: 'grey', alignSelf: 'center', fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }} >
-                                    Haven't receive a code? <Text style={{ color: AppStyle.fourt_main_color }}>Resend again</Text>
+                                    Haven't receive a code? <Text style={{ color: AppStyle.fourt_main_color }}>Resend Again</Text>
                                 </Text>
                             </View>
                             <View style={styles.submitBtn}>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.45,
+        top: AppStyle.screenSize.height * 0.4675,
     },
     inputContainer: {
         flex: 3,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         bottom: AppStyle.screenSize.height / 4.5,
         maxWidth: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        maxHeight: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.5),
+        maxHeight: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.55),
     },
     otpWrapper: {
         flex: 0.6,

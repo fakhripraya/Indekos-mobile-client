@@ -22,8 +22,8 @@ const api = axios.create({
     baseURL: "http://" + HostServer.host + HostServer.port + "/"
 })
 
-// Register is the root of registration stack
-export default function Register({ navigation }) {
+// Login is the root of Login stack
+export default function Login({ navigation }) {
 
     // Redux dispatch
     const dispatch = useDispatch()
@@ -56,7 +56,7 @@ export default function Register({ navigation }) {
         );
     }
 
-    // Renders the Register screen
+    // Renders the Login screen
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
@@ -69,23 +69,26 @@ export default function Register({ navigation }) {
                         <View style={styles.backgroundContainer_2} />
                         <View style={styles.wrapper}>
                             <View style={styles.inputContainer}>
-                                <View style={styles.warnMessage}>
-                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
-                                        Make sure you have whatsapp
-                                        </Text>
-                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
-                                        account when you registering your
-                                        </Text>
-                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
-                                        phone number
-                                        </Text>
+                                <View style={styles.authInputWrapper}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 14 - (AppStyle.font_scaled_ratio * 14), alignSelf: 'flex-start', bottom: 5 }}>
+                                        Username
+                                    </Text>
+                                    <View style={styles.authInput}>
+                                        <TextInput
+                                            secureTextEntry={true}
+                                            onChangeText={(newVal) => setInput(newVal)}
+                                            value={inputValue}
+                                            textAlign="left"
+                                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
+                                    </View>
                                 </View>
                                 <View style={styles.authInputWrapper}>
                                     <Text style={{ fontWeight: 'bold', fontSize: 14 - (AppStyle.font_scaled_ratio * 14), alignSelf: 'flex-start', bottom: 5 }}>
-                                        Phone / Email
-                                        </Text>
+                                        Password
+                                    </Text>
                                     <View style={styles.authInput}>
                                         <TextInput
+                                            secureTextEntry={true}
                                             onChangeText={(newVal) => setInput(newVal)}
                                             value={inputValue}
                                             textAlign="left"
@@ -110,7 +113,7 @@ export default function Register({ navigation }) {
                             </View>
                             <View style={styles.loginBtn}>
                                 <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 12) }} >
-                                    Have an account ? <Text style={{ color: AppStyle.fourt_main_color }}>Login</Text>
+                                    Forgot Password? <Text style={{ color: AppStyle.fourt_main_color }}>Click Here</Text>
                                 </Text>
                             </View>
                         </View>
@@ -161,10 +164,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.38,
+        top: AppStyle.screenSize.height * 0.4675,
     },
     inputContainer: {
-        flex: 7,
+        flex: 3,
         elevation: 5,
         borderRadius: 15,
         paddingTop: '5%',
@@ -174,28 +177,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         justifyContent: 'space-evenly',
-        bottom: AppStyle.screenSize.height / 4.5,
         width: AppStyle.screenSize.width * 0.95,
+        bottom: AppStyle.screenSize.height / 4.5,
         maxWidth: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
         maxHeight: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.5),
     },
-    warnMessage: {
-        paddingTop: '5%',
-        borderRadius: 15,
-        paddingBottom: '5%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        backgroundColor: AppStyle.fourt_main_color,
-        maxHeight: AppStyle.screenSize.height * 0.25,
-    },
     authInputWrapper: {
-        width: '100%',
         marginTop: '5%',
-        marginBottom: '5%'
+        marginBottom: '5%',
     },
     authInput: {
-        width: '100%',
         height: 45,
         borderWidth: 1,
         borderRadius: 7.5,
