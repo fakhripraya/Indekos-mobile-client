@@ -33,19 +33,19 @@ const PromiseSpinner = (props) => {
 // the render elements style
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
-        position: 'absolute',
-        height: 100,
         width: 100,
+        height: 100,
         alignSelf: 'center',
+        position: 'absolute',
         alignContent: 'center',
         justifyContent: 'center',
+        backgroundColor: 'white',
     },
     spinner: {
-        position: 'absolute',
-        height: 100,
         width: 100,
-        alignSelf: 'center'
+        height: 100,
+        alignSelf: 'center',
+        position: 'absolute',
     }
 });
 
