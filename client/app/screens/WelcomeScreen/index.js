@@ -87,7 +87,7 @@ export default function Welcome({ navigation }) {
                     <TouchableOpacity
                         onPress={() => {
                             if (activeIndex == 2)
-                                navigation.navigate('Registration');
+                                navigation.navigate('RegistrationStack');
                             else
                                 carouselRef.current.snapToNext();
 

@@ -47,7 +47,7 @@ const Splash = ({ navigation }) => {
                 if (response.status === 200) {
                     // TODO: set the state to logged in
                     console.log(response.status);
-                    navigation.navigate('App');
+                    navigation.navigate('AppStack');
                 }
             })
             .catch(error => {
@@ -58,7 +58,7 @@ const Splash = ({ navigation }) => {
                     if (error.response.status === 401) {
                         // TODO: delete after development and change to !== 401
                         console.log("unauthorized");
-                        navigation.navigate('Welcome');
+                        navigation.navigate('WelcomeStack');
                     }
                     else
                         console.log(error.message); // TODO: development only, delete when development done
