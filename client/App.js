@@ -17,12 +17,11 @@ const RootStack = createStackNavigator();
 // set axios withCredentials to true to handle cors
 axios.defaults.withCredentials = true;
 
-// the root of all the applications root
+// the root of all the applications stack
 export default function App() {
   return (
     <Provider store={store}>
       <View style={styles.container}>
-        {/* <RootNavigator /> */}
         <NavigationContainer>
           <RootStack.Navigator initialRouteName="SplashStack">
             <RootStack.Screen

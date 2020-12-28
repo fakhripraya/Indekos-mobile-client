@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
 import {
@@ -36,6 +36,12 @@ export default function Welcome({ navigation }) {
             text: "Have an account?",
         },
     ]
+
+    // event before component mount/update/leave
+    useEffect(() => navigation.addListener('beforeRemove', (e) => {
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+    }), [navigation]);
 
     // Renders the elements of the carousel view
     function _renderItem({ item, index }) {
