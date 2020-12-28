@@ -48,6 +48,7 @@ export default function Register({ navigation }) {
                 })
                 .catch(error => {
                     if (error.response.status !== 200) {
+                        // TODO: development only, delete when development done
                         console.log(error.response.data.message);
                     }
                 })

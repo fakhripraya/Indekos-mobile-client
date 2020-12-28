@@ -1,4 +1,5 @@
 import React from 'react';
+import { Easing } from 'react-native';
 import Home from '../screens/HomeScreen';
 import Splash from '../screens/SplashScreen';
 import Welcome from '../screens/WelcomeScreen';
@@ -9,6 +10,26 @@ import RegisterOtp from '../screens/RegisterScreen/otp';
 import RegisterFinal from '../screens/RegisterScreen/final';
 import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
+
+const openConfig = {
+    animation: 'timing',
+    config: {
+        stiffness: 1000,
+        damping: 50,
+        mass: 3,
+        overshootClamping: false,
+        restDisplacementThreshold: 0.01,
+        restSpeedThreshold: 0.01,
+    },
+};
+
+const closeConfig = {
+    animation: 'timing',
+    config: {
+        duration: 500,
+        easing: Easing.linear
+    },
+};
 
 // AppStack is the application main stack that roots on the home page
 const AppStack = createStackNavigator(
@@ -29,23 +50,26 @@ const RegistrationStack = createStackNavigator(
             screen: Register,
             navigationOptions: {
                 headerTitle: '',
-                headerTransparent: true
-            }
+                headerTransparent: true,
+            },
         },
         RegisterOtp: {
             screen: RegisterOtp,
             navigationOptions: {
                 headerTitle: '',
-                headerTransparent: true
+                headerTransparent: true,
             }
         },
         RegisterFinal: {
             screen: RegisterFinal,
             navigationOptions: {
                 headerTitle: '',
-                headerTransparent: true
-            }
+                headerTransparent: true,
+            },
         }
+    },
+    {
+        initialRouteName: 'Register'
     }
 );
 
@@ -61,13 +85,13 @@ export default createAppContainer(createAnimatedSwitchNavigator(
         transition: (
             <Transition.Together>
                 <Transition.Out
-                    type="scale"
-                    durationMs={500}
+                    type="fade"
+                    durationMs={300}
                     interpolation="easeInOut"
                 />
                 <Transition.In
-                    type="scale"
-                    durationMs={500}
+                    type="fade"
+                    durationMs={300}
                     interpolation="easeInOut" />
             </Transition.Together>
         ),

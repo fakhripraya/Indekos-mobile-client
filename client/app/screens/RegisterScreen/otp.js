@@ -38,7 +38,7 @@ export default function Register({ navigation }) {
         // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(
             api.post(
-                '/register',
+                '/register/check',
                 { username: inputValue }
             )
                 .then(response => {

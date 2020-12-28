@@ -1,10 +1,13 @@
 import React from 'react';
+import { AppStyle } from '../config/app.config';
 import { animated, useTransition } from 'react-spring'
 import { usePromiseTracker } from "react-promise-tracker";
 import {
-    ActivityIndicator,
     View,
-    StyleSheet
+    Text,
+    Modal,
+    StyleSheet,
+    ActivityIndicator,
 } from 'react-native';
 
 const AnimatedView = animated(View)
@@ -25,7 +28,16 @@ const PromiseSpinner = (props) => {
     return transitions.map(({ key, props }) =>
         promiseInProgress &&
         <AnimatedView key={key} style={[props, styles.container]}>
-            <ActivityIndicator style={styles.spinner} size="large" color="#0000ff" />
+            <Modal
+                animationType="fade"
+                transparent={true}
+                style={styles.modal}
+            >
+                <View style={styles.spinner}>
+                    <ActivityIndicator size="large" color={AppStyle.main_color} />
+                    <Text >Loading...</Text>
+                </View>
+            </Modal>
         </AnimatedView>
     )
 }
@@ -33,20 +45,23 @@ const PromiseSpinner = (props) => {
 // the render elements style
 const styles = StyleSheet.create({
     container: {
-        width: 100,
-        height: 100,
-        alignSelf: 'center',
         position: 'absolute',
-        alignContent: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
+    },
+    modal: {
+        flex: 1,
     },
     spinner: {
-        width: 100,
-        height: 100,
-        alignSelf: 'center',
-        position: 'absolute',
-    }
+        flex: 1,
+        elevation: 5,
+        alignItems: 'center',
+        borderRadius: 50 / 2,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        maxWidth: (AppStyle.screenSize.width * 0.33),
+        maxHeight: (AppStyle.screenSize.height * 0.2),
+        left: (AppStyle.screenSize.width - (AppStyle.screenSize.width / 2)) - (AppStyle.screenSize.width * 0.167),
+        top: (AppStyle.screenSize.height - (AppStyle.screenSize.height / 2)) - (AppStyle.screenSize.height * 0.15),
+    },
 });
 
 export default PromiseSpinner;

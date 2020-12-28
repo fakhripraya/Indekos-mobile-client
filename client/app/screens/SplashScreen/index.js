@@ -61,7 +61,7 @@ const Splash = ({ navigation }) => {
                         navigation.navigate('Welcome');
                     }
                     else
-                        console.log(error.message);
+                        console.log(error.message); // TODO: development only, delete when development done
                 }
             });
         return () => {
