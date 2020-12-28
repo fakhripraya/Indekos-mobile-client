@@ -105,7 +105,7 @@ export default function Register({ navigation }) {
                             </View>
                             <View style={styles.loginBtn}>
                                 <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 12) }} >
-                                    Have an account ? <Text style={{ color: AppStyle.fourt_main_color }}>Login</Text>
+                                    Have an account ? <Text onPress={() => { navigation.navigate('LoginStack'); }} style={{ color: AppStyle.fourt_main_color }}>Login</Text>
                                 </Text>
                             </View>
                         </View>
