@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
         top: AppStyle.screenSize.height * 0.4675,
     },
     inputContainer: {
-        flex: 3,
         elevation: 5,
         borderRadius: 15,
         paddingLeft: '5%',
@@ -185,8 +184,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'space-evenly',
         bottom: AppStyle.screenSize.height / 4.5,
-        maxWidth: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        maxHeight: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.55),
+        width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
+        height: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.662),
     },
     otpWrapper: {
         flex: 0.6,
