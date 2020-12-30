@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import React from 'react'
 import { AppStyle } from '../../config/app.config';
-import { FirstBackground } from '../Backgrounds/CreateUserBackground'
+import { FirstBackground } from '../../components/Backgrounds/CreateUserBackground'
 
 export default function FillName({ navigation }) {
 

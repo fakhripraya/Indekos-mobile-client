@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker'
 import { HostServer } from '../../config/app.config';
-import Background from '../Backgrounds/RegistrationBackground'
+import Background from '../../components/Backgrounds/RegistrationBackground'
 
 // creates the promised base http client
 const api = axios.create({

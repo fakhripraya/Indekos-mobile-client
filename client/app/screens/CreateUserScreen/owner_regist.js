@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppStyle } from '../../config/app.config';
 import { StyleSheet, Text, View } from 'react-native'
-import { SecondBackground } from '../Backgrounds/CreateUserBackground'
+import { SecondBackground } from '../../components/Backgrounds/CreateUserBackground'
 
 export default function Agreement() {
     return (
