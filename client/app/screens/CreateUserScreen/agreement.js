@@ -2,7 +2,7 @@ import React from 'react'
 import { AppStyle } from '../../config/app.config';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from 'react-native'
-import { SecondBackground } from '../../components/Backgrounds/CreateUserBackground'
+import { SecondBackground } from '../../components/Backgrounds/create_user_background'
 
 export default function Agreement() {
     return (

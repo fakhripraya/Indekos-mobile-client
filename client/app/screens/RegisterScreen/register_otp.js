@@ -15,7 +15,7 @@ import React, { useState, useRef } from 'react';
 import { AppStyle } from '../../config/app.config';
 import { HostServer } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker'
-import Background from '../../components/Backgrounds/RegistrationBackground'
+import Background from '../../components/Backgrounds/registration_background'
 
 // creates the promised base http client
 const api = axios.create({

@@ -16,7 +16,7 @@ import { AppStyle } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker'
 import { HostServer } from '../../config/app.config';
-import Background from '../../components/Backgrounds/RegistrationBackground'
+import Background from '../../components/Backgrounds/registration_background'
 
 // creates the promised base http client
 const api = axios.create({

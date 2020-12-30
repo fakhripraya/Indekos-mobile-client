@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import React from 'react'
 import { AppStyle } from '../../config/app.config';
-import { FirstBackground } from '../../components/Backgrounds/CreateUserBackground'
+import { FirstBackground } from '../../components/Backgrounds/create_user_background'
 
 export default function PickRole({ navigation }) {
     return (
