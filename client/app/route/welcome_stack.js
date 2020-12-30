@@ -8,7 +8,7 @@ const NestedStack = createStackNavigator();
 // export the WelcomeStack
 export default function WelcomeStack() {
     return (
-        <NestedStack.Navigator screenOptions={{ headerShown: false, headerBackAccessibilityLabel: false }}>
+        <NestedStack.Navigator screenOptions={{ headerShown: false }}>
             <NestedStack.Screen name="Welcome" component={Welcome} />
         </NestedStack.Navigator>
     );

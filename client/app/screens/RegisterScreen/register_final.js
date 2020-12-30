@@ -9,6 +9,7 @@ import {
     accountRegistrationChange
 } from '../../redux'
 import {
+    Dimensions,
     TextInput,
     StyleSheet,
     Text,
@@ -44,7 +45,7 @@ export default function Register({ navigation }) {
             )
                 .then(response => {
                     if (response.status === 200) {
-                        navigation.navigate('LoginStack');
+                        navigation.replace('CreateUserStack');
                     }
                 })
                 .catch(error => {
@@ -70,7 +71,7 @@ export default function Register({ navigation }) {
                         <View style={styles.wrapper}>
                             <View style={styles.inputContainer}>
                                 <View style={styles.authInputWrapper}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 14 - (AppStyle.font_scaled_ratio * 14), alignSelf: 'flex-start', bottom: 5 }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
                                         Password
                                     </Text>
                                     <View style={styles.authInput}>
@@ -79,11 +80,11 @@ export default function Register({ navigation }) {
                                             onChangeText={(newVal) => setInput(newVal)}
                                             value={inputValue}
                                             textAlign="left"
-                                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
+                                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
                                     </View>
                                 </View>
                                 <View style={styles.authInputWrapper}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 14 - (AppStyle.font_scaled_ratio * 14), alignSelf: 'flex-start', bottom: 5 }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
                                         Confirm Password
                                     </Text>
                                     <View style={styles.authInput}>
@@ -92,20 +93,20 @@ export default function Register({ navigation }) {
                                             onChangeText={(newVal) => setInput(newVal)}
                                             value={inputValue}
                                             textAlign="left"
-                                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
+                                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
                                     </View>
                                 </View>
                             </View>
                             <View style={styles.submitBtn}>
                                 <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                                    <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>
+                                    <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
                                         Submit
                                         </Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.loginBtn}>
-                                <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 12) }} >
-                                    Have an account ? <Text onPress={() => { navigation.navigate('LoginStack'); }} style={{ color: AppStyle.fourt_main_color }}>Login</Text>
+                                <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale }} >
+                                    Have an account ? <Text onPress={() => { navigation.replace('LoginStack'); }} style={{ color: AppStyle.fourt_main_color }}>Login</Text>
                                 </Text>
                             </View>
                         </View>

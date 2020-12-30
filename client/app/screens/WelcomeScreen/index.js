@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
 import {
+    Dimensions,
     StyleSheet,
     Text,
     View,
@@ -37,12 +38,6 @@ export default function Welcome({ navigation }) {
         },
     ]
 
-    // event before component mount/update/leave
-    useEffect(() => navigation.addListener('beforeRemove', (e) => {
-        // Prevent default behavior of leaving the screen
-        e.preventDefault();
-    }), [navigation]);
-
     // Renders the elements of the carousel view
     function _renderItem({ item, index }) {
         return (
@@ -53,11 +48,11 @@ export default function Welcome({ navigation }) {
                     <View style={activeIndex == 2 ? styles.dotStyleFlag : styles.dotStyle} />
                 </View>
                 <View>
-                    <Text style={{ fontSize: 30 - (AppStyle.font_scaled_ratio * 30), color: 'white' }}>{item.title}
+                    <Text style={{ fontSize: 30 / Dimensions.get("screen").fontScale, color: 'white' }}>{item.title}
                         <Text style={{ color: AppStyle.third_main_color }}> {item.sub_title}</Text>
                     </Text>
                     <Text style={[
-                        { fontSize: 30 - (AppStyle.font_scaled_ratio * 30), color: AppStyle.third_main_color },
+                        { fontSize: 30 / Dimensions.get("screen").fontScale, color: AppStyle.third_main_color },
                         activeIndex == 2 ? { display: 'flex' } : { display: 'none' }
                     ]}>{item.second_sub_title}
                         <Text style={{ color: 'white' }}> {item.second_title}</Text>
@@ -88,18 +83,18 @@ export default function Welcome({ navigation }) {
                             { width: AppStyle.screenSize.width / 3 },
                             activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]
                         }>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>Prev</Text>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>Prev</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
                             if (activeIndex == 2)
-                                navigation.navigate('RegistrationStack');
+                                navigation.replace('RegistrationStack');
                             else
                                 carouselRef.current.snapToNext();
 
                         }}
                         style={{ width: AppStyle.screenSize.width / 3 }}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -124,13 +119,13 @@ const styles = StyleSheet.create({
     },
     textWrapper: {
         flex: 1,
-        padding: 20,
+        padding: '5%',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     buttonWrapper: {
         flex: 1,
-        top: 30,
+        top: '5%',
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
@@ -140,14 +135,14 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
         marginRight: 10,
-        borderRadius: 1000,
+        borderRadius: 100,
         backgroundColor: 'white',
     },
     dotStyleFlag: {
         width: 10,
         height: 10,
         marginRight: 10,
-        borderRadius: 1000,
+        borderRadius: 100,
         transform: [{ scaleX: 2 }],
         backgroundColor: AppStyle.sub_main_color,
     },

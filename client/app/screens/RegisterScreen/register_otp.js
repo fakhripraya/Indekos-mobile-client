@@ -1,14 +1,14 @@
 import axios from 'axios';
-import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import React, { useState, useRef } from 'react';
 import { AppStyle } from '../../config/app.config';
-import { SocialIcon } from 'react-native-elements';
-import { trackPromise } from 'react-promise-tracker'
 import { HostServer } from '../../config/app.config';
+import { trackPromise } from 'react-promise-tracker'
 import {
     accountRegistrationChange
 } from '../../redux'
 import {
+    Dimensions,
     TextInput,
     StyleSheet,
     Text,
@@ -27,6 +27,11 @@ export default function Register({ navigation }) {
 
     // Redux dispatch
     const dispatch = useDispatch()
+    // Function refs
+    const firstField = useRef(null);
+    const secondField = useRef(null);
+    const thirdField = useRef(null);
+    const fourthField = useRef(null);
     // Function state
     const [inputValue, setInput] = useState('')
 
@@ -44,7 +49,7 @@ export default function Register({ navigation }) {
             )
                 .then(response => {
                     if (response.status === 200) {
-                        navigation.push('RegisterOtp');
+                        navigation.replace('RegisterFinal');
                     }
                 })
                 .catch(error => {
@@ -69,49 +74,57 @@ export default function Register({ navigation }) {
                         <View style={styles.backgroundContainer_2} />
                         <View style={styles.wrapper}>
                             <View style={styles.inputContainer}>
-                                <View style={styles.warnMessage}>
-                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
-                                        Make sure you have whatsapp
-                                        </Text>
-                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
-                                        account when you registering your
-                                        </Text>
-                                    <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 14), textAlign: 'center', color: 'white' }} >
-                                        phone number
-                                        </Text>
-                                </View>
-                                <View style={styles.authInputWrapper}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 14 - (AppStyle.font_scaled_ratio * 14), alignSelf: 'flex-start', bottom: 5 }}>
-                                        Phone / Email
-                                        </Text>
-                                    <View style={styles.authInput}>
-                                        <TextInput
-                                            onChangeText={(newVal) => setInput(newVal)}
-                                            value={inputValue}
-                                            textAlign="left"
-                                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
+                                <View style={styles.otpWrapper}>
+                                    <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>
+                                        OTP Number
+                                    </Text>
+                                    <View style={styles.otpFieldContainer}>
+                                        <View style={styles.otpField} onPress={() => { firstField.current.focus(); }}>
+                                            <TextInput
+                                                ref={firstField}
+                                                onChangeText={(newVal) => setInput(newVal)}
+                                                value={inputValue}
+                                                textAlign="center"
+                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                        </View>
+                                        <View style={styles.otpField} ref={secondField}>
+                                            <TextInput
+                                                onChangeText={(newVal) => setInput(newVal)}
+                                                value={inputValue}
+                                                textAlign="center"
+                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                        </View>
+                                        <View style={styles.otpField} ref={thirdField}>
+                                            <TextInput
+                                                onChangeText={(newVal) => setInput(newVal)}
+                                                value={inputValue}
+                                                textAlign="center"
+                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                        </View>
+                                        <View style={styles.otpField} ref={fourthField}>
+                                            <TextInput
+                                                onChangeText={(newVal) => setInput(newVal)}
+                                                value={inputValue}
+                                                textAlign="center"
+                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                        </View>
                                     </View>
                                 </View>
-                                <View style={styles.o2AuthWrapper}>
-                                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6, marginRight: 5 }}>
-                                        <SocialIcon button type='google' />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6 }}>
-                                        <SocialIcon button type='facebook' />
-                                    </TouchableOpacity>
-                                </View>
+                                <Text style={{ flex: 0.15, color: 'grey', alignSelf: 'center', fontSize: 16 / Dimensions.get("screen").fontScale }} >
+                                    Haven't receive a code? <Text style={{ color: AppStyle.fourt_main_color }}>Resend Again</Text>
+                                </Text>
                             </View>
                             <View style={styles.submitBtn}>
-                                <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                                    <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 - (AppStyle.font_scaled_ratio * 16) }]}>
-                                        Submit
-                                        </Text>
+                                <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.goBack()}>
+                                    <Text style={[styles.button, { backgroundColor: 'white', fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                                        <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
+                                    </Text>
                                 </TouchableOpacity>
-                            </View>
-                            <View style={styles.loginBtn}>
-                                <Text style={{ fontSize: 14 - (AppStyle.font_scaled_ratio * 12) }} >
-                                    Have an account ? <Text onPress={() => { navigation.navigate('LoginStack'); }} style={{ color: AppStyle.fourt_main_color }}>Login</Text>
-                                </Text>
+                                <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
+                                    <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                                        Submit
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -158,60 +171,47 @@ const styles = StyleSheet.create({
     },
     wrapper: {
         alignSelf: 'center',
-        alignItems: 'center',
         position: 'absolute',
+        alignItems: 'center',
         flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.38,
+        top: AppStyle.screenSize.height * 0.4675,
     },
     inputContainer: {
         elevation: 5,
         borderRadius: 15,
-        paddingTop: '5%',
-        paddingBottom: '5%',
         paddingLeft: '5%',
         paddingRight: '5%',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         backgroundColor: 'white',
         justifyContent: 'space-evenly',
         bottom: AppStyle.screenSize.height / 4.5,
         width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        height: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.55),
+        height: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.662),
     },
-    warnMessage: {
-        width: '100%',
-        paddingTop: '5%',
-        borderRadius: 15,
-        paddingBottom: '5%',
+    otpWrapper: {
+        flex: 0.6,
         alignItems: 'center',
-        justifyContent: 'center',
-        height: AppStyle.screenSize.height * 0.15,
-        backgroundColor: AppStyle.fourt_main_color,
+        flexDirection: 'column',
+        justifyContent: 'space-around'
     },
-    authInputWrapper: {
+    otpFieldContainer: {
+        height: '70%',
         width: '100%',
-        marginTop: '5%',
-        marginBottom: '5%'
-    },
-    authInput: {
-        width: '100%',
-        borderWidth: 1,
-        borderRadius: 7.5,
-        borderColor: 'gray',
         flexDirection: 'row',
-        alignSelf: 'flex-start',
-        height: AppStyle.screenSize.height * 0.075,
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
-    o2AuthWrapper: {
-        flexDirection: 'row',
+    otpField: {
+        width: '22.5%',
+        height: '100%',
+        borderWidth: 0.7,
+        borderRadius: 10,
+        borderColor: 'grey',
     },
     submitBtn: {
         flex: 1,
-        bottom: AppStyle.screenSize.height / 7,
-    },
-    loginBtn: {
-        flex: 1,
         flexDirection: 'row',
-        bottom: AppStyle.screenSize.height / 9,
+        bottom: AppStyle.screenSize.height / 7,
     },
     button: {
         paddingTop: 15,

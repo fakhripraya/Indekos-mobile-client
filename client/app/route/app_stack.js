@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from '../screens/HomeScreen';
+import Home from '../screens/HomeScreen/home';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // create a nested stack navigator

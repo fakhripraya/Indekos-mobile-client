@@ -22,7 +22,6 @@ export const AppStyle = {
     google_plus_color: '#dd4b39',
     facebook_color: '#3b5998',
     main_font: '',
-    font_scaled_ratio: Dimensions.get("screen").fontScale - 1,
     screenSize: Dimensions.get("screen"),
     windowSize: Dimensions.get("window"),
 }

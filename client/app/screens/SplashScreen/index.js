@@ -48,7 +48,7 @@ const Splash = ({ navigation }) => {
                 if (response.status === 200) {
                     // TODO: set the state to logged in
                     console.log(response.status);
-                    navigation.navigate('AppStack');
+                    navigation.replace('AppStack');
                 }
             })
             .catch(error => {
@@ -59,7 +59,7 @@ const Splash = ({ navigation }) => {
                     if (error.response.status === 401) {
                         // TODO: delete after development and change to !== 401
                         console.log("unauthorized");
-                        navigation.navigate('WelcomeStack');
+                        navigation.replace('WelcomeStack');
                     }
                     else
                         console.log(error.message); // TODO: development only, delete when development done
@@ -75,7 +75,7 @@ const Splash = ({ navigation }) => {
     return transitions.map(({ key, props }) =>
         <AnimatedView key={key} style={[props, styles.container]}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text>LOADING YOUR APP CHAMP</Text>
+            <Text>Loading Application...</Text>
         </AnimatedView>
     )
 }

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 import AppStack from './app/route/app_stack.js';
 import LoginStack from './app/route/login_stack';
+import CreateUserStack from './app/route/create_user_stack';
 import SplashStack from './app/route/splash_stack';
 import WelcomeStack from './app/route/welcome_stack';
 import PromiseSpinner from './app/promise/promise_tracker';
@@ -43,6 +44,11 @@ export default function App() {
             <RootStack.Screen
               name="LoginStack"
               component={LoginStack}
+              options={{ headerShown: false }}
+            />
+            <RootStack.Screen
+              name="CreateUserStack"
+              component={CreateUserStack}
               options={{ headerShown: false }}
             />
             <RootStack.Screen
