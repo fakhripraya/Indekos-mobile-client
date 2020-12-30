@@ -16,7 +16,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // create a root stack navigator
 const RootStack = createStackNavigator();
 
-// set axios withCredentials to true to handle cors
+// set axios default configuration
 axios.defaults.withCredentials = true;
 
 // the root of all the applications stack

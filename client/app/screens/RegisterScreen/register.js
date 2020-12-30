@@ -21,8 +21,6 @@ import Background from '../Backgrounds/RegistrationBackground'
 // creates the promised base http client
 const api = axios.create({
     baseURL: "http://" + HostServer.host + HostServer.port + "/",
-    xsrfCookieName: 'XSRF-TOKEN',
-    xsrfHeaderName: 'X-XSRF-TOKEN'
 })
 
 // Register is the root of registration stack
