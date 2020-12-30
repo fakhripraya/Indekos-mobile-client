@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import React from 'react'
 import { AppStyle } from '../../config/app.config';
-import Background from '../Backgrounds/CreateUserBackground'
+import { FirstBackground } from '../Backgrounds/CreateUserBackground'
 
 export default function FillName({ navigation }) {
 
@@ -20,7 +20,7 @@ export default function FillName({ navigation }) {
     }
 
     return (
-        <Background>
+        <FirstBackground>
             <View style={styles.wrapper}>
                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
                 <View style={styles.input}>
@@ -36,7 +36,7 @@ export default function FillName({ navigation }) {
                     </View>
                 </TouchableOpacity>
             </View>
-        </Background>
+        </FirstBackground>
     )
 }
 

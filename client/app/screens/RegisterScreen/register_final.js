@@ -60,11 +60,14 @@ export default function RegisterFinal({ navigation }) {
     return (
         <Background>
             <View style={styles.wrapper}>
+                <Text style={styles.title}>
+                    Register
+                </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.authInputWrapper}>
                         <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
                             Password
-                                    </Text>
+                        </Text>
                         <View style={styles.authInput}>
                             <TextInput
                                 secureTextEntry={true}
@@ -77,7 +80,7 @@ export default function RegisterFinal({ navigation }) {
                     <View style={styles.authInputWrapper}>
                         <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
                             Confirm Password
-                                    </Text>
+                        </Text>
                         <View style={styles.authInput}>
                             <TextInput
                                 secureTextEntry={true}
@@ -92,13 +95,8 @@ export default function RegisterFinal({ navigation }) {
                     <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
                             Submit
-                                        </Text>
+                        </Text>
                     </TouchableOpacity>
-                </View>
-                <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale }} >
-                        Have an account ? <Text onPress={() => { navigation.replace('LoginStack'); }} style={{ color: AppStyle.fourt_main_color }}>Login</Text>
-                    </Text>
                 </View>
             </View>
         </Background >
@@ -112,7 +110,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.4675,
+        top: AppStyle.screenSize.height * 0.375,
+    },
+    title: {
+        right: '5%',
+        color: 'white',
+        fontWeight: 'bold',
+        alignSelf: 'flex-end',
+        bottom: AppStyle.screenSize.height / 4,
+        fontSize: 32 / Dimensions.get("screen").fontScale
     },
     inputContainer: {
         elevation: 5,
@@ -148,11 +154,6 @@ const styles = StyleSheet.create({
     submitBtn: {
         flex: 1,
         bottom: AppStyle.screenSize.height / 7,
-    },
-    loginBtn: {
-        flex: 1,
-        flexDirection: 'row',
-        bottom: AppStyle.screenSize.height / 9,
     },
     button: {
         paddingTop: 15,

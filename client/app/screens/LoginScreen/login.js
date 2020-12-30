@@ -61,11 +61,14 @@ export default function Login({ navigation }) {
     return (
         <Background >
             <View style={styles.wrapper}>
+                <Text style={styles.title}>
+                    Login
+                </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.authInputWrapper}>
                         <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
                             Username
-                                    </Text>
+                        </Text>
                         <View style={styles.authInput}>
                             <TextInput
                                 secureTextEntry={true}
@@ -78,7 +81,7 @@ export default function Login({ navigation }) {
                     <View style={styles.authInputWrapper}>
                         <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
                             Password
-                                    </Text>
+                        </Text>
                         <View style={styles.authInput}>
                             <TextInput
                                 secureTextEntry={true}
@@ -101,7 +104,7 @@ export default function Login({ navigation }) {
                     <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
                             Submit
-                                        </Text>
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.loginBtn}>
@@ -121,7 +124,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.4675,
+        top: AppStyle.screenSize.height * 0.375,
+    },
+    title: {
+        right: '5%',
+        color: 'white',
+        fontWeight: 'bold',
+        alignSelf: 'flex-end',
+        bottom: AppStyle.screenSize.height / 4,
+        fontSize: 32 / Dimensions.get("screen").fontScale
     },
     inputContainer: {
         elevation: 5,

@@ -65,11 +65,14 @@ export default function RegisterOtp({ navigation }) {
     return (
         <Background>
             <View style={styles.wrapper}>
+                <Text style={styles.title}>
+                    Register
+                </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.otpWrapper}>
                         <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>
                             OTP Number
-                                    </Text>
+                        </Text>
                         <View style={styles.otpFieldContainer}>
                             <View style={styles.otpField} onPress={() => { firstField.current.focus(); }}>
                                 <TextInput
@@ -115,7 +118,7 @@ export default function RegisterOtp({ navigation }) {
                     <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
                             Submit
-                                    </Text>
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -130,7 +133,15 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.4675,
+        top: AppStyle.screenSize.height * 0.375,
+    },
+    title: {
+        right: '5%',
+        color: 'white',
+        fontWeight: 'bold',
+        alignSelf: 'flex-end',
+        bottom: AppStyle.screenSize.height / 4,
+        fontSize: 32 / Dimensions.get("screen").fontScale
     },
     inputContainer: {
         elevation: 5,

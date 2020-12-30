@@ -1,12 +1,14 @@
 import React from 'react'
+import { AppStyle } from '../../config/app.config';
 import { StyleSheet, Text, View } from 'react-native'
+import { SecondBackground } from '../Backgrounds/CreateUserBackground'
 
-export default function OwnerPaymentMethod() {
+export default function Agreement() {
     return (
-        <View>
-            <Text></Text>
-        </View>
+        <SecondBackground>
+        </SecondBackground>
     )
 }
+
 
 const styles = StyleSheet.create({})

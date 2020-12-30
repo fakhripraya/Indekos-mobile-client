@@ -7,20 +7,20 @@ import {
 } from 'react-native'
 import React from 'react'
 import { AppStyle } from '../../config/app.config';
-import Background from '../Backgrounds/CreateUserBackground'
+import { FirstBackground } from '../Backgrounds/CreateUserBackground'
 
 export default function PickRole({ navigation }) {
     return (
-        <Background>
+        <FirstBackground>
             <View style={styles.wrapper}>
                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>I want to register in <Text style={{ color: AppStyle.fourt_main_color }}>as</Text></Text>
                 <View style={styles.buttonWrapper}>
-                    <TouchableOpacity onPress={() => { navigation.replace('FillName') }}>
+                    <TouchableOpacity onPress={() => { navigation.replace('AppStack') }}>
                         <View style={[styles.button, { backgroundColor: AppStyle.fourt_main_color }]}>
                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>User</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.replace('Agreement') }}>
                         <View style={[styles.button, { backgroundColor: 'white' }]}>
                             <Text style={{ fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>Owner</Text>
                         </View>
@@ -32,7 +32,7 @@ export default function PickRole({ navigation }) {
                     </View>
                 </TouchableOpacity>
             </View>
-        </Background>
+        </FirstBackground>
     )
 }
 
