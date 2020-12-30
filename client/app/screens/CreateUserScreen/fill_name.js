@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 import { AppStyle } from '../../config/app.config';
+import Background from '../Backgrounds/CreateUserBackground'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 
 export default function FillName({ navigation }) {
 
@@ -12,9 +13,7 @@ export default function FillName({ navigation }) {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.background_1} />
-            <View style={styles.background_2} />
+        <Background>
             <View style={styles.wrapper}>
                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
                 <View style={styles.input}>
@@ -30,35 +29,11 @@ export default function FillName({ navigation }) {
                     </View>
                 </TouchableOpacity>
             </View>
-        </View>
+        </Background>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: AppStyle.main_color,
-    },
-    background_1: {
-        top: AppStyle.screenSize.height * 0.85,
-        width: AppStyle.screenSize.width * 0.5,
-        height: AppStyle.screenSize.width * 0.5,
-        transform: [{ scale: 2 }],
-        position: 'absolute',
-        alignSelf: 'flex-start',
-        backgroundColor: AppStyle.third_main_color,
-        borderRadius: 100,
-    },
-    background_2: {
-        top: AppStyle.screenSize.height * 0.85,
-        width: AppStyle.screenSize.width * 0.5,
-        height: AppStyle.screenSize.width * 0.5,
-        transform: [{ scale: 2 }],
-        position: 'absolute',
-        alignSelf: 'flex-end',
-        backgroundColor: 'rgba(78, 122, 174, 0.5)',
-        borderRadius: 100,
-    },
     wrapper: {
         width: '100%',
         position: 'absolute',

@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import { AppStyle } from '../../config/app.config';
 import { HostServer } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker'
+import Background from '../Backgrounds/RegistrationBackground'
 import {
     accountRegistrationChange
 } from '../../redux'
@@ -63,112 +64,68 @@ export default function Register({ navigation }) {
 
     // Renders the Register screen
     return (
-        <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-                    <View style={styles.container}>
-                        <View style={styles.backgroundContainer} >
-                            <View style={styles.background_1} />
-                            <View style={styles.background_2} />
-                        </View>
-                        <View style={styles.backgroundContainer_2} />
-                        <View style={styles.wrapper}>
-                            <View style={styles.inputContainer}>
-                                <View style={styles.otpWrapper}>
-                                    <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>
-                                        OTP Number
+        <Background>
+            <View style={styles.wrapper}>
+                <View style={styles.inputContainer}>
+                    <View style={styles.otpWrapper}>
+                        <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>
+                            OTP Number
                                     </Text>
-                                    <View style={styles.otpFieldContainer}>
-                                        <View style={styles.otpField} onPress={() => { firstField.current.focus(); }}>
-                                            <TextInput
-                                                ref={firstField}
-                                                onChangeText={(newVal) => setInput(newVal)}
-                                                value={inputValue}
-                                                textAlign="center"
-                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
-                                        </View>
-                                        <View style={styles.otpField} ref={secondField}>
-                                            <TextInput
-                                                onChangeText={(newVal) => setInput(newVal)}
-                                                value={inputValue}
-                                                textAlign="center"
-                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
-                                        </View>
-                                        <View style={styles.otpField} ref={thirdField}>
-                                            <TextInput
-                                                onChangeText={(newVal) => setInput(newVal)}
-                                                value={inputValue}
-                                                textAlign="center"
-                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
-                                        </View>
-                                        <View style={styles.otpField} ref={fourthField}>
-                                            <TextInput
-                                                onChangeText={(newVal) => setInput(newVal)}
-                                                value={inputValue}
-                                                textAlign="center"
-                                                style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
-                                        </View>
-                                    </View>
-                                </View>
-                                <Text style={{ flex: 0.15, color: 'grey', alignSelf: 'center', fontSize: 16 / Dimensions.get("screen").fontScale }} >
-                                    Haven't receive a code? <Text style={{ color: AppStyle.fourt_main_color }}>Resend Again</Text>
-                                </Text>
+                        <View style={styles.otpFieldContainer}>
+                            <View style={styles.otpField} onPress={() => { firstField.current.focus(); }}>
+                                <TextInput
+                                    ref={firstField}
+                                    onChangeText={(newVal) => setInput(newVal)}
+                                    value={inputValue}
+                                    textAlign="center"
+                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
                             </View>
-                            <View style={styles.submitBtn}>
-                                <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.goBack()}>
-                                    <Text style={[styles.button, { backgroundColor: 'white', fontSize: 16 / Dimensions.get("screen").fontScale }]}>
-                                        <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                                    <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
-                                        Submit
-                                    </Text>
-                                </TouchableOpacity>
+                            <View style={styles.otpField} ref={secondField}>
+                                <TextInput
+                                    onChangeText={(newVal) => setInput(newVal)}
+                                    value={inputValue}
+                                    textAlign="center"
+                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                            </View>
+                            <View style={styles.otpField} ref={thirdField}>
+                                <TextInput
+                                    onChangeText={(newVal) => setInput(newVal)}
+                                    value={inputValue}
+                                    textAlign="center"
+                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                            </View>
+                            <View style={styles.otpField} ref={fourthField}>
+                                <TextInput
+                                    onChangeText={(newVal) => setInput(newVal)}
+                                    value={inputValue}
+                                    textAlign="center"
+                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
                             </View>
                         </View>
                     </View>
+                    <Text style={{ flex: 0.15, color: 'grey', alignSelf: 'center', fontSize: 16 / Dimensions.get("screen").fontScale }} >
+                        Haven't receive a code? <Text style={{ color: AppStyle.fourt_main_color }}>Resend Again</Text>
+                    </Text>
                 </View>
-            </ScrollView>
-        </View >
+                <View style={styles.submitBtn}>
+                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
+                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                            <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                            Submit
+                                    </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </Background >
     )
 }
 
 // the render elements style
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        backgroundColor: 'white',
-    },
-    backgroundContainer: {
-        flex: 0.40,
-        backgroundColor: AppStyle.third_main_color,
-    },
-    backgroundContainer_2: {
-        flex: 0.60,
-        backgroundColor: 'white',
-    },
-    background_1: {
-        position: 'absolute',
-        alignSelf: 'center',
-        borderRadius: 200 / 2,
-        width: AppStyle.screenSize.width * 0.6,
-        top: (AppStyle.screenSize.height * 0.2),
-        height: AppStyle.screenSize.height * 0.3,
-        right: (AppStyle.screenSize.width * 0.70),
-        backgroundColor: AppStyle.fourt_main_color,
-    },
-    background_2: {
-        position: 'absolute',
-        borderRadius: 300 / 2,
-        backgroundColor: AppStyle.main_color,
-        width: AppStyle.screenSize.width * 0.9,
-        left: (AppStyle.screenSize.width) * 0.6,
-        height: AppStyle.screenSize.height * 0.3,
-        bottom: (AppStyle.screenSize.height * 0.375),
-        transform: [{ scaleX: 2 }, { scaleY: 3 }, { rotate: '5deg' }],
-    },
     wrapper: {
         alignSelf: 'center',
         position: 'absolute',
