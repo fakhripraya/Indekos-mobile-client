@@ -1,7 +1,3 @@
-import React from 'react';
-import { AppStyle } from '../config/app.config';
-import { animated, useTransition } from 'react-spring'
-import { usePromiseTracker } from "react-promise-tracker";
 import {
     View,
     Text,
@@ -9,6 +5,10 @@ import {
     StyleSheet,
     ActivityIndicator,
 } from 'react-native';
+import React from 'react';
+import { AppStyle } from '../config/app.config';
+import { animated, useTransition } from 'react-spring'
+import { usePromiseTracker } from "react-promise-tracker";
 
 const AnimatedView = animated(View)
 

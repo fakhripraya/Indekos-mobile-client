@@ -1,10 +1,10 @@
-import React from 'react';
-import { AppStyle } from '../../config/app.config';
 import {
     StyleSheet,
     View,
     ScrollView
 } from 'react-native';
+import React from 'react';
+import { AppStyle } from '../../config/app.config';
 
 // RegistrationBackground is the background image for the registration stack
 export default function RegistrationBackground(props) {
@@ -32,23 +32,23 @@ const styles = StyleSheet.create({
         backgroundColor: AppStyle.main_color,
     },
     background_1: {
-        top: AppStyle.screenSize.height * 0.85,
-        width: AppStyle.screenSize.width * 0.5,
-        height: AppStyle.screenSize.width * 0.5,
-        transform: [{ scale: 2 }],
+        borderRadius: 100,
         position: 'absolute',
         alignSelf: 'flex-start',
-        backgroundColor: AppStyle.third_main_color,
-        borderRadius: 100,
-    },
-    background_2: {
+        transform: [{ scale: 2 }],
         top: AppStyle.screenSize.height * 0.85,
         width: AppStyle.screenSize.width * 0.5,
         height: AppStyle.screenSize.width * 0.5,
-        transform: [{ scale: 2 }],
+        backgroundColor: AppStyle.third_main_color,
+    },
+    background_2: {
+        borderRadius: 100,
         position: 'absolute',
         alignSelf: 'flex-end',
+        transform: [{ scale: 2 }],
+        top: AppStyle.screenSize.height * 0.85,
+        width: AppStyle.screenSize.width * 0.5,
+        height: AppStyle.screenSize.width * 0.5,
         backgroundColor: 'rgba(78, 122, 174, 0.5)',
-        borderRadius: 100,
     },
 })

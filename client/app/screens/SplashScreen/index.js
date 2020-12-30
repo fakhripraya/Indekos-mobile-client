@@ -1,16 +1,16 @@
+import {
+    animated,
+    useTransition,
+} from 'react-spring';
+import {
+    Text,
+    View,
+    StyleSheet,
+    ActivityIndicator,
+} from 'react-native';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { HostServer } from '../../config/app.config';
-import {
-    animated,
-    useTransition
-} from 'react-spring';
-import {
-    ActivityIndicator,
-    StyleSheet,
-    Text,
-    View
-} from 'react-native';
 
 // creates the react spring animated view
 const AnimatedView = animated(View)

@@ -1,13 +1,13 @@
+import {
+    Text,
+    View,
+    Dimensions,
+    StyleSheet,
+    TouchableOpacity
+} from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
-import {
-    Dimensions,
-    StyleSheet,
-    Text,
-    View,
-    TouchableOpacity
-} from 'react-native';
 
 // Welcome is the root of Welcome stack
 export default function Welcome({ navigation }) {

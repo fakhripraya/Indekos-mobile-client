@@ -1,10 +1,10 @@
-import React from 'react';
-import { AppStyle } from '../../config/app.config';
 import {
     StyleSheet,
     View,
     ScrollView
 } from 'react-native';
+import React from 'react';
+import { AppStyle } from '../../config/app.config';
 
 // LoginBackground is the background image for the login stack
 export default function LoginBackground(props) {

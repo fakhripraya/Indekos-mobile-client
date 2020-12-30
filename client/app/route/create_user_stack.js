@@ -2,9 +2,9 @@ import React from 'react';
 import PickRole from '../screens/CreateUserScreen/pick_role';
 import FillName from '../screens/CreateUserScreen/fill_name';
 import Agreement from '../screens/CreateUserScreen/agreement';
+import { createStackNavigator } from '@react-navigation/stack';
 import OwnerRegist from '../screens/CreateUserScreen/owner_regist';
 import OwnerPaymentMethod from '../screens/CreateUserScreen/owner_payment_method';
-import { createStackNavigator } from '@react-navigation/stack';
 
 // create a nested stack navigator
 const NestedStack = createStackNavigator();

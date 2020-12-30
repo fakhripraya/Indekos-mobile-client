@@ -1,8 +1,8 @@
 import React from 'react';
 import Register from '../screens/RegisterScreen/register';
+import { createStackNavigator } from '@react-navigation/stack';
 import RegisterOtp from '../screens/RegisterScreen/register_otp';
 import RegisterFinal from '../screens/RegisterScreen/register_final';
-import { createStackNavigator } from '@react-navigation/stack';
 
 // create a nested stack navigator
 const NestedStack = createStackNavigator();

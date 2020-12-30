@@ -1,10 +1,10 @@
-import React from 'react';
-import { AppStyle } from '../../config/app.config';
 import {
     StyleSheet,
     View,
     ScrollView
 } from 'react-native';
+import React from 'react';
+import { AppStyle } from '../../config/app.config';
 
 // RegistrationBackground is the background image for the registration stack
 export default function RegistrationBackground(props) {

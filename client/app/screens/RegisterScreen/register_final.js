@@ -1,3 +1,14 @@
+import {
+    Text,
+    View,
+    TextInput,
+    Dimensions,
+    StyleSheet,
+    TouchableOpacity
+} from 'react-native';
+import {
+    accountRegistrationChange
+} from '../../redux'
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -5,18 +16,6 @@ import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker'
 import { HostServer } from '../../config/app.config';
 import Background from '../Backgrounds/RegistrationBackground'
-import {
-    accountRegistrationChange
-} from '../../redux'
-import {
-    Dimensions,
-    TextInput,
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-    TouchableOpacity
-} from 'react-native';
 
 // creates the promised base http client
 const api = axios.create({

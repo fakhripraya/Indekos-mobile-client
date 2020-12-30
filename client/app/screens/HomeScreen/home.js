@@ -1,9 +1,9 @@
-import React from 'react';
 import {
-    StyleSheet,
     Text,
-    View
+    View,
+    StyleSheet,
 } from 'react-native';
+import React from 'react';
 
 export default function Home({ navigation }) {
     return (

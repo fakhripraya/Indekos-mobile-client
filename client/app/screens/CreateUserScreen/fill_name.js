@@ -1,7 +1,14 @@
+import {
+    Text,
+    View,
+    TextInput,
+    StyleSheet,
+    Dimensions,
+    TouchableOpacity,
+} from 'react-native'
 import React from 'react'
 import { AppStyle } from '../../config/app.config';
 import Background from '../Backgrounds/CreateUserBackground'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 
 export default function FillName({ navigation }) {
 
@@ -37,23 +44,23 @@ const styles = StyleSheet.create({
     wrapper: {
         width: '100%',
         position: 'absolute',
-        justifyContent: 'space-evenly',
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         height: AppStyle.screenSize.height * 0.45,
         bottom: AppStyle.screenSize.height * 0.35,
     },
     input: {
+        borderRadius: 10,
+        backgroundColor: 'white',
         width: AppStyle.screenSize.width * 0.80,
         height: AppStyle.screenSize.height * 0.070,
-        borderRadius: 10,
-        backgroundColor: 'white'
     },
     submitButton: {
+        alignItems: 'center',
+        borderRadius: 100 / 2,
+        backgroundColor: 'grey',
+        justifyContent: 'center',
         width: AppStyle.screenSize.width * 0.4,
         height: AppStyle.screenSize.height * 0.075,
-        backgroundColor: 'grey',
-        borderRadius: 100 / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
     }
 })

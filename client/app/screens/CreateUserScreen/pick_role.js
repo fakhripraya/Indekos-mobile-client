@@ -1,7 +1,13 @@
+import {
+    Text,
+    View,
+    StyleSheet,
+    Dimensions,
+    TouchableOpacity,
+} from 'react-native'
 import React from 'react'
 import { AppStyle } from '../../config/app.config';
 import Background from '../Backgrounds/CreateUserBackground'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
 
 export default function PickRole({ navigation }) {
     return (
@@ -34,8 +40,8 @@ const styles = StyleSheet.create({
     wrapper: {
         width: '100%',
         position: 'absolute',
-        justifyContent: 'space-evenly',
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         height: AppStyle.screenSize.height * 0.45,
         bottom: AppStyle.screenSize.height * 0.35,
     },
@@ -43,21 +49,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     button: {
-        marginLeft: AppStyle.screenSize.width * 0.025,
-        marginRight: AppStyle.screenSize.width * 0.025,
+        borderRadius: 20,
+        paddingRight: '10%',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
         width: AppStyle.screenSize.width * 0.35,
         height: AppStyle.screenSize.height * 0.125,
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        paddingRight: '10%',
+        marginLeft: AppStyle.screenSize.width * 0.025,
+        marginRight: AppStyle.screenSize.width * 0.025,
     },
     submitButton: {
+        alignItems: 'center',
+        borderRadius: 100 / 2,
+        backgroundColor: 'grey',
+        justifyContent: 'center',
         width: AppStyle.screenSize.width * 0.4,
         height: AppStyle.screenSize.height * 0.075,
-        backgroundColor: 'grey',
-        borderRadius: 100 / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
     }
 })
