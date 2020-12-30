@@ -31,7 +31,7 @@ export default function Login({ navigation }) {
     // Function state
     const [inputValue, setInput] = useState('')
 
-    // handle registration form submit
+    // handle login form submit
     function handleSubmit() {
 
         // dispatch the accountRegistrationChange actions to store new user credentials  

@@ -22,15 +22,15 @@ const api = axios.create({
     baseURL: "http://" + HostServer.host + HostServer.port + "/"
 })
 
-// Register is the root of registration stack
-export default function Register({ navigation }) {
+// RegisterFinal is the final screen of the registration stack
+export default function RegisterFinal({ navigation }) {
 
     // Redux dispatch
     const dispatch = useDispatch()
     // Function state
     const [inputValue, setInput] = useState('')
 
-    // handle registration form submit
+    // handle the process of assign password flow
     function handleSubmit() {
 
         // dispatch the accountRegistrationChange actions to store new user credentials  
@@ -56,7 +56,7 @@ export default function Register({ navigation }) {
         );
     }
 
-    // Renders the Register screen
+    // Renders the RegisterFinal screen
     return (
         <Background>
             <View style={styles.wrapper}>

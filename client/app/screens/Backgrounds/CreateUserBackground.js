@@ -6,10 +6,10 @@ import {
 import React from 'react';
 import { AppStyle } from '../../config/app.config';
 
-// RegistrationBackground is the background image for the registration stack
-export default function RegistrationBackground(props) {
+// CreateUserBackground is the background image for the registration stack
+export default function CreateUserBackground(props) {
 
-    // Renders the RegistrationStack background
+    // Renders the CreateUserStack background
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>

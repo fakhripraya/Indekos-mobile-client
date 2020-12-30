@@ -22,8 +22,8 @@ const api = axios.create({
     baseURL: "http://" + HostServer.host + HostServer.port + "/"
 })
 
-// Register is the root of registration stack
-export default function Register({ navigation }) {
+// RegisterOtp is the screen to handle the otp process of the registration flow
+export default function RegisterOtp({ navigation }) {
 
     // Redux dispatch
     const dispatch = useDispatch()
@@ -35,7 +35,7 @@ export default function Register({ navigation }) {
     // Function state
     const [inputValue, setInput] = useState('')
 
-    // handle registration form submit
+    // handle otp form submit
     function handleSubmit() {
 
         // dispatch the accountRegistrationChange actions to store new user credentials  
@@ -61,7 +61,7 @@ export default function Register({ navigation }) {
         );
     }
 
-    // Renders the Register screen
+    // Renders the RegisterOtp screen
     return (
         <Background>
             <View style={styles.wrapper}>

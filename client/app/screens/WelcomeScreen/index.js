@@ -39,7 +39,7 @@ export default function Welcome({ navigation }) {
     ]
 
     // Renders the elements of the carousel view
-    function _renderItem({ item, index }) {
+    function _renderItem({ item }) {
         return (
             <View style={styles.textWrapper}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '15%' }}>
