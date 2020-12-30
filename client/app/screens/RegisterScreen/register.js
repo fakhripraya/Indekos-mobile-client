@@ -35,7 +35,7 @@ export default function Register({ navigation }) {
     function handleSubmit() {
 
         // dispatch the accountRegistrationChange actions to store new user credentials  
-        dispatch(accountRegistrationChange({ username: inputValue, otp_code: "" }))
+        dispatch(accountRegistrationChange({ username: inputValue }))
 
         // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(
