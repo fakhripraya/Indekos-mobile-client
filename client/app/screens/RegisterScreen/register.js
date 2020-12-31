@@ -19,7 +19,6 @@ import { trackPromise } from 'react-promise-tracker'
 import { HostServer } from '../../config/app.config';
 import Background from '../../components/Backgrounds/registration_background'
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click'
-import { TouchableHighlight } from 'react-native-gesture-handler';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -33,15 +32,15 @@ const api = axios.create({
 export default function Register({ navigation }) {
 
     // Variables
-    // regEmail is a regular expression to match standard email string
-    var regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     // waRegex is a regular expression to match standard phone string
     var regWA = /\+?([ -]?\d+)+|\(\d+\)([ -]\d+)/;
+    // regEmail is a regular expression to match standard email string
+    var regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    // Redux dispatch
-    const dispatch = useDispatch()
-    // Function state
+    // Function states
     const [inputValue, setInput] = useState('')
+    // Hooks
+    const dispatch = useDispatch()
 
     // Functions
     // handle Email validation
@@ -164,17 +163,17 @@ export default function Register({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                        <Text style={[styles.button, styles.submitBtnText]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
                 </View>
                 <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale }} >
+                    <Text style={{ fontSize: 16 / Dimensions.get("screen").fontScale }} >
                         Have an account ?{' '}
                     </Text>
                     <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
-                        <Text style={{ color: AppStyle.fourt_main_color }}>
+                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }}>
                             Login
                         </Text>
                     </TouchableOpacityPrevent>
@@ -255,6 +254,10 @@ const styles = StyleSheet.create({
     submitBtn: {
         flex: 1,
         bottom: AppStyle.screenSize.height / 7,
+    },
+    submitBtnText: {
+        backgroundColor: AppStyle.sub_main_color,
+        fontSize: 16 / Dimensions.get("screen").fontScale
     },
     loginBtn: {
         flex: 1,

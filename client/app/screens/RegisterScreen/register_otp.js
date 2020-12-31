@@ -1,4 +1,7 @@
 import {
+    popUpModalChange
+} from '../../redux';
+import {
     Text,
     View,
     TextInput,
@@ -7,11 +10,16 @@ import {
     TouchableOpacity
 } from 'react-native';
 import axios from 'axios';
+import React, { useState, useRef } from 'react';
 import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { HostServer } from '../../config/app.config';
-import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Background from '../../components/Backgrounds/registration_background'
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click'
+
+// a HOC to throttle button click
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
 const api = axios.create({
@@ -31,25 +39,65 @@ export default function RegisterOtp({ navigation }) {
     const [secondValue, setSecondInput] = useState("")
     const [thirdValue, setThirdInput] = useState("")
     const [fourthValue, setFourthInput] = useState("")
+    // Hooks
+    const dispatch = useDispatch()
+    const tempUsername = useSelector(state => state.accountRegistrationReducer.username);
 
     // handle otp form submit
     function handleSubmit() {
+
+        // concat all the value
+        var res = firstValue.concat(secondValue).concat(thirdValue).concat(fourthValue);
+
+        // validation
+        if (res.length < 4)
+            return;
+
+        if (isNaN(res))
+            return;
 
         // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(
             api.post(
                 '/register/check',
-                { otp_code: '9999' }
+                { otp_code: res }
             )
                 .then(response => {
-                    if (response.status === 200) {
+                    if (response.status >= 200 && response.status < 300) {
                         navigation.replace('RegisterFinal');
                     }
                 })
                 .catch(error => {
                     if (error.response.status !== 200) {
-                        // TODO: development only, delete when development done
-                        console.log(error.response.data.message);
+
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                    }
+                })
+        );
+    }
+
+    // handle resend otp code
+    function handleResend() {
+
+        // triggers the http post request to /register url in the authentication service to process the registration
+        trackPromise(
+            api.post(
+                '/register',
+                { username: tempUsername }
+            )
+                .then(response => {
+                    if (response.status >= 200 && response.status < 300) {
+
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'INFO', message: "Successfully resend otp code" }));
+                    }
+                })
+                .catch(error => {
+                    if (error.response.status !== 200) {
+
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
                     }
                 })
         );
@@ -72,18 +120,28 @@ export default function RegisterOtp({ navigation }) {
                                 <TextInput
                                     keyboardType="numeric"
                                     ref={firstField}
+                                    autoFocus={true}
                                     selectTextOnFocus={true}
                                     onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace') {
+                                        if (nativeEvent.key === 'Backspace')
                                             firstField.current.focus();
-                                        }
                                     }}
                                     onChangeText={newVal => {
-                                        setFirstInput(newVal);
-                                        if (newVal !== '') {
-                                            secondField.current.focus();
+                                        if (isNaN(newVal) || newVal === ' ')
+                                            firstField.current.focus();
+                                        else {
+                                            setFirstInput(newVal);
+                                            if (newVal !== '')
+                                                secondField.current.focus();
                                         }
                                     }}
+                                    onSelectionChange={({ nativeEvent }) => {
+                                        if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
+                                            return;
+                                        if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                            secondField.current.focus();
+                                    }}
+                                    value={firstValue}
                                     maxLength={1}
                                     textAlign="center"
                                     style={styles.otpFieldInput} />
@@ -94,16 +152,25 @@ export default function RegisterOtp({ navigation }) {
                                     ref={secondField}
                                     selectTextOnFocus={true}
                                     onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace') {
+                                        if (nativeEvent.key === 'Backspace')
                                             firstField.current.focus();
-                                        }
                                     }}
                                     onChangeText={(newVal) => {
-                                        setSecondInput(newVal);
-                                        if (newVal !== '') {
-                                            thirdField.current.focus();
+                                        if (isNaN(newVal) || newVal === ' ')
+                                            secondField.current.focus();
+                                        else {
+                                            setSecondInput(newVal);
+                                            if (newVal !== '')
+                                                thirdField.current.focus();
                                         }
                                     }}
+                                    onSelectionChange={({ nativeEvent }) => {
+                                        if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
+                                            return
+                                        if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                            thirdField.current.focus();
+                                    }}
+                                    value={secondValue}
                                     maxLength={1}
                                     textAlign="center"
                                     style={styles.otpFieldInput} />
@@ -114,16 +181,25 @@ export default function RegisterOtp({ navigation }) {
                                     ref={thirdField}
                                     selectTextOnFocus={true}
                                     onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace') {
+                                        if (nativeEvent.key === 'Backspace')
                                             secondField.current.focus();
-                                        }
                                     }}
                                     onChangeText={(newVal) => {
-                                        setThirdInput(newVal);
-                                        if (newVal !== '') {
-                                            fourthField.current.focus();
+                                        if (isNaN(newVal) || newVal === ' ')
+                                            thirdField.current.focus();
+                                        else {
+                                            setThirdInput(newVal);
+                                            if (newVal !== '')
+                                                fourthField.current.focus();
                                         }
                                     }}
+                                    onSelectionChange={({ nativeEvent }) => {
+                                        if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
+                                            return;
+                                        if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                            fourthField.current.focus();
+                                    }}
+                                    value={thirdValue}
                                     maxLength={1}
                                     textAlign="center"
                                     style={styles.otpFieldInput} />
@@ -134,34 +210,45 @@ export default function RegisterOtp({ navigation }) {
                                     ref={fourthField}
                                     selectTextOnFocus={true}
                                     onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace') {
+                                        if (nativeEvent.key === 'Backspace')
                                             thirdField.current.focus();
-                                        }
                                     }}
                                     onChangeText={(newVal) => {
-                                        setFourthInput(newVal);
+                                        if (isNaN(newVal) || newVal === ' ')
+                                            fourthField.current.focus();
+                                        else
+                                            setFourthInput(newVal);
                                     }}
+                                    value={fourthValue}
                                     maxLength={1}
                                     textAlign="center"
                                     style={styles.otpFieldInput} />
                             </View>
                         </View>
                     </View>
-                    <Text style={{ flex: 0.15, color: 'grey', alignSelf: 'center', fontSize: 16 / Dimensions.get("screen").fontScale }} >
-                        Haven't receive a code? <Text style={{ color: AppStyle.fourt_main_color }}>Resend Again</Text>
-                    </Text>
+                    <View style={styles.resendText}>
+                        <Text style={{ fontSize: 16 / Dimensions.get("screen").fontScale }}>
+                            Haven't receive a code?{' '}
+                        </Text>
+                        <TouchableOpacityPrevent onPress={() => handleResend()} >
+                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }}>
+                                Resend Again
+                            </Text>
+                        </TouchableOpacityPrevent>
+                    </View>
+
                 </View>
                 <View style={styles.submitBtn}>
-                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
+                    <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
                         <Text style={[styles.button, { backgroundColor: 'white', fontSize: 16 / Dimensions.get("screen").fontScale }]}>
                             <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
                         </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
+                    </TouchableOpacityPrevent>
+                    <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
                             Submit
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacityPrevent>
                 </View>
             </View>
         </Background >
@@ -227,6 +314,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         fontSize: 32 / Dimensions.get("screen").fontScale
+    },
+    resendText: {
+        flex: 0.15,
+        color: 'grey',
+        alignSelf: 'center',
+        flexDirection: 'row',
     },
     submitBtn: {
         flex: 1,

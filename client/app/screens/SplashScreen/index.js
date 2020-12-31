@@ -45,7 +45,7 @@ const Splash = ({ navigation }) => {
             cancelToken: cancelSource.token
         })
             .then(response => {
-                if (response.status === 200) {
+                if (response.status >= 200 && response.status < 300) {
                     // TODO: set the state to logged in
                     console.log(response.status);
                     navigation.replace('AppStack');
