@@ -7,7 +7,8 @@ import {
     TouchableOpacity
 } from 'react-native';
 import {
-    accountRegistrationChange
+    accountRegistrationChange,
+    popUpModalChange
 } from '../../redux'
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -51,6 +52,10 @@ export default function Register({ navigation }) {
                 .catch(error => {
                     if (error.response.status !== 200) {
                         // TODO: development only, delete when development done, throws generic message
+
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }))
+
                         console.log(error.response.data.message);
                     }
                 })

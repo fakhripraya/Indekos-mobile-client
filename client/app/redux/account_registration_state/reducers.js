@@ -6,7 +6,7 @@ const accountRegistrationState = {
 }
 
 // accountRegistrationReducer is a redux reducer of a new users credentials
-const accountRegistrationReducer = (state = accountRegistrationState, action) => {
+export const accountRegistrationReducer = (state = accountRegistrationState, action) => {
     switch (action.type) {
         case NEW_ACCOUNT_INPUT: return {
             ...state,
@@ -15,5 +15,3 @@ const accountRegistrationReducer = (state = accountRegistrationState, action) =>
         default: return state
     }
 }
-
-export default accountRegistrationReducer;

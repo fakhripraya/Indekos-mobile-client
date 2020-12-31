@@ -7,9 +7,10 @@ import {
 } from 'react-native';
 import React from 'react';
 import { AppStyle } from '../config/app.config';
-import { animated, useTransition } from 'react-spring'
+import { animated, useTransition } from 'react-spring';
 import { usePromiseTracker } from "react-promise-tracker";
 
+// spring animated view element
 const AnimatedView = animated(View)
 
 // PromiseSpinner is a spinner that triggers while the application doang the http request

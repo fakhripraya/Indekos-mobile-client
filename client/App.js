@@ -12,6 +12,7 @@ import CreateUserStack from './app/route/create_user_stack';
 import RegistrationStack from './app/route/registration_stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { PopUpMessage } from './app/components/Modal/pop_up_message'
 
 // create a root stack navigator
 const RootStack = createStackNavigator();
@@ -21,6 +22,7 @@ axios.defaults.withCredentials = true;
 
 // the root of all the applications stack
 export default function App() {
+
   return (
     <Provider store={store}>
       <View style={styles.container}>
@@ -60,6 +62,7 @@ export default function App() {
         </NavigationContainer>
       </View>
       <PromiseSpinner />
+      <PopUpMessage />
     </Provider>
   );
 }
