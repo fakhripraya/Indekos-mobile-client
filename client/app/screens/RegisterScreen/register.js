@@ -27,13 +27,57 @@ const api = axios.create({
 // Register is the root of registration stack
 export default function Register({ navigation }) {
 
+    // Variables
+    // regEmail is a regular expression to match standard email string
+    var regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    // waRegex is a regular expression to match standard phone string
+    var regWA = /\+?([ -]?\d+)+|\(\d+\)([ -]\d+)/;
+
     // Redux dispatch
     const dispatch = useDispatch()
     // Function state
     const [inputValue, setInput] = useState('')
 
+    // Functions
+    // handle Email validation
+    function handleValidateEmail(value) {
+
+        if (regEmail.test(value) === true) {
+            return true;
+        }
+
+        return false;
+    };
+
+    // handle WhatsApp validation
+    function handleValidatePhone(value) {
+
+        if (regWA.test(value) === true) {
+            return true;
+        }
+
+        return false;
+    };
+
     // handle registration form submit
     function handleSubmit() {
+
+        // validation
+
+        var count = 0;
+
+        if (!handleValidatePhone(inputValue)) {
+            count++;
+        }
+        if (!handleValidateEmail(inputValue)) {
+            count++;
+        }
+        if (count == 2) {
+
+            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: "Invalid Phone number / Email" }));
+            return;
+
+        }
 
         // dispatch the accountRegistrationChange actions to store new user credentials  
         dispatch(accountRegistrationChange({ username: inputValue }))
@@ -51,12 +95,9 @@ export default function Register({ navigation }) {
                 })
                 .catch(error => {
                     if (error.response.status !== 200) {
-                        // TODO: development only, delete when development done, throws generic message
 
                         // dispatch the popUpModalChange actions to store the generic message modal state
-                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }))
-
-                        console.log(error.response.data.message);
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
                     }
                 })
         );
