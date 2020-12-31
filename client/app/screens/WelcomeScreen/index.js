@@ -90,12 +90,10 @@ export default function Welcome({ navigation }) {
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent
                         onPress={() => {
-                            if (activeIndex == 2) {
+                            if (activeIndex == 2)
                                 navigation.replace('RegistrationStack');
-                            }
-                            else {
+                            else
                                 carouselRef.current.snapToNext();
-                            }
                         }}
                         style={{ width: AppStyle.screenSize.width / 3 }}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
