@@ -5,9 +5,12 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click'
+
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // Welcome is the root of Welcome stack
 export default function Welcome({ navigation }) {
@@ -77,25 +80,26 @@ export default function Welcome({ navigation }) {
                     onSnapToItem={(index) => { setActive(index) }}
                 />
                 <View style={styles.buttonWrapper}>
-                    <TouchableOpacity
+                    <TouchableOpacityPrevent
                         onPress={() => { carouselRef.current.snapToPrev(); }}
                         style={[
                             { width: AppStyle.screenSize.width / 3 },
                             activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]
                         }>
                         <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>Prev</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
+                    </TouchableOpacityPrevent>
+                    <TouchableOpacityPrevent
                         onPress={() => {
-                            if (activeIndex == 2)
+                            if (activeIndex == 2) {
                                 navigation.replace('RegistrationStack');
-                            else
+                            }
+                            else {
                                 carouselRef.current.snapToNext();
-
+                            }
                         }}
                         style={{ width: AppStyle.screenSize.width / 3 }}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacityPrevent>
                 </View>
             </View>
         </View>
