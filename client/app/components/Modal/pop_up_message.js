@@ -4,6 +4,7 @@ import {
     Modal,
     StyleSheet,
     ScrollView,
+    Dimensions,
     TouchableOpacity
 } from 'react-native';
 import React from 'react';
@@ -57,7 +58,7 @@ export function PopUpMessage() {
                     </View>
                     <View style={styles.buttonWrapper}>
                         <TouchableOpacity style={styles.buttonFrame} onPress={() => { handleMessage() }}>
-                            <Text style={styles.buttonText}>OK</Text>
+                            <Text style={styles.buttonText}>Ok</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         maxWidth: (AppStyle.screenSize.width * 0.5),
-        maxHeight: (AppStyle.screenSize.height * 0.25),
+        maxHeight: (AppStyle.screenSize.height * 0.3),
         left: (AppStyle.screenSize.width * 0.25),
         top: (AppStyle.screenSize.height - (AppStyle.screenSize.height / 2)) - (AppStyle.screenSize.height * 0.15),
     },
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: 'bold',
-        fontSize: 22,
+        fontSize: 22 / Dimensions.get("screen").fontScale,
         color: AppStyle.sub_main_color
     },
     messageWrapper: {
@@ -108,9 +109,10 @@ const styles = StyleSheet.create({
     },
     messageText: {
         textAlign: 'center',
-        fontSize: 14
+        fontSize: 16 / Dimensions.get("screen").fontScale
     },
     buttonWrapper: {
+        bottom: (AppStyle.screenSize.height * 0.3) / 20,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     buttonFrame: {
-        height: '50%',
+        height: '75%',
         width: '60%',
         alignItems: 'center',
         justifyContent: 'center',
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 16 / Dimensions.get("screen").fontScale,
         color: 'white'
     }
 });

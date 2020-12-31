@@ -8,7 +8,7 @@ const NestedStack = createStackNavigator();
 // export the LoginStack
 export default function LoginStack() {
     return (
-        <NestedStack.Navigator screenOptions={{ headerShown: false }}>
+        <NestedStack.Navigator screenOptions={{ headerTransparent: true, title: '', headerTintColor: 'white' }}>
             <NestedStack.Screen name="Login" component={Login} />
         </NestedStack.Navigator>
     );

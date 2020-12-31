@@ -6,15 +6,11 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import {
-    accountRegistrationChange
-} from '../../redux'
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import React, { useState, useRef } from 'react';
 import { AppStyle } from '../../config/app.config';
+import { trackPromise } from 'react-promise-tracker';
 import { HostServer } from '../../config/app.config';
-import { trackPromise } from 'react-promise-tracker'
+import React, { useState, useRef, useEffect } from 'react';
 import Background from '../../components/Backgrounds/registration_background'
 
 // creates the promised base http client
@@ -25,27 +21,25 @@ const api = axios.create({
 // RegisterOtp is the screen to handle the otp process of the registration flow
 export default function RegisterOtp({ navigation }) {
 
-    // Redux dispatch
-    const dispatch = useDispatch()
     // Function refs
     const firstField = useRef(null);
     const secondField = useRef(null);
     const thirdField = useRef(null);
     const fourthField = useRef(null);
-    // Function state
-    const [inputValue, setInput] = useState('')
+    // Function states
+    const [firstValue, setFirstInput] = useState("")
+    const [secondValue, setSecondInput] = useState("")
+    const [thirdValue, setThirdInput] = useState("")
+    const [fourthValue, setFourthInput] = useState("")
 
     // handle otp form submit
     function handleSubmit() {
 
-        // dispatch the accountRegistrationChange actions to store new user credentials  
-        dispatch(accountRegistrationChange({ username: inputValue, password: "", otp_code: "" }))
-
         // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(
             api.post(
-                '/register',
-                { username: inputValue }
+                '/register/check',
+                { otp_code: '9999' }
             )
                 .then(response => {
                     if (response.status === 200) {
@@ -70,38 +64,86 @@ export default function RegisterOtp({ navigation }) {
                 </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.otpWrapper}>
-                        <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>
+                        <Text style={styles.otpWrapperText}>
                             OTP Number
                         </Text>
                         <View style={styles.otpFieldContainer}>
-                            <View style={styles.otpField} onPress={() => { firstField.current.focus(); }}>
+                            <View style={styles.otpField}>
                                 <TextInput
+                                    keyboardType="numeric"
                                     ref={firstField}
-                                    onChangeText={(newVal) => setInput(newVal)}
-                                    value={inputValue}
+                                    selectTextOnFocus={true}
+                                    onKeyPress={({ nativeEvent }) => {
+                                        if (nativeEvent.key === 'Backspace') {
+                                            firstField.current.focus();
+                                        }
+                                    }}
+                                    onChangeText={newVal => {
+                                        setFirstInput(newVal);
+                                        if (newVal !== '') {
+                                            secondField.current.focus();
+                                        }
+                                    }}
+                                    maxLength={1}
                                     textAlign="center"
-                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                    style={styles.otpFieldInput} />
                             </View>
-                            <View style={styles.otpField} ref={secondField}>
+                            <View style={styles.otpField}>
                                 <TextInput
-                                    onChangeText={(newVal) => setInput(newVal)}
-                                    value={inputValue}
+                                    keyboardType="numeric"
+                                    ref={secondField}
+                                    selectTextOnFocus={true}
+                                    onKeyPress={({ nativeEvent }) => {
+                                        if (nativeEvent.key === 'Backspace') {
+                                            firstField.current.focus();
+                                        }
+                                    }}
+                                    onChangeText={(newVal) => {
+                                        setSecondInput(newVal);
+                                        if (newVal !== '') {
+                                            thirdField.current.focus();
+                                        }
+                                    }}
+                                    maxLength={1}
                                     textAlign="center"
-                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                    style={styles.otpFieldInput} />
                             </View>
-                            <View style={styles.otpField} ref={thirdField}>
+                            <View style={styles.otpField}>
                                 <TextInput
-                                    onChangeText={(newVal) => setInput(newVal)}
-                                    value={inputValue}
+                                    keyboardType="numeric"
+                                    ref={thirdField}
+                                    selectTextOnFocus={true}
+                                    onKeyPress={({ nativeEvent }) => {
+                                        if (nativeEvent.key === 'Backspace') {
+                                            secondField.current.focus();
+                                        }
+                                    }}
+                                    onChangeText={(newVal) => {
+                                        setThirdInput(newVal);
+                                        if (newVal !== '') {
+                                            fourthField.current.focus();
+                                        }
+                                    }}
+                                    maxLength={1}
                                     textAlign="center"
-                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                    style={styles.otpFieldInput} />
                             </View>
-                            <View style={styles.otpField} ref={fourthField}>
+                            <View style={styles.otpField}>
                                 <TextInput
-                                    onChangeText={(newVal) => setInput(newVal)}
-                                    value={inputValue}
+                                    keyboardType="numeric"
+                                    ref={fourthField}
+                                    selectTextOnFocus={true}
+                                    onKeyPress={({ nativeEvent }) => {
+                                        if (nativeEvent.key === 'Backspace') {
+                                            thirdField.current.focus();
+                                        }
+                                    }}
+                                    onChangeText={(newVal) => {
+                                        setFourthInput(newVal);
+                                    }}
+                                    maxLength={1}
                                     textAlign="center"
-                                    style={{ height: '100%', width: '100%', flex: 1, fontSize: 32 / Dimensions.get("screen").fontScale }} />
+                                    style={styles.otpFieldInput} />
                             </View>
                         </View>
                     </View>
@@ -161,6 +203,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around'
     },
+    otpWrapperText: {
+        fontWeight: 'bold',
+        alignSelf: 'flex-start',
+        fontSize: 14 / Dimensions.get("screen").fontScale,
+    },
     otpFieldContainer: {
         height: '70%',
         width: '100%',
@@ -174,6 +221,12 @@ const styles = StyleSheet.create({
         borderWidth: 0.7,
         borderRadius: 10,
         borderColor: 'grey',
+    },
+    otpFieldInput: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        fontSize: 32 / Dimensions.get("screen").fontScale
     },
     submitBtn: {
         flex: 1,

@@ -18,6 +18,11 @@ import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker'
 import { HostServer } from '../../config/app.config';
 import Background from '../../components/Backgrounds/registration_background'
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click'
+import { TouchableHighlight } from 'react-native-gesture-handler';
+
+// a HOC to throttle button click
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
 const api = axios.create({
@@ -51,6 +56,20 @@ export default function Register({ navigation }) {
 
     // handle WhatsApp validation
     function handleValidatePhone(value) {
+
+        if (value.length > 8) {
+            if (value.includes('+')) {
+                var subPhone = value.split('+', 2);
+                if (isNaN(subPhone[1])) {
+                    return false;
+                }
+            }
+            else {
+                if (isNaN(value)) {
+                    return false;
+                }
+            }
+        }
 
         if (regWA.test(value) === true) {
             return true;
@@ -112,48 +131,53 @@ export default function Register({ navigation }) {
                 </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.warnMessage}>
-                        <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale, textAlign: 'center', color: 'white' }} >
+                        <Text style={styles.warnMessageText} >
                             Make sure you have whatsapp
                         </Text>
-                        <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale, textAlign: 'center', color: 'white' }} >
+                        <Text style={styles.warnMessageText} >
                             account when you registering your
                         </Text>
-                        <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale, textAlign: 'center', color: 'white' }} >
+                        <Text style={styles.warnMessageText} >
                             phone number
                         </Text>
                     </View>
                     <View style={styles.authInputWrapper}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
+                        <Text style={styles.authInputTitle}>
                             Phone / Email
                         </Text>
                         <View style={styles.authInput}>
                             <TextInput
-                                onChangeText={(newVal) => setInput(newVal)}
-                                value={inputValue}
                                 textAlign="left"
+                                value={inputValue}
+                                onChangeText={(newVal) => setInput(newVal)}
                                 style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
                         </View>
                     </View>
                     <View style={styles.o2AuthWrapper}>
-                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6, marginRight: 5 }}>
+                        <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 6, marginRight: 5 }}>
                             <SocialIcon button type='google' />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6 }}>
+                        </TouchableOpacityPrevent>
+                        <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 6 }}>
                             <SocialIcon button type='facebook' />
-                        </TouchableOpacity>
+                        </TouchableOpacityPrevent>
                     </View>
                 </View>
                 <View style={styles.submitBtn}>
-                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
+                    <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
                             Submit
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacityPrevent>
                 </View>
                 <View style={styles.loginBtn}>
                     <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale }} >
-                        Have an account ? <Text onPress={() => { navigation.replace('LoginStack'); }} style={{ color: AppStyle.fourt_main_color }}>Login</Text>
+                        Have an account ?{' '}
                     </Text>
+                    <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
+                        <Text style={{ color: AppStyle.fourt_main_color }}>
+                            Login
+                        </Text>
+                    </TouchableOpacityPrevent>
                 </View>
             </View>
         </Background >
@@ -201,10 +225,20 @@ const styles = StyleSheet.create({
         height: AppStyle.screenSize.height * 0.15,
         backgroundColor: AppStyle.fourt_main_color,
     },
+    warnMessageText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 14 / Dimensions.get("screen").fontScale,
+    },
     authInputWrapper: {
         width: '100%',
         marginTop: '10%',
         marginBottom: '5%'
+    },
+    authInputTitle: {
+        fontWeight: 'bold',
+        alignSelf: 'flex-start', bottom: 5,
+        fontSize: 14 / Dimensions.get("screen").fontScale,
     },
     authInput: {
         width: '100%',

@@ -10,6 +10,7 @@ import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click'
 
+// a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // Welcome is the root of Welcome stack
