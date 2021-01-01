@@ -15,8 +15,8 @@ import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { HostServer } from '../../config/app.config';
 import { useSelector, useDispatch } from 'react-redux';
-import Background from '../../components/Backgrounds/registration_background'
-import withPreventDoubleClick from '../../components/HOC/prevent_double_click'
+import Background from '../../components/Backgrounds/registration_background';
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);

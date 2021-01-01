@@ -47,7 +47,6 @@ const Splash = ({ navigation }) => {
             .then(response => {
                 if (response.status >= 200 && response.status < 300) {
                     // TODO: set the state to logged in
-                    console.log(response.status);
                     navigation.replace('AppStack');
                 }
             })
@@ -58,7 +57,6 @@ const Splash = ({ navigation }) => {
                 } else {
                     if (error.response.status === 401) {
                         // TODO: delete after development and change to !== 401
-                        console.log("unauthorized");
                         navigation.replace('WelcomeStack');
                     }
                     else
