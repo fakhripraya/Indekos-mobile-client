@@ -138,9 +138,6 @@ export default function RegisterFinal({ navigation }) {
                                 style={styles.authInputText} />
                         </View>
                     </View>
-                    <Text style={[{ display: popFlag, width: '100%' }, styles.textWarning, { backgroundColor: popColor, fontSize: 14 / Dimensions.get("screen").fontScale }]}>
-                        {popMessage}
-                    </Text>
                     <View style={styles.authInputWrapper}>
                         <Text style={styles.authInputTitle}>
                             Confirm Password
@@ -155,11 +152,6 @@ export default function RegisterFinal({ navigation }) {
                         </View>
                     </View>
                 </View>
-                {/* <View style={[{ display: popFlag }, styles.textWarningWrapper]}>
-                    <Text style={[styles.textWarning, { backgroundColor: popColor, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
-                        {popMessage}
-                    </Text>
-                </View> */}
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
