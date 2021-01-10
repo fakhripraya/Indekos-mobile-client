@@ -1,4 +1,7 @@
 import {
+    popUpModalChange
+} from '../../redux';
+import {
     animated,
     useTransition,
 } from 'react-spring';
@@ -10,14 +13,15 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { HostServer } from '../../config/app.config';
+import { useDispatch } from 'react-redux';
+import { AuthService } from '../../config/app.config';
 
 // creates the react spring animated view
 const AnimatedView = animated(View)
 
 // creates the promised base http client
 const api = axios.create({
-    baseURL: "http://" + HostServer.host + HostServer.port + "/"
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
 // axios cancel source
@@ -27,6 +31,7 @@ var cancelSource
 const Splash = ({ navigation }) => {
 
     // hooks
+    const dispatch = useDispatch()
     const transitions = useTransition(null, null, {
         from: { opacity: 0 },
         enter: { opacity: 1 },
@@ -46,7 +51,6 @@ const Splash = ({ navigation }) => {
         })
             .then(response => {
                 if (response.status >= 200 && response.status < 300) {
-                    // TODO: set the state to logged in
                     navigation.replace('AppStack');
                 }
             })
@@ -55,12 +59,12 @@ const Splash = ({ navigation }) => {
                     // TODO: development only
                     console.log('Request canceled', error.message);
                 } else {
-                    if (error.response.status === 401) {
-                        // TODO: delete after development and change to !== 401
+                    if (error.response.status === 401)
+                        // go to welcome screen if user is not authorized
                         navigation.replace('WelcomeStack');
-                    }
                     else
-                        console.log(error.message); // TODO: development only, delete when development done
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
                 }
             });
         return () => {

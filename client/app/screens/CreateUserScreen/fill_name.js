@@ -1,22 +1,52 @@
 import {
+    popUpModalChange
+} from '../../redux';
+import {
     Text,
     View,
     TextInput,
     StyleSheet,
     Dimensions,
     TouchableOpacity,
-} from 'react-native'
-import React from 'react'
+} from 'react-native';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
-import { FirstBackground } from '../../components/Backgrounds/create_user_background'
+import { UserService } from '../../config/app.config';
+import { FirstBackground } from '../../components/Backgrounds/create_user_background';
+
+// creates the promised base http client
+const api = axios.create({
+    baseURL: "http://" + UserService.host + UserService.port + "/"
+})
 
 export default function FillName({ navigation }) {
+
+    // Hooks
+    const dispatch = useDispatch()
+    // Function states
+    const [inputValue, setInput] = useState('')
 
     // handle registration form submit
     function handleSubmit() {
 
-        navigation.replace('PickRole');
-
+        // triggers the http post request to /register url in the authentication service to process the registration
+        trackPromise(
+            api.patch('/user/update/signed', { displayname: inputValue })
+                .then(response => {
+                    if (response.status >= 200 && response.status < 300) {
+                        navigation.replace('PickRole');
+                    }
+                })
+                .catch(error => {
+                    if (error.response.status === 401)
+                        // go to welcome screen if user is not authorized
+                        navigation.replace('WelcomeStack');
+                    else
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                })
+        );
     }
 
     return (
@@ -25,8 +55,9 @@ export default function FillName({ navigation }) {
                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
                 <View style={styles.input}>
                     <TextInput
-                        onChangeText={(newVal) => { }}
                         textAlign="center"
+                        value={inputValue}
+                        onChangeText={(newVal) => setInput(newVal)}
                         style={{ flex: 1, paddingLeft: 0, fontSize: 20 / Dimensions.get("screen").fontScale }} />
 
                 </View>

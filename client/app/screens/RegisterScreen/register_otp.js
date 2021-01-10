@@ -13,7 +13,7 @@ import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
-import { HostServer } from '../../config/app.config';
+import { AuthService } from '../../config/app.config';
 import { useSelector, useDispatch } from 'react-redux';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
@@ -23,7 +23,7 @@ const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
 const api = axios.create({
-    baseURL: "http://" + HostServer.host + HostServer.port + "/"
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
 // RegisterOtp is the screen to handle the otp process of the registration flow

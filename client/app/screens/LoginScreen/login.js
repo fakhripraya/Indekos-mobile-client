@@ -15,12 +15,12 @@ import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker'
-import { HostServer } from '../../config/app.config';
+import { AuthService } from '../../config/app.config';
 import Background from '../../components/Backgrounds/login_background'
 
 // creates the promised base http client
 const api = axios.create({
-    baseURL: "http://" + HostServer.host + HostServer.port + "/"
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
 // Login is the root of Login stack
