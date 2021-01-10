@@ -1,7 +1,4 @@
 import {
-    popUpModalChange
-} from '../../redux';
-import {
     Text,
     View,
     TextInput,
@@ -9,6 +6,9 @@ import {
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
+import {
+    UserDisplayNameChange
+} from '../../redux';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
@@ -29,24 +29,7 @@ export default function FillName({ navigation }) {
 
     // handle registration form submit
     function handleSubmit() {
-
-        // triggers the http post request to /register url in the authentication service to process the registration
-        trackPromise(
-            api.patch('/user/update/signed', { displayname: inputValue })
-                .then(response => {
-                    if (response.status >= 200 && response.status < 300) {
-                        navigation.replace('PickRole');
-                    }
-                })
-                .catch(error => {
-                    if (error.response.status === 401)
-                        // go to welcome screen if user is not authorized
-                        navigation.replace('WelcomeStack');
-                    else
-                        // dispatch the popUpModalChange actions to store the generic message modal state
-                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                })
-        );
+        dispatch(UserDisplayNameChange({ displayName: inputValue }));
     }
 
     return (

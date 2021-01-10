@@ -1,11 +1,13 @@
-import { combineReducers, createStore } from 'redux'
-import { popUpModalReducer } from './pop_up_state/reducers'
-import { accountRegistrationReducer } from './account_registration_state/reducers'
+import { UserReducer } from './user_state/reducers';
+import { combineReducers, createStore } from 'redux';
+import { popUpModalReducer } from './pop_up_state/reducers';
+import { accountRegistrationReducer } from './account_registration_state/reducers';
 
 // rootReducer combines all the available reducers into one
 const rootReducer = combineReducers({
+    UserReducer,
+    popUpModalReducer,
     accountRegistrationReducer,
-    popUpModalReducer
 })
 
 // store is a redux store that holds all the client temporary data

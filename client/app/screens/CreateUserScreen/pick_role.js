@@ -4,23 +4,68 @@ import {
     StyleSheet,
     Dimensions,
     TouchableOpacity,
-} from 'react-native'
-import React from 'react'
+} from 'react-native';
+import {
+    UserRoleChange,
+    clearUserState,
+} from '../../redux';
+import React from 'react';
 import { AppStyle } from '../../config/app.config';
+import { useDispatch, useSelector } from 'react-redux';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background'
 
 export default function PickRole({ navigation }) {
+
+    // Hooks
+    const dispatch = useDispatch()
+    const tempDisplayName = useSelector(state => state.UserReducer.displayName);
+
+    // handle registration form submit
+    function handleSubmit(roleId) {
+
+        // roleId = 1 (user)
+        // roleId = 2 (owner)
+
+        dispatch(UserRoleChange({ roleId: roleId }));
+
+        if (roleId === 1) {
+            // if owner, finish the user creation and navigate to home screen
+            trackPromise(
+                api.patch('/user/update/signed', {
+                    displayname: tempDisplayName,
+                    role_id: roleId,
+                })
+                    .then(response => {
+                        if (response.status >= 200 && response.status < 300) {
+                            dispatch(clearUserState());
+                            navigation.replace('AppStack');
+                        }
+                    })
+                    .catch(error => {
+                        if (error.response.status === 401)
+                            // go to welcome screen if user is not authorized
+                            navigation.replace('WelcomeStack');
+                        else
+                            // dispatch the popUpModalChange actions to store the generic message modal state
+                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                    })
+            );
+        } else
+            // if owner, navigate to owner
+            navigation.replace('Agreement');
+    }
+
     return (
         <FirstBackground>
             <View style={styles.wrapper}>
                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>I want to register in <Text style={{ color: AppStyle.fourt_main_color }}>as</Text></Text>
                 <View style={styles.buttonWrapper}>
-                    <TouchableOpacity onPress={() => { navigation.replace('AppStack') }}>
+                    <TouchableOpacity onPress={() => handleSubmit(1)}>
                         <View style={[styles.button, { backgroundColor: AppStyle.fourt_main_color }]}>
                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>User</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { navigation.replace('Agreement') }}>
+                    <TouchableOpacity onPress={() => handleSubmit(2)}>
                         <View style={[styles.button, { backgroundColor: 'white' }]}>
                             <Text style={{ fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>Owner</Text>
                         </View>
