@@ -10,6 +10,7 @@ import {
     UserDisplayNameChange
 } from '../../redux';
 import React from 'react';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
 import { UserService } from '../../config/app.config';
@@ -30,6 +31,26 @@ export default function FillName({ navigation }) {
     // handle registration form submit
     function handleSubmit() {
         dispatch(UserDisplayNameChange({ displayName: inputValue }));
+
+        // if owner, finish the user creation and navigate to home screen
+        trackPromise(
+            api.patch('/update/signed', {
+                displayname: inputValue,
+            })
+                .then(response => {
+                    if (response.status >= 200 && response.status < 300) {
+                        navigation.replace('PickRole');
+                    }
+                })
+                .catch(error => {
+                    if (error.response.status === 401)
+                        // go to welcome screen if user is not authorized
+                        navigation.replace('WelcomeStack');
+                    else
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                })
+        );
     }
 
     return (

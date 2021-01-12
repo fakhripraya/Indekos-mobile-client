@@ -10,9 +10,15 @@ import {
     clearUserState,
 } from '../../redux';
 import React from 'react';
+import axios from 'axios';
 import { AppStyle } from '../../config/app.config';
 import { useDispatch, useSelector } from 'react-redux';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background'
+
+// creates the promised base http client
+const api = axios.create({
+    baseURL: "http://" + UserService.host + UserService.port + "/"
+})
 
 export default function PickRole({ navigation }) {
 
@@ -31,7 +37,7 @@ export default function PickRole({ navigation }) {
         if (roleId === 1) {
             // if owner, finish the user creation and navigate to home screen
             trackPromise(
-                api.patch('/user/update/signed', {
+                api.patch('/update/signed', {
                     displayname: tempDisplayName,
                     role_id: roleId,
                 })
