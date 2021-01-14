@@ -2,8 +2,6 @@
 client/babel.config.js
 client/.expo-shared
 client/node_modules
-client/package-lock.json
-client/package.json
 client/app.json
 
 client/.vscode/launch.json
