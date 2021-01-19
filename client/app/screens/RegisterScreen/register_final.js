@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         flexDirection: 'row',
         alignSelf: 'flex-start',
-        height: AppStyle.screenSize.height * 0.075,
+        height: AppStyle.screenSize.height * 0.06,
     },
     authInputText: {
         flex: 1,

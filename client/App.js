@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import store from './app/redux/store';
 import { Provider } from 'react-redux';
+import BookStack from './app/route/book_stack';
 import { StyleSheet, View } from 'react-native';
 import AppStack from './app/route/app_stack.js';
 import LoginStack from './app/route/login_stack';
@@ -27,7 +28,8 @@ export default function App() {
     <Provider store={store}>
       <View style={styles.container}>
         <NavigationContainer>
-          <RootStack.Navigator initialRouteName="SplashStack">
+          <RootStack.Navigator initialRouteName="BookStack">
+            {/* <RootStack.Navigator initialRouteName="SplashStack"> */}
             <RootStack.Screen
               name="SplashStack"
               component={SplashStack}
@@ -56,6 +58,11 @@ export default function App() {
             <RootStack.Screen
               name="AppStack"
               component={AppStack}
+              options={{ headerShown: false }}
+            />
+            <RootStack.Screen
+              name="BookStack"
+              component={BookStack}
               options={{ headerShown: false }}
             />
           </RootStack.Navigator>

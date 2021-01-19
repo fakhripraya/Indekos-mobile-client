@@ -9,7 +9,7 @@ import OwnerPaymentMethod from '../screens/CreateUserScreen/owner_payment_method
 // create a nested stack navigator
 const NestedStack = createStackNavigator();
 
-// export the RegistrationStack
+// export the CreateUserStack
 export default function CreateUserStack() {
     return (
         <NestedStack.Navigator>

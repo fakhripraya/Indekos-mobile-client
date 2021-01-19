@@ -9,10 +9,11 @@ import {
 import {
     UserDisplayNameChange
 } from '../../redux';
-import React from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
+import { trackPromise } from 'react-promise-tracker';
 import { UserService } from '../../config/app.config';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background';
 

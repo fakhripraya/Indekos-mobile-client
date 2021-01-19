@@ -211,8 +211,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'space-evenly',
         bottom: AppStyle.screenSize.height / 4.5,
-        width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        height: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.5),
+        width: AppStyle.screenSize.width * 0.9,
+        height: AppStyle.screenSize.height * 0.5,
     },
     warnMessage: {
         width: '100%',
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         flexDirection: 'row',
         alignSelf: 'flex-start',
-        height: AppStyle.screenSize.height * 0.075,
+        height: AppStyle.screenSize.height * 0.06,
     },
     o2AuthWrapper: {
         flexDirection: 'row',

@@ -11,7 +11,7 @@ import {
 } from '../../redux';
 import React from 'react';
 import axios from 'axios';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, UserService } from '../../config/app.config';
 import { useDispatch, useSelector } from 'react-redux';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background'
 
