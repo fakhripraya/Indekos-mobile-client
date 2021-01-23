@@ -45,6 +45,18 @@ const styles = StyleSheet.create({
 
     absoluteContainer: {
         position: 'absolute',
+        elevation: 5,
+        borderRadius: 15,
+        paddingTop: '5%',
+        paddingBottom: '5%',
+        paddingLeft: '5%',
+        paddingRight: '5%',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        justifyContent: 'space-evenly',
+        bottom: AppStyle.screenSize.height / 4.5,
+        width: AppStyle.screenSize.width * 0.9,
+        height: AppStyle.screenSize.height * 0.5,
     },
     container_1: {
         flex: 0.7,
