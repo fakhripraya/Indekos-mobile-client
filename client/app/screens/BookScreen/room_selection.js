@@ -1,201 +1,105 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
-import { AntDesign } from '@expo/vector-icons';
-import { FlatList, TouchableOpacity, ScrollView, Dimensions, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    FlatList,
+    TouchableOpacity,
+    ScrollView,
+    Dimensions,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
 
 export default function RoomSelection() {
 
     // Function refs
-    const carouselRef = useRef(null);
+    const periodCarouselRef = useRef(null);
+    const roomCarouselRef = useRef(null);
+
     // Function states
-    const [activeIndex, setActive] = useState(0)
-    const initialDataList = [
+    const [dataList, setDataList] = useState(null)
+    const [containerIndex, setContainerIndex] = useState(0)
+
+    // data dummy 1
+    const RoomListData = [
         {
             state: false,
-            occupied: false,
-            key: "1",
+            RoomID: 1,
+            RoomLevel: "level 1",
+            RoomDesc: "Kamar Mayat",
+            RoomSize: "(20m x 20m)",
+            RoomDetailList: [
+                {
+                    state: false,
+                    occupied: false,
+                    key: "1",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "2",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "3",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "4",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "5",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "6",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "7",
+                },
+            ]
         },
         {
             state: false,
-            occupied: true,
-            key: "2",
-        },
-        {
-            state: false,
-            occupied: false,
-            key: "3",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "4",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "5",
-        },
-        {
-            state: false,
-            occupied: false,
-            key: "6",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "7",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "8",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "9",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "10",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "11",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "12",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "13",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "14",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "15",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "16",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "17",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "18",
+            RoomID: 2,
+            RoomLevel: "level 2",
+            RoomDesc: "Luxury Room",
+            RoomSize: "(20m x 20m)",
+            RoomDetailList: [
+                {
+                    state: false,
+                    occupied: false,
+                    key: "1",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "2",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "3",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "4",
+                },
+            ]
         },
     ]
-    const [dataList, setDataList] = useState([
-        {
-            state: false,
-            occupied: false,
-            key: "1",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "2",
-        },
-        {
-            state: false,
-            occupied: false,
-            key: "3",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "4",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "5",
-        },
-        {
-            state: false,
-            occupied: false,
-            key: "6",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "7",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "8",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "9",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "10",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "11",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "12",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "13",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "14",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "15",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "16",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "17",
-        },
-        {
-            state: false,
-            occupied: true,
-            key: "18",
-        },
-    ])
 
-    // the fixed data for the carousel view
+    // data dummy 2
     let caraouselData = [
         {
             title: "Find your",
@@ -216,8 +120,8 @@ export default function RoomSelection() {
         },
     ]
 
-    // Renders the elements of the carousel view
-    function _renderItem({ page }) {
+    // Renders the elements of the period carousel
+    function _renderFirstCarousel({ page }) {
         return (
             <View style={styles.buttonWrapper}>
                 <View style={styles.buttonPeriod}>
@@ -236,22 +140,72 @@ export default function RoomSelection() {
         )
     }
 
-    // Renders the elements of the carousel view
+    // map room array from database
+    function RoomListView() {
+
+        return (
+            <View style={styles.absoluteContainer}>
+                <View style={styles.roomFloor}><Text style={{ fontWeight: 'bold', fontSize: 18 }}>{dataList[containerIndex].RoomLevel}</Text></View>
+                <View style={styles.roomInfo}>
+                    <View >
+                        <Text>{dataList[containerIndex].RoomDesc}</Text>
+                        <Text>{dataList[containerIndex].RoomSize}</Text>
+                    </View>
+                    <View style={{ position: 'absolute', flexDirection: 'row', left: '70%' }} >
+                        <TouchableOpacity style={styles.arrow}>
+                            <AntDesign name="caretleft" size={12} color="white" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.arrow}>
+                            <AntDesign name="caretright" size={12} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.roomListContainer}>
+                    <Carousel
+                        ref={roomCarouselRef}
+                        layout={"default"}
+                        data={dataList}
+                        sliderWidth={styles.absoluteContainer.width}
+                        itemWidth={styles.absoluteContainer.width}
+                        renderItem={_renderSecondCarousel}
+                    />
+                </View>
+            </View>
+        )
+
+    }
+
+    // Renders the elements of the room carousel
+    function _renderSecondCarousel() {
+
+        return (
+            <FlatList
+                data={dataList[containerIndex].RoomDetailList}
+                renderItem={_renderFlatList}
+                keyExtractor={(item, index) => index.toString()}
+                numColumns={6}
+            />
+        )
+    }
+
+    // update the state of the room detail
+    const updateDataList = (index) => {
+
+        const newArr = [...RoomListData];
+
+        if (dataList[containerIndex].RoomDetailList[index].state === false)
+            newArr[containerIndex].RoomDetailList[index].state = true;
+        else
+            newArr[containerIndex].RoomDetailList[index].state = false;
+
+        setDataList(newArr);
+    }
+
+    // Renders the elements of the room detail flat list
     function _renderFlatList({ item, index }) {
 
         const txtColor = item.state ? "white" : AppStyle.fourt_main_color
         const bgColor = item.state ? AppStyle.fourt_main_color : "white"
-
-        const updateDataList = (index) => {
-
-            let newArr = [...initialDataList]; // copying the old datas array
-            if (newArr[index].state === false)
-                newArr[index].state = true; // replace e.target.value with whatever you want to change it to
-            else
-                newArr[index].state = false; // replace e.target.value with whatever you want to change it to
-
-            setDataList(newArr); // ??
-        }
 
         if (item.occupied === true) {
             return (
@@ -270,76 +224,63 @@ export default function RoomSelection() {
         }
     }
 
+    // fetch the data from the server
     useEffect(() => {
+
+        if (dataList === null)
+            setDataList(RoomListData)
+
         return () => {
         }
     }, [])
 
-    return (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ flex: 1, width: '100%', height: AppStyle.screenSize.height }}>
-                    <Text style={styles.title}>Room Selection</Text>
-                    <View style={styles.absoluteContainer}>
-                        <View style={styles.roomFloor}><Text style={{ fontWeight: 'bold', fontSize: 18 }}>Room Level</Text></View>
-                        <View style={styles.roomInfo}>
-                            <View >
-                                <Text>Luxury Room</Text>
-                                <Text>( 20m x 20m )</Text>
-                            </View>
-                            <View style={{ position: 'absolute', flexDirection: 'row', left: '70%' }} >
-                                <TouchableOpacity style={styles.arrow}>
-                                    <AntDesign name="caretleft" size={12} color="white" />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.arrow}>
-                                    <AntDesign name="caretright" size={12} color="white" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={styles.roomListContainer}>
-                            <FlatList
-                                data={dataList}
-                                renderItem={_renderFlatList}
-                                keyExtractor={(item, index) => index.toString()}
-                                numColumns={6}
+    //if null dont render yet
+    if (dataList !== null) {
+        return (
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={{ flex: 1, width: '100%', height: AppStyle.screenSize.height }}>
+                        <Text style={styles.title}>Room Selection</Text>
+                        <RoomListView >
+                            {dataList}
+                        </RoomListView>
+                        <View style={styles.container_1}>
+                            <Text style={styles.containerTitle}>Period</Text>
+                            <Carousel
+                                ref={periodCarouselRef}
+                                layout={"default"}
+                                data={caraouselData}
+                                sliderWidth={AppStyle.screenSize.width}
+                                itemWidth={AppStyle.screenSize.width}
+                                renderItem={_renderFirstCarousel}
                             />
                         </View>
-                    </View>
-                    <View style={styles.container_1}>
-                        <Text style={styles.containerTitle}>Period</Text>
-                        <Carousel
-                            ref={carouselRef}
-                            layout={"default"}
-                            data={caraouselData}
-                            sliderWidth={AppStyle.screenSize.width}
-                            itemWidth={AppStyle.screenSize.width}
-                            renderItem={_renderItem}
-                            onSnapToItem={(index) => { setActive(index) }}
-                        />
-                    </View>
-                    <View style={styles.container_2}>
-                        <Text style={styles.containerTitle}>Date</Text>
-                        <View style={styles.buttonWrapper}>
-                            <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
-                                <Text style={{ fontWeight: 'bold' }}>12</Text>
-                            </View>
-                            <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.40 }]}>
-                                <Text style={{ fontWeight: 'bold' }}>October</Text>
-                            </View>
-                            <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
-                                <Text style={{ fontWeight: 'bold' }}>2012</Text>
+                        <View style={styles.container_2}>
+                            <Text style={styles.containerTitle}>Date</Text>
+                            <View style={styles.buttonWrapper}>
+                                <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
+                                    <Text style={{ fontWeight: 'bold' }}>12</Text>
+                                </View>
+                                <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.40 }]}>
+                                    <Text style={{ fontWeight: 'bold' }}>October</Text>
+                                </View>
+                                <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
+                                    <Text style={{ fontWeight: 'bold' }}>2012</Text>
+                                </View>
                             </View>
                         </View>
+                        <View style={styles.container_3}>
+                            <TouchableOpacity style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Next</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={styles.container_3}>
-                        <TouchableOpacity style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Next</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </ScrollView>
-        </View>
-    )
+                </ScrollView>
+            </View>
+        )
+    } else {
+        return null
+    }
 }
 
 const styles = StyleSheet.create({
