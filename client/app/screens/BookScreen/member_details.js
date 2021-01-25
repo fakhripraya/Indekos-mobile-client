@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { AppStyle } from '../../config/app.config';
-import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Button, ScrollView, Dimensions, StyleSheet, Text, View, TextInput } from 'react-native'
 
 export default function MemberDetails() {
 
@@ -10,32 +10,62 @@ export default function MemberDetails() {
     }, [])
 
     return (
-        <View>
-            <View>
-                <View>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+            <ScrollView style={{ flex: 1 }}>
+                <View style={{ flex: 1, width: '100%', height: AppStyle.screenSize.height }}>
+                    <Text style={styles.title}>Member Details</Text>
+                    <View style={styles.absoluteContainer}>
+                        <Text></Text>
+                        <View>
+                            <View>
 
-                </View>
-                <View>
+                            </View>
+                            <View>
 
+                            </View>
+                        </View>
+                        <Text></Text>
+                        <Text></Text>
+                        <View>
+                            <View>
+
+                            </View>
+                            <View>
+
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.mappedContainer}>
+                        <View>
+                            <Text></Text>
+                            <Text></Text>
+                        </View>
+                        <View>
+                            <Text></Text>
+                            <TextInput />
+                        </View>
+                        <View>
+                            <Text></Text>
+                            <TextInput />
+                        </View>
+                        <View>
+                            <Text></Text>
+                            <View>
+                                <View>
+
+                                </View>
+                                <View>
+
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    <View>
+                        <Text></Text>
+                        <TextInput />
+                    </View>
                 </View>
-            </View>
-            <View>
-                <Text>Period</Text>
-                <View>
-                    <Button />
-                    <Button />
-                    <Button />
-                    <Button />
-                </View>
-            </View>
-            <View>
-                <Text>Date</Text>
-                <View>
-                    <Button />
-                    <Button />
-                    <Button />
-                </View>
-            </View>
+            </ScrollView>
         </View>
     )
 }
@@ -43,29 +73,33 @@ export default function MemberDetails() {
 
 const styles = StyleSheet.create({
 
+    title: {
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop: AppStyle.screenSize.height * 0.05,
+        marginBottom: AppStyle.screenSize.height * 0.05,
+        fontSize: 20 / Dimensions.get("screen").fontScale,
+    },
     absoluteContainer: {
-        position: 'absolute',
         elevation: 5,
-        borderRadius: 15,
         paddingTop: '5%',
-        paddingBottom: '5%',
+        borderRadius: 15,
         paddingLeft: '5%',
         paddingRight: '5%',
-        alignItems: 'center',
+        paddingBottom: '5%',
+        alignSelf: 'center',
         backgroundColor: 'white',
-        justifyContent: 'space-evenly',
-        bottom: AppStyle.screenSize.height / 4.5,
         width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.5,
+        height: AppStyle.screenSize.height * 0.425,
+        marginBottom: AppStyle.screenSize.height * 0.025,
     },
-    container_1: {
-        flex: 0.7,
-        alignItems: 'flex-end',
-        justifyContent: 'center'
-    },
-    container_2: {
-        flex: 0.3,
-
+    mappedContainer: {
+        paddingLeft: '5%',
+        paddingRight: '5%',
+        alignSelf: 'center',
+        width: AppStyle.screenSize.width * 0.9,
+        height: AppStyle.screenSize.height * 0.425,
+        marginBottom: AppStyle.screenSize.height * 0.025,
     }
-
 })

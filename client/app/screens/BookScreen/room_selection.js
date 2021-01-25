@@ -281,9 +281,7 @@ export default function RoomSelection() {
                 <ScrollView style={{ flex: 1 }}>
                     <View style={{ flex: 1, width: '100%', height: AppStyle.screenSize.height }}>
                         <Text style={styles.title}>Room Selection</Text>
-                        <RoomListView >
-                            {dataList}
-                        </RoomListView>
+                        <RoomListView />
                         <View style={styles.container_1}>
                             <Text style={styles.containerTitle}>Period</Text>
                             <Carousel

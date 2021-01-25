@@ -10,8 +10,8 @@ const NestedStack = createStackNavigator();
 export default function BookStack() {
     return (
         <NestedStack.Navigator>
-            <NestedStack.Screen name="RoomSelection" component={RoomSelection} options={{ headerShown: false }} />
             <NestedStack.Screen name="MemberDetails" component={MemberDetails} options={{ headerShown: false }} />
+            <NestedStack.Screen name="RoomSelection" component={RoomSelection} options={{ headerShown: false }} />
         </NestedStack.Navigator>
     );
 }
