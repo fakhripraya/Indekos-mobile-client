@@ -20,6 +20,7 @@ export default function RoomSelection() {
 
     // Function states
     const [dataList, setDataList] = useState(null)
+    const [periodDataList, setPeriodDataList] = useState(null)
     const [containerIndex, setContainerIndex] = useState(0)
 
     // data dummy 1
@@ -100,24 +101,43 @@ export default function RoomSelection() {
     ]
 
     // data dummy 2
-    let caraouselData = [
-        {
-            title: "Find your",
-            sub_title: "kos",
-            text: "Have an account?",
-        },
-        {
-            title: "Choose",
-            sub_title: "it",
-            text: "Have an account?",
-        },
-        {
-            title: "Manage",
-            sub_title: "all",
-            second_title: "time",
-            second_sub_title: "in one",
-            text: "Have an account?",
-        },
+    const PeriodDataList = [
+        [
+            {
+                desc: "Daily",
+                state: false,
+            },
+            {
+                desc: "Weekly",
+                state: false,
+            },
+            {
+                desc: "Monthly",
+                state: false,
+            },
+            {
+                desc: "Annualy",
+                state: false,
+            }
+        ],
+        [
+            {
+                desc: "Decadely",
+                state: false,
+            },
+            {
+                desc: "Secondly",
+                state: false,
+            },
+            {
+                desc: "Minutely",
+                state: false,
+            },
+            {
+                desc: "Hourly",
+                state: false,
+            }
+        ],
     ]
 
     function nextRoom() {
@@ -135,23 +155,41 @@ export default function RoomSelection() {
     }
 
     // Renders the elements of the period carousel
-    function _renderFirstCarousel({ page }) {
+    function _renderFirstCarousel({ item, index }) {
+
+        let parent = index
+
         return (
             <View style={styles.buttonWrapper}>
-                <View style={styles.buttonPeriod}>
-                    <Text style={{ fontWeight: 'bold' }}>Daily</Text>
-                </View>
-                <View style={styles.buttonPeriod}>
-                    <Text style={{ fontWeight: 'bold' }}>Weekly</Text>
-                </View>
-                <View style={styles.buttonPeriod}>
-                    <Text style={{ fontWeight: 'bold' }}>Monthly</Text>
-                </View>
-                <View style={styles.buttonPeriod}>
-                    <Text style={{ fontWeight: 'bold' }}>Annualy</Text>
-                </View>
+                {item.map((item, index) => {
+
+                    const txtColor = item.state ? "white" : AppStyle.fourt_main_color
+                    const bgColor = item.state ? AppStyle.fourt_main_color : "white"
+
+                    return (
+                        <TouchableOpacity key={index} onPress={() => { updatePeriodList(index, parent) }}>
+                            <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
+                                <Text style={{ fontWeight: 'bold', color: txtColor }}>{item.desc}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    )
+
+                })}
             </View>
         )
+    }
+
+    // update the state of the period
+    const updatePeriodList = (index, parent) => {
+
+        const newArr = [...PeriodDataList];
+
+        if (periodDataList[parent][index].state === false)
+            newArr[parent][index].state = true;
+        else
+            newArr[parent][index].state = false;
+
+        setPeriodDataList(newArr);
     }
 
     // map room array from database
@@ -229,6 +267,9 @@ export default function RoomSelection() {
         if (dataList === null)
             setDataList(RoomListData)
 
+        if (periodDataList === null)
+            setPeriodDataList(PeriodDataList)
+
         return () => {
         }
     }, [])
@@ -248,7 +289,7 @@ export default function RoomSelection() {
                             <Carousel
                                 ref={periodCarouselRef}
                                 layout={"default"}
-                                data={caraouselData}
+                                data={periodDataList}
                                 sliderWidth={AppStyle.screenSize.width}
                                 itemWidth={AppStyle.screenSize.width}
                                 renderItem={_renderFirstCarousel}
