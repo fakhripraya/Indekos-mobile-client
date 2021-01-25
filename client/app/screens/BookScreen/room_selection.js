@@ -1,7 +1,3 @@
-import { AntDesign } from '@expo/vector-icons';
-import Carousel from 'react-native-snap-carousel';
-import { AppStyle } from '../../config/app.config';
-import React, { useEffect, useRef, useState } from 'react';
 import {
     FlatList,
     TouchableOpacity,
@@ -12,6 +8,10 @@ import {
     View,
     LogBox
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import Carousel from 'react-native-snap-carousel';
+import { AppStyle } from '../../config/app.config';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function RoomSelection() {
 
@@ -326,49 +326,49 @@ export default function RoomSelection() {
 const styles = StyleSheet.create({
 
     title: {
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        justifyContent: 'center',
         marginTop: AppStyle.screenSize.height * 0.05,
         marginBottom: AppStyle.screenSize.height * 0.05,
-        alignSelf: 'center',
-        fontWeight: 'bold',
-        justifyContent: 'center',
         fontSize: 20 / Dimensions.get("screen").fontScale,
     },
     absoluteContainer: {
-        marginBottom: AppStyle.screenSize.height * 0.025,
         elevation: 5,
-        borderRadius: 15,
         paddingTop: '5%',
-        paddingBottom: '5%',
+        borderRadius: 15,
         paddingLeft: '5%',
         paddingRight: '5%',
+        paddingBottom: '5%',
         alignSelf: 'center',
         backgroundColor: 'white',
         width: AppStyle.screenSize.width * 0.9,
         height: AppStyle.screenSize.height * 0.425,
+        marginBottom: AppStyle.screenSize.height * 0.025,
     },
     roomList: {
-        width: AppStyle.screenSize.width * 0.1215,
-        height: AppStyle.screenSize.width * 0.1225,
         marginTop: 1,
         marginRight: 5,
+        borderWidth: 1,
+        paddingTop: 15,
         marginBottom: 1,
         borderRadius: 10,
-        paddingTop: 15,
         paddingBottom: 15,
-        justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
+        justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
+        width: AppStyle.screenSize.width * 0.1215,
+        height: AppStyle.screenSize.width * 0.1225,
     },
     roomListContainer: {
         top: AppStyle.screenSize.height * 0.05
     },
     arrow: {
-        backgroundColor: 'gray',
-        justifyContent: 'center',
-        borderRadius: 100 / 2,
         marginRight: 10,
         alignItems: 'center',
+        borderRadius: 100 / 2,
+        backgroundColor: 'gray',
+        justifyContent: 'center',
         width: AppStyle.screenSize.width * 0.1,
         height: AppStyle.screenSize.height * 0.05,
     },
@@ -376,10 +376,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     container_1: {
-        paddingLeft: AppStyle.screenSize.width * 0.05,
         justifyContent: 'center',
+        width: AppStyle.screenSize.width,
         height: AppStyle.screenSize.height * 0.15,
-        width: AppStyle.screenSize.width
+        paddingLeft: AppStyle.screenSize.width * 0.05,
     },
     container_2: {
         paddingLeft: AppStyle.screenSize.width * 0.05,
@@ -388,52 +388,52 @@ const styles = StyleSheet.create({
         width: AppStyle.screenSize.width
     },
     container_3: {
-        paddingRight: AppStyle.screenSize.width * 0.05,
         justifyContent: 'center',
+        width: AppStyle.screenSize.width,
         height: AppStyle.screenSize.height * 0.1,
-        width: AppStyle.screenSize.width
+        paddingRight: AppStyle.screenSize.width * 0.05,
     },
     containerTitle: {
-        alignSelf: 'flex-start',
-        marginBottom: '2%',
         marginTop: '2%',
         fontWeight: 'bold',
-        fontSize: 16 / Dimensions.get("screen").fontScale
+        marginBottom: '2%',
+        alignSelf: 'flex-start',
+        fontSize: 16 / Dimensions.get("screen").fontScale,
     },
     nextBtn: {
-        width: AppStyle.screenSize.width * 0.275,
-        borderRadius: 100 / 2,
         paddingTop: 10,
-        paddingBottom: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'flex-end',
         borderWidth: 1,
+        paddingBottom: 10,
+        alignItems: 'center',
+        borderRadius: 100 / 2,
+        alignSelf: 'flex-end',
+        justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
+        width: AppStyle.screenSize.width * 0.275,
     },
     buttonWrapper: {
-        flexDirection: 'row',
         width: '100%',
+        flexDirection: 'row',
     },
     buttonPeriod: {
-        width: AppStyle.screenSize.width * 0.205,
+        paddingTop: 15,
+        borderWidth: 1,
         marginRight: 10,
         borderRadius: 10,
-        paddingTop: 15,
         paddingBottom: 15,
-        justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
+        justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
+        width: AppStyle.screenSize.width * 0.205,
     },
     buttonDate: {
+        paddingTop: 15,
+        borderWidth: 1,
         marginRight: 10,
         borderRadius: 10,
-        paddingTop: 15,
         paddingBottom: 15,
-        justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
+        justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
 })
