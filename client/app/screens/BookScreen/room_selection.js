@@ -9,14 +9,14 @@ import {
     Dimensions,
     StyleSheet,
     Text,
-    View
+    View,
+    LogBox
 } from 'react-native';
 
 export default function RoomSelection() {
 
     // Function refs
     const periodCarouselRef = useRef(null);
-    const roomCarouselRef = useRef(null);
 
     // Function states
     const [dataList, setDataList] = useState(null)
@@ -120,6 +120,20 @@ export default function RoomSelection() {
         },
     ]
 
+    function nextRoom() {
+        if (containerIndex + 1 >= dataList.length)
+            return
+
+        setContainerIndex(containerIndex + 1)
+    }
+
+    function prevRoom() {
+        if (containerIndex - 1 < 0)
+            return
+
+        setContainerIndex(containerIndex - 1)
+    }
+
     // Renders the elements of the period carousel
     function _renderFirstCarousel({ page }) {
         return (
@@ -152,53 +166,25 @@ export default function RoomSelection() {
                         <Text>{dataList[containerIndex].RoomSize}</Text>
                     </View>
                     <View style={{ position: 'absolute', flexDirection: 'row', left: '70%' }} >
-                        <TouchableOpacity style={styles.arrow}>
+                        <TouchableOpacity style={styles.arrow} onPress={() => { prevRoom() }}>
                             <AntDesign name="caretleft" size={12} color="white" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.arrow}>
+                        <TouchableOpacity style={styles.arrow} onPress={() => { nextRoom() }}>
                             <AntDesign name="caretright" size={12} color="white" />
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.roomListContainer}>
-                    <Carousel
-                        ref={roomCarouselRef}
-                        layout={"default"}
-                        data={dataList}
-                        sliderWidth={styles.absoluteContainer.width}
-                        itemWidth={styles.absoluteContainer.width}
-                        renderItem={_renderSecondCarousel}
+                    <FlatList
+                        data={dataList[containerIndex].RoomDetailList}
+                        renderItem={_renderFlatList}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={6}
                     />
                 </View>
             </View>
         )
 
-    }
-
-    // Renders the elements of the room carousel
-    function _renderSecondCarousel() {
-
-        return (
-            <FlatList
-                data={dataList[containerIndex].RoomDetailList}
-                renderItem={_renderFlatList}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={6}
-            />
-        )
-    }
-
-    // update the state of the room detail
-    const updateDataList = (index) => {
-
-        const newArr = [...RoomListData];
-
-        if (dataList[containerIndex].RoomDetailList[index].state === false)
-            newArr[containerIndex].RoomDetailList[index].state = true;
-        else
-            newArr[containerIndex].RoomDetailList[index].state = false;
-
-        setDataList(newArr);
     }
 
     // Renders the elements of the room detail flat list
@@ -224,9 +210,22 @@ export default function RoomSelection() {
         }
     }
 
+    // update the state of the room detail
+    const updateDataList = (index) => {
+
+        const newArr = [...RoomListData];
+
+        if (dataList[containerIndex].RoomDetailList[index].state === false)
+            newArr[containerIndex].RoomDetailList[index].state = true;
+        else
+            newArr[containerIndex].RoomDetailList[index].state = false;
+
+        setDataList(newArr);
+    }
+
     // fetch the data from the server
     useEffect(() => {
-
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
         if (dataList === null)
             setDataList(RoomListData)
 
