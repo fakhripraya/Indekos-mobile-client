@@ -13,7 +13,7 @@ import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function RoomSelection() {
+export default function RoomSelection({ navigation }) {
 
     // Function refs
     const periodCarouselRef = useRef(null);
@@ -261,6 +261,10 @@ export default function RoomSelection() {
         setDataList(newArr);
     }
 
+    function handleNext() {
+        navigation.replace('MemberDetails');
+    }
+
     // fetch the data from the server
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -278,8 +282,8 @@ export default function RoomSelection() {
     if (dataList !== null) {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={{ flex: 1, width: '100%', height: AppStyle.screenSize.height }}>
+                <View style={{ flex: 1, width: '100%', height: AppStyle.screenSize.height }}>
+                    <ScrollView style={{ flex: 1 }}>
                         <Text style={styles.title}>Room Selection</Text>
                         <RoomListView />
                         <View style={styles.container_1}>
@@ -308,12 +312,12 @@ export default function RoomSelection() {
                             </View>
                         </View>
                         <View style={styles.container_3}>
-                            <TouchableOpacity style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
+                            <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
                                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Next</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </View>
             </View>
         )
     } else {
@@ -388,7 +392,7 @@ const styles = StyleSheet.create({
     container_3: {
         justifyContent: 'center',
         width: AppStyle.screenSize.width,
-        height: AppStyle.screenSize.height * 0.1,
+        height: AppStyle.screenSize.height * 0.15,
         paddingRight: AppStyle.screenSize.width * 0.05,
     },
     containerTitle: {

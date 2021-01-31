@@ -19,8 +19,6 @@ export default function MemberDetails() {
     ])
 
     const [maxMember, setMaxMember] = useState(null)
-    const [periodDataList, setPeriodDataList] = useState(null)
-    const [containerIndex, setContainerIndex] = useState(0)
     const [toggleCheckMe, setToggleCheckMe] = useState(true)
     const [toggleCheckOther, setToggleCheckOther] = useState(false)
 
@@ -83,6 +81,9 @@ export default function MemberDetails() {
     // Renders the elements of the member detail input
     function MemberDetailInput({ children }) {
 
+        const [name, setName] = useState(children.item.memberName)
+        const [phone, setPhone] = useState(children.item.memberPhone)
+
         const txtColorMale = children.item.memberGender === 0 ? "white" : AppStyle.fourt_main_color
         const bgColorMale = children.item.memberGender === 0 ? AppStyle.fourt_main_color : "white"
         const txtColorFemale = children.item.memberGender === 1 ? "white" : AppStyle.fourt_main_color
@@ -92,12 +93,32 @@ export default function MemberDetails() {
 
             let newArr = [...loopingInput]
 
-            if (loopingInput[index].memberGender === 0)
+            if (gender === 1)
                 newArr[index].memberGender = 1;
             else
                 newArr[index].memberGender = 0;
 
             setLoopingInput(newArr);
+        }
+
+        function handleName(name, index) {
+
+            let newArr = [...loopingInput]
+
+            newArr[index].memberName = name
+
+            setLoopingInput(newArr);
+
+        }
+
+        function handlePhone(phone, index) {
+
+            let newArr = [...loopingInput]
+
+            newArr[index].memberPhone = phone
+
+            setLoopingInput(newArr);
+
         }
 
         return (
@@ -111,8 +132,9 @@ export default function MemberDetails() {
                     <View style={styles.nameInputBox}>
                         <TextInput
                             textAlign="left"
-                            // value={inputValue}
-                            // onChangeText={(newVal) => setInput(newVal)}
+                            value={name}
+                            onChangeText={(newVal) => setName(newVal)}
+                            onEndEditing={() => { handleName(name, children.index) }}
                             style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
                     </View>
                 </View>
@@ -121,22 +143,23 @@ export default function MemberDetails() {
                     <View style={styles.phoneInputBox}>
                         <TextInput
                             textAlign="left"
-                            // value={inputValue}
-                            // onChangeText={(newVal) => setInput(newVal)}
+                            value={phone}
+                            onChangeText={(newVal) => setPhone(newVal)}
+                            onEndEditing={() => { handlePhone(phone, children.index) }}
                             style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
                     </View>
                 </View>
                 <View style={styles.genderInput}>
                     <Text style={{ alignSelf: 'flex-start', paddingBottom: 10, fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Gender</Text>
                     <View style={styles.genderWrapper}>
-                        <TouchableOpacity onPress={() => { toggleGender(0, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-start', backgroundColor: bgColorMale }]}>
+                        <TouchableOpacity onPress={() => { toggleGender(0, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-start', backgroundColor: bgColorMale, borderColor: txtColorMale }]}>
                             <View>
-                                <Text style={{ fontWeight: 'bold', fontSize: 16 / Dimensions.get("screen").fontScale, color: txtColorMale }}>{'  '}Male</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, color: txtColorMale }}>{'  '}Male</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { toggleGender(1, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-end', backgroundColor: bgColorFemale }]}>
+                        <TouchableOpacity onPress={() => { toggleGender(1, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-end', backgroundColor: bgColorFemale, borderColor: txtColorFemale }]}>
                             <View>
-                                <Text style={{ fontWeight: 'bold', fontSize: 16 / Dimensions.get("screen").fontScale, color: txtColorFemale }}>Female</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, color: txtColorFemale }}>Female</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -157,6 +180,14 @@ export default function MemberDetails() {
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <View style={{ flex: 1, width: '100%', height: AppStyle.screenSize.height }}>
                 <ScrollView style={{ flex: 1 }}>
+                    {/* <View style={[styles.headerWrapper]}>
+                        <TouchableOpacity style={{ height: '100%', position: 'absolute', alignSelf: 'flex-start', justifyContent: 'center', left: 20 }}>
+                            <AntDesign name="left" size={24} color="black" />
+                        </TouchableOpacity>
+                        <View style={[styles.title, { height: '100%', position: 'absolute', alignSelf: 'center', justifyContent: 'center' }]}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 20 / Dimensions.get("screen").fontScale, }}>Member Details</Text>
+                        </View>
+                    </View> */}
                     <Text style={styles.title}>Member Details</Text>
                     <View style={styles.absoluteContainer}>
                         <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>This Room For</Text>
@@ -222,6 +253,14 @@ export default function MemberDetails() {
 
 const styles = StyleSheet.create({
 
+    // headerWrapper: {
+    //     marginTop: AppStyle.screenSize.height * 0.075,
+    //     marginBottom: AppStyle.screenSize.height * 0.075,
+    // },
+    // title: {
+    //     fontWeight: 'bold',
+    //     fontSize: 20 / Dimensions.get("screen").fontScale,
+    // },
     title: {
         fontWeight: 'bold',
         alignSelf: 'center',
@@ -240,7 +279,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         backgroundColor: 'white',
         width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.425,
+        height: AppStyle.screenSize.height * 0.45,
         marginBottom: AppStyle.screenSize.height * 0.025,
     },
     mappedContainer: {
@@ -330,7 +369,7 @@ const styles = StyleSheet.create({
     container_3: {
         justifyContent: 'center',
         width: AppStyle.screenSize.width,
-        height: AppStyle.screenSize.height * 0.1,
+        height: AppStyle.screenSize.height * 0.15,
         paddingRight: AppStyle.screenSize.width * 0.05,
     },
     nextBtn: {
