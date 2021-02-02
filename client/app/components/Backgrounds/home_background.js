@@ -1,6 +1,7 @@
 import {
     StyleSheet,
     View,
+    Text,
     ScrollView
 } from 'react-native';
 import React from 'react';
@@ -11,14 +12,30 @@ export default function HomeBackground(props) {
 
     // Renders the HomeStack background
     return (
-        <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-            <View style={styles.container}>
-                <View style={styles.backgroundContainer} >
-                    <View style={styles.background_1} />
-                    <View style={styles.background_2} />
-                </View>
-                <View style={styles.backgroundContainer_2} />
-                {props.children}
+        <View style={{ flex: 1 }}>
+            <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={styles.backgroundContainer} >
+                        <View style={styles.background_1} />
+                        <View style={styles.background_2} />
+                        <View style={styles.background_3} />
+                    </View>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
+                    {props.children}
+                </ScrollView>
             </View>
         </View>
     )
@@ -28,21 +45,28 @@ export default function HomeBackground(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height: '100%',
         flexDirection: 'column',
         backgroundColor: 'white',
     },
     backgroundContainer: {
-        flex: 0.40,
+        position: 'absolute',
+        height: AppStyle.screenSize.height * 0.4,
+        width: AppStyle.screenSize.width,
         backgroundColor: AppStyle.third_main_color,
     },
-    backgroundContainer_2: {
-        flex: 0.60,
+    background_3: {
+        position: 'absolute',
+        alignSelf: 'center',
+        width: AppStyle.screenSize.width,
+        top: (AppStyle.screenSize.height * 0.4),
+        height: AppStyle.screenSize.height * 0.3,
         backgroundColor: 'white',
     },
     background_1: {
         position: 'absolute',
         alignSelf: 'center',
-        borderRadius: 200 / 2,
+        borderRadius: 300 / 2,
         width: AppStyle.screenSize.width * 0.6,
         top: (AppStyle.screenSize.height * 0.2),
         height: AppStyle.screenSize.height * 0.3,

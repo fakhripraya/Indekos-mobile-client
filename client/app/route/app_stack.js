@@ -9,7 +9,7 @@ const NestedStack = createStackNavigator();
 export default function AppStack() {
     return (
         <NestedStack.Navigator>
-            <NestedStack.Screen name="Home" component={Home} />
+            <NestedStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         </NestedStack.Navigator>
     );
 }

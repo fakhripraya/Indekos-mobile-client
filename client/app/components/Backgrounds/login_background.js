@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     background_1: {
         position: 'absolute',
         alignSelf: 'center',
-        borderRadius: 200 / 2,
+        borderRadius: 300 / 2,
         width: AppStyle.screenSize.width * 0.6,
         top: (AppStyle.screenSize.height * 0.2),
         height: AppStyle.screenSize.height * 0.3,

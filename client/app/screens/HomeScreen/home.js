@@ -4,12 +4,15 @@ import {
     StyleSheet,
 } from 'react-native';
 import React from 'react';
+import HomeBackground from '../../components/Backgrounds/home_background';
 
 export default function Home({ navigation }) {
     return (
-        <View style={styles.container}>
-            <Text>Home Screen</Text>
-        </View>
+        <HomeBackground >
+            {/* <View style={styles.container}>
+                <Text>Home Screen</Text>
+            </View> */}
+        </HomeBackground>
     )
 }
 
