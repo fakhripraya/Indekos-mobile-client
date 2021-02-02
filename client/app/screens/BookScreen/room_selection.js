@@ -98,6 +98,95 @@ export default function RoomSelection({ navigation }) {
                 },
             ]
         },
+        {
+            state: false,
+            RoomID: 3,
+            RoomLevel: "level 3",
+            RoomDesc: "Kamar Mandi",
+            RoomSize: "(5m x 5m)",
+            RoomDetailList: [
+                {
+                    state: false,
+                    occupied: false,
+                    key: "1",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "2",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "3",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "4",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "5",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "6",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "7",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "8",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "9",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "10",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "11",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "12",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "13",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "14",
+                },
+                {
+                    state: false,
+                    occupied: false,
+                    key: "15",
+                },
+                {
+                    state: false,
+                    occupied: true,
+                    key: "16",
+                },
+            ]
+        },
     ]
 
     // data dummy 2
