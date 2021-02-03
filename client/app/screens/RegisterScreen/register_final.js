@@ -154,7 +154,7 @@ export default function RegisterFinal({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf: 'flex-end',
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32 / Dimensions.get("screen").fontScale,
+        fontSize: 32,
     },
     inputContainer: {
         elevation: 5,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         bottom: 5,
         fontWeight: 'bold',
         alignSelf: 'flex-start',
-        fontSize: 14 / Dimensions.get("screen").fontScale,
+        fontSize: 14,
     },
     authInput: {
         width: '100%',
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     authInputText: {
         flex: 1,
         paddingLeft: 10,
-        fontSize: 16 / Dimensions.get("screen").fontScale,
+        fontSize: 16,
     },
     o2AuthWrapper: {
         flexDirection: 'row',

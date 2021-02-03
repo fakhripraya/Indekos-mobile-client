@@ -52,11 +52,11 @@ export default function Welcome({ navigation }) {
                     <View style={activeIndex == 2 ? styles.dotStyleFlag : styles.dotStyle} />
                 </View>
                 <View>
-                    <Text style={{ fontSize: 30 / Dimensions.get("screen").fontScale, color: 'white' }}>{item.title}
+                    <Text style={{ fontSize: 30, color: 'white' }}>{item.title}
                         <Text style={{ color: AppStyle.third_main_color }}> {item.sub_title}</Text>
                     </Text>
                     <Text style={[
-                        { fontSize: 30 / Dimensions.get("screen").fontScale, color: AppStyle.third_main_color },
+                        { fontSize: 30, color: AppStyle.third_main_color },
                         activeIndex == 2 ? { display: 'flex' } : { display: 'none' }
                     ]}>{item.second_sub_title}
                         <Text style={{ color: 'white' }}> {item.second_title}</Text>
@@ -87,7 +87,7 @@ export default function Welcome({ navigation }) {
                             { width: AppStyle.screenSize.width / 3 },
                             activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]
                         }>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>Prev</Text>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: 16 }]}>Prev</Text>
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent
                         onPress={() => {
@@ -97,7 +97,7 @@ export default function Welcome({ navigation }) {
                                 carouselRef.current.snapToNext();
                         }}
                         style={{ width: AppStyle.screenSize.width / 3 }}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
                     </TouchableOpacityPrevent>
                 </View>
             </View>

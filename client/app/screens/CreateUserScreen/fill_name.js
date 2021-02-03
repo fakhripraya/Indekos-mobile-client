@@ -57,18 +57,18 @@ export default function FillName({ navigation }) {
     return (
         <FirstBackground>
             <View style={styles.wrapper}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
                 <View style={styles.input}>
                     <TextInput
                         textAlign="center"
                         value={inputValue}
                         onChangeText={(newVal) => setInput(newVal)}
-                        style={{ flex: 1, paddingLeft: 0, fontSize: 20 / Dimensions.get("screen").fontScale }} />
+                        style={{ flex: 1, paddingLeft: 0, fontSize: 20 }} />
 
                 </View>
                 <TouchableOpacity onPress={() => handleSubmit()}>
                     <View style={[styles.submitButton, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Submit</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Submit</Text>
                     </View>
                 </TouchableOpacity>
             </View>

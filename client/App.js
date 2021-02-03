@@ -13,7 +13,7 @@ import CreateUserStack from './app/route/create_user_stack';
 import RegistrationStack from './app/route/registration_stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { PopUpMessage } from './app/components/Modal/pop_up_message'
+import { PopUpMessage } from './app/components/Modal/pop_up_message';
 
 // create a root stack navigator
 const RootStack = createStackNavigator();
@@ -71,7 +71,7 @@ export default function App() {
       </View>
       <PromiseSpinner />
       <PopUpMessage />
-    </Provider>
+    </Provider >
   );
 }
 

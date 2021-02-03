@@ -1,8 +1,7 @@
 import {
-    StyleSheet,
     View,
-    Text,
-    ScrollView
+    StyleSheet,
+    ScrollView,
 } from 'react-native';
 import React from 'react';
 import { AppStyle } from '../../config/app.config';
@@ -12,28 +11,14 @@ export default function HomeBackground(props) {
 
     // Renders the HomeStack background
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ backgroundColor: 'white', flex: 1 }}>
             <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.backgroundContainer} >
-                        <View style={styles.background_1} />
                         <View style={styles.background_2} />
+                        <View style={styles.background_1} />
                         <View style={styles.background_3} />
                     </View>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
-                    <Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto itaque esse expedita quos veniam quisquam, sunt exercitationem voluptas porro ipsa at dolorem obcaecati, ex nemo ipsam quasi rem enim doloremque.</Text>
                     {props.children}
                 </ScrollView>
             </View>
@@ -51,9 +36,9 @@ const styles = StyleSheet.create({
     },
     backgroundContainer: {
         position: 'absolute',
-        height: AppStyle.screenSize.height * 0.4,
+        height: AppStyle.screenSize.height * 0.3,
         width: AppStyle.screenSize.width,
-        backgroundColor: AppStyle.third_main_color,
+        backgroundColor: AppStyle.main_color,
     },
     background_3: {
         position: 'absolute',
@@ -65,22 +50,22 @@ const styles = StyleSheet.create({
     },
     background_1: {
         position: 'absolute',
-        alignSelf: 'center',
         borderRadius: 300 / 2,
-        width: AppStyle.screenSize.width * 0.6,
-        top: (AppStyle.screenSize.height * 0.2),
-        height: AppStyle.screenSize.height * 0.3,
-        right: (AppStyle.screenSize.width * 0.60),
         backgroundColor: AppStyle.fourt_main_color,
+        width: AppStyle.screenSize.height * 0.25,
+        height: AppStyle.screenSize.height * 0.25,
+        left: -AppStyle.screenSize.height * 0.15,
+        top: -AppStyle.screenSize.height * 0.15,
+        transform: [{ scaleX: 1 }, { scaleY: 1 }],
     },
     background_2: {
         position: 'absolute',
         borderRadius: 300 / 2,
-        backgroundColor: AppStyle.main_color,
-        width: AppStyle.screenSize.width * 0.5,
-        left: (AppStyle.screenSize.width) * 0.7,
-        height: AppStyle.screenSize.height * 0.5,
-        bottom: (AppStyle.screenSize.height * 0.575),
-        transform: [{ scaleX: 3 }, { scaleY: 3 }, { rotate: '5deg' }],
+        backgroundColor: AppStyle.third_main_color,
+        width: AppStyle.screenSize.height * 0.3,
+        height: AppStyle.screenSize.height * 0.3,
+        left: -AppStyle.screenSize.height * 0.15,
+        top: -AppStyle.screenSize.height * 0.15,
+        transform: [{ scaleX: 2 }, { scaleY: 2 }],
     },
 })

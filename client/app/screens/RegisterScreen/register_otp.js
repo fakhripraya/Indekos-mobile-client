@@ -227,11 +227,11 @@ export default function RegisterOtp({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.resendText}>
-                        <Text style={{ fontSize: 16 / Dimensions.get("screen").fontScale }}>
+                        <Text style={{ fontSize: 16 }}>
                             Haven't receive a code?{' '}
                         </Text>
                         <TouchableOpacityPrevent onPress={() => handleResend()} >
-                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }}>
+                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 }}>
                                 Resend Again
                             </Text>
                         </TouchableOpacityPrevent>
@@ -240,12 +240,12 @@ export default function RegisterOtp({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
-                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: 16 }]}>
                             <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
                         </Text>
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf: 'flex-end',
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32 / Dimensions.get("screen").fontScale
+        fontSize: 32
     },
     inputContainer: {
         elevation: 5,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     otpWrapperText: {
         fontWeight: 'bold',
         alignSelf: 'flex-start',
-        fontSize: 14 / Dimensions.get("screen").fontScale,
+        fontSize: 14,
     },
     otpFieldContainer: {
         height: '70%',
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        fontSize: 32 / Dimensions.get("screen").fontScale
+        fontSize: 32
     },
     resendText: {
         flex: 0.15,

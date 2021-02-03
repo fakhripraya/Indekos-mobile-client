@@ -1,12 +1,12 @@
 import {
+    View,
+    Text,
+    LogBox,
     FlatList,
-    TouchableOpacity,
     ScrollView,
     Dimensions,
     StyleSheet,
-    Text,
-    View,
-    LogBox
+    TouchableOpacity,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
@@ -405,7 +405,7 @@ export default function RoomSelection({ navigation }) {
                     </View>
                     <View style={styles.container_3}>
                         <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Next</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Next</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerText: {
-        fontSize: 20 / Dimensions.get("screen").fontScale,
+        fontSize: 20,
         color: '#333',
         fontWeight: 'bold',
     },
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: '2%',
         alignSelf: 'flex-start',
-        fontSize: 16 / Dimensions.get("screen").fontScale,
+        fontSize: 16,
     },
     nextBtn: {
         paddingTop: 10,

@@ -7,8 +7,8 @@ import {
     TouchableOpacity
 } from 'react-native';
 import {
+    popUpModalChange,
     accountRegistrationChange,
-    popUpModalChange
 } from '../../redux'
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -149,15 +149,15 @@ export default function Register({ navigation }) {
                                 textAlign="left"
                                 value={inputValue}
                                 onChangeText={(newVal) => setInput(newVal)}
-                                style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
+                                style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
                         </View>
                     </View>
                     <View style={styles.o2AuthWrapper}>
-                        <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 6, marginRight: 5 }}>
-                            <SocialIcon button type='google' />
+                        <TouchableOpacityPrevent >
+                            <SocialIcon style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100, marginRight: 5 }} button type='google' />
                         </TouchableOpacityPrevent>
-                        <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 6 }}>
-                            <SocialIcon button type='facebook' />
+                        <TouchableOpacityPrevent >
+                            <SocialIcon style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100 }} button type='facebook' />
                         </TouchableOpacityPrevent>
                     </View>
                 </View>
@@ -169,11 +169,11 @@ export default function Register({ navigation }) {
                     </TouchableOpacityPrevent>
                 </View>
                 <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: 16 / Dimensions.get("screen").fontScale }} >
+                    <Text style={{ fontSize: 16 }} >
                         Have an account ?{' '}
                     </Text>
                     <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
-                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }}>
+                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 }}>
                             Login
                         </Text>
                     </TouchableOpacityPrevent>
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf: 'flex-end',
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32 / Dimensions.get("screen").fontScale
+        fontSize: 32
     },
     inputContainer: {
         elevation: 5,
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     warnMessageText: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 14 / Dimensions.get("screen").fontScale,
+        fontSize: 14,
     },
     authInputWrapper: {
         width: '100%',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     authInputTitle: {
         fontWeight: 'bold',
         alignSelf: 'flex-start', bottom: 5,
-        fontSize: 14 / Dimensions.get("screen").fontScale,
+        fontSize: 14,
     },
     authInput: {
         width: '100%',
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     },
     submitBtnText: {
         backgroundColor: AppStyle.sub_main_color,
-        fontSize: 16 / Dimensions.get("screen").fontScale
+        fontSize: 16
     },
     loginBtn: {
         flex: 1,

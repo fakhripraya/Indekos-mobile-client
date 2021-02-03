@@ -1,7 +1,7 @@
 import {
-    StyleSheet,
     View,
-    ScrollView
+    ScrollView,
+    StyleSheet,
 } from 'react-native';
 import React from 'react';
 import { AppStyle } from '../../config/app.config';

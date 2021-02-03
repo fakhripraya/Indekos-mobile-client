@@ -64,22 +64,22 @@ export default function PickRole({ navigation }) {
     return (
         <FirstBackground>
             <View style={styles.wrapper}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>I want to register in <Text style={{ color: AppStyle.fourt_main_color }}>as</Text></Text>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>I want to register in <Text style={{ color: AppStyle.fourt_main_color }}>as</Text></Text>
                 <View style={styles.buttonWrapper}>
                     <TouchableOpacity onPress={() => handleSubmit(1)}>
                         <View style={[styles.button, { backgroundColor: AppStyle.fourt_main_color }]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>User</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>User</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleSubmit(2)}>
                         <View style={[styles.button, { backgroundColor: 'white' }]}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 18 / Dimensions.get("screen").fontScale }}>Owner</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Owner</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity>
                     <View style={[styles.submitButton, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Submit</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Submit</Text>
                     </View>
                 </TouchableOpacity>
             </View>

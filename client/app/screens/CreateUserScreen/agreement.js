@@ -16,7 +16,7 @@ export default function Agreement() {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        <Text style={{ color: 'black', fontSize: 16 / Dimensions.get("screen").fontScale }}>
+                        <Text style={{ color: 'black', fontSize: 16 }}>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia libero nemo perspiciatis nam hic soluta aut labore, at porro autem deleniti repellendus eveniet cumque placeat provident rerum maiores ipsa! Molestiae.
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. At recusandae sed animi hic quidem suscipit pariatur quisquam perspiciatis laborum doloremque voluptates non, velit quis corporis molestias tempora illum tenetur ipsum.
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda cupiditate illo odio laboriosam nisi id repellendus maxime sequi veritatis magni, veniam culpa. Aut veniam nobis assumenda eveniet? Nostrum, reiciendis dolorum!
@@ -29,7 +29,7 @@ export default function Agreement() {
                 <View style={styles.buttonWrapper}>
                     <TouchableOpacity style={styles.agreeButton}>
                         <View >
-                            <Text style={{ color: 'white', fontSize: 16 / Dimensions.get("screen").fontScale }}>
+                            <Text style={{ color: 'white', fontSize: 16 }}>
                                 Agree
                             </Text>
                         </View>

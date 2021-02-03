@@ -1,9 +1,16 @@
+import {
+    View,
+    Text,
+    ScrollView,
+    TextInput,
+    StyleSheet,
+    TouchableOpacity,
+} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { AppStyle } from '../../config/app.config';
 import CheckBox from '@react-native-community/checkbox';
-import { TouchableOpacity, ScrollView, Dimensions, StyleSheet, Text, View, TextInput } from 'react-native';
 
 export default function MemberDetails({ navigation }) {
 
@@ -124,42 +131,42 @@ export default function MemberDetails({ navigation }) {
         return (
             <View style={styles.mappedContainer}>
                 <View style={styles.detailHeader}>
-                    <View style={{ position: 'absolute', alignSelf: 'flex-start' }}><Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Details</Text></View>
-                    <View style={{ position: 'absolute', alignSelf: 'flex-end' }}><Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Member {children.index + 1}</Text></View>
+                    <View style={{ position: 'absolute', alignSelf: 'flex-start' }}><Text style={{ fontWeight: 'bold', fontSize: 14 }}>Details</Text></View>
+                    <View style={{ position: 'absolute', alignSelf: 'flex-end' }}><Text style={{ fontWeight: 'bold', fontSize: 14 }}>Member {children.index + 1}</Text></View>
                 </View>
                 <View style={styles.nameInput}>
-                    <Text style={{ alignSelf: 'flex-start', paddingBottom: 10, fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Member Name</Text>
+                    <Text style={{ alignSelf: 'flex-start', paddingBottom: 10, fontWeight: 'bold', fontSize: 14 }}>Member Name</Text>
                     <View style={styles.nameInputBox}>
                         <TextInput
                             textAlign="left"
                             value={name}
                             onChangeText={(newVal) => setName(newVal)}
                             onEndEditing={() => { handleName(name, children.index) }}
-                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
+                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
                     </View>
                 </View>
                 <View style={styles.phoneInput}>
-                    <Text style={{ alignSelf: 'flex-start', paddingBottom: 10, fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Phone</Text>
+                    <Text style={{ alignSelf: 'flex-start', paddingBottom: 10, fontWeight: 'bold', fontSize: 14 }}>Phone</Text>
                     <View style={styles.phoneInputBox}>
                         <TextInput
                             textAlign="left"
                             value={phone}
                             onChangeText={(newVal) => setPhone(newVal)}
                             onEndEditing={() => { handlePhone(phone, children.index) }}
-                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
+                            style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
                     </View>
                 </View>
                 <View style={styles.genderInput}>
-                    <Text style={{ alignSelf: 'flex-start', paddingBottom: 10, fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Gender</Text>
+                    <Text style={{ alignSelf: 'flex-start', paddingBottom: 10, fontWeight: 'bold', fontSize: 14 }}>Gender</Text>
                     <View style={styles.genderWrapper}>
                         <TouchableOpacity onPress={() => { toggleGender(0, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-start', backgroundColor: bgColorMale, borderColor: txtColorMale }]}>
                             <View>
-                                <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, color: txtColorMale }}>{'  '}Male</Text>
+                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 14, color: txtColorMale }}>Male</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { toggleGender(1, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-end', backgroundColor: bgColorFemale, borderColor: txtColorFemale }]}>
                             <View>
-                                <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, color: txtColorFemale }}>Female</Text>
+                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 14, color: txtColorFemale }}>Female</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -188,7 +195,7 @@ export default function MemberDetails({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.absoluteContainer}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>This Room For</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 14 }}>This Room For</Text>
                     <View style={styles.checkboxWrapper}>
                         <View style={styles.checkboxContainer}>
                             <CheckBox
@@ -207,8 +214,8 @@ export default function MemberDetails({ navigation }) {
                             <Text onPress={() => checkOther()} style={{ alignSelf: 'center', fontWeight: 'bold' }}>Other</Text>
                         </View>
                     </View>
-                    <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Person</Text>
-                    <Text style={{ fontWeight: 'bold', fontSize: 12 / Dimensions.get("screen").fontScale }}>This room maximum is {maxMember} persons</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 14 }}>Person</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 12 }}>This room maximum is {maxMember} persons</Text>
                     <View style={{ flexDirection: 'row', marginTop: '15%' }}>
                         <View>
                             <TouchableOpacity style={[styles.icon, { marginRight: 30, marginLeft: 10 }]} >
@@ -220,7 +227,7 @@ export default function MemberDetails({ navigation }) {
                                 <AntDesign name="minus" size={24} color={AppStyle.fourt_main_color} />
                             </TouchableOpacity>
                             <View style={[styles.icon, { marginRight: 10, marginLeft: 0 }]}>
-                                <Text style={{ fontSize: 18 / Dimensions.get("screen").fontScale }}>
+                                <Text style={{ fontSize: 18 }}>
                                     {loopingInput.length}
                                 </Text>
                             </View>
@@ -239,7 +246,7 @@ export default function MemberDetails({ navigation }) {
                 })}
                 <View style={styles.container_3}>
                     <TouchableOpacity style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale }}>Next</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -258,12 +265,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerText: {
-        fontSize: 20 / Dimensions.get("screen").fontScale,
+        fontSize: 20,
         color: '#333',
         fontWeight: 'bold',
     },
     headerIcon: {
-        left: 16,
+        left: AppStyle.screenSize.width * 0.05,
         position: 'absolute',
     },
     absoluteContainer: {

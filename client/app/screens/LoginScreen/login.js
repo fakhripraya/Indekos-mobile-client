@@ -66,7 +66,7 @@ export default function Login({ navigation }) {
                 </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.authInputWrapper}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 14, alignSelf: 'flex-start', bottom: 5 }}>
                             Username
                         </Text>
                         <View style={styles.authInput}>
@@ -79,7 +79,7 @@ export default function Login({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.authInputWrapper}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 14 / Dimensions.get("screen").fontScale, alignSelf: 'flex-start', bottom: 5 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 14, alignSelf: 'flex-start', bottom: 5 }}>
                             Password
                         </Text>
                         <View style={styles.authInput}>
@@ -88,7 +88,7 @@ export default function Login({ navigation }) {
                                 onChangeText={(newVal) => setInput(newVal)}
                                 value={inputValue}
                                 textAlign="left"
-                                style={{ flex: 1, paddingLeft: 10, fontSize: 16 / Dimensions.get("screen").fontScale }} />
+                                style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
                         </View>
                     </View>
                     <View style={styles.o2AuthWrapper}>
@@ -102,13 +102,13 @@ export default function Login({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 / Dimensions.get("screen").fontScale }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>
                             Submit
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: 14 / Dimensions.get("screen").fontScale }} >
+                    <Text style={{ fontSize: 14 }} >
                         Forgot Password? <Text style={{ color: AppStyle.fourt_main_color }}>Click Here</Text>
                     </Text>
                 </View>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf: 'flex-end',
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32 / Dimensions.get("screen").fontScale
+        fontSize: 32
     },
     inputContainer: {
         elevation: 5,

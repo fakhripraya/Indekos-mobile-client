@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: 'bold',
-        fontSize: 22 / Dimensions.get("screen").fontScale,
+        fontSize: 22,
         color: AppStyle.sub_main_color
     },
     messageWrapper: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     },
     messageText: {
         textAlign: 'center',
-        fontSize: 16 / Dimensions.get("screen").fontScale
+        fontSize: 16
     },
     buttonWrapper: {
         bottom: (AppStyle.screenSize.height * 0.3) / 20,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: 'bold',
-        fontSize: 16 / Dimensions.get("screen").fontScale,
+        fontSize: 16,
         color: 'white'
     }
 });
