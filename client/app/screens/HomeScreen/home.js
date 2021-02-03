@@ -219,7 +219,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: 15, width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -228,17 +228,17 @@ export default function Home({ navigation }) {
                                 />
                             </View>
                             <View style={{ height: '50%' }}>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{item.nama}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.alamat}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
                         </View>
@@ -257,7 +257,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: 15, width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -266,17 +266,17 @@ export default function Home({ navigation }) {
                                 />
                             </View>
                             <View style={{ height: '50%' }}>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{item.nama}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.alamat}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
                         </View>
@@ -295,7 +295,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: 15, width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -304,17 +304,17 @@ export default function Home({ navigation }) {
                                 />
                             </View>
                             <View style={{ height: '50%' }}>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{item.nama}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.alamat}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
                         </View>
@@ -333,7 +333,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: 15, width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.screenSize.width * 0.33, height: AppStyle.screenSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -342,17 +342,17 @@ export default function Home({ navigation }) {
                                 />
                             </View>
                             <View style={{ height: '50%' }}>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{item.nama}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.alamat}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
-                                <View style={{ left: 10, height: '25%' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.harga}</Text>
+                                <View style={{ left: Normalize(10), height: '25%' }}>
+                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
                         </View>
@@ -397,18 +397,18 @@ export default function Home({ navigation }) {
             </View>
             <View style={styles.timerContainer}>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                    <View style={{ left: AppStyle.screenSize.width * 0.05, width: '10%', height: 1, backgroundColor: '#BBBBBB' }} />
+                    <View style={{ left: Normalize(10), width: Normalize(39), height: 1, backgroundColor: '#BBBBBB' }} />
                 </View>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                    <Text style={{ marginRight: 10, fontSize: 18, color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
-                    <View style={styles.timerBox}><Text style={{ fontSize: 14, color: 'white' }}>1</Text></View>
-                    <View style={styles.timerBox}><Text style={{ fontSize: 14, color: 'white' }}>2</Text></View>
-                    <Text style={{ marginRight: 5, fontSize: 14, color: AppStyle.main_color }}>:</Text>
-                    <View style={styles.timerBox}><Text style={{ fontSize: 14, color: 'white' }}>0</Text></View>
-                    <View style={styles.timerBox}><Text style={{ fontSize: 14, color: 'white' }}>0</Text></View>
+                    <Text style={{ marginRight: Normalize(10), fontSize: Normalize(18), color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
+                    <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>1</Text></View>
+                    <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>2</Text></View>
+                    <Text style={{ marginRight: Normalize(5), fontSize: Normalize(14), color: AppStyle.main_color }}>:</Text>
+                    <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
+                    <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
                 </View>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                    <View style={{ right: AppStyle.screenSize.width * 0.05, width: '10%', height: 1, backgroundColor: '#BBBBBB' }} />
+                    <View style={{ right: Normalize(10), width: Normalize(39), height: 1, backgroundColor: '#BBBBBB' }} />
                 </View>
             </View>
             <View style={styles.bookListCarouselContainer}>
@@ -423,11 +423,11 @@ export default function Home({ navigation }) {
             </View>
             <View style={styles.promoListHeader}>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                    <Text style={{ fontSize: 18, color: 'black', left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>Promo</Text>
+                    <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>Promo</Text>
                 </View>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                     <TouchableOpacity style={{ right: AppStyle.screenSize.width * 0.05 }}>
-                        <Text style={{ fontSize: 12, color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                        <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -441,16 +441,16 @@ export default function Home({ navigation }) {
                     renderItem={_renderPromoList}
                 />
             </View>
-            <View style={{ width: '100%', top: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
-                <Text style={{ fontSize: 18, color: 'black', left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>Near You</Text>
+            <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start' }}>
+                <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>Near You</Text>
             </View>
             <View style={styles.nearYouListHeader}>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                    <Text style={{ fontSize: 16, color: AppStyle.third_main_color, left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>West Jakarta</Text>
+                    <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>West Jakarta</Text>
                 </View>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                     <TouchableOpacity style={{ right: AppStyle.screenSize.width * 0.05 }}>
-                        <Text style={{ fontSize: 12, color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                        <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -466,11 +466,11 @@ export default function Home({ navigation }) {
             </View>
             <View style={styles.recListHeader}>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                    <Text style={{ fontSize: 18, color: 'black', left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>Recommendation</Text>
+                    <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.screenSize.width * 0.05, fontWeight: 'bold' }}>Recommendation</Text>
                 </View>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                     <TouchableOpacity style={{ right: AppStyle.screenSize.width * 0.05 }}>
-                        <Text style={{ fontSize: 12, color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                        <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -514,19 +514,19 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     timerContainer: {
-        marginTop: 10,
-        marginBottom: 10,
+        marginTop: Normalize(10),
+        marginBottom: Normalize(10),
         height: AppStyle.screenSize.height / 16.14,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
     },
     timerBox: {
-        width: '5%',
-        height: (AppStyle.screenSize.height / 16.14) / 2,
+        width: Normalize(17),
+        height: Normalize(22),
         borderWidth: 1,
-        marginRight: 5,
-        borderRadius: 5,
+        marginRight: Normalize(5),
+        borderRadius: Normalize(5),
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: AppStyle.main_color
@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
         width: AppStyle.screenSize.width * 0.9,
     },
     promoListHeader: {
-        height: 75,
+        height: Normalize(60),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
         width: AppStyle.screenSize.width * 0.9,
     },
     nearYouListHeader: {
-        height: 75,
+        height: Normalize(60),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
         width: AppStyle.screenSize.width * 0.9,
     },
     recListHeader: {
-        height: 75,
+        height: Normalize(60),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
