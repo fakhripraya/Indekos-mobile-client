@@ -399,7 +399,7 @@ export default function Home({ navigation }) {
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
                     <View style={{ left: Normalize(10), width: Normalize(39), height: 1, backgroundColor: '#BBBBBB' }} />
                 </View>
-                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                <View style={{ width: AppStyle.screenSize.width - Normalize(98), position: 'absolute', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                     <Text style={{ marginRight: Normalize(10), fontSize: Normalize(18), color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
                     <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>1</Text></View>
                     <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>2</Text></View>

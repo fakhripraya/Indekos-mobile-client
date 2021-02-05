@@ -46,19 +46,19 @@ function BottomNavBar({ state, descriptors, navigation }) {
 
                     if (index === 0) {
                         return (
-                            <Feather name="home" size={Normalize(18)} color="black" />
+                            <Feather name="home" size={Normalize(18)} color={isFocused ? 'white' : 'black'} />
                         )
                     } else if (index === 1) {
                         return (
-                            <Feather name="search" size={Normalize(18)} color="black" />
+                            <Feather name="search" size={Normalize(18)} color={isFocused ? 'white' : 'black'} />
                         )
                     } else if (index === 2) {
                         return (
-                            <MaterialIcons name="storefront" size={Normalize(18)} color="black" />
+                            <MaterialIcons name="storefront" size={Normalize(18)} color={isFocused ? 'white' : 'black'} />
                         )
                     } else if (index === 3) {
                         return (
-                            <Feather name="user" size={Normalize(18)} color="black" />
+                            <Feather name="user" size={Normalize(18)} color={isFocused ? 'white' : 'black'} />
                         )
                     }
 
@@ -68,16 +68,17 @@ function BottomNavBar({ state, descriptors, navigation }) {
                     return (
                         <View style={styles.middleTab}>
                             <TouchableOpacity
-                                accessibilityRole="button"
-                                accessibilityState={isFocused ? { selected: true } : {}}
-                                accessibilityLabel={options.tabBarAccessibilityLabel}
-                                testID={options.tabBarTestID}
+                                key={index}
                                 onPress={onPress}
                                 onLongPress={onLongPress}
+                                accessibilityRole="button"
+                                testID={options.tabBarTestID}
+                                accessibilityState={isFocused ? { selected: true } : {}}
+                                accessibilityLabel={options.tabBarAccessibilityLabel}
                                 style={[styles.innerMiddleTab, { backgroundColor: isFocused ? AppStyle.fourt_main_color : '#ffffff', }]}
                             >
                                 <View style={{ color: isFocused ? '#673ab7' : '#222' }}>
-                                    <Ionicons name="chatbubbles-outline" size={Normalize(18)} color="black" />
+                                    <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={isFocused ? 'white' : 'black'} />
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -86,12 +87,13 @@ function BottomNavBar({ state, descriptors, navigation }) {
 
                 return (
                     <TouchableOpacity
-                        accessibilityRole="button"
-                        accessibilityState={isFocused ? { selected: true } : {}}
-                        accessibilityLabel={options.tabBarAccessibilityLabel}
-                        testID={options.tabBarTestID}
+                        key={index}
                         onPress={onPress}
                         onLongPress={onLongPress}
+                        accessibilityRole="button"
+                        testID={options.tabBarTestID}
+                        accessibilityLabel={options.tabBarAccessibilityLabel}
+                        accessibilityState={isFocused ? { selected: true } : {}}
                         style={[styles.tab, { backgroundColor: isFocused ? AppStyle.fourt_main_color : '#ffffff', }]}
                     >
                         <View style={{ alignSelf: 'center' }}>
