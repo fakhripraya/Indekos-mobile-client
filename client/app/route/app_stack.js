@@ -13,12 +13,12 @@ const Tab = createBottomTabNavigator();
 export default function AppStack() {
 
     return (
-        <Tab.Navigator tabbar={props => <BottomNavBar {...props} />}>
+        <Tab.Navigator tabBar={props => <BottomNavBar {...props} />}>
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Search" component={Search} />
-            <Tab.Screen name="Chats" component={Chats} />
             <Tab.Screen name="MyKosan" component={MyKosan} />
             <Tab.Screen name="UserProfile" component={UserProfile} />
+            <Tab.Screen name="Chats" component={Chats} />
         </Tab.Navigator>
     )
 }
