@@ -1,15 +1,26 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import Home from '../screens/HomeScreen/home';
-import { createStackNavigator } from '@react-navigation/stack';
+import Chats from '../screens/HomeScreen/chats';
+import Search from '../screens/HomeScreen/search';
+import MyKosan from '../screens/HomeScreen/my_kosan';
+import UserProfile from '../screens/HomeScreen/user_profile';
+import BottomNavBar from '../components/Navigation/bottom_nav_bar';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// create a nested stack navigator
-const NestedStack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-// export the AppStack
 export default function AppStack() {
+
     return (
-        <NestedStack.Navigator>
-            <NestedStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        </NestedStack.Navigator>
-    );
+        <Tab.Navigator tabbar={props => <BottomNavBar {...props} />}>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Search" component={Search} />
+            <Tab.Screen name="Chats" component={Chats} />
+            <Tab.Screen name="MyKosan" component={MyKosan} />
+            <Tab.Screen name="UserProfile" component={UserProfile} />
+        </Tab.Navigator>
+    )
 }
+
+const styles = StyleSheet.create({})
