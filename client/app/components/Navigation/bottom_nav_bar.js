@@ -66,9 +66,8 @@ function BottomNavBar({ state, descriptors, navigation }) {
 
                 if (index === 4) {
                     return (
-                        <View style={styles.middleTab}>
+                        <View key={index} style={styles.middleTab}>
                             <TouchableOpacity
-                                key={index}
                                 onPress={onPress}
                                 onLongPress={onLongPress}
                                 accessibilityRole="button"
@@ -83,24 +82,24 @@ function BottomNavBar({ state, descriptors, navigation }) {
                             </TouchableOpacity>
                         </View>
                     );
+                } else {
+                    return (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={onPress}
+                            onLongPress={onLongPress}
+                            accessibilityRole="button"
+                            testID={options.tabBarTestID}
+                            accessibilityLabel={options.tabBarAccessibilityLabel}
+                            accessibilityState={isFocused ? { selected: true } : {}}
+                            style={[styles.tab, { backgroundColor: isFocused ? AppStyle.fourt_main_color : '#ffffff', }]}
+                        >
+                            <View style={{ alignSelf: 'center' }}>
+                                <TabIcon index={index} />
+                            </View>
+                        </TouchableOpacity>
+                    );
                 }
-
-                return (
-                    <TouchableOpacity
-                        key={index}
-                        onPress={onPress}
-                        onLongPress={onLongPress}
-                        accessibilityRole="button"
-                        testID={options.tabBarTestID}
-                        accessibilityLabel={options.tabBarAccessibilityLabel}
-                        accessibilityState={isFocused ? { selected: true } : {}}
-                        style={[styles.tab, { backgroundColor: isFocused ? AppStyle.fourt_main_color : '#ffffff', }]}
-                    >
-                        <View style={{ alignSelf: 'center' }}>
-                            <TabIcon index={index} />
-                        </View>
-                    </TouchableOpacity>
-                );
             })}
         </View>
     );
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
 
     tab: {
         flex: 1,
-        borderTopWidth: 3,
+        borderTopWidth: Normalize(3),
         justifyContent: 'center',
         borderColor: 'rgba(0,0,0,0.1)',
         width: AppStyle.screenSize.width * 0.2,
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     middleTab: {
         flex: 1,
         borderRadius: 100,
-        borderLeftWidth: 3,
+        borderLeftWidth: Normalize(3),
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
