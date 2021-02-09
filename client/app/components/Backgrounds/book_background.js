@@ -6,8 +6,8 @@ import {
 import React from 'react';
 import { AppStyle } from '../../config/app.config';
 
-// HomeBackground is the background image for the home stack
-export default function HomeBackground(props) {
+// BookBackground is the background image for the book stack
+export default function BookBackground(props) {
 
     // Renders the HomeStack background
     return (
@@ -37,35 +37,34 @@ const styles = StyleSheet.create({
     backgroundContainer: {
         position: 'absolute',
         width: AppStyle.screenSize.width,
-        backgroundColor: AppStyle.main_color,
         height: AppStyle.screenSize.height * 0.3,
+        backgroundColor: AppStyle.third_main_color,
     },
     background_3: {
         alignSelf: 'center',
         position: 'absolute',
         backgroundColor: 'white',
         width: AppStyle.screenSize.width,
-        top: (AppStyle.screenSize.height * 0.4),
+        top: (AppStyle.screenSize.height * 0.3),
         height: AppStyle.screenSize.height * 0.3,
     },
     background_1: {
         position: 'absolute',
         borderRadius: 300 / 2,
-        top: -AppStyle.screenSize.height * 0.15,
         width: AppStyle.screenSize.height * 0.25,
-        left: -AppStyle.screenSize.height * 0.15,
-        height: AppStyle.screenSize.height * 0.25,
         transform: [{ scaleX: 1 }, { scaleY: 1 }],
+        height: AppStyle.screenSize.height * 0.25,
+        right: -AppStyle.screenSize.height * 0.175,
         backgroundColor: AppStyle.fourt_main_color,
+        top: (AppStyle.screenSize.height * 0.3 - AppStyle.screenSize.height * 0.25) / 2,
     },
     background_2: {
         position: 'absolute',
         borderRadius: 300 / 2,
-        top: -AppStyle.screenSize.height * 0.15,
+        backgroundColor: AppStyle.main_color,
         width: AppStyle.screenSize.height * 0.3,
         height: AppStyle.screenSize.height * 0.3,
-        left: -AppStyle.screenSize.height * 0.15,
+        left: -AppStyle.screenSize.height * 0.1,
         transform: [{ scaleX: 2 }, { scaleY: 2 }],
-        backgroundColor: AppStyle.third_main_color,
     },
 })

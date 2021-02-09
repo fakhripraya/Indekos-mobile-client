@@ -5,11 +5,11 @@ import {
     ImageBackground,
 } from 'react-native';
 import React, { useRef } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle, Normalize } from '../../config/app.config';
 import HomeBackground from '../../components/Backgrounds/home_background';
-import { TouchableOpacity } from 'react-native';
 
 export default function Home({ navigation }) {
 
@@ -397,7 +397,7 @@ export default function Home({ navigation }) {
             </View>
             <View style={styles.timerContainer}>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                    <View style={{ left: Normalize(10), width: Normalize(39), height: 1, backgroundColor: '#BBBBBB' }} />
+                    <View style={{ left: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
                 </View>
                 <View style={{ width: AppStyle.screenSize.width - Normalize(98), position: 'absolute', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                     <Text style={{ marginRight: Normalize(10), fontSize: Normalize(18), color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
@@ -408,7 +408,7 @@ export default function Home({ navigation }) {
                     <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
                 </View>
                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                    <View style={{ right: Normalize(10), width: Normalize(39), height: 1, backgroundColor: '#BBBBBB' }} />
+                    <View style={{ right: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
                 </View>
             </View>
             <View style={styles.bookListCarouselContainer}>

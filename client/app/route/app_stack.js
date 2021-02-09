@@ -1,11 +1,10 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import Home from '../screens/HomeScreen/home';
-import Chats from '../screens/HomeScreen/chats';
-import Search from '../screens/HomeScreen/search';
-import MyKosan from '../screens/HomeScreen/my_kosan';
-import UserProfile from '../screens/HomeScreen/user_profile';
+import Chats from '../screens/ChatScreen/chats';
+import Search from '../screens/SearchScreen/search';
+import MyKosan from '../screens/MyKosanScreen/my_kosan';
 import BottomNavBar from '../components/Navigation/bottom_nav_bar';
+import UserProfile from '../screens/UserProfileScreen/user_profile';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
@@ -22,5 +21,3 @@ export default function AppStack() {
         </Tab.Navigator>
     )
 }
-
-const styles = StyleSheet.create({})

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { AppStyle, Normalize } from '../../config/app.config';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
@@ -111,23 +111,20 @@ const styles = StyleSheet.create({
 
     tab: {
         flex: 1,
-        borderTopWidth: Normalize(3),
+        elevation: 10,
         justifyContent: 'center',
-        borderColor: 'rgba(0,0,0,0.1)',
         width: AppStyle.screenSize.width * 0.2,
         height: AppStyle.screenSize.width * 0.15,
 
     },
     middleTab: {
         flex: 1,
+        elevation: 10,
         borderRadius: 100,
-        borderLeftWidth: Normalize(3),
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        borderColor: 'rgba(0,0,0,0.1)',
-        transform: [{ rotate: '90deg' }],
         left: AppStyle.screenSize.width * 0.4125,
         width: AppStyle.screenSize.width * 0.175,
         height: AppStyle.screenSize.width * 0.175,
