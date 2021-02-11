@@ -447,6 +447,7 @@ export default function KostDetail({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
+
                 {
                     reviewList.map((item, index) => {
 
@@ -480,11 +481,13 @@ export default function KostDetail({ navigation }) {
                         )
                     })
                 }
+
             </View>
             <View style={[styles.softLines, { top: Normalize(-40) }]} />
             <View style={styles.roomTitle}>
                 <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
             </View>
+
             {
                 roomList.map((item, index) => {
                     return (
@@ -529,6 +532,7 @@ export default function KostDetail({ navigation }) {
                     )
                 })
             }
+
             <View style={styles.softLines} />
             <View style={styles.ownerContainer}>
                 <View style={styles.ownerTitle}>
@@ -556,7 +560,6 @@ export default function KostDetail({ navigation }) {
                                     {kostOwner.kost_count} Kosan Owned
                                 </Text>
                             </TouchableOpacity>
-
                         </View>
                     </View>
                 </View>
