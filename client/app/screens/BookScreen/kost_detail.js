@@ -4,12 +4,14 @@ import MapShow from '../../components/Maps/map_show';
 import { AppStyle, Normalize } from '../../config/app.config';
 import HomeBackground from '../../components/Backgrounds/book_background';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
-import { AntDesign, Ionicons, MaterialIcons, FontAwesome, SimpleLineIcons, Octicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
+import MyKosan from '../MyKosanScreen/my_kosan';
 
 export default function KostDetail({ navigation }) {
 
     // Function refs
     const kostPictRef = useRef(null);
+    const roomPictRef = useRef(null);
 
     // dummy
     let kostCaraouselData = [
@@ -88,6 +90,99 @@ export default function KostDetail({ navigation }) {
         },
     ];
 
+    let reviewList = [
+        {
+            id: "0",
+            user_id: "0",
+            user_pict: "https://reactjs.org/logo-og.png",
+            nama_user: "Budi Utami",
+            rating: "4.9",
+            review_body: "Kosannya rapih banget, overall suka sama pelayanannya!"
+        },
+        {
+            id: "1",
+            user_id: "1",
+            user_pict: "https://reactjs.org/logo-og.png",
+            nama_user: "Joko Anwar",
+            rating: "4.6",
+            review_body: "Yah lumayan lah dari pada saya gelandangan"
+        },
+        {
+            id: "2",
+            user_id: "2",
+            user_pict: "https://reactjs.org/logo-og.png",
+            nama_user: "Sakhi Ali",
+            rating: "4.8",
+            review_body: "Harga terjangkau untuk fasilitas yang semewah ini, like it!"
+        },
+    ];
+
+    let roomList = [
+        {
+            kost_id: "0",
+            room_id: "0",
+            room_pict: [
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png"
+            ],
+            room_name: "Luxury",
+            room_size: "20m x 20m",
+            room_price: "Rp.3.000.000",
+            room_availability: 2,
+        },
+        {
+            kost_id: "0",
+            room_id: "1",
+            room_pict: [
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png"
+            ],
+            room_name: "Standard",
+            room_size: "15m x 15m",
+            room_price: "Rp.2.500.000",
+            room_availability: 7,
+        },
+        {
+            kost_id: "0",
+            room_id: "2",
+            room_pict: [
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png"
+            ],
+            room_name: "Standard",
+            room_size: "10m x 10m",
+            room_price: "Rp.2.000.000",
+            room_availability: 4,
+        },
+        {
+            kost_id: "0",
+            room_id: "3",
+            room_pict: [
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png",
+                "https://reactjs.org/logo-og.png"
+            ],
+            room_name: "Singular",
+            room_size: "5m x 10m",
+            room_price: "Rp.1.000.000",
+            room_availability: 5,
+        },
+    ];
+
+    let kostOwner = {
+        user_id: 10,
+        user_pict: "https://reactjs.org/logo-og.png",
+        user_name: "Mimin Oh",
+        location: "DKI Jakarta",
+        kost_count: 2,
+    }
 
     function _renderKostPict({ item }) {
 
@@ -96,6 +191,18 @@ export default function KostDetail({ navigation }) {
             <ImageBackground
                 style={styles.backgroundImg}
                 source={{ uri: item.uri }}
+            />
+        )
+    }
+
+    function _renderRoomPict({ item }) {
+
+        return (
+
+            <ImageBackground
+                imageStyle={{ borderRadius: 10 }}
+                style={[styles.backgroundImg, { height: AppStyle.screenSize.height * 0.2 }]}
+                source={{ uri: item }}
             />
         )
     }
@@ -299,11 +406,157 @@ export default function KostDetail({ navigation }) {
                     </View>
                     <View style={styles.ratingBodyRight}>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                 <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
                                 <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
                             </View>
                             <Text style={{ fontSize: Normalize(14) }}>Cleanliness</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
+                            </View>
+                            <Text style={{ fontSize: Normalize(14) }}>Convenience</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
+                            </View>
+                            <Text style={{ fontSize: Normalize(14) }}>Security</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
+                            </View>
+                            <Text style={{ fontSize: Normalize(14) }}>Facilities</Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+            <View style={styles.reviewContainer}>
+                <View style={styles.reviewTitle}>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                        <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
+                    </View>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <TouchableOpacity>
+                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                {
+                    reviewList.map((item, index) => {
+
+                        if (index > 1)
+                            return null
+
+                        return (
+                            <View key={index} style={styles.reviewBody}>
+                                <View style={styles.reviewBodyContainer}>
+                                    <View style={styles.reviewUserPict}>
+                                        <ImageBackground
+                                            imageStyle={{ borderRadius: 10.12 }}
+                                            style={styles.backgroundImg}
+                                            source={{ uri: item.user_pict }}
+                                        />
+                                    </View>
+                                    <View style={styles.reviewUserHeader}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <AntDesign name="star" size={Normalize(14)} color="#FFB800" style={{ marginRight: Normalize(5) }} />
+                                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.rating}</Text>
+                                        </View>
+                                        <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{item.nama_user}</Text>
+                                    </View>
+                                    <View style={styles.reviewUserBody}>
+                                        <Text style={{ textAlign: 'left', fontSize: Normalize(12), fontWeight: 'bold' }}>
+                                            {item.review_body}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        )
+                    })
+                }
+            </View>
+            <View style={[styles.softLines, { top: Normalize(-40) }]} />
+            <View style={styles.roomTitle}>
+                <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+            </View>
+            {
+                roomList.map((item, index) => {
+                    return (
+                        <View key={index} style={styles.roomBody}>
+                            <Carousel
+                                ref={roomPictRef}
+                                layout={"default"}
+                                data={item.room_pict}
+                                renderItem={_renderRoomPict}
+                                itemWidth={AppStyle.screenSize.width * 0.9}
+                                sliderWidth={AppStyle.screenSize.width * 0.9}
+                            />
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.room_size}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{item.room_availability > 0 ? "Available" : "unavailable"}</Text>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: item.room_availability > 2 ? AppStyle.success : AppStyle.error }}>{item.room_availability > 2 ? item.room_availability + " rooms" : item.room_availability + " rooms left"}</Text>
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
+                                <TouchableOpacity>
+                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{item.room_price}</Text>
+                                    </View>
+                                    <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                                </View>
+                                <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                    <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: 10, backgroundColor: AppStyle.sub_main_color }}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold' }}>Choose</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    )
+                })
+            }
+            <View style={styles.softLines} />
+            <View style={styles.ownerContainer}>
+                <View style={styles.ownerTitle}>
+                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
+                </View>
+                <View style={styles.ownerBody}>
+                    <View style={styles.ownerBodyContainer}>
+                        <View style={styles.ownerUserPict}>
+                            <ImageBackground
+                                imageStyle={{ borderRadius: 10.12 }}
+                                style={styles.backgroundImg}
+                                source={{ uri: kostOwner.user_pict }}
+                            />
+                        </View>
+                        <View style={styles.ownerUserHeader}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{kostOwner.user_name}</Text>
+                            </View>
+                            <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{kostOwner.location}</Text>
+                        </View>
+                        <View style={styles.ownerUserBody}>
+                            <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: 10, backgroundColor: AppStyle.third_main_color }}>
+                                <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
+                                <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>
+                                    {kostOwner.kost_count} Kosan Owned
+                                </Text>
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                 </View>
@@ -525,7 +778,101 @@ const styles = StyleSheet.create({
     ratingBodyRight: {
         width: '50%',
         height: '100%',
+        justifyContent: 'space-evenly',
+        alignItems: 'flex-start',
+    },
+    reviewContainer: {
         justifyContent: 'center',
+        alignItems: 'flex-start',
+        marginLeft: Normalize(15),
+        marginBottom: Normalize(55),
+        width: AppStyle.screenSize.width * 0.9,
+    },
+    reviewTitle: {
+        marginBottom: Normalize(25),
+    },
+    reviewBody: {
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: Normalize(10),
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: AppStyle.screenSize.height * 0.1,
+    },
+    reviewBodyContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+    },
+    reviewUserPict: {
+        height: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.screenSize.width * 0.9) * 0.2,
+    },
+    reviewUserHeader: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.screenSize.width * 0.9) * 0.2,
+        flexDirection: 'column',
+    },
+    reviewUserBody: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.screenSize.width * 0.9) * 0.5,
+    },
+    roomTitle: {
+        top: -Normalize(30),
+        left: AppStyle.screenSize.width * 0.05,
+        width: AppStyle.screenSize.width * 0.9,
+    },
+    roomBody: {
+        top: -Normalize(15),
+        left: AppStyle.screenSize.width * 0.05,
+        width: AppStyle.screenSize.width * 0.9,
+    },
+    ownerContainer: {
+        marginTop: Normalize(5),
+        marginLeft: Normalize(15),
+        marginBottom: Normalize(50),
+        width: AppStyle.screenSize.width * 0.9,
+    },
+    ownerTitle: {
+        marginBottom: Normalize(10),
+    },
+    ownerBody: {
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: Normalize(10),
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: AppStyle.screenSize.height * 0.1,
+    },
+    ownerBodyContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+    },
+    ownerUserPict: {
+        height: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.screenSize.width * 0.9) * 0.2,
+    },
+    ownerUserHeader: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.screenSize.width * 0.9) * 0.2,
+        flexDirection: 'column',
+    },
+    ownerUserBody: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.screenSize.width * 0.9) * 0.5,
     },
 
 })
