@@ -38,11 +38,11 @@ const styles = StyleSheet.create({
         marginLeft: AppStyle.screenSize.width * 0.05,
     },
     bookButton: {
-        borderRadius: 20,
         alignItems: 'center',
         height: Normalize(35),
         width: Normalize(108),
         justifyContent: 'center',
+        borderRadius: Normalize(20),
         backgroundColor: AppStyle.sub_main_color,
         marginRight: AppStyle.screenSize.width * 0.05,
     },

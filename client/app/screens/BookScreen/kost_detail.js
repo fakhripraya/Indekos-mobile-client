@@ -213,7 +213,7 @@ export default function KostDetail({ navigation }) {
         return (
 
             <ImageBackground
-                imageStyle={{ borderRadius: 10 }}
+                imageStyle={{ borderRadius: Normalize(10) }}
                 style={[styles.backgroundImg, { height: AppStyle.windowSize.height * 0.2 }]}
                 source={{ uri: item }}
             />
@@ -474,7 +474,7 @@ export default function KostDetail({ navigation }) {
                                     <View style={styles.reviewBodyContainer}>
                                         <View style={styles.reviewUserPict}>
                                             <ImageBackground
-                                                imageStyle={{ borderRadius: 10.12 }}
+                                                imageStyle={{ borderRadius: Normalize(10.12) }}
                                                 style={styles.backgroundImg}
                                                 source={{ uri: item.user_pict }}
                                             />
@@ -538,7 +538,7 @@ export default function KostDetail({ navigation }) {
                                         <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
                                     </View>
                                     <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                        <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: 10, backgroundColor: AppStyle.sub_main_color }}>
+                                        <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
                                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
                                         </TouchableOpacity>
                                     </View>
@@ -557,7 +557,7 @@ export default function KostDetail({ navigation }) {
                         <View style={styles.ownerBodyContainer}>
                             <View style={styles.ownerUserPict}>
                                 <ImageBackground
-                                    imageStyle={{ borderRadius: 10.12 }}
+                                    imageStyle={{ borderRadius: Normalize(10.12) }}
                                     style={styles.backgroundImg}
                                     source={{ uri: kostOwner.user_pict }}
                                 />
@@ -569,7 +569,7 @@ export default function KostDetail({ navigation }) {
                                 <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{kostOwner.location}</Text>
                             </View>
                             <View style={styles.ownerUserBody}>
-                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: 10, backgroundColor: AppStyle.third_main_color }}>
+                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
                                     <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
                                     <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>
                                         {kostOwner.kost_count} Kosan Owned
@@ -657,7 +657,6 @@ const styles = StyleSheet.create({
     },
     toolsButton: {
         elevation: 2,
-        borderRadius: 10,
         width: Normalize(60),
         alignItems: 'center',
         height: Normalize(30),
@@ -665,19 +664,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'white',
         marginRight: Normalize(10),
+        borderRadius: Normalize(10),
     },
     toolsButtonText: {
         fontSize: Normalize(12),
     },
     toolsIcon: {
         elevation: 2,
-        borderRadius: 100,
         alignItems: 'center',
         width: Normalize(34),
         height: Normalize(34),
         backgroundColor: 'white',
         justifyContent: 'center',
         marginLeft: Normalize(10),
+        borderRadius: Normalize(100),
         borderColor: 'rgba(0,0,0,0.15)',
     },
     descContainer: {
