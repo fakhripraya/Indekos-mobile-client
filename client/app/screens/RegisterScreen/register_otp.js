@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import React, { useState, useRef } from 'react';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
 import { useSelector, useDispatch } from 'react-redux';
@@ -227,11 +227,11 @@ export default function RegisterOtp({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.resendText}>
-                        <Text style={{ fontSize: 16 }}>
+                        <Text style={{ fontSize: Normalize(12) }}>
                             Haven't receive a code?{' '}
                         </Text>
                         <TouchableOpacityPrevent onPress={() => handleResend()} >
-                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 }}>
+                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: Normalize(12) }}>
                                 Resend Again
                             </Text>
                         </TouchableOpacityPrevent>
@@ -240,12 +240,12 @@ export default function RegisterOtp({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
-                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: 16 }]}>
+                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: Normalize(14) }]}>
                             <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
                         </Text>
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: Normalize(14) }]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
@@ -269,16 +269,16 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        fontSize: Normalize(32),
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32
     },
     inputContainer: {
         elevation: 5,
-        borderRadius: 15,
         paddingLeft: '5%',
         paddingRight: '5%',
         alignItems: 'flex-start',
         backgroundColor: 'white',
+        borderRadius: Normalize(15),
         justifyContent: 'space-evenly',
         bottom: AppStyle.screenSize.height / 4.5,
         width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     otpWrapperText: {
         fontWeight: 'bold',
         alignSelf: 'flex-start',
-        fontSize: 14,
+        fontSize: Normalize(14),
     },
     otpFieldContainer: {
         height: '70%',
@@ -306,14 +306,14 @@ const styles = StyleSheet.create({
         width: '22.5%',
         height: '100%',
         borderWidth: 0.7,
-        borderRadius: 10,
         borderColor: 'grey',
+        borderRadius: Normalize(10),
     },
     otpFieldInput: {
         flex: 1,
         width: '100%',
         height: '100%',
-        fontSize: 32
+        fontSize: Normalize(32),
     },
     resendText: {
         flex: 0.15,
@@ -327,11 +327,11 @@ const styles = StyleSheet.create({
         bottom: AppStyle.screenSize.height / 7,
     },
     button: {
-        paddingTop: 15,
         color: 'white',
-        borderRadius: 50,
-        paddingBottom: 15,
         textAlign: 'center',
         borderColor: 'white',
+        paddingTop: Normalize(15),
+        borderRadius: Normalize(50),
+        paddingBottom: Normalize(15),
     },
 })

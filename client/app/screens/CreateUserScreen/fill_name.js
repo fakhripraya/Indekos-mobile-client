@@ -12,9 +12,9 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { UserService } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background';
 
 // creates the promised base http client
@@ -57,18 +57,18 @@ export default function FillName({ navigation }) {
     return (
         <FirstBackground>
             <View style={styles.wrapper}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(18) }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
                 <View style={styles.input}>
                     <TextInput
                         textAlign="center"
                         value={inputValue}
                         onChangeText={(newVal) => setInput(newVal)}
-                        style={{ flex: 1, paddingLeft: 0, fontSize: 20 }} />
+                        style={{ flex: 1, paddingLeft: 0, fontSize: Normalize(14) }} />
 
                 </View>
                 <TouchableOpacity onPress={() => handleSubmit()}>
                     <View style={[styles.submitButton, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Submit</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Submit</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -86,16 +86,16 @@ const styles = StyleSheet.create({
         bottom: AppStyle.screenSize.height * 0.35,
     },
     input: {
-        borderRadius: 10,
         backgroundColor: 'white',
+        borderRadius: Normalize(10),
         width: AppStyle.screenSize.width * 0.80,
         height: AppStyle.screenSize.height * 0.070,
     },
     submitButton: {
         alignItems: 'center',
-        borderRadius: 100 / 2,
         backgroundColor: 'grey',
         justifyContent: 'center',
+        borderRadius: Normalize(50),
         width: AppStyle.screenSize.width * 0.4,
         height: AppStyle.screenSize.height * 0.075,
     }

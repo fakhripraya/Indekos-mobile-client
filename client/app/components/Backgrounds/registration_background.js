@@ -4,7 +4,7 @@ import {
     StyleSheet,
 } from 'react-native';
 import React from 'react';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 
 // RegistrationBackground is the background image for the registration stack
 export default function RegistrationBackground(props) {
@@ -44,18 +44,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     background_1: {
-        position: 'absolute',
         alignSelf: 'center',
-        borderRadius: 300 / 2,
+        position: 'absolute',
+        borderRadius: Normalize(300),
         width: AppStyle.screenSize.width * 0.6,
         top: (AppStyle.screenSize.height * 0.2),
-        height: AppStyle.screenSize.height * 0.3,
-        right: (AppStyle.screenSize.width * 0.60),
+        height: AppStyle.screenSize.height * 0.6,
+        right: (AppStyle.screenSize.width * 0.7),
         backgroundColor: AppStyle.fourt_main_color,
     },
     background_2: {
         position: 'absolute',
-        borderRadius: 300 / 2,
+        borderRadius: Normalize(300),
         backgroundColor: AppStyle.main_color,
         width: AppStyle.screenSize.width * 0.5,
         left: (AppStyle.screenSize.width) * 0.7,

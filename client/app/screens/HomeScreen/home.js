@@ -219,7 +219,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <TouchableOpacity onPress={() => { navigation.replace('BookStack') }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -241,7 +241,7 @@ export default function Home({ navigation }) {
                                     <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )
 
                 })}
@@ -257,7 +257,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -279,7 +279,7 @@ export default function Home({ navigation }) {
                                     <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )
 
                 })}
@@ -295,7 +295,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -317,7 +317,7 @@ export default function Home({ navigation }) {
                                     <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )
 
                 })}
@@ -333,7 +333,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <View key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -355,7 +355,7 @@ export default function Home({ navigation }) {
                                     <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )
 
                 })}

@@ -13,7 +13,7 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker'
 import { AuthService } from '../../config/app.config';
@@ -149,15 +149,15 @@ export default function Register({ navigation }) {
                                 textAlign="left"
                                 value={inputValue}
                                 onChangeText={(newVal) => setInput(newVal)}
-                                style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
+                                style={{ flex: 1, paddingLeft: Normalize(10), fontSize: Normalize(14) }} />
                         </View>
                     </View>
                     <View style={styles.o2AuthWrapper}>
                         <TouchableOpacityPrevent >
-                            <SocialIcon style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100, marginRight: 5 }} button type='google' />
+                            <SocialIcon iconSize={Normalize(24)} style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100, marginRight: Normalize(5) }} button type='google' />
                         </TouchableOpacityPrevent>
                         <TouchableOpacityPrevent >
-                            <SocialIcon style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100 }} button type='facebook' />
+                            <SocialIcon iconSize={Normalize(24)} style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100 }} button type='facebook' />
                         </TouchableOpacityPrevent>
                     </View>
                 </View>
@@ -169,11 +169,11 @@ export default function Register({ navigation }) {
                     </TouchableOpacityPrevent>
                 </View>
                 <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: 16 }} >
+                    <Text style={{ fontSize: Normalize(14) }} >
                         Have an account ?{' '}
                     </Text>
                     <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
-                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: 16 }}>
+                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: Normalize(14) }}>
                             Login
                         </Text>
                     </TouchableOpacityPrevent>
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        fontSize: Normalize(32),
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32
     },
     inputContainer: {
         elevation: 5,
@@ -210,8 +210,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         justifyContent: 'space-evenly',
-        bottom: AppStyle.screenSize.height / 4.5,
         width: AppStyle.screenSize.width * 0.9,
+        bottom: AppStyle.screenSize.height / 4.5,
         height: AppStyle.screenSize.height * 0.5,
     },
     warnMessage: {
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     warnMessageText: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 14,
+        fontSize: Normalize(14),
     },
     authInputWrapper: {
         width: '100%',
@@ -236,8 +236,9 @@ const styles = StyleSheet.create({
     },
     authInputTitle: {
         fontWeight: 'bold',
-        alignSelf: 'flex-start', bottom: 5,
-        fontSize: 14,
+        bottom: Normalize(5),
+        fontSize: Normalize(14),
+        alignSelf: 'flex-start',
     },
     authInput: {
         width: '100%',
@@ -256,8 +257,8 @@ const styles = StyleSheet.create({
         bottom: AppStyle.screenSize.height / 7,
     },
     submitBtnText: {
+        fontSize: Normalize(14),
         backgroundColor: AppStyle.sub_main_color,
-        fontSize: 16
     },
     loginBtn: {
         flex: 1,
@@ -265,11 +266,11 @@ const styles = StyleSheet.create({
         bottom: AppStyle.screenSize.height / 9,
     },
     button: {
-        paddingTop: 15,
         color: 'white',
-        borderRadius: 50,
-        paddingBottom: 15,
         textAlign: 'center',
         borderColor: 'white',
+        paddingTop: Normalize(15),
+        borderRadius: Normalize(50),
+        paddingBottom: Normalize(15),
     },
 })

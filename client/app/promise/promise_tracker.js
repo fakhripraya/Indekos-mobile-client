@@ -6,7 +6,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import { AppStyle } from '../config/app.config';
+import { AppStyle, Normalize } from '../config/app.config';
 import { animated, useTransition } from 'react-spring';
 import { usePromiseTracker } from "react-promise-tracker";
 
@@ -36,7 +36,7 @@ const PromiseSpinner = (props) => {
             >
                 <View style={styles.spinner}>
                     <ActivityIndicator size="large" color={AppStyle.main_color} />
-                    <Text >Loading...</Text>
+                    <Text style={{ fontSize: Normalize(14) }}>Loading...</Text>
                 </View>
             </Modal>
         </AnimatedView>

@@ -12,7 +12,7 @@ import {
 } from '../../redux'
 import axios from 'axios';
 import React, { useState } from 'react';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
 import { useDispatch, useSelector } from 'react-redux';
@@ -154,7 +154,7 @@ export default function RegisterFinal({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: Normalize(14) }]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
@@ -178,18 +178,18 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        fontSize: Normalize(32),
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32,
     },
     inputContainer: {
         elevation: 5,
-        borderRadius: 15,
         paddingTop: '5%',
         paddingBottom: '5%',
         paddingLeft: '5%',
         paddingRight: '5%',
         alignItems: 'center',
         backgroundColor: 'white',
+        borderRadius: Normalize(15),
         justifyContent: 'space-evenly',
         bottom: AppStyle.screenSize.height / 4.5,
         width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
@@ -201,48 +201,37 @@ const styles = StyleSheet.create({
         marginBottom: '5%',
     },
     authInputTitle: {
-        bottom: 5,
         fontWeight: 'bold',
+        bottom: Normalize(5),
+        fontSize: Normalize(14),
         alignSelf: 'flex-start',
-        fontSize: 14,
     },
     authInput: {
         width: '100%',
         borderWidth: 1,
-        borderRadius: 7.5,
         borderColor: 'gray',
         flexDirection: 'row',
         alignSelf: 'flex-start',
+        borderRadius: Normalize(10),
         height: AppStyle.screenSize.height * 0.06,
     },
     authInputText: {
         flex: 1,
-        paddingLeft: 10,
-        fontSize: 16,
+        fontSize: Normalize(14),
+        paddingLeft: Normalize(10),
     },
     o2AuthWrapper: {
         flexDirection: 'row',
-    },
-    textWarningWrapper: {
-        flex: 1,
-        bottom: AppStyle.screenSize.height / 6,
-    },
-    textWarning: {
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        color: 'white',
-        borderRadius: 10,
-        textAlign: 'center',
     },
     submitBtn: {
         flex: 1,
         bottom: AppStyle.screenSize.height / 7,
     },
     button: {
-        paddingTop: 15,
         color: 'white',
-        borderRadius: 50,
-        paddingBottom: 15,
         textAlign: 'center',
+        paddingTop: Normalize(15),
+        borderRadius: Normalize(50),
+        paddingBottom: Normalize(15),
     },
 })

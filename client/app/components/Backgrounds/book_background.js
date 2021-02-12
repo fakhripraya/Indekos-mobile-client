@@ -4,7 +4,7 @@ import {
     ScrollView,
 } from 'react-native';
 import React from 'react';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 
 // BookBackground is the background image for the book stack
 export default function BookBackground(props) {
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     },
     background_1: {
         position: 'absolute',
-        borderRadius: 300 / 2,
+        borderRadius: Normalize(300),
         width: AppStyle.screenSize.height * 0.25,
         transform: [{ scaleX: 1 }, { scaleY: 1 }],
         height: AppStyle.screenSize.height * 0.25,
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     },
     background_2: {
         position: 'absolute',
-        borderRadius: 300 / 2,
+        borderRadius: Normalize(300),
         backgroundColor: AppStyle.main_color,
         width: AppStyle.screenSize.height * 0.3,
         height: AppStyle.screenSize.height * 0.3,

@@ -11,8 +11,9 @@ import {
 } from '../../redux';
 import React from 'react';
 import axios from 'axios';
-import { AppStyle, UserService } from '../../config/app.config';
+import { trackPromise } from 'react-promise-tracker';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppStyle, Normalize, UserService } from '../../config/app.config';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background'
 
 // creates the promised base http client
@@ -64,22 +65,22 @@ export default function PickRole({ navigation }) {
     return (
         <FirstBackground>
             <View style={styles.wrapper}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>I want to register in <Text style={{ color: AppStyle.fourt_main_color }}>as</Text></Text>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(18) }}>I want to register in <Text style={{ color: AppStyle.fourt_main_color }}>as</Text></Text>
                 <View style={styles.buttonWrapper}>
                     <TouchableOpacity onPress={() => handleSubmit(1)}>
                         <View style={[styles.button, { backgroundColor: AppStyle.fourt_main_color }]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>User</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>User</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleSubmit(2)}>
                         <View style={[styles.button, { backgroundColor: 'white' }]}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Owner</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Owner</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity>
                     <View style={[styles.submitButton, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Submit</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Submit</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -100,10 +101,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     button: {
-        borderRadius: 20,
         paddingRight: '10%',
         alignItems: 'flex-end',
         justifyContent: 'center',
+        borderRadius: Normalize(20),
         width: AppStyle.screenSize.width * 0.35,
         height: AppStyle.screenSize.height * 0.125,
         marginLeft: AppStyle.screenSize.width * 0.025,
@@ -111,9 +112,9 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         alignItems: 'center',
-        borderRadius: 100 / 2,
         backgroundColor: 'grey',
         justifyContent: 'center',
+        borderRadius: Normalize(50),
         width: AppStyle.screenSize.width * 0.4,
         height: AppStyle.screenSize.height * 0.075,
     }

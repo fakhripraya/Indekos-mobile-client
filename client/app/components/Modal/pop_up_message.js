@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { popUpModalChange } from '../../redux';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import { useSelector, useDispatch } from 'react-redux';
 import { animated, useTransition } from 'react-spring';
 
@@ -58,7 +58,7 @@ export function PopUpMessage() {
                     </View>
                     <View style={styles.buttonWrapper}>
                         <TouchableOpacity style={styles.buttonFrame} onPress={() => { handleMessage() }}>
-                            <Text style={styles.buttonText}>Ok</Text>
+                            <Text style={styles.buttonText}>OK</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
         borderRadius: 50 / 2,
         backgroundColor: 'white',
         justifyContent: 'center',
+        left: (AppStyle.screenSize.width * 0.25),
         maxWidth: (AppStyle.screenSize.width * 0.5),
         maxHeight: (AppStyle.screenSize.height * 0.3),
-        left: (AppStyle.screenSize.width * 0.25),
         top: (AppStyle.screenSize.height - (AppStyle.screenSize.height / 2)) - (AppStyle.screenSize.height * 0.15),
     },
     titleWrapper: {
@@ -94,42 +94,42 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: 'bold',
-        fontSize: 22,
-        color: AppStyle.sub_main_color
+        fontSize: Normalize(22),
+        color: AppStyle.sub_main_color,
     },
     messageWrapper: {
+        flex: 1,
         width: '90%',
         borderRadius: 10,
-        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     messageScroll: {
         alignSelf: 'center'
     },
     messageText: {
         textAlign: 'center',
-        fontSize: 16
+        fontSize: Normalize(14),
     },
     buttonWrapper: {
-        bottom: (AppStyle.screenSize.height * 0.3) / 20,
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bottom: (AppStyle.screenSize.height * 0.3) / 20,
     },
     buttonFrame: {
-        height: '75%',
         width: '60%',
+        height: '75%',
+        borderRadius: 20,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: AppStyle.sub_main_color,
-        borderRadius: 20
     },
     buttonText: {
+        color: 'white',
         fontWeight: 'bold',
-        fontSize: 16,
-        color: 'white'
+        fontSize: Normalize(14),
     }
 });

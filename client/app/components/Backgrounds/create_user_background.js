@@ -4,7 +4,7 @@ import {
     StyleSheet,
 } from 'react-native';
 import React from 'react';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 
 // FirstBackground is the first background image for the Create user stack
 export function FirstBackground(props) {
@@ -53,20 +53,20 @@ const firstStyles = StyleSheet.create({
         backgroundColor: AppStyle.main_color,
     },
     background_1: {
-        borderRadius: 100,
         position: 'absolute',
         alignSelf: 'flex-start',
         transform: [{ scale: 2 }],
+        borderRadius: Normalize(300),
         top: AppStyle.screenSize.height * 0.85,
         width: AppStyle.screenSize.width * 0.5,
         height: AppStyle.screenSize.width * 0.5,
         backgroundColor: AppStyle.third_main_color,
     },
     background_2: {
-        borderRadius: 100,
         position: 'absolute',
         alignSelf: 'flex-end',
         transform: [{ scale: 2 }],
+        borderRadius: Normalize(300),
         top: AppStyle.screenSize.height * 0.85,
         width: AppStyle.screenSize.width * 0.5,
         height: AppStyle.screenSize.width * 0.5,
@@ -92,7 +92,7 @@ const secondStyles = StyleSheet.create({
     background_1: {
         position: 'absolute',
         alignSelf: 'center',
-        borderRadius: 200 / 2,
+        borderRadius: Normalize(300),
         width: AppStyle.screenSize.width * 0.6,
         top: (AppStyle.screenSize.height * 0.2),
         height: AppStyle.screenSize.height * 0.3,
@@ -101,7 +101,7 @@ const secondStyles = StyleSheet.create({
     },
     background_2: {
         position: 'absolute',
-        borderRadius: 300 / 2,
+        borderRadius: Normalize(300),
         backgroundColor: AppStyle.main_color,
         width: AppStyle.screenSize.width * 0.5,
         left: (AppStyle.screenSize.width) * 0.7,

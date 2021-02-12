@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { AuthService } from '../../config/app.config';
+import { AuthService, Normalize } from '../../config/app.config';
 
 // creates the react spring animated view
 const AnimatedView = animated(View)
@@ -77,7 +77,7 @@ const Splash = ({ navigation }) => {
     return transitions.map(({ key, props }) =>
         <AnimatedView key={key} style={[props, styles.container]}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text>Loading Application...</Text>
+            <Text style={{ fontSize: Normalize(12) }}>Loading Application...</Text>
         </AnimatedView>
     )
 }

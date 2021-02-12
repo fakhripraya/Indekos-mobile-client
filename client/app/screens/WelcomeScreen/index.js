@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React, { useState, useRef } from 'react';
 import Carousel from 'react-native-snap-carousel';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
 // a HOC to throttle button click
@@ -52,17 +52,17 @@ export default function Welcome({ navigation }) {
                     <View style={activeIndex == 2 ? styles.dotStyleFlag : styles.dotStyle} />
                 </View>
                 <View>
-                    <Text style={{ fontSize: 30, color: 'white' }}>{item.title}
+                    <Text style={{ fontSize: Normalize(30), color: 'white' }}>{item.title}
                         <Text style={{ color: AppStyle.third_main_color }}> {item.sub_title}</Text>
                     </Text>
                     <Text style={[
-                        { fontSize: 30, color: AppStyle.third_main_color },
+                        { fontSize: Normalize(30), color: AppStyle.third_main_color },
                         activeIndex == 2 ? { display: 'flex' } : { display: 'none' }
                     ]}>{item.second_sub_title}
                         <Text style={{ color: 'white' }}> {item.second_title}</Text>
                     </Text>
                 </View>
-                <Text style={{ color: 'white' }}>{item.text}</Text>
+                <Text style={{ color: 'white', fontSize: Normalize(12) }}>{item.text}</Text>
             </View >
         )
     }
@@ -87,7 +87,7 @@ export default function Welcome({ navigation }) {
                             { width: AppStyle.screenSize.width / 3 },
                             activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]
                         }>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: 16 }]}>Prev</Text>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: Normalize(12) }]}>Prev</Text>
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent
                         onPress={() => {
@@ -97,7 +97,7 @@ export default function Welcome({ navigation }) {
                                 carouselRef.current.snapToNext();
                         }}
                         style={{ width: AppStyle.screenSize.width / 3 }}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: Normalize(12) }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
                     </TouchableOpacityPrevent>
                 </View>
             </View>
@@ -135,26 +135,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     dotStyle: {
-        width: 10,
-        height: 10,
-        marginRight: 10,
         borderRadius: 100,
+        width: Normalize(10),
+        height: Normalize(10),
         backgroundColor: 'white',
+        marginRight: Normalize(10),
     },
     dotStyleFlag: {
-        width: 10,
-        height: 10,
-        marginRight: 10,
         borderRadius: 100,
+        width: Normalize(10),
+        height: Normalize(10),
+        marginRight: Normalize(10),
         transform: [{ scaleX: 2 }],
         backgroundColor: AppStyle.sub_main_color,
     },
     button: {
         color: 'white',
-        paddingTop: 10,
         borderRadius: 50,
-        paddingBottom: 10,
         textAlign: 'center',
         borderColor: 'white',
+        paddingTop: Normalize(10),
+        paddingBottom: Normalize(10),
     }
 });
