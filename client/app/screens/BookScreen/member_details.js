@@ -270,8 +270,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     headerIcon: {
-        left: AppStyle.screenSize.width * 0.05,
         position: 'absolute',
+        left: AppStyle.screenSize.width * 0.05,
     },
     absoluteContainer: {
         elevation: 5,

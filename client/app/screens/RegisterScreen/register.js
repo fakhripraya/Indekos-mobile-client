@@ -257,6 +257,7 @@ const styles = StyleSheet.create({
         bottom: AppStyle.screenSize.height / 7,
     },
     submitBtnText: {
+        fontWeight: 'bold',
         fontSize: Normalize(14),
         backgroundColor: AppStyle.sub_main_color,
     },

@@ -227,11 +227,11 @@ export default function RegisterOtp({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.resendText}>
-                        <Text style={{ fontSize: Normalize(12) }}>
+                        <Text style={{ fontSize: Normalize(14), color: 'gray' }}>
                             Haven't receive a code?{' '}
                         </Text>
                         <TouchableOpacityPrevent onPress={() => handleResend()} >
-                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: Normalize(12) }}>
+                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: Normalize(14) }}>
                                 Resend Again
                             </Text>
                         </TouchableOpacityPrevent>
@@ -240,12 +240,12 @@ export default function RegisterOtp({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
-                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: Normalize(14) }]}>
+                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: Normalize(14), fontWeight: 'bold', }]}>
                             <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
                         </Text>
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: Normalize(14) }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: Normalize(14), fontWeight: 'bold', }]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
