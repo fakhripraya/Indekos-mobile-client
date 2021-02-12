@@ -213,7 +213,7 @@ export default function KostDetail({ navigation }) {
 
             <ImageBackground
                 imageStyle={{ borderRadius: 10 }}
-                style={[styles.backgroundImg, { height: AppStyle.screenSize.height * 0.2 }]}
+                style={[styles.backgroundImg, { height: AppStyle.windowSize.height * 0.2 }]}
                 source={{ uri: item }}
             />
         )
@@ -301,8 +301,8 @@ export default function KostDetail({ navigation }) {
                         layout={"default"}
                         ref={kostPictRef}
                         data={kostCaraouselData}
-                        itemWidth={AppStyle.screenSize.width}
-                        sliderWidth={AppStyle.screenSize.width}
+                        itemWidth={AppStyle.windowSize.width}
+                        sliderWidth={AppStyle.windowSize.width}
                         renderItem={_renderKostPict}
                     />
                 </View>
@@ -511,8 +511,8 @@ export default function KostDetail({ navigation }) {
                                     layout={"default"}
                                     data={item.room_pict}
                                     renderItem={_renderRoomPict}
-                                    itemWidth={AppStyle.screenSize.width * 0.9}
-                                    sliderWidth={AppStyle.screenSize.width * 0.9}
+                                    itemWidth={AppStyle.windowSize.width * 0.9}
+                                    sliderWidth={AppStyle.windowSize.width * 0.9}
                                 />
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
                                     <View style={{ flexDirection: 'row' }}>
@@ -606,7 +606,7 @@ const styles = StyleSheet.create({
     },
     headerIcon: {
         position: 'absolute',
-        left: AppStyle.screenSize.width * 0.05,
+        left: AppStyle.windowSize.width * 0.05,
     },
     headerLocation: {
         top: -Normalize(45),
@@ -617,8 +617,8 @@ const styles = StyleSheet.create({
         top: -Normalize(35),
         alignSelf: 'center',
         backgroundColor: 'black',
-        width: AppStyle.screenSize.width,
-        height: AppStyle.screenSize.height * 0.33,
+        width: AppStyle.windowSize.width,
+        height: AppStyle.windowSize.height * 0.33,
     },
     backgroundImg: {
         flex: 1,
@@ -626,11 +626,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     topBorder: {
+        top: -Normalize(45),
+        height: Normalize(15),
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         backgroundColor: 'white',
-        top: -Normalize(45),
-        height: Normalize(15)
     },
     topTools: {
         width: '100%',
@@ -666,7 +666,7 @@ const styles = StyleSheet.create({
         marginRight: Normalize(10),
     },
     toolsButtonText: {
-        fontSize: Normalize(12)
+        fontSize: Normalize(12),
     },
     toolsIcon: {
         elevation: 2,
@@ -682,7 +682,7 @@ const styles = StyleSheet.create({
     descContainer: {
         top: -Normalize(30),
         marginLeft: Normalize(15),
-        width: AppStyle.screenSize.width * 0.9,
+        width: AppStyle.windowSize.width * 0.9,
     },
     descTitle: {
         marginBottom: Normalize(10),
@@ -694,7 +694,7 @@ const styles = StyleSheet.create({
         marginTop: Normalize(15),
         marginLeft: Normalize(15),
         marginBottom: Normalize(15),
-        width: AppStyle.screenSize.width * 0.9,
+        width: AppStyle.windowSize.width * 0.9,
     },
     facilitiesTitle: {
         marginBottom: Normalize(10),
@@ -703,37 +703,37 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     softLines: {
-        top: -Normalize(10),
         height: 1,
+        top: -Normalize(10),
         backgroundColor: 'rgba(0,0,0,0.1)',
-        width: AppStyle.screenSize.width * 0.9,
-        left: AppStyle.screenSize.width * 0.05,
+        width: AppStyle.windowSize.width * 0.9,
+        left: AppStyle.windowSize.width * 0.05,
     },
     locationContainer: {
         top: -Normalize(10),
         marginTop: Normalize(15),
         marginLeft: Normalize(15),
         marginBottom: Normalize(15),
-        width: AppStyle.screenSize.width * 0.9,
+        width: AppStyle.windowSize.width * 0.9,
     },
     locationTitle: {
         marginBottom: Normalize(10),
     },
     locationBody: {
         flexDirection: 'row',
-        width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.2,
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.2,
     },
     landmarkWrapper: {
         flexDirection: 'row',
-        width: AppStyle.screenSize.width,
+        width: AppStyle.windowSize.width,
     },
     benchmarkContainer: {
         width: '50%',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        left: AppStyle.screenSize.width * 0.05,
+        left: AppStyle.windowSize.width * 0.05,
     },
     benchmarkTitle: {
         flexDirection: 'row',
@@ -751,7 +751,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        left: AppStyle.screenSize.width * 0.05,
+        left: AppStyle.windowSize.width * 0.05,
     },
     accessibilityTitle: {
         flexDirection: 'row',
@@ -765,8 +765,8 @@ const styles = StyleSheet.create({
         marginTop: Normalize(15),
         marginLeft: Normalize(15),
         marginBottom: Normalize(25),
-        width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.1,
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.1,
     },
     aroundKostTitle: {
         marginBottom: Normalize(10),
@@ -783,7 +783,7 @@ const styles = StyleSheet.create({
         marginTop: Normalize(10),
         marginLeft: Normalize(15),
         marginBottom: Normalize(25),
-        width: AppStyle.screenSize.width * 0.9,
+        width: AppStyle.windowSize.width * 0.9,
     },
     ratingTitle: {
         marginBottom: Normalize(10),
@@ -791,7 +791,7 @@ const styles = StyleSheet.create({
     ratingBody: {
         width: '100%',
         flexDirection: 'row',
-        height: AppStyle.screenSize.height * 0.15,
+        height: AppStyle.windowSize.height * 0.15,
     },
     ratingBodyLeft: {
         width: '50%',
@@ -803,15 +803,15 @@ const styles = StyleSheet.create({
     ratingBodyRight: {
         width: '50%',
         height: '100%',
-        justifyContent: 'space-evenly',
         alignItems: 'flex-start',
+        justifyContent: 'space-evenly',
     },
     reviewContainer: {
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginLeft: Normalize(15),
         marginBottom: Normalize(55),
-        width: AppStyle.screenSize.width * 0.9,
+        width: AppStyle.windowSize.width * 0.9,
     },
     reviewTitle: {
         marginBottom: Normalize(25),
@@ -819,50 +819,50 @@ const styles = StyleSheet.create({
     reviewBody: {
         width: '100%',
         alignItems: 'center',
-        marginBottom: Normalize(10),
         flexDirection: 'column',
         justifyContent: 'center',
-        height: AppStyle.screenSize.height * 0.1,
+        marginBottom: Normalize(10),
+        height: AppStyle.windowSize.height * 0.1,
     },
     reviewBodyContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        height: '100%',
         width: '100%',
+        height: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
     },
     reviewUserPict: {
-        height: (AppStyle.screenSize.width * 0.9) * 0.2,
-        width: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.windowSize.width * 0.9) * 0.2,
+        height: (AppStyle.windowSize.width * 0.9) * 0.2,
     },
     reviewUserHeader: {
-        justifyContent: 'center',
         alignItems: 'center',
-        height: (AppStyle.screenSize.width * 0.9) * 0.2,
-        width: (AppStyle.screenSize.width * 0.9) * 0.2,
         flexDirection: 'column',
+        justifyContent: 'center',
+        width: (AppStyle.windowSize.width * 0.9) * 0.2,
+        height: (AppStyle.windowSize.width * 0.9) * 0.2,
     },
     reviewUserBody: {
-        justifyContent: 'center',
         alignItems: 'center',
-        height: (AppStyle.screenSize.width * 0.9) * 0.2,
-        width: (AppStyle.screenSize.width * 0.9) * 0.5,
+        justifyContent: 'center',
+        width: (AppStyle.windowSize.width * 0.9) * 0.5,
+        height: (AppStyle.windowSize.width * 0.9) * 0.2,
     },
     roomTitle: {
         top: -Normalize(30),
-        left: AppStyle.screenSize.width * 0.05,
-        width: AppStyle.screenSize.width * 0.9,
+        left: AppStyle.windowSize.width * 0.05,
+        width: AppStyle.windowSize.width * 0.9,
     },
     roomBody: {
         top: -Normalize(15),
-        left: AppStyle.screenSize.width * 0.05,
-        width: AppStyle.screenSize.width * 0.9,
+        left: AppStyle.windowSize.width * 0.05,
+        width: AppStyle.windowSize.width * 0.9,
     },
     ownerContainer: {
         marginTop: Normalize(5),
         marginLeft: Normalize(15),
         marginBottom: Normalize(90),
-        width: AppStyle.screenSize.width * 0.9,
+        width: AppStyle.windowSize.width * 0.9,
     },
     ownerTitle: {
         marginBottom: Normalize(10),
@@ -873,7 +873,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         marginBottom: Normalize(10),
-        height: AppStyle.screenSize.height * 0.1,
+        height: AppStyle.windowSize.height * 0.1,
     },
     ownerBodyContainer: {
         width: '100%',
@@ -883,21 +883,21 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     ownerUserPict: {
-        height: (AppStyle.screenSize.width * 0.9) * 0.2,
-        width: (AppStyle.screenSize.width * 0.9) * 0.2,
+        width: (AppStyle.windowSize.width * 0.9) * 0.2,
+        height: (AppStyle.windowSize.width * 0.9) * 0.2,
     },
     ownerUserHeader: {
-        justifyContent: 'center',
         alignItems: 'center',
-        height: (AppStyle.screenSize.width * 0.9) * 0.2,
-        width: (AppStyle.screenSize.width * 0.9) * 0.2,
         flexDirection: 'column',
+        justifyContent: 'center',
+        width: (AppStyle.windowSize.width * 0.9) * 0.2,
+        height: (AppStyle.windowSize.width * 0.9) * 0.2,
     },
     ownerUserBody: {
-        justifyContent: 'center',
         alignItems: 'center',
-        height: (AppStyle.screenSize.width * 0.9) * 0.2,
-        width: (AppStyle.screenSize.width * 0.9) * 0.5,
+        justifyContent: 'center',
+        width: (AppStyle.windowSize.width * 0.9) * 0.5,
+        height: (AppStyle.windowSize.width * 0.9) * 0.2,
     },
 
 })
