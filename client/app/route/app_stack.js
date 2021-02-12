@@ -13,11 +13,11 @@ export default function AppStack() {
 
     return (
         <Tab.Navigator tabBar={props => <BottomNavBar {...props} />}>
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Search" component={Search} />
-            <Tab.Screen name="MyKosan" component={MyKosan} />
-            <Tab.Screen name="UserProfile" component={UserProfile} />
-            <Tab.Screen name="Chats" component={Chats} />
+            <Tab.Screen options={{ tabBarVisible: false }} name="Home" component={Home} />
+            <Tab.Screen options={{ tabBarVisible: false }} name="Search" component={Search} />
+            <Tab.Screen options={{ tabBarVisible: false }} name="MyKosan" component={MyKosan} />
+            <Tab.Screen options={{ tabBarVisible: false }} name="UserProfile" component={UserProfile} />
+            <Tab.Screen options={{ tabBarVisible: false }} name="Chats" component={Chats} />
         </Tab.Navigator>
     )
 }

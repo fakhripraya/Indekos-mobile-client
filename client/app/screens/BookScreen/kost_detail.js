@@ -861,7 +861,7 @@ const styles = StyleSheet.create({
     ownerContainer: {
         marginTop: Normalize(5),
         marginLeft: Normalize(15),
-        marginBottom: Normalize(120),
+        marginBottom: Normalize(90),
         width: AppStyle.screenSize.width * 0.9,
     },
     ownerTitle: {

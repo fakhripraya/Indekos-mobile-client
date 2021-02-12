@@ -28,10 +28,10 @@ const styles = StyleSheet.create({
         elevation: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        height: Normalize(60),
         backgroundColor: 'white',
         justifyContent: 'space-between',
         width: AppStyle.screenSize.width,
+        height: AppStyle.screenSize.width * 0.15,
     },
     priceTag: {
         flexDirection: 'row',
