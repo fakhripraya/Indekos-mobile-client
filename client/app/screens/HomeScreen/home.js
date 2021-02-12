@@ -569,7 +569,7 @@ const styles = StyleSheet.create({
     },
     recListCarouselContainer: {
         alignSelf: 'center',
-        marginBottom: Normalize(125),
+        marginBottom: Normalize(100),
         width: AppStyle.windowSize.width * 0.9,
         height: AppStyle.windowSize.height * 0.26,
     },

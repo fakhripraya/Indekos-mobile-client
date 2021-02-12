@@ -7,6 +7,7 @@ import HomeBackground from '../../components/Backgrounds/book_background';
 import StickyBottom from '../../components/StickyBottom/kost_detail_bottom';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
+import { normalize } from 'react-native-elements';
 
 const Tab = createBottomTabNavigator();
 
@@ -224,13 +225,13 @@ export default function KostDetail({ navigation }) {
         function Icon({ children }) {
 
             if (children == 0)
-                return <FontAwesome name="snowflake-o" size={Normalize(12)} color={AppStyle.third_main_color} />
+                return <FontAwesome name="snowflake-o" size={Normalize(14)} color={AppStyle.third_main_color} />
             else if (children == 1)
-                return <MaterialIcons name="storefront" size={Normalize(12)} color={AppStyle.third_main_color} />
+                return <MaterialIcons name="storefront" size={Normalize(14)} color={AppStyle.third_main_color} />
             else if (children == 2)
-                return <AntDesign name="unlock" size={Normalize(12)} color={AppStyle.third_main_color} />
+                return <AntDesign name="unlock" size={Normalize(14)} color={AppStyle.third_main_color} />
             else if (children == 3)
-                return <AntDesign name="wifi" size={Normalize(12)} color={AppStyle.third_main_color} />
+                return <AntDesign name="wifi" size={Normalize(14)} color={AppStyle.third_main_color} />
             else
                 return null
 
@@ -254,15 +255,15 @@ export default function KostDetail({ navigation }) {
         function Icon({ children }) {
 
             if (children == 0)
-                return <Ionicons name="ios-basketball-outline" size={24} color={AppStyle.third_main_color} />
+                return <Ionicons name="ios-basketball-outline" size={Normalize(18)} color={AppStyle.third_main_color} />
             else if (children == 1)
-                return <SimpleLineIcons name="bag" size={24} color={AppStyle.third_main_color} />
+                return <SimpleLineIcons name="bag" size={Normalize(18)} color={AppStyle.third_main_color} />
             else if (children == 2)
-                return <MaterialIcons name="shopping-basket" size={24} color={AppStyle.third_main_color} />
+                return <MaterialIcons name="shopping-basket" size={Normalize(18)} color={AppStyle.third_main_color} />
             else if (children == 3)
-                return <FontAwesome name="truck" size={24} color={AppStyle.third_main_color} />
+                return <FontAwesome name="truck" size={Normalize(18)} color={AppStyle.third_main_color} />
             else if (children == 4)
-                return <MaterialIcons name="local-dining" size={24} color={AppStyle.third_main_color} />
+                return <MaterialIcons name="local-dining" size={Normalize(18)} color={AppStyle.third_main_color} />
             else
                 return null
 
@@ -333,7 +334,7 @@ export default function KostDetail({ navigation }) {
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
                     </View>
                     <View style={styles.descBody}>
-                        <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi pariatur odio aliquam error accusantium consectetur saepe maxime delectus earum corrupti labore consequatur temporibus deserunt soluta adipisci eligendi blanditiis, ab magnam?</Text>
+                        <Text style={{ fontSize: Normalize(14) }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi pariatur odio aliquam error accusantium consectetur saepe maxime delectus earum corrupti labore consequatur temporibus deserunt soluta adipisci eligendi blanditiis, ab magnam?</Text>
                     </View>
                 </View>
                 <View style={styles.softLines} />
@@ -358,7 +359,7 @@ export default function KostDetail({ navigation }) {
                     <View style={styles.benchmarkContainer}>
                         <View style={styles.benchmarkTitle}>
                             <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                            <Text style={{ color: 'gray' }}>Benchmark</Text>
+                            <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
                         </View >
                         <View style={{ flexDirection: 'column' }}>
                             {
@@ -367,7 +368,7 @@ export default function KostDetail({ navigation }) {
                                     return (
                                         <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                                             <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                            {'  '}
+                                            {'   '}
                                             <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
                                         </Text>
                                     )
@@ -379,7 +380,7 @@ export default function KostDetail({ navigation }) {
                     <View style={styles.accessibilityContainer}>
                         <View style={styles.accessibilityTitle}>
                             <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                            <Text style={{ color: 'gray' }}>Accessibility</Text>
+                            <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
                         </View>
                         <View style={{ flexDirection: 'column' }}>
                             {
@@ -388,7 +389,7 @@ export default function KostDetail({ navigation }) {
                                     return (
                                         <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                                             <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                            {'  '}
+                                            {'   '}
                                             <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
                                         </Text>
                                     )
@@ -538,7 +539,7 @@ export default function KostDetail({ navigation }) {
                                     </View>
                                     <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
                                         <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: 10, backgroundColor: AppStyle.sub_main_color }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>Choose</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -810,18 +811,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginLeft: Normalize(15),
-        marginBottom: Normalize(55),
+        marginBottom: Normalize(40),
         width: AppStyle.windowSize.width * 0.9,
     },
     reviewTitle: {
-        marginBottom: Normalize(25),
+        marginBottom: Normalize(30),
     },
     reviewBody: {
         width: '100%',
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'center',
-        marginBottom: Normalize(10),
+        marginBottom: Normalize(20),
         height: AppStyle.windowSize.height * 0.1,
     },
     reviewBodyContainer: {
@@ -861,7 +862,7 @@ const styles = StyleSheet.create({
     ownerContainer: {
         marginTop: Normalize(5),
         marginLeft: Normalize(15),
-        marginBottom: Normalize(90),
+        marginBottom: Normalize(100),
         width: AppStyle.windowSize.width * 0.9,
     },
     ownerTitle: {
