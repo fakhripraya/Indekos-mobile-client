@@ -351,7 +351,7 @@ export default function RoomSelection({ navigation }) {
     }
 
     function handleNext() {
-        navigation.replace('MemberDetails');
+        navigation.push('MemberDetails');
     }
 
     // fetch the data from the server

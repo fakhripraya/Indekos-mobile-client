@@ -10,7 +10,7 @@ const NestedStack = createStackNavigator();
 // export the BookStack
 export default function BookStack() {
     return (
-        <NestedStack.Navigator screenOptions={{ headerTransparent: false, headerStyle: { height: 0 }, title: '', headerTintColor: 'white' }}>
+        <NestedStack.Navigator screenOptions={{ headerTransparent: false, headerStyle: { height: 0 }, title: '', headerTintColor: 'rgba(255,255,255,0)' }}>
             <NestedStack.Screen name="KostDetail" component={KostDetail} />
             <NestedStack.Screen name="RoomSelection" component={RoomSelection} />
             <NestedStack.Screen name="MemberDetails" component={MemberDetails} />

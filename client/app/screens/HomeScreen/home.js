@@ -219,7 +219,7 @@ export default function Home({ navigation }) {
                 {item.map((item, index) => {
 
                     return (
-                        <TouchableOpacity onPress={() => { navigation.replace('BookStack') }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                        <TouchableOpacity onPress={() => { navigation.push('BookStack') }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                             <View style={{ height: '50%' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}

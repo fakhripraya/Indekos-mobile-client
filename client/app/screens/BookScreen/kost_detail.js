@@ -409,7 +409,7 @@ export default function KostDetail({ navigation }) {
             <>
                 <HomeBackground >
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.replace('AppStack') }} style={styles.headerIcon}>
+                        <TouchableOpacity onPress={() => { navigation.pop(1) }} style={styles.headerIcon}>
                             <AntDesign name="left" size={Normalize(24)} color="white" />
                         </TouchableOpacity>
                         <View>
