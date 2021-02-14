@@ -3,12 +3,12 @@ import Carousel from 'react-native-snap-carousel';
 import BottomSheet from 'reanimated-bottom-sheet';
 import MapShow from '../../components/Maps/map_show';
 import { AppStyle, Normalize } from '../../config/app.config';
-import SheetBody from '../../components/BottomSheets/kost_detail_sheet';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeBackground from '../../components/Backgrounds/book_background';
 import StickyBottom from '../../components/StickyBottom/kost_detail_bottom';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,9 +18,17 @@ export default function KostDetail({ navigation }) {
     const kostPictRef = useRef(null);
     const roomPictRef = useRef(null);
     const bottomSheetRef = useRef(null);
+    const sheetCarouselRef = useRef(null);
 
     // dummy
     let kostCaraouselData = [
+        { uri: "https://reactjs.org/logo-og.png" },
+        { uri: "https://reactjs.org/logo-og.png" },
+        { uri: "https://reactjs.org/logo-og.png" },
+        { uri: "https://reactjs.org/logo-og.png" },
+    ];
+
+    let roomSheetCaraouselData = [
         { uri: "https://reactjs.org/logo-og.png" },
         { uri: "https://reactjs.org/logo-og.png" },
         { uri: "https://reactjs.org/logo-og.png" },
@@ -202,7 +210,6 @@ export default function KostDetail({ navigation }) {
     function _renderKostPict({ item }) {
 
         return (
-
             <ImageBackground
                 style={styles.backgroundImg}
                 source={{ uri: item.uri }}
@@ -213,11 +220,21 @@ export default function KostDetail({ navigation }) {
     function _renderRoomPict({ item }) {
 
         return (
-
             <ImageBackground
                 imageStyle={{ borderRadius: Normalize(10) }}
                 style={[styles.backgroundImg, { height: AppStyle.windowSize.height * 0.2 }]}
                 source={{ uri: item }}
+            />
+        )
+    }
+
+    function _renderSheetRoomPicts({ item }) {
+
+        return (
+            <ImageBackground
+                imageStyle={{ borderRadius: Normalize(10) }}
+                style={[styles.backgroundImg]}
+                source={{ uri: item.uri }}
             />
         )
     }
@@ -283,6 +300,108 @@ export default function KostDetail({ navigation }) {
             })
         )
     }
+
+    const SheetHeader = () => (
+        <View style={styles.sheetHeader}>
+            <Ionicons name="ios-chevron-down-outline" size={Normalize(14)} color="gray" />
+            <Text style={{ fontSize: Normalize(12), color: 'gray', marginLeft: Normalize(10) }}>Close</Text>
+        </View>
+    );
+
+    const SheetBody = () => (
+        <View style={{ backgroundColor: 'white', height: AppStyle.windowSize.height * 0.8, alignItems: 'center' }}>
+            <ScrollView>
+                <View style={styles.sheetCarouselContainer}>
+                    <Carousel
+                        layout={"default"}
+                        ref={sheetCarouselRef}
+                        data={roomSheetCaraouselData}
+                        itemWidth={AppStyle.windowSize.width * 0.9}
+                        sliderWidth={AppStyle.windowSize.width * 0.9}
+                        renderItem={_renderSheetRoomPicts}
+                    />
+                </View>
+                <View style={styles.sheetRoomTitle}>
+                    <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>Luxury Room</Text>
+                </View>
+                <View style={styles.sheetTopInfo}>
+                    <View style={styles.sheetTopInfoLeft}>
+                        <View style={styles.sheetTopInfoLeftItem}>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                    <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
+                                </View>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>20m x 20m</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.sheetTopInfoLeftItem}>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                    <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
+                                </View>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>2 Persons</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.sheetTopInfoRight}>
+                        <View style={styles.sheetTopInfoRightItem}>
+                            <View style={{ flexDirection: 'row', height: Normalize(35), width: Normalize(70), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.male_color, borderRadius: Normalize(10) }}>
+                                <Ionicons name="male" size={Normalize(24)} color="white" />
+                                <Text style={{ color: 'white', fontSize: Normalize(14) }}>Male</Text>
+                            </View>
+                        </View>
+                        <View style={styles.sheetTopInfoRightItem}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>Available</Text>
+                                <Text style={{ color: AppStyle.error, fontSize: Normalize(12) }}>2 rooms left</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.sheetSharingFac}>
+                    <View style={styles.sheetSharingFacTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                    </View>
+                    <View style={styles.sheetSharingFacBody}>
+                        <MappedAroundKost />
+                    </View>
+                </View>
+                <View style={styles.sheetRoomFac}>
+                    <View style={styles.sheetRoomFacTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
+                    </View>
+                    <View style={styles.sheetRoomFacBody}>
+                        <MappedAroundKost />
+                    </View>
+                </View>
+                <View style={styles.sheetNotes}>
+                    <View style={styles.sheetNotesTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
+                    </View>
+                    <View style={styles.sheetNotesBody}>
+                        <Text>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, ipsam, nobis ad officia culpa reprehenderit nulla similique suscipit a quod in itaque aperiam. Temporibus vero dolor quibusdam, alias minus nobis?
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam suscipit, fuga maiores doloribus officia quo. Vero perspiciatis sapiente, nulla repellat praesentium tempore, neque enim soluta repellendus, dolorum quasi quibusdam quam.
+                        </Text>
+                    </View>
+                </View>
+            </ScrollView>
+        </View>
+    );
 
     function MainBody() {
 
@@ -577,9 +696,7 @@ export default function KostDetail({ navigation }) {
                                 <View style={styles.ownerUserBody}>
                                     <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
                                         <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
-                                        <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>
-                                            {kostOwner.kost_count} Kosan Owned
-                                </Text>
+                                        <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{kostOwner.kost_count} Kosan Owned</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -589,8 +706,9 @@ export default function KostDetail({ navigation }) {
                 <BottomSheet
                     initialSnap={1}
                     ref={bottomSheetRef}
+                    renderHeader={SheetHeader}
                     renderContent={SheetBody}
-                    borderRadius={Normalize(10)}
+                    enabledContentGestureInteraction={false}
                     snapPoints={[AppStyle.windowSize.height * 0.85, 0]}
                 />
             </>
@@ -913,6 +1031,115 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: (AppStyle.windowSize.width * 0.9) * 0.5,
         height: (AppStyle.windowSize.width * 0.9) * 0.2,
+    },
+    sheetHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        borderTopLeftRadius: Normalize(10),
+        borderTopRightRadius: Normalize(10),
+        height: AppStyle.windowSize.height * 0.05,
+    },
+    sheetCarouselContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.2,
+    },
+    sheetRoomTitle: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: Normalize(15),
+        justifyContent: 'center',
+    },
+    sheetTopInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: Normalize(20),
+        justifyContent: 'space-between',
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.15,
+    },
+    sheetTopInfoLeft: {
+        width: '50%',
+        height: '100%',
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    sheetTopInfoLeftItem: {
+        width: '100%',
+        height: '50%',
+        alignItems: 'center',
+        borderRightWidth: 0.5,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        borderColor: 'rgba(0,0,0,0.25)'
+    },
+    sheetTopInfoRight: {
+        width: '50%',
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    sheetTopInfoRightItem: {
+        width: '100%',
+        height: '50%',
+        borderLeftWidth: 0.5,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        borderColor: 'rgba(0,0,0,0.25)'
+    },
+    sheetSharingFac: {
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        marginTop: Normalize(15),
+        marginBottom: Normalize(15),
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.1,
+    },
+    sheetSharingFacTitle: {
+        marginBottom: Normalize(10),
+    },
+    sheetSharingFacBody: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+    },
+    sheetRoomFac: {
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        marginTop: Normalize(15),
+        marginBottom: Normalize(15),
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.1,
+    },
+    sheetRoomFacTitle: {
+        marginBottom: Normalize(10),
+    },
+    sheetRoomFacBody: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+    },
+    sheetNotes: {
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        marginTop: Normalize(15),
+        marginBottom: Normalize(15),
+        width: AppStyle.windowSize.width * 0.9,
+    },
+    sheetNotesTitle: {
+        marginBottom: Normalize(10),
+    },
+    sheetNotesBody: {
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
 })
