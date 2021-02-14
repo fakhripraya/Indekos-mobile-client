@@ -3,7 +3,7 @@ import { AppStyle, Normalize } from '../../config/app.config';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { normalize } from 'react-native-elements';
 
-function StickyBottom() {
+function StickyBottom({ navigation }) {
 
     return (
         <View style={styles.stickyContainer}>
@@ -13,7 +13,7 @@ function StickyBottom() {
                 </View>
                 <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
             </View>
-            <TouchableOpacity style={styles.bookButton}>
+            <TouchableOpacity onPress={() => { navigation.replace('RoomSelection') }} style={styles.bookButton}>
                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
             </TouchableOpacity>
         </View>

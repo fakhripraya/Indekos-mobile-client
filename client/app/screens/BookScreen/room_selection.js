@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
-import { AppStyle } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import React, { useEffect, useRef, useState } from 'react';
 
 export default function RoomSelection({ navigation }) {
@@ -373,6 +373,9 @@ export default function RoomSelection({ navigation }) {
             <View style={{ flex: 1, backgroundColor: 'white', width: '100%', height: '100%' }}>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.header}>
+                        <TouchableOpacity onPress={() => { navigation.replace('KostDetail') }} style={styles.headerIcon}>
+                            <AntDesign name="left" size={Normalize(24)} color="black" />
+                        </TouchableOpacity>
                         <View>
                             <Text style={styles.headerText}>Room Selection</Text>
                         </View>

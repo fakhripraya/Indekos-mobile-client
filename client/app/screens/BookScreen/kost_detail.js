@@ -717,7 +717,7 @@ export default function KostDetail({ navigation }) {
     }
 
     return (
-        <Tab.Navigator tabBar={props => <StickyBottom {...props} />}>
+        <Tab.Navigator tabBar={props => <StickyBottom {...props} navigation={navigation} />}>
             <Tab.Screen name="MainBody" component={MainBody} />
         </Tab.Navigator>
     )
