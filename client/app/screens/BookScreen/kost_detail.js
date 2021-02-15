@@ -393,7 +393,7 @@ export default function KostDetail({ navigation }) {
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
                     </View>
                     <View style={styles.sheetNotesBody}>
-                        <Text>
+                        <Text style={{ fontSize: Normalize(14) }}>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, ipsam, nobis ad officia culpa reprehenderit nulla similique suscipit a quod in itaque aperiam. Temporibus vero dolor quibusdam, alias minus nobis?
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam suscipit, fuga maiores doloribus officia quo. Vero perspiciatis sapiente, nulla repellat praesentium tempore, neque enim soluta repellendus, dolorum quasi quibusdam quam.
                         </Text>

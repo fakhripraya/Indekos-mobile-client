@@ -258,7 +258,7 @@ export default function RoomSelection({ navigation }) {
                     return (
                         <TouchableOpacity key={index} onPress={() => { updatePeriodList(index, parent) }}>
                             <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                                <Text style={{ fontWeight: 'bold', color: txtColor }}>{item.desc}</Text>
+                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: Normalize(12) }}>{item.desc}</Text>
                             </View>
                         </TouchableOpacity>
                     )
@@ -286,18 +286,18 @@ export default function RoomSelection({ navigation }) {
 
         return (
             <View style={styles.absoluteContainer}>
-                <View style={styles.roomFloor}><Text style={{ fontWeight: 'bold', fontSize: 18 }}>{dataList[containerIndex].RoomLevel}</Text></View>
+                <View style={styles.roomFloor}><Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>{dataList[containerIndex].RoomLevel}</Text></View>
                 <View style={styles.roomInfo}>
                     <View >
-                        <Text>{dataList[containerIndex].RoomDesc}</Text>
-                        <Text>{dataList[containerIndex].RoomSize}</Text>
+                        <Text style={{ fontSize: Normalize(12) }}>{dataList[containerIndex].RoomDesc}</Text>
+                        <Text style={{ fontSize: Normalize(12) }}>{dataList[containerIndex].RoomSize}</Text>
                     </View>
                     <View style={{ position: 'absolute', flexDirection: 'row', left: '70%' }} >
                         <TouchableOpacity style={styles.arrow} onPress={() => { prevRoom() }}>
-                            <AntDesign name="caretleft" size={12} color="white" />
+                            <AntDesign name="caretleft" size={Normalize(12)} color="white" />
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.arrow} onPress={() => { nextRoom() }}>
-                            <AntDesign name="caretright" size={12} color="white" />
+                            <AntDesign name="caretright" size={Normalize(12)} color="white" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -323,14 +323,14 @@ export default function RoomSelection({ navigation }) {
         if (item.occupied === true) {
             return (
                 <View style={[styles.roomList, { backgroundColor: 'gray' }]}>
-                    <Text style={{ color: 'white' }}>Full</Text>
+                    <Text style={{ color: 'white', fontSize: Normalize(14) }}>Full</Text>
                 </View>
             )
         } else {
             return (
                 <TouchableOpacity onPress={() => { updateDataList(index) }}>
                     <View style={[styles.roomList, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                        <Text style={{ color: txtColor }}>{item.key}</Text>
+                        <Text style={{ color: txtColor, fontSize: Normalize(14) }}>{item.key}</Text>
                     </View>
                 </TouchableOpacity>
             )
@@ -396,19 +396,19 @@ export default function RoomSelection({ navigation }) {
                         <Text style={styles.containerTitle}>Date</Text>
                         <View style={styles.buttonWrapper}>
                             <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
-                                <Text style={{ fontWeight: 'bold' }}>12</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>12</Text>
                             </View>
                             <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.40 }]}>
-                                <Text style={{ fontWeight: 'bold' }}>October</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>October</Text>
                             </View>
                             <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
-                                <Text style={{ fontWeight: 'bold' }}>2012</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>2012</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.container_3}>
                         <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Next</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Next</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -423,43 +423,43 @@ const styles = StyleSheet.create({
 
     header: {
         width: '100%',
-        height: 125,
         flexDirection: 'row',
         alignItems: 'center',
+        height: Normalize(100),
         justifyContent: 'center',
     },
     headerText: {
-        fontSize: 20,
         color: '#333',
         fontWeight: 'bold',
+        fontSize: Normalize(18),
     },
     headerIcon: {
-        left: 16,
         position: 'absolute',
+        left: AppStyle.screenSize.width * 0.05,
     },
     absoluteContainer: {
         elevation: 5,
         paddingTop: '5%',
-        borderRadius: 15,
         paddingLeft: '5%',
         paddingRight: '5%',
         paddingBottom: '5%',
         alignSelf: 'center',
         backgroundColor: 'white',
+        borderRadius: Normalize(15),
         width: AppStyle.screenSize.width * 0.9,
         height: AppStyle.screenSize.height * 0.425,
         marginBottom: AppStyle.screenSize.height * 0.025,
     },
     roomList: {
-        marginTop: 1,
-        marginRight: 5,
         borderWidth: 1,
-        paddingTop: 15,
-        marginBottom: 1,
-        borderRadius: 10,
-        paddingBottom: 15,
         alignItems: 'center',
         justifyContent: 'center',
+        marginRight: Normalize(5),
+        paddingTop: Normalize(15),
+        marginTop: Normalize(3.5),
+        marginBottom: Normalize(3.5),
+        borderRadius: Normalize(10),
+        paddingBottom: Normalize(15),
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.screenSize.width * 0.1215,
         height: AppStyle.screenSize.width * 0.1225,
@@ -468,13 +468,13 @@ const styles = StyleSheet.create({
         top: AppStyle.screenSize.height * 0.05
     },
     arrow: {
-        marginRight: 10,
         alignItems: 'center',
-        borderRadius: 100 / 2,
         backgroundColor: 'gray',
         justifyContent: 'center',
+        marginRight: Normalize(10),
+        borderRadius: Normalize(50),
         width: AppStyle.screenSize.width * 0.1,
-        height: AppStyle.screenSize.height * 0.05,
+        height: AppStyle.screenSize.width * 0.1,
     },
     roomInfo: {
         flexDirection: 'row',
@@ -486,10 +486,10 @@ const styles = StyleSheet.create({
         paddingLeft: AppStyle.screenSize.width * 0.05,
     },
     container_2: {
-        paddingLeft: AppStyle.screenSize.width * 0.05,
         justifyContent: 'center',
+        width: AppStyle.screenSize.width,
         height: AppStyle.screenSize.height * 0.15,
-        width: AppStyle.screenSize.width
+        paddingLeft: AppStyle.screenSize.width * 0.05,
     },
     container_3: {
         justifyContent: 'center',
@@ -502,42 +502,43 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: '2%',
         alignSelf: 'flex-start',
-        fontSize: 16,
+        fontSize: Normalize(14),
     },
     nextBtn: {
-        paddingTop: 10,
         borderWidth: 1,
-        paddingBottom: 10,
         alignItems: 'center',
-        borderRadius: 100 / 2,
         alignSelf: 'flex-end',
         justifyContent: 'center',
+        paddingTop: Normalize(10),
+        borderRadius: Normalize(50),
+        paddingBottom: Normalize(10),
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.screenSize.width * 0.275,
     },
     buttonWrapper: {
         width: '100%',
         flexDirection: 'row',
+        paddingBottom: Normalize(10),
     },
     buttonPeriod: {
-        paddingTop: 15,
         borderWidth: 1,
-        marginRight: 10,
-        borderRadius: 10,
-        paddingBottom: 15,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: Normalize(15),
+        marginRight: Normalize(10),
+        borderRadius: Normalize(10),
+        paddingBottom: Normalize(15),
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.screenSize.width * 0.205,
     },
     buttonDate: {
-        paddingTop: 15,
         borderWidth: 1,
-        marginRight: 10,
-        borderRadius: 10,
-        paddingBottom: 15,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: Normalize(15),
+        marginRight: Normalize(10),
+        borderRadius: Normalize(10),
+        paddingBottom: Normalize(15),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
 })
