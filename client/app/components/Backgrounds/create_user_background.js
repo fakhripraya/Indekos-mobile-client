@@ -12,15 +12,13 @@ export function FirstBackground(props) {
     // Renders the First background
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-                    <View style={firstStyles.container}>
-                        <View style={firstStyles.background_1} />
-                        <View style={firstStyles.background_2} />
-                        {props.children}
-                    </View>
+            <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
+                <View style={firstStyles.container}>
+                    <View style={firstStyles.background_1} />
+                    <View style={firstStyles.background_2} />
+                    {props.children}
                 </View>
-            </ScrollView>
+            </View>
         </View >
     )
 }
@@ -30,18 +28,16 @@ export function SecondBackground(props) {
     // Renders the Second background
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-                    <View style={secondStyles.container}>
-                        <View style={secondStyles.backgroundContainer} >
-                            <View style={secondStyles.background_1} />
-                            <View style={secondStyles.background_2} />
-                        </View>
-                        <View style={secondStyles.backgroundContainer_2} />
-                        {props.children}
+            <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
+                <View style={secondStyles.container}>
+                    <View style={secondStyles.backgroundContainer} >
+                        <View style={secondStyles.background_1} />
+                        <View style={secondStyles.background_2} />
                     </View>
+                    <View style={secondStyles.backgroundContainer_2} />
+                    {props.children}
                 </View>
-            </ScrollView>
+            </View>
         </View >
     )
 }

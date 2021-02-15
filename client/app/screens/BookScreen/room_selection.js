@@ -370,48 +370,46 @@ export default function RoomSelection({ navigation }) {
     //if null dont render yet
     if (dataList !== null) {
         return (
-            <View style={{ flex: 1, backgroundColor: 'white', width: '100%', height: '100%' }}>
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.replace('KostDetail') }} style={styles.headerIcon}>
-                            <AntDesign name="left" size={Normalize(24)} color="black" />
-                        </TouchableOpacity>
-                        <View>
-                            <Text style={styles.headerText}>Room Selection</Text>
+            <View style={{ flex: 1, backgroundColor: 'white', width: AppStyle.windowSize.width, height: AppStyle.windowSize.height }}>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => { navigation.replace('KostDetail') }} style={styles.headerIcon}>
+                        <AntDesign name="left" size={Normalize(24)} color="black" />
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={styles.headerText}>Room Selection</Text>
+                    </View>
+                </View>
+                <RoomListView />
+                <View style={styles.container_1}>
+                    <Text style={styles.containerTitle}>Period</Text>
+                    <Carousel
+                        ref={periodCarouselRef}
+                        layout={"default"}
+                        data={periodDataList}
+                        sliderWidth={AppStyle.screenSize.width}
+                        itemWidth={AppStyle.screenSize.width}
+                        renderItem={_renderFirstCarousel}
+                    />
+                </View>
+                <View style={styles.container_2}>
+                    <Text style={styles.containerTitle}>Date</Text>
+                    <View style={styles.buttonWrapper}>
+                        <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
+                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>12</Text>
+                        </View>
+                        <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.40 }]}>
+                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>October</Text>
+                        </View>
+                        <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
+                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>2012</Text>
                         </View>
                     </View>
-                    <RoomListView />
-                    <View style={styles.container_1}>
-                        <Text style={styles.containerTitle}>Period</Text>
-                        <Carousel
-                            ref={periodCarouselRef}
-                            layout={"default"}
-                            data={periodDataList}
-                            sliderWidth={AppStyle.screenSize.width}
-                            itemWidth={AppStyle.screenSize.width}
-                            renderItem={_renderFirstCarousel}
-                        />
-                    </View>
-                    <View style={styles.container_2}>
-                        <Text style={styles.containerTitle}>Date</Text>
-                        <View style={styles.buttonWrapper}>
-                            <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
-                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>12</Text>
-                            </View>
-                            <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.40 }]}>
-                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>October</Text>
-                            </View>
-                            <View style={[styles.buttonDate, { width: AppStyle.screenSize.width * 0.225 }]}>
-                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>2012</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.container_3}>
-                        <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Next</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                </View>
+                <View style={styles.container_3}>
+                    <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Next</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     } else {
@@ -425,8 +423,8 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        height: Normalize(100),
         justifyContent: 'center',
+        height: AppStyle.windowSize.height * 0.15,
     },
     headerText: {
         color: '#333',
@@ -439,15 +437,12 @@ const styles = StyleSheet.create({
     },
     absoluteContainer: {
         elevation: 5,
-        paddingTop: '5%',
-        paddingLeft: '5%',
-        paddingRight: '5%',
-        paddingBottom: '5%',
+        padding: '5%',
         alignSelf: 'center',
         backgroundColor: 'white',
         borderRadius: Normalize(15),
         width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.425,
+        height: AppStyle.windowSize.height * 0.4,
         marginBottom: AppStyle.screenSize.height * 0.025,
     },
     roomList: {
@@ -465,7 +460,9 @@ const styles = StyleSheet.create({
         height: AppStyle.screenSize.width * 0.1225,
     },
     roomListContainer: {
-        top: AppStyle.screenSize.height * 0.05
+        height: '75%',
+        paddingTop: '7%',
+        justifyContent: 'center',
     },
     arrow: {
         alignItems: 'center',
@@ -478,6 +475,10 @@ const styles = StyleSheet.create({
     },
     roomInfo: {
         flexDirection: 'row',
+        height: '12.5%',
+    },
+    roomFloor: {
+        height: '12.5%',
     },
     container_1: {
         justifyContent: 'center',
@@ -492,9 +493,9 @@ const styles = StyleSheet.create({
         paddingLeft: AppStyle.screenSize.width * 0.05,
     },
     container_3: {
+        marginTop: Normalize(7.5),
         justifyContent: 'center',
         width: AppStyle.screenSize.width,
-        height: AppStyle.screenSize.height * 0.15,
         paddingRight: AppStyle.screenSize.width * 0.05,
     },
     containerTitle: {

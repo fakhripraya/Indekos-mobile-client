@@ -44,7 +44,6 @@ export default function PickRole({ navigation }) {
                 })
                     .then(response => {
                         if (response.status >= 200 && response.status < 300) {
-                            dispatch(clearUserState());
                             navigation.replace('AppStack');
                         }
                     })

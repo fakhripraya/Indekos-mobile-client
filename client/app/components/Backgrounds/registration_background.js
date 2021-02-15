@@ -11,19 +11,17 @@ export default function RegistrationBackground(props) {
 
     // Renders the RegistrationStack background
     return (
-        <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-                    <View style={styles.container}>
-                        <View style={styles.backgroundContainer} >
-                            <View style={styles.background_1} />
-                            <View style={styles.background_2} />
-                        </View>
-                        <View style={styles.backgroundContainer_2} />
-                        {props.children}
+        <View style={{ flex: 1, width: AppStyle.windowSize.width, height: AppStyle.windowSize.height }}>
+            <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
+                <View style={styles.container}>
+                    <View style={styles.backgroundContainer} >
+                        <View style={styles.background_1} />
+                        <View style={styles.background_2} />
                     </View>
+                    <View style={styles.backgroundContainer_2} />
+                    {props.children}
                 </View>
-            </ScrollView>
+            </View>
         </View >
     )
 }

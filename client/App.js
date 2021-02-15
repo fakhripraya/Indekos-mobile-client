@@ -29,8 +29,8 @@ export default function App() {
       <View style={styles.container}>
         <NavigationContainer>
           {/* <RootStack.Navigator initialRouteName="BookStack"> */}
-          {/* <RootStack.Navigator initialRouteName="SplashStack"> */}
-          <RootStack.Navigator initialRouteName="AppStack">
+          <RootStack.Navigator initialRouteName="SplashStack">
+            {/* <RootStack.Navigator initialRouteName="AppStack"> */}
             <RootStack.Screen
               name="SplashStack"
               component={SplashStack}

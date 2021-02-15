@@ -283,8 +283,8 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        height: Normalize(100),
         justifyContent: 'center',
+        height: AppStyle.windowSize.height * 0.15,
     },
     headerText: {
         color: '#333',
@@ -307,7 +307,8 @@ const styles = StyleSheet.create({
         marginBottom: Normalize(10),
         paddingBottom: Normalize(15),
         width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.45,
+        height: Normalize(250),
+        // height: AppStyle.screenSize.height * 0.45,
     },
     mappedContainer: {
         paddingLeft: '5%',
