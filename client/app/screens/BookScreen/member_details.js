@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingTop: Normalize(15),
         borderRadius: Normalize(15),
-        marginBottom: Normalize(15),
+        marginBottom: Normalize(10),
         paddingBottom: Normalize(15),
         width: AppStyle.screenSize.width * 0.9,
         height: AppStyle.screenSize.height * 0.45,
