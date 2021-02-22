@@ -4,12 +4,22 @@ import {
     StyleSheet,
     ImageBackground,
 } from 'react-native';
-import React, { useRef } from 'react';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle, Normalize, AuthService } from '../../config/app.config';
 import HomeBackground from '../../components/Backgrounds/home_background';
+
+// creates the promised base http client
+const authAPI = axios.create({
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
+})
+
+// axios cancel source
+var cancelSource
 
 export default function Home({ navigation }) {
 
@@ -200,165 +210,291 @@ export default function Home({ navigation }) {
         ],
     ];
 
-    function _renderNewsItem({ item }) {
+    function NameWrapper() {
+
+        var [userInfo, setUserInfo] = useState({})
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http post request to / url in the authentication service to fetch the logged in users
+            authAPI.get('/', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    // console.log(response)
+                    setUserInfo(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
 
         return (
-            <ImageBackground
-                imageStyle={{ borderRadius: 25 }}
-                style={styles.backgroundImg}
-                source={{ uri: item.uri }}
-            />
-        )
-    }
-
-    function _renderBookList({ item }) {
-
-        return (
-
-            <View style={{ flexDirection: 'row' }}>
-                {item.map((item, index) => {
-
-                    return (
-                        <TouchableOpacity onPress={() => { navigation.push('BookStack') }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
-                            <View style={{ height: '50%' }}>
-                                <ImageBackground
-                                    imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
-                                    style={styles.backgroundImg}
-                                    source={{ uri: item.uri }}
-                                />
-                            </View>
-                            <View style={{ height: '50%' }}>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )
-
-                })}
+            <View style={styles.nameWrapper}>
+                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                    <Text style={{ fontSize: Normalize(18), color: 'white', left: AppStyle.windowSize.width * 0.075 }}><Text style={{ fontWeight: 'bold' }}>Hello</Text>, {userInfo.displayname}</Text>
+                </View>
+                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                    <TouchableOpacity style={{ width: Normalize(24), justifyContent: 'center', alignItems: 'center', right: AppStyle.windowSize.width * 0.075 }}>
+                        <FontAwesome5 name="bell" size={Normalize(24)} color="white" />
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
 
-    function _renderPromoList({ item }) {
+    function NewsCarousel() {
+
+        function _renderNewsItem({ item }) {
+
+            return (
+                <ImageBackground
+                    imageStyle={{ borderRadius: 25 }}
+                    style={styles.backgroundImg}
+                    source={{ uri: item.uri }}
+                />
+            )
+        }
 
         return (
-
-            <View style={{ flexDirection: 'row' }}>
-                {item.map((item, index) => {
-
-                    return (
-                        <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
-                            <View style={{ height: '50%' }}>
-                                <ImageBackground
-                                    imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
-                                    style={styles.backgroundImg}
-                                    source={{ uri: item.uri }}
-                                />
-                            </View>
-                            <View style={{ height: '50%' }}>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )
-
-                })}
+            <View style={styles.newsCarouselContainer}>
+                <Carousel
+                    layout={"default"}
+                    ref={newsCarouselRef}
+                    data={newsCaraouselData}
+                    itemWidth={AppStyle.windowSize.width * 0.9}
+                    sliderWidth={AppStyle.windowSize.width * 0.9}
+                    renderItem={_renderNewsItem}
+                />
             </View>
         )
     }
 
-    function _renderNearYouList({ item }) {
+    function BookCarousel() {
+
+        function _renderBookList({ item }) {
+
+            return (
+
+                <View style={{ flexDirection: 'row' }}>
+                    {item.map((item, index) => {
+
+                        return (
+                            <TouchableOpacity onPress={() => { navigation.push('BookStack') }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                                <View style={{ height: '50%' }}>
+                                    <ImageBackground
+                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                        style={styles.backgroundImg}
+                                        source={{ uri: item.uri }}
+                                    />
+                                </View>
+                                <View style={{ height: '50%' }}>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+
+                    })}
+                </View>
+            )
+        }
 
         return (
-
-            <View style={{ flexDirection: 'row' }}>
-                {item.map((item, index) => {
-
-                    return (
-                        <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
-                            <View style={{ height: '50%' }}>
-                                <ImageBackground
-                                    imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
-                                    style={styles.backgroundImg}
-                                    source={{ uri: item.uri }}
-                                />
-                            </View>
-                            <View style={{ height: '50%' }}>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )
-
-                })}
+            <View style={styles.bookListCarouselContainer}>
+                <Carousel
+                    layout={"default"}
+                    ref={bookCarouselRef}
+                    data={bookCaraouselData}
+                    itemWidth={AppStyle.windowSize.width * 0.9}
+                    sliderWidth={AppStyle.windowSize.width * 0.9}
+                    renderItem={_renderBookList}
+                />
             </View>
         )
     }
 
-    function _renderRecList({ item }) {
+    function PromoCarousel() {
+
+        function _renderPromoList({ item }) {
+
+            return (
+
+                <View style={{ flexDirection: 'row' }}>
+                    {item.map((item, index) => {
+
+                        return (
+                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                                <View style={{ height: '50%' }}>
+                                    <ImageBackground
+                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                        style={styles.backgroundImg}
+                                        source={{ uri: item.uri }}
+                                    />
+                                </View>
+                                <View style={{ height: '50%' }}>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+
+                    })}
+                </View>
+            )
+        }
 
         return (
+            <View style={styles.promoListCarouselContainer}>
+                <Carousel
+                    layout={"default"}
+                    ref={promoCarouselRef}
+                    data={promoCaraouselData}
+                    itemWidth={AppStyle.windowSize.width * 0.9}
+                    sliderWidth={AppStyle.windowSize.width * 0.9}
+                    renderItem={_renderPromoList}
+                />
+            </View>
+        )
+    }
 
-            <View style={{ flexDirection: 'row' }}>
-                {item.map((item, index) => {
+    function NearYouCarousel() {
 
-                    return (
-                        <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
-                            <View style={{ height: '50%' }}>
-                                <ImageBackground
-                                    imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
-                                    style={styles.backgroundImg}
-                                    source={{ uri: item.uri }}
-                                />
-                            </View>
-                            <View style={{ height: '50%' }}>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                                <View style={{ left: Normalize(10), height: '25%' }}>
-                                    <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )
+        function _renderNearYouList({ item }) {
 
-                })}
+            return (
+
+                <View style={{ flexDirection: 'row' }}>
+                    {item.map((item, index) => {
+
+                        return (
+                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                                <View style={{ height: '50%' }}>
+                                    <ImageBackground
+                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                        style={styles.backgroundImg}
+                                        source={{ uri: item.uri }}
+                                    />
+                                </View>
+                                <View style={{ height: '50%' }}>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+
+                    })}
+                </View>
+            )
+        }
+
+        return (
+            <View style={styles.nearYouListCarouselContainer}>
+                <Carousel
+                    layout={"default"}
+                    ref={nearYouCarouselRef}
+                    data={nearYouCaraouselData}
+                    itemWidth={AppStyle.windowSize.width * 0.9}
+                    sliderWidth={AppStyle.windowSize.width * 0.9}
+                    renderItem={_renderNearYouList}
+                />
+            </View>
+        )
+    }
+
+    function RecommendedCarousel() {
+
+        function _renderRecList({ item }) {
+
+            return (
+
+                <View style={{ flexDirection: 'row' }}>
+                    {item.map((item, index) => {
+
+                        return (
+                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                                <View style={{ height: '50%' }}>
+                                    <ImageBackground
+                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                        style={styles.backgroundImg}
+                                        source={{ uri: item.uri }}
+                                    />
+                                </View>
+                                <View style={{ height: '50%' }}>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                    <View style={{ left: Normalize(10), height: '25%' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+
+                    })}
+                </View>
+            )
+        }
+
+        return (
+            <View style={styles.recListCarouselContainer}>
+                <Carousel
+                    layout={"default"}
+                    ref={recCarouselRef}
+                    data={recCaraouselData}
+                    itemWidth={AppStyle.windowSize.width * 0.9}
+                    sliderWidth={AppStyle.windowSize.width * 0.9}
+                    renderItem={_renderRecList}
+                />
             </View>
         )
     }
@@ -366,26 +502,8 @@ export default function Home({ navigation }) {
     return (
         <HomeBackground >
             <View style={{ height: AppStyle.windowSize.height * 2.075 }}>
-                <View style={styles.nameWrapper}>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'white', left: AppStyle.windowSize.width * 0.075 }}><Text style={{ fontWeight: 'bold' }}>Hello</Text>, Mimin Oh</Text>
-                    </View>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={{ width: Normalize(24), justifyContent: 'center', alignItems: 'center', right: AppStyle.windowSize.width * 0.075 }}>
-                            <FontAwesome5 name="bell" size={Normalize(24)} color="white" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.newsCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
-                        ref={newsCarouselRef}
-                        data={newsCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
-                        renderItem={_renderNewsItem}
-                    />
-                </View>
+                <NameWrapper />
+                <NewsCarousel />
                 <View style={styles.bookListHeader}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
                         <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Book It Now</Text>
@@ -412,16 +530,7 @@ export default function Home({ navigation }) {
                         <View style={{ right: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
                     </View>
                 </View>
-                <View style={styles.bookListCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
-                        ref={bookCarouselRef}
-                        data={bookCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
-                        renderItem={_renderBookList}
-                    />
-                </View>
+                <BookCarousel />
                 <View style={styles.promoListHeader}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
                         <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Promo</Text>
@@ -432,16 +541,7 @@ export default function Home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.promoListCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
-                        ref={promoCarouselRef}
-                        data={promoCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
-                        renderItem={_renderPromoList}
-                    />
-                </View>
+                <PromoCarousel />
                 <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start' }}>
                     <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
                 </View>
@@ -455,16 +555,7 @@ export default function Home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.nearYouListCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
-                        ref={nearYouCarouselRef}
-                        data={nearYouCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
-                        renderItem={_renderNearYouList}
-                    />
-                </View>
+                <NearYouCarousel />
                 <View style={styles.recListHeader}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
                         <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Recommendation</Text>
@@ -475,16 +566,7 @@ export default function Home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.recListCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
-                        ref={recCarouselRef}
-                        data={recCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
-                        renderItem={_renderRecList}
-                    />
-                </View>
+                <RecommendedCarousel />
             </View>
         </HomeBackground>
     )
