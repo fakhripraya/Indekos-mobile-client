@@ -5,14 +5,14 @@ import {
     accountRegistrationChange
 } from './account_registration_state/actions'
 import {
-    UserRoleChange,
-    ClearUserState,
-    UserDisplayNameChange,
+    userRoleChange,
+    userLocationState,
+    userDisplayNameChange,
 } from './user_state/actions'
 export {
-    UserRoleChange,
-    ClearUserState,
+    userRoleChange,
     popUpModalChange,
-    UserDisplayNameChange,
+    userLocationState,
+    userDisplayNameChange,
     accountRegistrationChange,
 }

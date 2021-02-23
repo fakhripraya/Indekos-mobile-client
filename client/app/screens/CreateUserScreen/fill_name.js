@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import {
-    UserDisplayNameChange
+    userDisplayNameChange
 } from '../../redux';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -31,7 +31,7 @@ export default function FillName({ navigation }) {
 
     // handle registration form submit
     function handleSubmit() {
-        dispatch(UserDisplayNameChange({ displayName: inputValue }));
+        dispatch(userDisplayNameChange({ displayName: inputValue }));
 
         // if owner, finish the user creation and navigate to home screen
         trackPromise(

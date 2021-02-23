@@ -1,28 +1,31 @@
 import {
-    CLEAR_STATE,
     ROLE_ID_STATE,
+    LOCATION_STATE,
     DISPLAY_NAME_STATE,
 } from './types';
 
-// UserDisplayNameChange is a redux action to store temporary selected user display name
-export const UserDisplayNameChange = ({ displayName }) => {
+// userDisplayNameChange is a redux action to store temporary selected user display name
+export const userDisplayNameChange = ({ displayName }) => {
     return {
         type: DISPLAY_NAME_STATE,
         displayName: displayName,
     }
 }
 
-// UserRoleChange is a redux action to store temporary selected user role id
-export const UserRoleChange = ({ roleId }) => {
+// userRoleChange is a redux action to store temporary selected user role id
+export const userRoleChange = ({ roleId }) => {
     return {
         type: ROLE_ID_STATE,
         roleId: roleId,
     }
 }
 
-// ClearUserState is a redux action to clear the selected user state
-export const ClearUserState = () => {
+// userLocationState is a redux action to change the selected user location state
+export const userLocationState = ({ locationPermission, location, locationFlag }) => {
     return {
-        type: CLEAR_STATE,
+        type: LOCATION_STATE,
+        location: location,
+        locationFlag: locationFlag,
+        locationPermission: locationPermission,
     }
 }

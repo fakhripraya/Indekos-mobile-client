@@ -5,17 +5,22 @@ import {
     ImageBackground,
 } from 'react-native';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
-import { AppStyle, Normalize, AuthService } from '../../config/app.config';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
 import HomeBackground from '../../components/Backgrounds/home_background';
+import { AppStyle, Normalize, AuthService, KostService, BookService } from '../../config/app.config';
 
 // creates the promised base http client
 const authAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/"
+})
+
+// creates the promised base http client
+const kostAPI = axios.create({
+    baseURL: "http://" + KostService.host + KostService.port + "/"
 })
 
 // axios cancel source
@@ -23,20 +28,20 @@ var cancelSource
 
 export default function Home({ navigation }) {
 
+    const userLocationPermission = useSelector(state => state.userReducer.locationPermission);
+    const userLocation = useSelector(state => state.userReducer.location);
+    const userLocationFlag = useSelector(state => state.userReducer.locationFlag);
+
+    console.log(userLocationPermission)
+    console.log(userLocation)
+    console.log(userLocationFlag)
+
     // Function refs
+    const recCarouselRef = useRef(null);
     const newsCarouselRef = useRef(null);
     const bookCarouselRef = useRef(null);
     const promoCarouselRef = useRef(null);
     const nearYouCarouselRef = useRef(null);
-    const recCarouselRef = useRef(null);
-
-    // dummy
-    let newsCaraouselData = [
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-    ];
 
     let bookCaraouselData = [
         [
@@ -220,12 +225,11 @@ export default function Home({ navigation }) {
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http post request to / url in the authentication service to fetch the logged in users
+            // triggers the http get request to url in the authentication service to fetch the logged in users
             authAPI.get('/', {
                 cancelToken: cancelSource.token
             })
                 .then(response => {
-                    // console.log(response)
                     setUserInfo(response.data)
                 })
                 .catch(error => {
@@ -233,7 +237,7 @@ export default function Home({ navigation }) {
                         // TODO: development only
                         console.log('Request canceled', error.message);
                     } else {
-                        console.log(error.response)
+                        console.log(error.response.data)
                     }
                 });
             return () => {
@@ -258,13 +262,42 @@ export default function Home({ navigation }) {
 
     function NewsCarousel() {
 
+        var [eventList, setEventList] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/event/all', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setEventList(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
         function _renderNewsItem({ item }) {
 
             return (
                 <ImageBackground
                     imageStyle={{ borderRadius: 25 }}
                     style={styles.backgroundImg}
-                    source={{ uri: item.uri }}
+                    source={{ uri: item.thumbnail }}
                 />
             )
         }
@@ -274,7 +307,7 @@ export default function Home({ navigation }) {
                 <Carousel
                     layout={"default"}
                     ref={newsCarouselRef}
-                    data={newsCaraouselData}
+                    data={eventList}
                     itemWidth={AppStyle.windowSize.width * 0.9}
                     sliderWidth={AppStyle.windowSize.width * 0.9}
                     renderItem={_renderNewsItem}
@@ -392,6 +425,35 @@ export default function Home({ navigation }) {
     }
 
     function NearYouCarousel() {
+
+        // var [nearYouList, setNearYouList] = useState([])
+
+        // // event before component mount/update/leave
+        // useEffect(() => {
+
+        //     // creates the cancel token source
+        //     cancelSource = axios.CancelToken.source()
+
+        //     // triggers the http get request to / url in the kost service to fetch the list of application events
+        //     kostAPI.get('/my/near', {
+        //         cancelToken: cancelSource.token
+        //     })
+        //         .then(response => {
+        //             setNearYouList(response.data)
+        //         })
+        //         .catch(error => {
+        //             if (axios.isCancel(error)) {
+        //                 // TODO: development only
+        //                 console.log('Request canceled', error.message);
+        //             } else {
+        //                 console.log(error.response.data)
+        //             }
+        //         });
+        //     return () => {
+        //         // cancel the request (the message parameter is optional)
+        //         cancelSource.cancel();
+        //     }
+        // }, []);
 
         function _renderNearYouList({ item }) {
 

@@ -6,8 +6,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import {
-    UserRoleChange,
-    clearUserState,
+    userRoleChange,
 } from '../../redux';
 import React from 'react';
 import axios from 'axios';
@@ -25,7 +24,7 @@ export default function PickRole({ navigation }) {
 
     // Hooks
     const dispatch = useDispatch()
-    const tempDisplayName = useSelector(state => state.UserReducer.displayName);
+    const tempDisplayName = useSelector(state => state.userReducer.displayName);
 
     // handle registration form submit
     function handleSubmit(roleId) {
@@ -33,7 +32,7 @@ export default function PickRole({ navigation }) {
         // roleId = 1 (user)
         // roleId = 2 (owner)
 
-        dispatch(UserRoleChange({ roleId: roleId }));
+        dispatch(userRoleChange({ roleId: roleId }));
 
         if (roleId === 1) {
             // if owner, finish the user creation and navigate to home screen

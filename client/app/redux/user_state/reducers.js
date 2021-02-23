@@ -1,17 +1,20 @@
 import {
-    CLEAR_STATE,
     ROLE_ID_STATE,
+    LOCATION_STATE,
     DISPLAY_NAME_STATE,
 } from './types';
 
-// UserState is a redux state of the selected user state
-const UserState = {
+// userState is a redux state of the selected user state
+const userState = {
     RoleId: null,
     displayName: '',
+    location: null,
+    locationFlag: false,
+    locationPermission: false,
 }
 
-// UserReducer is a redux reducer of the selected user state
-export const UserReducer = (state = UserState, action) => {
+// userReducer is a redux reducer of the selected user state
+export const userReducer = (state = userState, action) => {
     switch (action.type) {
         case DISPLAY_NAME_STATE: return {
             ...state,
@@ -21,10 +24,11 @@ export const UserReducer = (state = UserState, action) => {
             ...state,
             RoleId: action.RoleId,
         }
-        case CLEAR_STATE: return {
+        case LOCATION_STATE: return {
             ...state,
-            RoleId: null,
-            displayName: '',
+            location: action.location,
+            locationFlag: action.locationFlag,
+            locationPermission: action.locationPermission,
         }
         default: return state
     }
