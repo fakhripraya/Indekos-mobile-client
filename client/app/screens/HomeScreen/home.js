@@ -5,10 +5,10 @@ import {
     ImageBackground,
 } from 'react-native';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
-import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useRef, useState } from 'react';
 import HomeBackground from '../../components/Backgrounds/home_background';
 import { AppStyle, Normalize, AuthService, KostService, BookService } from '../../config/app.config';
@@ -28,13 +28,8 @@ var cancelSource
 
 export default function Home({ navigation }) {
 
-    const userLocationPermission = useSelector(state => state.userReducer.locationPermission);
     const userLocation = useSelector(state => state.userReducer.location);
-    const userLocationFlag = useSelector(state => state.userReducer.locationFlag);
-
-    console.log(userLocationPermission)
-    console.log(userLocation)
-    console.log(userLocationFlag)
+    const userLocationPermission = useSelector(state => state.userReducer.locationPermission);
 
     // Function refs
     const recCarouselRef = useRef(null);
@@ -357,16 +352,44 @@ export default function Home({ navigation }) {
         }
 
         return (
-            <View style={styles.bookListCarouselContainer}>
-                <Carousel
-                    layout={"default"}
-                    ref={bookCarouselRef}
-                    data={bookCaraouselData}
-                    itemWidth={AppStyle.windowSize.width * 0.9}
-                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                    renderItem={_renderBookList}
-                />
-            </View>
+            <React.Fragment>
+                <View style={styles.bookListHeader}>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Book It Now</Text>
+                    </View>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
+                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.timerContainer}>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                        <View style={{ left: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
+                    </View>
+                    <View style={{ width: AppStyle.windowSize.width - Normalize(98), position: 'absolute', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                        <Text style={{ marginRight: Normalize(10), fontSize: Normalize(18), color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
+                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>1</Text></View>
+                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>2</Text></View>
+                        <Text style={{ marginRight: Normalize(5), fontSize: Normalize(14), color: AppStyle.main_color }}>:</Text>
+                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
+                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
+                    </View>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <View style={{ right: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
+                    </View>
+                </View>
+                <View style={styles.bookListCarouselContainer}>
+                    <Carousel
+                        layout={"default"}
+                        ref={bookCarouselRef}
+                        data={bookCaraouselData}
+                        itemWidth={AppStyle.windowSize.width * 0.9}
+                        sliderWidth={AppStyle.windowSize.width * 0.9}
+                        renderItem={_renderBookList}
+                    />
+                </View>
+            </React.Fragment>
         )
     }
 
@@ -411,49 +434,63 @@ export default function Home({ navigation }) {
         }
 
         return (
-            <View style={styles.promoListCarouselContainer}>
-                <Carousel
-                    layout={"default"}
-                    ref={promoCarouselRef}
-                    data={promoCaraouselData}
-                    itemWidth={AppStyle.windowSize.width * 0.9}
-                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                    renderItem={_renderPromoList}
-                />
-            </View>
+            <React.Fragment>
+                <View style={styles.promoListHeader}>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Promo</Text>
+                    </View>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
+                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.promoListCarouselContainer}>
+                    <Carousel
+                        layout={"default"}
+                        ref={promoCarouselRef}
+                        data={promoCaraouselData}
+                        itemWidth={AppStyle.windowSize.width * 0.9}
+                        sliderWidth={AppStyle.windowSize.width * 0.9}
+                        renderItem={_renderPromoList}
+                    />
+                </View>
+            </React.Fragment>
         )
     }
 
     function NearYouCarousel() {
 
-        // var [nearYouList, setNearYouList] = useState([])
+        var [nearYouList, setNearYouList] = useState([])
 
-        // // event before component mount/update/leave
-        // useEffect(() => {
+        if (locationPermission === true) {
+            // event before component mount/update/leave
+            useEffect(() => {
 
-        //     // creates the cancel token source
-        //     cancelSource = axios.CancelToken.source()
+                // creates the cancel token source
+                cancelSource = axios.CancelToken.source()
 
-        //     // triggers the http get request to / url in the kost service to fetch the list of application events
-        //     kostAPI.get('/my/near', {
-        //         cancelToken: cancelSource.token
-        //     })
-        //         .then(response => {
-        //             setNearYouList(response.data)
-        //         })
-        //         .catch(error => {
-        //             if (axios.isCancel(error)) {
-        //                 // TODO: development only
-        //                 console.log('Request canceled', error.message);
-        //             } else {
-        //                 console.log(error.response.data)
-        //             }
-        //         });
-        //     return () => {
-        //         // cancel the request (the message parameter is optional)
-        //         cancelSource.cancel();
-        //     }
-        // }, []);
+                // triggers the http get request to / url in the kost service to fetch the list of application events
+                kostAPI.get('/my/near', {
+                    cancelToken: cancelSource.token
+                })
+                    .then(response => {
+                        setNearYouList(response.data)
+                    })
+                    .catch(error => {
+                        if (axios.isCancel(error)) {
+                            // TODO: development only
+                            console.log('Request canceled', error.message);
+                        } else {
+                            console.log(error.response.data)
+                        }
+                    });
+                return () => {
+                    // cancel the request (the message parameter is optional)
+                    cancelSource.cancel();
+                }
+            }, []);
+        }
 
         function _renderNearYouList({ item }) {
 
@@ -493,18 +530,37 @@ export default function Home({ navigation }) {
             )
         }
 
-        return (
-            <View style={styles.nearYouListCarouselContainer}>
-                <Carousel
-                    layout={"default"}
-                    ref={nearYouCarouselRef}
-                    data={nearYouCaraouselData}
-                    itemWidth={AppStyle.windowSize.width * 0.9}
-                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                    renderItem={_renderNearYouList}
-                />
-            </View>
-        )
+        if (userLocationPermission === false) {
+            return null
+        } else {
+            return (
+                <React.Fragment>
+                    <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start' }}>
+                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
+                    </View>
+                    <View style={styles.nearYouListHeader}>
+                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                            <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>West Jakarta</Text>
+                        </View>
+                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                            <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
+                                <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.nearYouListCarouselContainer}>
+                        <Carousel
+                            layout={"default"}
+                            ref={nearYouCarouselRef}
+                            data={nearYouCaraouselData}
+                            itemWidth={AppStyle.windowSize.width * 0.9}
+                            sliderWidth={AppStyle.windowSize.width * 0.9}
+                            renderItem={_renderNearYouList}
+                        />
+                    </View>
+                </React.Fragment>
+            )
+        }
     }
 
     function RecommendedCarousel() {
@@ -548,76 +604,7 @@ export default function Home({ navigation }) {
         }
 
         return (
-            <View style={styles.recListCarouselContainer}>
-                <Carousel
-                    layout={"default"}
-                    ref={recCarouselRef}
-                    data={recCaraouselData}
-                    itemWidth={AppStyle.windowSize.width * 0.9}
-                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                    renderItem={_renderRecList}
-                />
-            </View>
-        )
-    }
-
-    return (
-        <HomeBackground >
-            <View style={{ height: AppStyle.windowSize.height * 2.075 }}>
-                <NameWrapper />
-                <NewsCarousel />
-                <View style={styles.bookListHeader}>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Book It Now</Text>
-                    </View>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.timerContainer}>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <View style={{ left: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
-                    </View>
-                    <View style={{ width: AppStyle.windowSize.width - Normalize(98), position: 'absolute', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                        <Text style={{ marginRight: Normalize(10), fontSize: Normalize(18), color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>1</Text></View>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>2</Text></View>
-                        <Text style={{ marginRight: Normalize(5), fontSize: Normalize(14), color: AppStyle.main_color }}>:</Text>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
-                    </View>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <View style={{ right: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
-                    </View>
-                </View>
-                <BookCarousel />
-                <View style={styles.promoListHeader}>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Promo</Text>
-                    </View>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <PromoCarousel />
-                <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start' }}>
-                    <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
-                </View>
-                <View style={styles.nearYouListHeader}>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>West Jakarta</Text>
-                    </View>
-                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <NearYouCarousel />
+            <React.Fragment>
                 <View style={styles.recListHeader}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
                         <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Recommendation</Text>
@@ -628,6 +615,28 @@ export default function Home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <View style={styles.recListCarouselContainer}>
+                    <Carousel
+                        layout={"default"}
+                        ref={recCarouselRef}
+                        data={recCaraouselData}
+                        itemWidth={AppStyle.windowSize.width * 0.9}
+                        sliderWidth={AppStyle.windowSize.width * 0.9}
+                        renderItem={_renderRecList}
+                    />
+                </View>
+            </React.Fragment>
+        )
+    }
+
+    return (
+        <HomeBackground >
+            <View style={{ height: AppStyle.windowSize.height * 2.075 }}>
+                <NameWrapper />
+                <NewsCarousel />
+                <BookCarousel />
+                <PromoCarousel />
+                <NearYouCarousel />
                 <RecommendedCarousel />
             </View>
         </HomeBackground>
