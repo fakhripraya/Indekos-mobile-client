@@ -463,7 +463,8 @@ export default function Home({ navigation }) {
 
         var [nearYouList, setNearYouList] = useState([])
 
-        if (locationPermission === true) {
+        if (userLocationPermission === true) {
+
             // event before component mount/update/leave
             useEffect(() => {
 
@@ -471,9 +472,14 @@ export default function Home({ navigation }) {
                 cancelSource = axios.CancelToken.source()
 
                 // triggers the http get request to / url in the kost service to fetch the list of application events
-                kostAPI.get('/my/near', {
-                    cancelToken: cancelSource.token
-                })
+                kostAPI.get('/my/near',
+                    {
+                        params: {
+                            latitude: userLocation.coords.latitude,
+                            longitude: userLocation.coords.longitude
+                        },
+                        cancelToken: cancelSource.token
+                    })
                     .then(response => {
                         setNearYouList(response.data)
                     })
@@ -497,7 +503,7 @@ export default function Home({ navigation }) {
             return (
 
                 <View style={{ flexDirection: 'row' }}>
-                    {item.map((item, index) => {
+                    {item.carousel_list.map((item, index) => {
 
                         return (
                             <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
@@ -505,21 +511,18 @@ export default function Home({ navigation }) {
                                     <ImageBackground
                                         imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
                                         style={styles.backgroundImg}
-                                        source={{ uri: item.uri }}
+                                        source={{ uri: item.thumbnail_url }}
                                     />
                                 </View>
-                                <View style={{ height: '50%' }}>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                                    <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.city}</Text>
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                    </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                    <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.thumbnail_price}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -540,7 +543,7 @@ export default function Home({ navigation }) {
                     </View>
                     <View style={styles.nearYouListHeader}>
                         <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>West Jakarta</Text>
+                            <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList.length === 0 ? "" : nearYouList[0].carousel_list[0].city}</Text>
                         </View>
                         <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                             <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
@@ -552,7 +555,7 @@ export default function Home({ navigation }) {
                         <Carousel
                             layout={"default"}
                             ref={nearYouCarouselRef}
-                            data={nearYouCaraouselData}
+                            data={nearYouList}
                             itemWidth={AppStyle.windowSize.width * 0.9}
                             sliderWidth={AppStyle.windowSize.width * 0.9}
                             renderItem={_renderNearYouList}
