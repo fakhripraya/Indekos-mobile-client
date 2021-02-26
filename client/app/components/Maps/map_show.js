@@ -1,20 +1,38 @@
 import React from 'react';
-import MapView from 'react-native-maps';
-import { StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, Dimensions } from 'react-native';
 
-export default function MapShow() {
-    return (
-        <MapView
-            style={styles.mapContainer}
-            loadingEnabled={true}
-            region={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            }}>
-        </MapView>
-    )
+export default function MapShow(props) {
+
+    const { width, height } = Dimensions.get('window');
+
+    const ASPECT_RATIO = width / height;
+    const LATITUDE_DELTA = 0.0922;
+    const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+    if (props.latitude === "" || props.longitude === "") {
+        return null
+    } else {
+        return (
+            <MapView
+                style={styles.mapContainer}
+                loadingEnabled={true}
+                region={{
+                    latitude: parseFloat(props.latitude),
+                    longitude: parseFloat(props.longitude),
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                }}>
+                <Marker
+                    coordinate={{
+                        latitude: parseFloat(props.latitude),
+                        longitude: parseFloat(props.longitude),
+                    }}
+                />
+            </MapView>
+        )
+    }
+
 }
 
 const styles = StyleSheet.create({

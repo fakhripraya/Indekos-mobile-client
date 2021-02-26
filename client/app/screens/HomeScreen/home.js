@@ -283,6 +283,8 @@ export default function Home({ navigation }) {
                                     screen: 'KostDetail',
                                     params: {
                                         kostID: 3,
+                                        kostName: "Kost Abang Ade",
+                                        city: "Jakarta Barat",
                                     }
                                 })
                             }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
@@ -475,6 +477,8 @@ export default function Home({ navigation }) {
                                     screen: 'KostDetail',
                                     params: {
                                         kostID: item.id,
+                                        kostName: item.kost_name,
+                                        city: item.city,
                                     }
                                 })
                             }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>

@@ -1,20 +1,28 @@
-import React, { useRef } from 'react';
+import axios from 'axios';
 import Carousel from 'react-native-snap-carousel';
 import BottomSheet from 'reanimated-bottom-sheet';
 import MapShow from '../../components/Maps/map_show';
-import { AppStyle, Normalize } from '../../config/app.config';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ScrollView } from 'react-native-gesture-handler';
+import React, { useRef, useState, useEffect } from 'react';
 import HomeBackground from '../../components/Backgrounds/book_background';
+import { AppStyle, Normalize, KostService } from '../../config/app.config';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
 
-const Tab = createBottomTabNavigator();
+// creates the promised base http client
+const kostAPI = axios.create({
+    baseURL: "http://" + KostService.host + KostService.port + "/"
+})
+
+// axios cancel source
+var cancelSource
 
 export default function KostDetail({ route, navigation }) {
 
     // get navigation parameter
     const kostID = route.params.kostID;
+    const kostName = route.params.kostName;
+    const kostCity = route.params.city;
 
     // Function refs
     const kostPictRef = useRef(null);
@@ -22,38 +30,11 @@ export default function KostDetail({ route, navigation }) {
     const bottomSheetRef = useRef(null);
     const sheetCarouselRef = useRef(null);
 
-    // dummy
-    let kostCaraouselData = [
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-    ];
-
     let roomSheetCaraouselData = [
         { uri: "https://reactjs.org/logo-og.png" },
         { uri: "https://reactjs.org/logo-og.png" },
         { uri: "https://reactjs.org/logo-og.png" },
         { uri: "https://reactjs.org/logo-og.png" },
-    ];
-
-    let kostFacilities = [
-        {
-            id: "0",
-            name: "AC"
-        },
-        {
-            id: "1",
-            name: "Canteen"
-        },
-        {
-            id: "2",
-            name: "24 Hours Security"
-        },
-        {
-            id: "3",
-            name: "Wifi"
-        },
     ];
 
     let kostBenchmark = [
@@ -209,13 +190,223 @@ export default function KostDetail({ route, navigation }) {
         pay_period: "Month"
     }
 
-    function _renderKostPict({ item }) {
+    function KostPictList() {
+
+        var [kostPictList, setKostPictList] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/picts', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostPictList(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        function _renderKostPict({ item }) {
+
+            return (
+                <ImageBackground
+                    style={styles.backgroundImg}
+                    source={{ uri: item.url }}
+                />
+            )
+        }
 
         return (
-            <ImageBackground
-                style={styles.backgroundImg}
-                source={{ uri: item.uri }}
-            />
+            <View style={styles.kostCarouselContainer}>
+                <Carousel
+                    layout={"default"}
+                    ref={kostPictRef}
+                    data={kostPictList}
+                    itemWidth={AppStyle.windowSize.width}
+                    sliderWidth={AppStyle.windowSize.width}
+                    renderItem={_renderKostPict}
+                />
+            </View>
+        )
+    }
+
+    function KostDescription() {
+
+        var [kostDesc, setKostDesc] = useState('')
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID, {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostDesc(response.data.kost_desc)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        return (
+            <View style={styles.descContainer} >
+                <View style={styles.descTitle}>
+                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
+                </View>
+                <View style={styles.descBody}>
+                    <Text style={{ fontSize: Normalize(14) }}>
+                        {kostDesc}
+                    </Text>
+                </View>
+            </View>
+        )
+
+    }
+
+    function KostFacilities() {
+
+        var [kostFacilities, setKostFacilities] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/facilities', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostFacilities(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        function MappedFacilities() {
+
+            // TODO: tambahkan icon seiring bertambahnya data
+            function Icon({ children }) {
+
+                if (children == 1)
+                    return <FontAwesome name="snowflake-o" size={Normalize(14)} color={AppStyle.third_main_color} />
+                else if (children == 2)
+                    return <MaterialIcons name="storefront" size={Normalize(14)} color={AppStyle.third_main_color} />
+                else if (children == 3)
+                    return <AntDesign name="unlock" size={Normalize(14)} color={AppStyle.third_main_color} />
+                else if (children == 4)
+                    return <AntDesign name="wifi" size={Normalize(14)} color={AppStyle.third_main_color} />
+                else
+                    return null
+
+            }
+
+            return (
+                kostFacilities.map((item, index) => {
+
+                    return (
+                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <Icon>{item.fac_id}</Icon>
+                            <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.fac_desc}</Text>
+                        </View>
+                    )
+                })
+            )
+        }
+
+        return (
+            <View style={styles.facilitiesContainer} >
+                <View style={styles.facilitiesTitle}>
+                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
+                </View>
+                <View style={styles.facilitiesBody}>
+                    <MappedFacilities />
+                </View>
+            </View>
+        )
+    }
+
+    function KostLocation() {
+
+        var [latitude, setLatitude] = useState('')
+        var [longitude, setLongitude] = useState('')
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID, {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setLatitude(response.data.latitude)
+                    setLongitude(response.data.longitude)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        return (
+            <View style={styles.locationContainer} >
+                <View style={styles.locationTitle}>
+                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
+                </View>
+                <View style={styles.locationBody}>
+                    <MapShow latitude={latitude} longitude={longitude} />
+                </View>
+            </View>
         )
     }
 
@@ -238,36 +429,6 @@ export default function KostDetail({ route, navigation }) {
                 style={[styles.backgroundImg]}
                 source={{ uri: item.uri }}
             />
-        )
-    }
-
-    function MappedFacilities() {
-
-        function Icon({ children }) {
-
-            if (children == 0)
-                return <FontAwesome name="snowflake-o" size={Normalize(14)} color={AppStyle.third_main_color} />
-            else if (children == 1)
-                return <MaterialIcons name="storefront" size={Normalize(14)} color={AppStyle.third_main_color} />
-            else if (children == 2)
-                return <AntDesign name="unlock" size={Normalize(14)} color={AppStyle.third_main_color} />
-            else if (children == 3)
-                return <AntDesign name="wifi" size={Normalize(14)} color={AppStyle.third_main_color} />
-            else
-                return null
-
-        }
-
-        return (
-            kostFacilities.map((item, index) => {
-
-                return (
-                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Icon>{item.id}</Icon>
-                        <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.name}</Text>
-                    </View>
-                )
-            })
         )
     }
 
@@ -424,22 +585,13 @@ export default function KostDetail({ route, navigation }) {
                         <AntDesign name="left" size={Normalize(24)} color="white" />
                     </TouchableOpacity>
                     <View>
-                        <Text style={styles.headerText}>Kosan Tarima</Text>
+                        <Text style={styles.headerText}>{kostName}</Text>
                     </View>
                 </View>
                 <View style={styles.headerLocation}>
-                    <Text style={{ color: 'white', fontSize: Normalize(12) }} >Jakarta Selatan</Text>
+                    <Text style={{ color: 'white', fontSize: Normalize(12) }} >{kostCity}</Text>
                 </View>
-                <View style={styles.kostCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
-                        ref={kostPictRef}
-                        data={kostCaraouselData}
-                        itemWidth={AppStyle.windowSize.width}
-                        sliderWidth={AppStyle.windowSize.width}
-                        renderItem={_renderKostPict}
-                    />
-                </View>
+                <KostPictList />
                 <View style={styles.topBorder} />
                 <View style={styles.topTools}>
                     <View style={styles.toolsLeft}>
@@ -462,32 +614,11 @@ export default function KostDetail({ route, navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.descContainer} >
-                    <View style={styles.descTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
-                    </View>
-                    <View style={styles.descBody}>
-                        <Text style={{ fontSize: Normalize(14) }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi pariatur odio aliquam error accusantium consectetur saepe maxime delectus earum corrupti labore consequatur temporibus deserunt soluta adipisci eligendi blanditiis, ab magnam?</Text>
-                    </View>
-                </View>
+                <KostDescription />
                 <View style={styles.softLines} />
-                <View style={styles.facilitiesContainer} >
-                    <View style={styles.facilitiesTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
-                    </View>
-                    <View style={styles.facilitiesBody}>
-                        <MappedFacilities />
-                    </View>
-                </View>
+                <KostFacilities />
                 <View style={styles.softLines} />
-                <View style={styles.locationContainer} >
-                    <View style={styles.locationTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
-                    </View>
-                    <View style={styles.locationBody}>
-                        <MapShow />
-                    </View>
-                </View>
+                <KostLocation />
                 <View style={styles.landmarkWrapper}>
                     <View style={styles.benchmarkContainer}>
                         <View style={styles.benchmarkTitle}>
