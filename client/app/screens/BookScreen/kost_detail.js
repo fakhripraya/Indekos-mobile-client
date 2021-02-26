@@ -12,7 +12,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
-export default function KostDetail({ navigation }) {
+export default function KostDetail({ route, navigation }) {
+
+    // get navigation parameter
+    const kostID = route.params.kostID;
 
     // Function refs
     const kostPictRef = useRef(null);

@@ -124,49 +124,6 @@ export default function Home({ navigation }) {
         ],
     ];
 
-    let nearYouCaraouselData = [
-        [
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Testis",
-                alamat: "Kebon Jeruk",
-                harga: "Rp. 2100.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
-            },
-        ],
-        [
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
-            },
-        ],
-    ];
-
     let recCaraouselData = [
         [
             {
@@ -506,7 +463,14 @@ export default function Home({ navigation }) {
                     {item.carousel_list.map((item, index) => {
 
                         return (
-                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                            <TouchableOpacity onPress={() => {
+                                navigation.push('BookStack', {
+                                    screen: 'KostDetail',
+                                    params: {
+                                        kostID: item.id,
+                                    }
+                                })
+                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                                 <View style={{ height: '50%' }}>
                                     <ImageBackground
                                         imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
