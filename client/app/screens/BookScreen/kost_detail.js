@@ -410,6 +410,189 @@ export default function KostDetail({ route, navigation }) {
         )
     }
 
+    function KostBenchmark() {
+
+        var [kostBenchmark, setKostBenchmark] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/benchmark', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostBenchmark(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        return (
+            <View style={styles.benchmarkContainer}>
+                <View style={styles.benchmarkTitle}>
+                    <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                    <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
+                </View >
+                <View style={{ flexDirection: 'column' }}>
+                    {
+                        kostBenchmark.map((item, index) => {
+
+                            return (
+                                <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                                    <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
+                                    {'   '}
+                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.benchmark_desc}</Text>
+                                </Text>
+                            )
+                        })
+                    }
+                </View>
+            </View>
+        )
+    }
+    function KostAccessibility() {
+
+        var [kostAccessibility, setKostAccessibility] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/access', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostAccessibility(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        return (
+            <View style={styles.accessibilityContainer}>
+                <View style={styles.accessibilityTitle}>
+                    <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                    <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                    {
+                        kostAccessibility.map((item, index) => {
+
+                            return (
+                                <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                                    <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
+                                    {'   '}
+                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.accessibility_desc}</Text>
+                                </Text>
+                            )
+                        })
+                    }
+                </View>
+            </View>
+        )
+    }
+    function KostAround() {
+
+        var [kostAround, setKostAround] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/around', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostAround(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        function MappedAroundKost() {
+
+            function Icon({ children }) {
+
+                if (children == 1)
+                    return <Ionicons name="ios-basketball-outline" size={Normalize(18)} color={AppStyle.third_main_color} />
+                else if (children == 2)
+                    return <SimpleLineIcons name="bag" size={Normalize(18)} color={AppStyle.third_main_color} />
+                else if (children == 3)
+                    return <MaterialIcons name="shopping-basket" size={Normalize(18)} color={AppStyle.third_main_color} />
+                else if (children == 4)
+                    return <FontAwesome name="truck" size={Normalize(18)} color={AppStyle.third_main_color} />
+                else if (children == 5)
+                    return <MaterialIcons name="local-dining" size={Normalize(18)} color={AppStyle.third_main_color} />
+                else
+                    return null
+
+            }
+
+            return (
+                kostAround.map((item, index) => {
+
+                    return (
+                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <Icon>{item.icon_id}</Icon>
+                            <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.around_desc}</Text>
+                        </View>
+                    )
+                })
+            )
+        }
+
+        return (
+            <View style={styles.aroundKostContainer}>
+                <View style={styles.aroundKostTitle}>
+                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
+                </View>
+                <View style={styles.aroundKostBody}>
+                    <MappedAroundKost />
+                </View>
+            </View>
+        )
+    }
+
     function _renderRoomPict({ item }) {
 
         return (
@@ -432,19 +615,19 @@ export default function KostDetail({ route, navigation }) {
         )
     }
 
-    function MappedAroundKost() {
+    function DummyList() {
 
         function Icon({ children }) {
 
-            if (children == 0)
+            if (children == 1)
                 return <Ionicons name="ios-basketball-outline" size={Normalize(18)} color={AppStyle.third_main_color} />
-            else if (children == 1)
-                return <SimpleLineIcons name="bag" size={Normalize(18)} color={AppStyle.third_main_color} />
             else if (children == 2)
-                return <MaterialIcons name="shopping-basket" size={Normalize(18)} color={AppStyle.third_main_color} />
+                return <SimpleLineIcons name="bag" size={Normalize(18)} color={AppStyle.third_main_color} />
             else if (children == 3)
-                return <FontAwesome name="truck" size={Normalize(18)} color={AppStyle.third_main_color} />
+                return <MaterialIcons name="shopping-basket" size={Normalize(18)} color={AppStyle.third_main_color} />
             else if (children == 4)
+                return <FontAwesome name="truck" size={Normalize(18)} color={AppStyle.third_main_color} />
+            else if (children == 5)
                 return <MaterialIcons name="local-dining" size={Normalize(18)} color={AppStyle.third_main_color} />
             else
                 return null
@@ -457,7 +640,7 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Icon>{item.icon_id}</Icon>
-                        <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.name}</Text>
+                        <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.around_desc}</Text>
                     </View>
                 )
             })
@@ -540,7 +723,7 @@ export default function KostDetail({ route, navigation }) {
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
                     </View>
                     <View style={styles.sheetSharingFacBody}>
-                        <MappedAroundKost />
+                        <DummyList />
                     </View>
                 </View>
                 <View style={styles.sheetRoomFac}>
@@ -548,7 +731,7 @@ export default function KostDetail({ route, navigation }) {
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
                     </View>
                     <View style={styles.sheetRoomFacBody}>
-                        <MappedAroundKost />
+                        <DummyList />
                     </View>
                 </View>
                 <View style={styles.sheetNotes}>
@@ -620,7 +803,7 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.softLines} />
                 <KostLocation />
                 <View style={styles.landmarkWrapper}>
-                    <View style={styles.benchmarkContainer}>
+                    {/* <View style={styles.benchmarkContainer}>
                         <View style={styles.benchmarkTitle}>
                             <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
                             <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
@@ -639,9 +822,11 @@ export default function KostDetail({ route, navigation }) {
                                 })
                             }
                         </View>
-                    </View>
+                    </View> */}
+                    <KostBenchmark />
                     <View style={styles.verticalLine} />
-                    <View style={styles.accessibilityContainer}>
+                    <KostAccessibility />
+                    {/* <View style={styles.accessibilityContainer}>
                         <View style={styles.accessibilityTitle}>
                             <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
                             <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
@@ -660,16 +845,17 @@ export default function KostDetail({ route, navigation }) {
                                 })
                             }
                         </View>
-                    </View>
+                    </View> */}
                 </View>
-                <View style={styles.aroundKostContainer}>
+                <KostAround />
+                {/* <View style={styles.aroundKostContainer}>
                     <View style={styles.aroundKostTitle}>
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
                     </View>
                     <View style={styles.aroundKostBody}>
                         <MappedAroundKost />
                     </View>
-                </View>
+                </View> */}
                 <View style={styles.softLines} />
                 <View style={styles.ratingContainer}>
                     <View style={styles.ratingTitle}>
