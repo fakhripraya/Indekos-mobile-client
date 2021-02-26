@@ -278,7 +278,14 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity onPress={() => { navigation.push('BookStack') }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                            <TouchableOpacity onPress={() => {
+                                navigation.push('BookStack', {
+                                    screen: 'KostDetail',
+                                    params: {
+                                        kostID: 3,
+                                    }
+                                })
+                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
                                 <View style={{ height: '50%' }}>
                                     <ImageBackground
                                         imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
@@ -598,14 +605,12 @@ export default function Home({ navigation }) {
 
     return (
         <HomeBackground >
-            <View style={{ height: AppStyle.windowSize.height * 2.075 }}>
-                <NameWrapper />
-                <NewsCarousel />
-                <BookCarousel />
-                <PromoCarousel />
-                <NearYouCarousel />
-                <RecommendedCarousel />
-            </View>
+            <NameWrapper />
+            <NewsCarousel />
+            <BookCarousel />
+            <PromoCarousel />
+            <NearYouCarousel />
+            <RecommendedCarousel />
         </HomeBackground>
     )
 }
@@ -689,8 +694,8 @@ const styles = StyleSheet.create({
     },
     recListCarouselContainer: {
         alignSelf: 'center',
-        marginBottom: Normalize(100),
         width: AppStyle.windowSize.width * 0.9,
         height: AppStyle.windowSize.height * 0.26,
+        marginBottom: ((AppStyle.screenSize.width * 0.15 / 2) + (AppStyle.screenSize.width * 0.175)) * 1.75,
     },
 })

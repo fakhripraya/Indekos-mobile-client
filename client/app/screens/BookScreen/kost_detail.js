@@ -5,7 +5,6 @@ import MapShow from '../../components/Maps/map_show';
 import { AppStyle, Normalize } from '../../config/app.config';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeBackground from '../../components/Backgrounds/book_background';
-import StickyBottom from '../../components/StickyBottom/kost_detail_bottom';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -403,272 +402,227 @@ export default function KostDetail({ route, navigation }) {
                     </View>
                 </View>
             </ScrollView>
+            <View style={styles.stickyContainer}>
+                <View style={styles.priceTag}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>Rp.3.000.000</Text>
+                    </View>
+                    <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
+                </View>
+                <TouchableOpacity onPress={() => { navigation.replace('RoomSelection') }} style={styles.bookButton}>
+                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 
-    function MainBody() {
-
-        return (
-            <>
-                <HomeBackground >
-                    <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.pop(1) }} style={styles.headerIcon}>
-                            <AntDesign name="left" size={Normalize(24)} color="white" />
+    return (
+        <>
+            <HomeBackground >
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => { navigation.pop(1) }} style={styles.headerIcon}>
+                        <AntDesign name="left" size={Normalize(24)} color="white" />
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={styles.headerText}>Kosan Tarima</Text>
+                    </View>
+                </View>
+                <View style={styles.headerLocation}>
+                    <Text style={{ color: 'white', fontSize: Normalize(12) }} >Jakarta Selatan</Text>
+                </View>
+                <View style={styles.kostCarouselContainer}>
+                    <Carousel
+                        layout={"default"}
+                        ref={kostPictRef}
+                        data={kostCaraouselData}
+                        itemWidth={AppStyle.windowSize.width}
+                        sliderWidth={AppStyle.windowSize.width}
+                        renderItem={_renderKostPict}
+                    />
+                </View>
+                <View style={styles.topBorder} />
+                <View style={styles.topTools}>
+                    <View style={styles.toolsLeft}>
+                        <TouchableOpacity style={styles.toolsButton}>
+                            <Text style={styles.toolsButtonText}>Photo</Text>
                         </TouchableOpacity>
-                        <View>
-                            <Text style={styles.headerText}>Kosan Tarima</Text>
-                        </View>
+                        <TouchableOpacity style={styles.toolsButton}>
+                            <Text style={styles.toolsButtonText}>Video</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.toolsButton}>
+                            <Text style={styles.toolsButtonText}>360</Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.headerLocation}>
-                        <Text style={{ color: 'white', fontSize: Normalize(12) }} >Jakarta Selatan</Text>
+                    <View style={styles.toolsRight}>
+                        <TouchableOpacity style={styles.toolsIcon}>
+                            <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={'black'} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.toolsIcon}>
+                            <MaterialIcons name="favorite-outline" size={Normalize(18)} color="red" />
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.kostCarouselContainer}>
-                        <Carousel
-                            layout={"default"}
-                            ref={kostPictRef}
-                            data={kostCaraouselData}
-                            itemWidth={AppStyle.windowSize.width}
-                            sliderWidth={AppStyle.windowSize.width}
-                            renderItem={_renderKostPict}
-                        />
+                </View>
+                <View style={styles.descContainer} >
+                    <View style={styles.descTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
                     </View>
-                    <View style={styles.topBorder} />
-                    <View style={styles.topTools}>
-                        <View style={styles.toolsLeft}>
-                            <TouchableOpacity style={styles.toolsButton}>
-                                <Text style={styles.toolsButtonText}>Photo</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.toolsButton}>
-                                <Text style={styles.toolsButtonText}>Video</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.toolsButton}>
-                                <Text style={styles.toolsButtonText}>360</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.toolsRight}>
-                            <TouchableOpacity style={styles.toolsIcon}>
-                                <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={'black'} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.toolsIcon}>
-                                <MaterialIcons name="favorite-outline" size={Normalize(18)} color="red" />
-                            </TouchableOpacity>
-                        </View>
+                    <View style={styles.descBody}>
+                        <Text style={{ fontSize: Normalize(14) }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi pariatur odio aliquam error accusantium consectetur saepe maxime delectus earum corrupti labore consequatur temporibus deserunt soluta adipisci eligendi blanditiis, ab magnam?</Text>
                     </View>
-                    <View style={styles.descContainer} >
-                        <View style={styles.descTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
-                        </View>
-                        <View style={styles.descBody}>
-                            <Text style={{ fontSize: Normalize(14) }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi pariatur odio aliquam error accusantium consectetur saepe maxime delectus earum corrupti labore consequatur temporibus deserunt soluta adipisci eligendi blanditiis, ab magnam?</Text>
-                        </View>
+                </View>
+                <View style={styles.softLines} />
+                <View style={styles.facilitiesContainer} >
+                    <View style={styles.facilitiesTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
                     </View>
-                    <View style={styles.softLines} />
-                    <View style={styles.facilitiesContainer} >
-                        <View style={styles.facilitiesTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
-                        </View>
-                        <View style={styles.facilitiesBody}>
-                            <MappedFacilities />
-                        </View>
+                    <View style={styles.facilitiesBody}>
+                        <MappedFacilities />
                     </View>
-                    <View style={styles.softLines} />
-                    <View style={styles.locationContainer} >
-                        <View style={styles.locationTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
-                        </View>
-                        <View style={styles.locationBody}>
-                            <MapShow />
-                        </View>
+                </View>
+                <View style={styles.softLines} />
+                <View style={styles.locationContainer} >
+                    <View style={styles.locationTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
                     </View>
-                    <View style={styles.landmarkWrapper}>
-                        <View style={styles.benchmarkContainer}>
-                            <View style={styles.benchmarkTitle}>
-                                <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                                <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
-                            </View >
-                            <View style={{ flexDirection: 'column' }}>
-                                {
-                                    kostBenchmark.map((item, index) => {
+                    <View style={styles.locationBody}>
+                        <MapShow />
+                    </View>
+                </View>
+                <View style={styles.landmarkWrapper}>
+                    <View style={styles.benchmarkContainer}>
+                        <View style={styles.benchmarkTitle}>
+                            <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                            <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
+                        </View >
+                        <View style={{ flexDirection: 'column' }}>
+                            {
+                                kostBenchmark.map((item, index) => {
 
-                                        return (
-                                            <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                                <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                                {'   '}
-                                                <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
-                                            </Text>
-                                        )
-                                    })
-                                }
-                            </View>
+                                    return (
+                                        <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                                            <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
+                                            {'   '}
+                                            <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
+                                        </Text>
+                                    )
+                                })
+                            }
                         </View>
-                        <View style={styles.verticalLine} />
-                        <View style={styles.accessibilityContainer}>
-                            <View style={styles.accessibilityTitle}>
-                                <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                                <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
-                            </View>
-                            <View style={{ flexDirection: 'column' }}>
-                                {
-                                    kostAccessibility.map((item, index) => {
+                    </View>
+                    <View style={styles.verticalLine} />
+                    <View style={styles.accessibilityContainer}>
+                        <View style={styles.accessibilityTitle}>
+                            <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                            <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            {
+                                kostAccessibility.map((item, index) => {
 
-                                        return (
-                                            <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                                <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                                {'   '}
-                                                <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
-                                            </Text>
-                                        )
-                                    })
-                                }
+                                    return (
+                                        <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                                            <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
+                                            {'   '}
+                                            <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
+                                        </Text>
+                                    )
+                                })
+                            }
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.aroundKostContainer}>
+                    <View style={styles.aroundKostTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
+                    </View>
+                    <View style={styles.aroundKostBody}>
+                        <MappedAroundKost />
+                    </View>
+                </View>
+                <View style={styles.softLines} />
+                <View style={styles.ratingContainer}>
+                    <View style={styles.ratingTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Rating</Text>
+                    </View>
+                    <View style={styles.ratingBody}>
+                        <View style={styles.ratingBodyLeft}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <AntDesign name="star" size={Normalize(24)} color="#FFB800" />
+                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(20) }}>4.9</Text>
                             </View>
+                            <Text style={{ fontSize: Normalize(16), top: 5, color: 'gray' }}>/5.0</Text>
                         </View>
-                    </View>
-                    <View style={styles.aroundKostContainer}>
-                        <View style={styles.aroundKostTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
-                        </View>
-                        <View style={styles.aroundKostBody}>
-                            <MappedAroundKost />
-                        </View>
-                    </View>
-                    <View style={styles.softLines} />
-                    <View style={styles.ratingContainer}>
-                        <View style={styles.ratingTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Rating</Text>
-                        </View>
-                        <View style={styles.ratingBody}>
-                            <View style={styles.ratingBodyLeft}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <AntDesign name="star" size={Normalize(24)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(20) }}>4.9</Text>
+                        <View style={styles.ratingBodyRight}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
                                 </View>
-                                <Text style={{ fontSize: Normalize(16), top: 5, color: 'gray' }}>/5.0</Text>
+                                <Text style={{ fontSize: Normalize(14) }}>Cleanliness</Text>
                             </View>
-                            <View style={styles.ratingBodyRight}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                        <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                    </View>
-                                    <Text style={{ fontSize: Normalize(14) }}>Cleanliness</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                        <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                    </View>
-                                    <Text style={{ fontSize: Normalize(14) }}>Convenience</Text>
+                                <Text style={{ fontSize: Normalize(14) }}>Convenience</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                        <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                    </View>
-                                    <Text style={{ fontSize: Normalize(14) }}>Security</Text>
+                                <Text style={{ fontSize: Normalize(14) }}>Security</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                        <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                    </View>
-                                    <Text style={{ fontSize: Normalize(14) }}>Facilities</Text>
-                                </View>
+                                <Text style={{ fontSize: Normalize(14) }}>Facilities</Text>
                             </View>
                         </View>
                     </View>
-                    <View style={styles.reviewContainer}>
-                        <View style={styles.reviewTitle}>
-                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
-                            </View>
-                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <TouchableOpacity>
-                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                                </TouchableOpacity>
-                            </View>
+                </View>
+                <View style={styles.reviewContainer}>
+                    <View style={styles.reviewTitle}>
+                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                            <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
                         </View>
-
-                        {
-                            reviewList.map((item, index) => {
-
-                                if (index > 1)
-                                    return null
-
-                                return (
-                                    <View key={index} style={styles.reviewBody}>
-                                        <View style={styles.reviewBodyContainer}>
-                                            <View style={styles.reviewUserPict}>
-                                                <ImageBackground
-                                                    imageStyle={{ borderRadius: Normalize(10.12) }}
-                                                    style={styles.backgroundImg}
-                                                    source={{ uri: item.user_pict }}
-                                                />
-                                            </View>
-                                            <View style={styles.reviewUserHeader}>
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" style={{ marginRight: Normalize(5) }} />
-                                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.rating}</Text>
-                                                </View>
-                                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{item.nama_user}</Text>
-                                            </View>
-                                            <View style={styles.reviewUserBody}>
-                                                <Text style={{ textAlign: 'left', fontSize: Normalize(12), fontWeight: 'bold' }}>
-                                                    {item.review_body}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                )
-                            })
-                        }
-
-                    </View>
-                    <View style={[styles.softLines, { top: Normalize(-40) }]} />
-                    <View style={styles.roomTitle}>
-                        <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                            <TouchableOpacity>
+                                <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
                     {
-                        roomList.map((item, index) => {
+                        reviewList.map((item, index) => {
+
+                            if (index > 1)
+                                return null
+
                             return (
-                                <View key={index} style={styles.roomBody}>
-                                    <Carousel
-                                        ref={roomPictRef}
-                                        layout={"default"}
-                                        data={item.room_pict}
-                                        renderItem={_renderRoomPict}
-                                        itemWidth={AppStyle.windowSize.width * 0.9}
-                                        sliderWidth={AppStyle.windowSize.width * 0.9}
-                                    />
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
-                                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.room_size}</Text>
+                                <View key={index} style={styles.reviewBody}>
+                                    <View style={styles.reviewBodyContainer}>
+                                        <View style={styles.reviewUserPict}>
+                                            <ImageBackground
+                                                imageStyle={{ borderRadius: Normalize(10.12) }}
+                                                style={styles.backgroundImg}
+                                                source={{ uri: item.user_pict }}
+                                            />
                                         </View>
-                                        <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{item.room_availability > 0 ? "Available" : "unavailable"}</Text>
-                                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: item.room_availability > 2 ? AppStyle.success : AppStyle.error }}>{item.room_availability > 2 ? item.room_availability + " rooms" : item.room_availability + " rooms left"}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
-                                        <TouchableOpacity>
-                                            <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
-                                        <View style={{ flexDirection: 'row' }}>
+                                        <View style={styles.reviewUserHeader}>
                                             <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{item.room_price}</Text>
+                                                <AntDesign name="star" size={Normalize(14)} color="#FFB800" style={{ marginRight: Normalize(5) }} />
+                                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.rating}</Text>
                                             </View>
-                                            <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                                            <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{item.nama_user}</Text>
                                         </View>
-                                        <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                            <TouchableOpacity onPress={() => {
-                                                bottomSheetRef.current.snapTo(0)
-                                            }}
-                                                style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
-                                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
-                                            </TouchableOpacity>
+                                        <View style={styles.reviewUserBody}>
+                                            <Text style={{ textAlign: 'left', fontSize: Normalize(12), fontWeight: 'bold' }}>
+                                                {item.review_body}
+                                            </Text>
                                         </View>
                                     </View>
                                 </View>
@@ -676,54 +630,101 @@ export default function KostDetail({ route, navigation }) {
                         })
                     }
 
-                    <View style={styles.softLines} />
-                    <View style={styles.ownerContainer}>
-                        <View style={styles.ownerTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
-                        </View>
-                        <View style={styles.ownerBody}>
-                            <View style={styles.ownerBodyContainer}>
-                                <View style={styles.ownerUserPict}>
-                                    <ImageBackground
-                                        imageStyle={{ borderRadius: Normalize(10.12) }}
-                                        style={styles.backgroundImg}
-                                        source={{ uri: kostOwner.user_pict }}
-                                    />
-                                </View>
-                                <View style={styles.ownerUserHeader}>
+                </View>
+                <View style={[styles.softLines, { top: Normalize(-40) }]} />
+                <View style={styles.roomTitle}>
+                    <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+                </View>
+
+                {
+                    roomList.map((item, index) => {
+                        return (
+                            <View key={index} style={styles.roomBody}>
+                                <Carousel
+                                    ref={roomPictRef}
+                                    layout={"default"}
+                                    data={item.room_pict}
+                                    renderItem={_renderRoomPict}
+                                    itemWidth={AppStyle.windowSize.width * 0.9}
+                                    sliderWidth={AppStyle.windowSize.width * 0.9}
+                                />
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{kostOwner.user_name}</Text>
+                                        <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.room_size}</Text>
                                     </View>
-                                    <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{kostOwner.location}</Text>
+                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{item.room_availability > 0 ? "Available" : "unavailable"}</Text>
+                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: item.room_availability > 2 ? AppStyle.success : AppStyle.error }}>{item.room_availability > 2 ? item.room_availability + " rooms" : item.room_availability + " rooms left"}</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.ownerUserBody}>
-                                    <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
-                                        <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
-                                        <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{kostOwner.kost_count} Kosan Owned</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
+                                    <TouchableOpacity>
+                                        <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
                                     </TouchableOpacity>
                                 </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{item.room_price}</Text>
+                                        </View>
+                                        <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                        <TouchableOpacity onPress={() => {
+                                            bottomSheetRef.current.snapTo(0)
+                                        }}
+                                            style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        )
+                    })
+                }
+
+                <View style={styles.softLines} />
+                <View style={styles.ownerContainer}>
+                    <View style={styles.ownerTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
+                    </View>
+                    <View style={styles.ownerBody}>
+                        <View style={styles.ownerBodyContainer}>
+                            <View style={styles.ownerUserPict}>
+                                <ImageBackground
+                                    imageStyle={{ borderRadius: Normalize(10.12) }}
+                                    style={styles.backgroundImg}
+                                    source={{ uri: kostOwner.user_pict }}
+                                />
+                            </View>
+                            <View style={styles.ownerUserHeader}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{kostOwner.user_name}</Text>
+                                </View>
+                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{kostOwner.location}</Text>
+                            </View>
+                            <View style={styles.ownerUserBody}>
+                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
+                                    <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
+                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{kostOwner.kost_count} Kosan Owned</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
-                </HomeBackground>
-                <BottomSheet
-                    initialSnap={1}
-                    ref={bottomSheetRef}
-                    renderHeader={SheetHeader}
-                    renderContent={SheetBody}
-                    enabledContentGestureInteraction={false}
-                    snapPoints={[AppStyle.windowSize.height * 0.85, 0]}
-                />
-            </>
-        )
-
-    }
-
-    return (
-        <Tab.Navigator tabBar={props => <StickyBottom {...props} navigation={navigation} />}>
-            <Tab.Screen name="MainBody" component={MainBody} />
-        </Tab.Navigator>
+                </View>
+            </HomeBackground>
+            <BottomSheet
+                initialSnap={1}
+                ref={bottomSheetRef}
+                renderHeader={SheetHeader}
+                renderContent={SheetBody}
+                enabledContentGestureInteraction={false}
+                snapPoints={[AppStyle.windowSize.height * 0.85, 0]}
+            />
+        </>
     )
+
 }
 
 const styles = StyleSheet.create({
@@ -997,7 +998,7 @@ const styles = StyleSheet.create({
     ownerContainer: {
         marginTop: Normalize(5),
         marginLeft: Normalize(15),
-        marginBottom: Normalize(100),
+        marginBottom: Normalize(50),
         width: AppStyle.windowSize.width * 0.9,
     },
     ownerTitle: {
@@ -1008,7 +1009,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'center',
-        marginBottom: Normalize(10),
         height: AppStyle.windowSize.height * 0.1,
     },
     ownerBodyContainer: {
@@ -1133,8 +1133,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginTop: Normalize(15),
-        marginBottom: Normalize(15),
         width: AppStyle.windowSize.width * 0.9,
+        marginBottom: Normalize(15) + AppStyle.screenSize.width * 0.15,
     },
     sheetNotesTitle: {
         marginBottom: Normalize(10),
@@ -1143,6 +1143,30 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    stickyContainer: {
+        elevation: 10,
+        position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        justifyContent: 'space-between',
+        width: AppStyle.screenSize.width,
+        height: AppStyle.screenSize.width * 0.15,
+        top: AppStyle.windowSize.height * 0.8 - AppStyle.screenSize.width * 0.15
+    },
+    priceTag: {
+        flexDirection: 'row',
+        marginLeft: AppStyle.screenSize.width * 0.05,
+    },
+    bookButton: {
+        alignItems: 'center',
+        height: Normalize(35),
+        width: Normalize(108),
+        justifyContent: 'center',
+        borderRadius: Normalize(20),
+        backgroundColor: AppStyle.sub_main_color,
+        marginRight: AppStyle.screenSize.width * 0.05,
     },
 
 })
