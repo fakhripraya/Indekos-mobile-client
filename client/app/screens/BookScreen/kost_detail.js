@@ -1180,6 +1180,8 @@ const styles = StyleSheet.create({
     },
     landmarkWrapper: {
         flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         width: AppStyle.windowSize.width,
     },
     benchmarkContainer: {
