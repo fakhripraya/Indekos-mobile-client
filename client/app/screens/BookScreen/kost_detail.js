@@ -37,28 +37,6 @@ export default function KostDetail({ route, navigation }) {
         { uri: "https://reactjs.org/logo-og.png" },
     ];
 
-    let kostBenchmark = [
-        {
-            id: "0",
-            name: "Mie Ayam Santika 99 "
-        },
-        {
-            id: "1",
-            name: "Warung Pak Muh"
-        },
-    ];
-
-    let kostAccessibility = [
-        {
-            id: "0",
-            name: "Mikrolet M24"
-        },
-        {
-            id: "1",
-            name: "Kopaja 609"
-        },
-    ];
-
     let aroundKost = [
         {
             id: "0",
@@ -84,33 +62,6 @@ export default function KostDetail({ route, navigation }) {
             id: "4",
             icon_id: "4",
             name: "Restaurant"
-        },
-    ];
-
-    let reviewList = [
-        {
-            id: "0",
-            user_id: "0",
-            user_pict: "https://reactjs.org/logo-og.png",
-            nama_user: "Budi Utami",
-            rating: "4.9",
-            review_body: "Kosannya rapih banget, overall suka sama pelayanannya!"
-        },
-        {
-            id: "1",
-            user_id: "1",
-            user_pict: "https://reactjs.org/logo-og.png",
-            nama_user: "Joko Anwar",
-            rating: "4.6",
-            review_body: "Yah lumayan lah dari pada saya gelandangan"
-        },
-        {
-            id: "2",
-            user_id: "2",
-            user_pict: "https://reactjs.org/logo-og.png",
-            nama_user: "Sakhi Ali",
-            rating: "4.8",
-            review_body: "Harga terjangkau untuk fasilitas yang semewah ini, like it!"
         },
     ];
 
@@ -179,15 +130,6 @@ export default function KostDetail({ route, navigation }) {
         user_name: "Mimin Oh",
         location: "DKI Jakarta",
         kost_count: 2,
-    }
-
-    let selectedKost = {
-        kost_id: 0,
-        user_id: 10,
-        kost_name: "Kosan Tarima",
-        kost_location: "Jakarta Selatan",
-        recommend_price: "Rp.3.000.000",
-        pay_period: "Month"
     }
 
     function KostPictList() {
@@ -593,6 +535,187 @@ export default function KostDetail({ route, navigation }) {
         )
     }
 
+    function KostRating() {
+
+        var [kostReview, setKostReview] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/review', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostReview(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        var cleanliness = 0
+        var convenience = 0
+        var security = 0
+        var facilities = 0
+
+        kostReview.forEach(element => {
+            cleanliness += element.cleanliness
+            convenience += element.convenience
+            security += element.security
+            facilities += element.facilities
+        });
+
+        var avgTotal = ((cleanliness / kostReview.length) + (convenience / kostReview.length) + (security / kostReview.length) + (facilities / kostReview.length)) / 4
+
+        if (kostReview.length === 0) {
+            return null
+        } else {
+            return (
+                <View style={styles.ratingContainer}>
+                    <View style={styles.ratingTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Rating</Text>
+                    </View>
+                    <View style={styles.ratingBody}>
+                        <View style={styles.ratingBodyLeft}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <AntDesign name="star" size={Normalize(24)} color="#FFB800" />
+                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(20) }}>{avgTotal.toString().substring(0, 3)}</Text>
+                            </View>
+                            <Text style={{ fontSize: Normalize(16), top: 5, color: 'gray' }}>/5.0</Text>
+                        </View>
+                        <View style={styles.ratingBodyRight}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(cleanliness / kostReview.length).toString().substring(0, 3)}</Text>
+                                </View>
+                                <Text style={{ fontSize: Normalize(14) }}>Cleanliness</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(convenience / kostReview.length).toString().substring(0, 3)}</Text>
+                                </View>
+                                <Text style={{ fontSize: Normalize(14) }}>Convenience</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(security / kostReview.length).toString().substring(0, 3)}</Text>
+                                </View>
+                                <Text style={{ fontSize: Normalize(14) }}>Security</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
+                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(facilities / kostReview.length).toString().substring(0, 3)}</Text>
+                                </View>
+                                <Text style={{ fontSize: Normalize(14) }}>Facilities</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            )
+        }
+    }
+
+    function KostReview() {
+
+        var [kostReview, setKostReview] = useState([])
+
+        // event before component mount/update/leave
+        useEffect(() => {
+
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
+
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/review', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostReview(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
+
+        return (
+            <View style={styles.reviewContainer}>
+                <View style={styles.reviewTitle}>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                        <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
+                    </View>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <TouchableOpacity>
+                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {
+                    kostReview.map((item, index) => {
+
+                        var avgTotal = (item.cleanliness + item.convenience + item.security + item.facilities) / 4
+
+                        if (index > 1)
+                            return null
+
+                        return (
+                            <View key={index} style={styles.reviewBody}>
+                                <View style={styles.reviewBodyContainer}>
+                                    <View style={styles.reviewUserPict}>
+                                        <ImageBackground
+                                            imageStyle={{ borderRadius: Normalize(10.12) }}
+                                            style={styles.backgroundImg}
+                                            source={{ uri: item.profile_picture }}
+                                        />
+                                    </View>
+                                    <View style={styles.reviewUserHeader}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <AntDesign name="star" size={Normalize(14)} color="#FFB800" style={{ marginRight: Normalize(5) }} />
+                                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{avgTotal.toString().substring(0, 3)}</Text>
+                                        </View>
+                                        <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{item.display_name}</Text>
+                                    </View>
+                                    <View style={styles.reviewUserBody}>
+                                        <Text style={{ textAlign: 'left', fontSize: Normalize(12), fontWeight: 'bold' }}>
+                                            {item.comments}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        )
+                    })
+                }
+
+            </View>
+        )
+    }
+
     function _renderRoomPict({ item }) {
 
         return (
@@ -803,151 +926,14 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.softLines} />
                 <KostLocation />
                 <View style={styles.landmarkWrapper}>
-                    {/* <View style={styles.benchmarkContainer}>
-                        <View style={styles.benchmarkTitle}>
-                            <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                            <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
-                        </View >
-                        <View style={{ flexDirection: 'column' }}>
-                            {
-                                kostBenchmark.map((item, index) => {
-
-                                    return (
-                                        <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                            <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                            {'   '}
-                                            <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
-                                        </Text>
-                                    )
-                                })
-                            }
-                        </View>
-                    </View> */}
                     <KostBenchmark />
                     <View style={styles.verticalLine} />
                     <KostAccessibility />
-                    {/* <View style={styles.accessibilityContainer}>
-                        <View style={styles.accessibilityTitle}>
-                            <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                            <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
-                        </View>
-                        <View style={{ flexDirection: 'column' }}>
-                            {
-                                kostAccessibility.map((item, index) => {
-
-                                    return (
-                                        <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                            <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                            {'   '}
-                                            <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.name}</Text>
-                                        </Text>
-                                    )
-                                })
-                            }
-                        </View>
-                    </View> */}
                 </View>
                 <KostAround />
-                {/* <View style={styles.aroundKostContainer}>
-                    <View style={styles.aroundKostTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
-                    </View>
-                    <View style={styles.aroundKostBody}>
-                        <MappedAroundKost />
-                    </View>
-                </View> */}
                 <View style={styles.softLines} />
-                <View style={styles.ratingContainer}>
-                    <View style={styles.ratingTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Rating</Text>
-                    </View>
-                    <View style={styles.ratingBody}>
-                        <View style={styles.ratingBodyLeft}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <AntDesign name="star" size={Normalize(24)} color="#FFB800" />
-                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(20) }}>4.9</Text>
-                            </View>
-                            <Text style={{ fontSize: Normalize(16), top: 5, color: 'gray' }}>/5.0</Text>
-                        </View>
-                        <View style={styles.ratingBodyRight}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Cleanliness</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Convenience</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Security</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
-                                    <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>4.9</Text>
-                                </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Facilities</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.reviewContainer}>
-                    <View style={styles.reviewTitle}>
-                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
-                        </View>
-                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <TouchableOpacity>
-                                <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    {
-                        reviewList.map((item, index) => {
-
-                            if (index > 1)
-                                return null
-
-                            return (
-                                <View key={index} style={styles.reviewBody}>
-                                    <View style={styles.reviewBodyContainer}>
-                                        <View style={styles.reviewUserPict}>
-                                            <ImageBackground
-                                                imageStyle={{ borderRadius: Normalize(10.12) }}
-                                                style={styles.backgroundImg}
-                                                source={{ uri: item.user_pict }}
-                                            />
-                                        </View>
-                                        <View style={styles.reviewUserHeader}>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <AntDesign name="star" size={Normalize(14)} color="#FFB800" style={{ marginRight: Normalize(5) }} />
-                                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.rating}</Text>
-                                            </View>
-                                            <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{item.nama_user}</Text>
-                                        </View>
-                                        <View style={styles.reviewUserBody}>
-                                            <Text style={{ textAlign: 'left', fontSize: Normalize(12), fontWeight: 'bold' }}>
-                                                {item.review_body}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            )
-                        })
-                    }
-
-                </View>
+                <KostRating />
+                <KostReview />
                 <View style={[styles.softLines, { top: Normalize(-40) }]} />
                 <View style={styles.roomTitle}>
                     <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
@@ -1154,7 +1140,8 @@ const styles = StyleSheet.create({
         marginBottom: Normalize(10),
     },
     facilitiesBody: {
-        flexDirection: 'row'
+        flexWrap: 'wrap',
+        flexDirection: 'row',
     },
     softLines: {
         height: 1,
