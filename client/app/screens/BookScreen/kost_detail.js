@@ -5,8 +5,8 @@ import MapShow from '../../components/Maps/map_show';
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
 import HomeBackground from '../../components/Backgrounds/book_background';
-import { AppStyle, Normalize, KostService } from '../../config/app.config';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { AppStyle, Normalize, KostService, CurrencyPrefix } from '../../config/app.config';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
 
 // creates the promised base http client
@@ -62,65 +62,6 @@ export default function KostDetail({ route, navigation }) {
             id: "4",
             icon_id: "4",
             name: "Restaurant"
-        },
-    ];
-
-    let roomList = [
-        {
-            kost_id: "0",
-            room_id: "0",
-            room_pict: [
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png"
-            ],
-            room_name: "Luxury",
-            room_size: "20m x 20m",
-            room_price: "Rp.3.000.000",
-            room_availability: 2,
-        },
-        {
-            kost_id: "0",
-            room_id: "1",
-            room_pict: [
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png"
-            ],
-            room_name: "Standard",
-            room_size: "15m x 15m",
-            room_price: "Rp.2.500.000",
-            room_availability: 7,
-        },
-        {
-            kost_id: "0",
-            room_id: "2",
-            room_pict: [
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png"
-            ],
-            room_name: "Standard",
-            room_size: "10m x 10m",
-            room_price: "Rp.2.000.000",
-            room_availability: 4,
-        },
-        {
-            kost_id: "0",
-            room_id: "3",
-            room_pict: [
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png",
-                "https://reactjs.org/logo-og.png"
-            ],
-            room_name: "Singular",
-            room_size: "5m x 10m",
-            room_price: "Rp.1.000.000",
-            room_availability: 5,
         },
     ];
 
@@ -571,18 +512,19 @@ export default function KostDetail({ route, navigation }) {
         var security = 0
         var facilities = 0
 
-        kostReview.forEach(element => {
-            cleanliness += element.cleanliness
-            convenience += element.convenience
-            security += element.security
-            facilities += element.facilities
-        });
-
-        var avgTotal = ((cleanliness / kostReview.length) + (convenience / kostReview.length) + (security / kostReview.length) + (facilities / kostReview.length)) / 4
-
         if (kostReview.length === 0) {
             return null
         } else {
+
+            kostReview.forEach(element => {
+                cleanliness += element.cleanliness
+                convenience += element.convenience
+                security += element.security
+                facilities += element.facilities
+            });
+
+            var avgTotal = ((cleanliness / kostReview.length) + (convenience / kostReview.length) + (security / kostReview.length) + (facilities / kostReview.length)) / 4
+
             return (
                 <View style={styles.ratingContainer}>
                     <View style={styles.ratingTitle}>
@@ -747,109 +689,195 @@ export default function KostDetail({ route, navigation }) {
             }
         }, []);
 
-        function RoomPicts(props) {
+        function KostRoomList(props) {
 
-            function _renderRoomPict({ item }) {
+            var [kostRoomDetails, setKostRoomDetails] = useState(null)
+
+            // event before component mount/update/leave
+            useEffect(() => {
+
+                // creates the cancel token source
+                cancelSource = axios.CancelToken.source()
+
+                // triggers the http get request to / url in the kost service to fetch the list of application events
+                kostAPI.get('/' + kostID + '/rooms/' + props.kostRoom.id + '/details', {
+                    cancelToken: cancelSource.token
+                })
+                    .then(response => {
+                        setKostRoomDetails(response.data)
+                    })
+                    .catch(error => {
+                        if (axios.isCancel(error)) {
+                            // TODO: development only
+                            console.log('Request canceled', error.message);
+                        } else {
+                            console.log(error.response.data)
+                        }
+                    });
+                return () => {
+                    // cancel the request (the message parameter is optional)
+                    cancelSource.cancel();
+                }
+            }, []);
+
+            function RoomPicts(props) {
+
+                function _renderRoomPict({ item }) {
+
+                    return (
+                        <ImageBackground
+                            imageStyle={{ borderRadius: Normalize(10) }}
+                            style={[styles.backgroundImg, { height: AppStyle.windowSize.height * 0.2 }]}
+                            source={{ uri: item.url }}
+                        />
+                    )
+                }
 
                 return (
-                    <ImageBackground
-                        imageStyle={{ borderRadius: Normalize(10) }}
-                        style={[styles.backgroundImg, { height: AppStyle.windowSize.height * 0.2 }]}
-                        source={{ uri: item }}
+                    <Carousel
+                        ref={roomPictRef}
+                        layout={"default"}
+                        data={props.RoomPicts}
+                        renderItem={_renderRoomPict}
+                        itemWidth={AppStyle.windowSize.width * 0.9}
+                        sliderWidth={AppStyle.windowSize.width * 0.9}
                     />
                 )
             }
 
-            return (
-                <Carousel
-                    ref={roomPictRef}
-                    layout={"default"}
-                    data={props.room_picts}
-                    renderItem={_renderRoomPict}
-                    itemWidth={AppStyle.windowSize.width * 0.9}
-                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                />
-            )
+            if (kostRoomDetails === null) {
+                return null
+            } else {
+
+                var roomBookedCount = 0
+                if (kostRoomDetails.room_booked !== null) {
+                    roomBookedCount = kostRoomDetails.room_booked.length
+                }
+
+                var roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
+
+                return (
+                    <View style={styles.roomBody}>
+                        <RoomPicts RoomPicts={kostRoomDetails.room_picts} />
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
+                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{props.kostRoom.room_length + props.kostRoom.room_area_uom_desc.substring(0, 1) + 'x' + props.kostRoom.room_width + props.kostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{roomAvailability > 0 ? "Available" : "unavailable"}</Text>
+                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: roomAvailability > 2 ? AppStyle.success : AppStyle.error }}>{roomAvailability > 2 ? roomAvailability + " rooms" : roomAvailability + " rooms left"}</Text>
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
+                            <TouchableOpacity onPress={() => {
+                                bottomSheetRef.current.snapTo(0)
+                            }}>
+                                <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{CurrencyPrefix(props.kostRoom.room_price_uom_desc) + props.kostRoom.room_price}</Text>
+                                </View>
+                                <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                            </View>
+                            <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
+                                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )
+            }
+
         }
 
-        return (
-            <>
-                <View style={styles.roomTitle}>
-                    <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
-                </View>
+        if (kostRooms.length === 0) {
+            return null
+        } else {
+            return (
+                <>
+                    <View style={styles.roomTitle}>
+                        <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+                    </View>
+                    {
+                        kostRooms.map((item, index) => {
+                            return (
+                                <KostRoomList key={index} kostRoom={item} />
+                            )
+                        })
+                    }
+                </>
+            )
+        }
+    }
 
-                {
-                    kostRooms.map((item, index) => {
+    function KostOwner() {
 
-                        var [kostRoomDetails, setKostRoomDetails] = useState([])
+        var [kostOwner, setKostOwner] = useState(null)
 
-                        // event before component mount/update/leave
-                        useEffect(() => {
+        // event before component mount/update/leave
+        useEffect(() => {
 
-                            // creates the cancel token source
-                            cancelSource = axios.CancelToken.source()
+            // creates the cancel token source
+            cancelSource = axios.CancelToken.source()
 
-                            // triggers the http get request to / url in the kost service to fetch the list of application events
-                            kostAPI.get('/' + kostID + '/rooms/' + item.id + '/details', {
-                                cancelToken: cancelSource.token
-                            })
-                                .then(response => {
-                                    setKostRoomDetails(response.data)
-                                })
-                                .catch(error => {
-                                    if (axios.isCancel(error)) {
-                                        // TODO: development only
-                                        console.log('Request canceled', error.message);
-                                    } else {
-                                        console.log(error.response.data)
-                                    }
-                                });
-                            return () => {
-                                // cancel the request (the message parameter is optional)
-                                cancelSource.cancel();
-                            }
-                        }, []);
+            // triggers the http get request to / url in the kost service to fetch the list of application events
+            kostAPI.get('/' + kostID + '/owner', {
+                cancelToken: cancelSource.token
+            })
+                .then(response => {
+                    setKostOwner(response.data)
+                })
+                .catch(error => {
+                    if (axios.isCancel(error)) {
+                        // TODO: development only
+                        console.log('Request canceled', error.message);
+                    } else {
+                        console.log(error.response.data)
+                    }
+                });
+            return () => {
+                // cancel the request (the message parameter is optional)
+                cancelSource.cancel();
+            }
+        }, []);
 
-                        return (
-                            <View key={index} style={styles.roomBody}>
-                                <RoomPicts room_picts={kostRoomDetails.room_picts} />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{kostRooms.room_length + kostRooms.uom_desc.substring(0, 1) + 'x' + kostRooms.room_width + kostRooms.uom_desc.substring(0, 1)}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{item.room_availability > 0 ? "Available" : "unavailable"}</Text>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: item.room_availability > 2 ? AppStyle.success : AppStyle.error }}>{item.room_availability > 2 ? item.room_availability + " rooms" : item.room_availability + " rooms left"}</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
-                                    <TouchableOpacity>
-                                        <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{item.room_price}</Text>
-                                        </View>
-                                        <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                        <TouchableOpacity onPress={() => {
-                                            bottomSheetRef.current.snapTo(0)
-                                        }}
-                                            style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
+        if (kostOwner === null) {
+            return null
+        } else {
+            return (
+                <View style={styles.ownerContainer}>
+                    <View style={styles.ownerTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
+                    </View>
+                    <View style={styles.ownerBody}>
+                        <View style={styles.ownerBodyContainer}>
+                            <View style={styles.ownerUserPict}>
+                                <ImageBackground
+                                    imageStyle={{ borderRadius: Normalize(10.12) }}
+                                    style={styles.backgroundImg}
+                                    source={{ uri: kostOwner.profile_picture }}
+                                />
                             </View>
-                        )
-                    })
-                }
-            </>
-        )
+                            <View style={styles.ownerUserHeader}>
+                                <Text style={{ textAlign: 'center', fontSize: Normalize(14), fontWeight: 'bold' }}>{kostOwner.display_name}</Text>
+                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{kostOwner.city}</Text>
+                            </View>
+                            <View style={styles.ownerUserBody}>
+                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
+                                    <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
+                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{kostOwner.kost_list.length} Kosan Owned</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            )
+        }
     }
 
     function _renderSheetRoomPicts({ item }) {
@@ -1061,87 +1089,8 @@ export default function KostDetail({ route, navigation }) {
                 <KostReview />
                 <View style={[styles.softLines, { top: Normalize(-40) }]} />
                 <KostRooms />
-                {/* <View style={styles.roomTitle}>
-                    <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
-                </View>
-
-                {
-                    roomList.map((item, index) => {
-                        return (
-                            <View key={index} style={styles.roomBody}>
-                                <Carousel
-                                    ref={roomPictRef}
-                                    layout={"default"}
-                                    data={item.room_pict}
-                                    renderItem={_renderRoomPict}
-                                    itemWidth={AppStyle.windowSize.width * 0.9}
-                                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                                />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.room_size}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{item.room_availability > 0 ? "Available" : "unavailable"}</Text>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: item.room_availability > 2 ? AppStyle.success : AppStyle.error }}>{item.room_availability > 2 ? item.room_availability + " rooms" : item.room_availability + " rooms left"}</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
-                                    <TouchableOpacity>
-                                        <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{item.room_price}</Text>
-                                        </View>
-                                        <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                        <TouchableOpacity onPress={() => {
-                                            bottomSheetRef.current.snapTo(0)
-                                        }}
-                                            style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        )
-                    })
-                } */}
-
                 <View style={styles.softLines} />
-                <View style={styles.ownerContainer}>
-                    <View style={styles.ownerTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
-                    </View>
-                    <View style={styles.ownerBody}>
-                        <View style={styles.ownerBodyContainer}>
-                            <View style={styles.ownerUserPict}>
-                                <ImageBackground
-                                    imageStyle={{ borderRadius: Normalize(10.12) }}
-                                    style={styles.backgroundImg}
-                                    source={{ uri: kostOwner.user_pict }}
-                                />
-                            </View>
-                            <View style={styles.ownerUserHeader}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{kostOwner.user_name}</Text>
-                                </View>
-                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{kostOwner.location}</Text>
-                            </View>
-                            <View style={styles.ownerUserBody}>
-                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
-                                    <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
-                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{kostOwner.kost_count} Kosan Owned</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+                <KostOwner />
             </HomeBackground>
             <BottomSheet
                 initialSnap={1}
