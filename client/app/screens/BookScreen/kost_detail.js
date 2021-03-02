@@ -1062,11 +1062,16 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.stickyContainer}>
                     <View style={styles.priceTag}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>Rp.3.000.000</Text>
+                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
                         </View>
                         <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
                     </View>
-                    <TouchableOpacity onPress={() => { navigation.replace('RoomSelection') }} style={styles.bookButton}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.replace('RoomSelection', {
+                            room: selectedKostRoom,
+                            roomDetails: kostRoomDetails,
+                        })
+                    }} style={styles.bookButton}>
                         <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
                     </TouchableOpacity>
                 </View>
