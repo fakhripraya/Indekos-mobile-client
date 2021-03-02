@@ -727,7 +727,12 @@ export default function KostDetail({ route, navigation }) {
                                 <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
                             </View>
                             <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
+                                <TouchableOpacity onPress={() => {
+                                    navigation.replace('RoomSelection', {
+                                        room: selectedKostRoom,
+                                        roomDetails: kostRoomDetails,
+                                    });
+                                }} style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
                                 </TouchableOpacity>
                             </View>
@@ -1070,7 +1075,7 @@ export default function KostDetail({ route, navigation }) {
                         navigation.replace('RoomSelection', {
                             room: selectedKostRoom,
                             roomDetails: kostRoomDetails,
-                        })
+                        });
                     }} style={styles.bookButton}>
                         <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
                     </TouchableOpacity>
