@@ -2,21 +2,19 @@ import {
     Text,
     View,
     TextInput,
-    Dimensions,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
 import {
     popUpModalChange,
-    accountRegistrationChange,
-} from '../../redux'
+} from '../../redux';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppStyle, Normalize } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
-import { trackPromise } from 'react-promise-tracker'
+import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
+import { AppStyle, Normalize } from '../../config/app.config';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
@@ -31,14 +29,13 @@ const api = axios.create({
 // Register is the root of registration stack
 export default function Register({ navigation }) {
 
-    // Variables
-    // waRegex is a regular expression to match standard phone string
+    // Variables with regex
     var regWA = /\+?([ -]?\d+)+|\(\d+\)([ -]\d+)/;
-    // regEmail is a regular expression to match standard email string
     var regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     // Function states
     const [inputValue, setInput] = useState('')
+
     // Hooks
     const dispatch = useDispatch()
 
@@ -80,8 +77,7 @@ export default function Register({ navigation }) {
     // handle registration form submit
     function handleSubmit() {
 
-        // validation
-
+        // Registration form validation
         var count = 0;
 
         if (!handleValidatePhone(inputValue)) {
@@ -97,10 +93,7 @@ export default function Register({ navigation }) {
 
         }
 
-        // dispatch the accountRegistrationChange actions to store new user credentials  
-        dispatch(accountRegistrationChange({ username: inputValue }))
-
-        // triggers the http post request to /register url in the authentication service to process the registration
+        // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
         trackPromise(
             api.post(
                 '/register',
@@ -108,7 +101,9 @@ export default function Register({ navigation }) {
             )
                 .then(response => {
                     if (response.status >= 200 && response.status < 300) {
-                        navigation.replace('RegisterOtp');
+                        navigation.replace('RegisterOtp', {
+                            tempUsername: inputValue,
+                        });
                     }
                 })
                 .catch(error => {

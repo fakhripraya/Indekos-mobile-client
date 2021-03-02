@@ -2,20 +2,18 @@ import {
     Text,
     View,
     TextInput,
-    Dimensions,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
 import {
-    popUpModalChange,
-    accountRegistrationChange
+    popUpModalChange
 } from '../../redux'
 import axios from 'axios';
 import React, { useState } from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { useDispatch } from 'react-redux';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
-import { useDispatch, useSelector } from 'react-redux';
+import { AppStyle, Normalize } from '../../config/app.config';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
@@ -28,7 +26,10 @@ const api = axios.create({
 })
 
 // RegisterFinal is the final screen of the registration stack
-export default function RegisterFinal({ navigation }) {
+export default function RegisterFinal({ route, navigation }) {
+
+    // Get navigation parameter
+    const tempUsername = route.params.tempUsername;
 
     // Function state
     const [passwordValue, setPassword] = useState('')
@@ -36,10 +37,13 @@ export default function RegisterFinal({ navigation }) {
     const [popFlag, setPopFlag] = useState('none')
     const [popMessage, setPopMessage] = useState('')
     const [popColor, setPopColor] = useState(AppStyle.error)
+
     // Hooks
     const dispatch = useDispatch()
-    const tempUsername = useSelector(state => state.accountRegistrationReducer.username);
 
+    // Determine the password level
+    // Weak / standard / Strong
+    // TODO: belum di implementasi
     function onChangePassword(value) {
 
         let PasswordLevel = 0;
@@ -81,8 +85,6 @@ export default function RegisterFinal({ navigation }) {
     function handleSubmit() {
 
         // validation
-        // TODO: password validation for weak,standard,strong password
-
         if (confirmPasswordValue !== passwordValue) {
 
             // dispatch the popUpModalChange actions to store the generic message modal state
@@ -90,7 +92,7 @@ export default function RegisterFinal({ navigation }) {
             return;
         }
 
-        // triggers the http post request to /register url in the authentication service to process the registration
+        // triggers the http post request to /register/create url to finish the user registration process 
         trackPromise(
             api.post(
                 '/register/create',
@@ -101,9 +103,6 @@ export default function RegisterFinal({ navigation }) {
             )
                 .then(response => {
                     if (response.status >= 200 && response.status < 300) {
-
-                        // clear the account registration state  
-                        dispatch(accountRegistrationChange({ username: "", password: "", otp_code: "" }))
                         navigation.replace('CreateUserStack');
                     }
                 })

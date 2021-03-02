@@ -2,13 +2,9 @@ import {
     Text,
     View,
     TextInput,
-    Dimensions,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import {
-    accountRegistrationChange
-} from '../../redux'
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -33,9 +29,6 @@ export default function Login({ navigation }) {
 
     // handle login form submit
     function handleSubmit() {
-
-        // dispatch the accountRegistrationChange actions to store new user credentials  
-        dispatch(accountRegistrationChange({ username: inputValue, password: "", otp_code: "" }))
 
         // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(

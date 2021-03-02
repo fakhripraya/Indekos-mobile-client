@@ -3,12 +3,8 @@ import {
     View,
     TextInput,
     StyleSheet,
-    Dimensions,
     TouchableOpacity,
 } from 'react-native';
-import {
-    userDisplayNameChange
-} from '../../redux';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -26,21 +22,23 @@ export default function FillName({ navigation }) {
 
     // Hooks
     const dispatch = useDispatch()
+
     // Function states
     const [inputValue, setInput] = useState('')
 
     // handle registration form submit
     function handleSubmit() {
-        dispatch(userDisplayNameChange({ displayName: inputValue }));
 
-        // if owner, finish the user creation and navigate to home screen
+        // triggers the http patch request to /update/signed url to update the created user displayname
         trackPromise(
             api.patch('/update/signed', {
                 displayname: inputValue,
             })
                 .then(response => {
                     if (response.status >= 200 && response.status < 300) {
-                        navigation.replace('PickRole');
+                        navigation.replace('PickRole', {
+                            tempDisplayname: inputValue,
+                        });
                     }
                 })
                 .catch(error => {

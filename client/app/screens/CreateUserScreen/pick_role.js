@@ -2,16 +2,12 @@ import {
     Text,
     View,
     StyleSheet,
-    Dimensions,
     TouchableOpacity,
 } from 'react-native';
-import {
-    userRoleChange,
-} from '../../redux';
 import React from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { trackPromise } from 'react-promise-tracker';
-import { useDispatch, useSelector } from 'react-redux';
 import { AppStyle, Normalize, UserService } from '../../config/app.config';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background'
 
@@ -20,19 +16,19 @@ const api = axios.create({
     baseURL: "http://" + UserService.host + UserService.port + "/"
 })
 
-export default function PickRole({ navigation }) {
+export default function PickRole({ route, navigation }) {
+
+    // Get navigation parameter
+    const tempDisplayName = route.params.tempDisplayName
 
     // Hooks
     const dispatch = useDispatch()
-    const tempDisplayName = useSelector(state => state.userReducer.displayName);
 
-    // handle registration form submit
+    // triggers the http patch request to /update/signed url to update the created user role
     function handleSubmit(roleId) {
 
         // roleId = 1 (user)
         // roleId = 2 (owner)
-
-        dispatch(userRoleChange({ roleId: roleId }));
 
         if (roleId === 1) {
             // if owner, finish the user creation and navigate to home screen
@@ -57,7 +53,10 @@ export default function PickRole({ navigation }) {
             );
         } else
             // if owner, navigate to owner
-            navigation.replace('Agreement');
+            navigation.replace('Agreement', {
+                tempDisplayname: tempDisplayName,
+                tempUserRoleID: roleId
+            });
     }
 
     return (

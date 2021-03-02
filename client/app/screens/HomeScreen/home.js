@@ -11,14 +11,14 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import React, { useEffect, useRef, useState } from 'react';
 import HomeBackground from '../../components/Backgrounds/home_background';
-import { AppStyle, Normalize, AuthService, KostService, BookService } from '../../config/app.config';
+import { AppStyle, Normalize, AuthService, KostService } from '../../config/app.config';
 
-// creates the promised base http client
+// creates the promised base http auth client
 const authAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
-// creates the promised base http client
+// creates the promised base http kost client
 const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
 })
@@ -28,6 +28,7 @@ var cancelSource
 
 export default function Home({ navigation }) {
 
+    // Get the user location from the redux state
     const userLocation = useSelector(state => state.userReducer.location);
     const userLocationPermission = useSelector(state => state.userReducer.locationPermission);
 
@@ -169,15 +170,16 @@ export default function Home({ navigation }) {
 
     function NameWrapper() {
 
+        // Function State
         var [userInfo, setUserInfo] = useState({})
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to url in the authentication service to fetch the logged in users
+            // triggers the http get request to the / url in Authentication Service to get the current logged in user information 
             authAPI.get('/', {
                 cancelToken: cancelSource.token
             })
@@ -193,7 +195,6 @@ export default function Home({ navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -214,15 +215,16 @@ export default function Home({ navigation }) {
 
     function NewsCarousel() {
 
+        // Function State
         var [eventList, setEventList] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /event/all url in the kost service to fetch the list of application events
             kostAPI.get('/event/all', {
                 cancelToken: cancelSource.token
             })
@@ -238,7 +240,6 @@ export default function Home({ navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -427,17 +428,19 @@ export default function Home({ navigation }) {
 
     function NearYouCarousel() {
 
+        // Function State
         var [nearYouList, setNearYouList] = useState([])
 
+        // Validate to check user location permission 
         if (userLocationPermission === true) {
 
-            // event before component mount/update/leave
+            // trigger after the first render / component update / component unmount
             useEffect(() => {
 
                 // creates the cancel token source
                 cancelSource = axios.CancelToken.source()
 
-                // triggers the http get request to / url in the kost service to fetch the list of application events
+                // triggers the http get request to /,y/near url in the kost service to fetch the list of nearby kost based on the user location
                 kostAPI.get('/my/near',
                     {
                         params: {
@@ -458,7 +461,6 @@ export default function Home({ navigation }) {
                         }
                     });
                 return () => {
-                    // cancel the request (the message parameter is optional)
                     cancelSource.cancel();
                 }
             }, []);

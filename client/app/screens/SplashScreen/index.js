@@ -39,7 +39,7 @@ const Splash = ({ navigation }) => {
         config: { duration: 1000 }
     })
 
-    // event before component mount/update/leave
+    // trigger the event after the first render 
     useEffect(() => {
 
         // creates the cancel token source

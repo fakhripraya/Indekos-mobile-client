@@ -1,15 +1,15 @@
 import axios from 'axios';
+import Icons from '../../components/Icons/icons';
 import Carousel from 'react-native-snap-carousel';
 import BottomSheet from 'reanimated-bottom-sheet';
-import Icons from '../../components/Icons/icons';
 import MapShow from '../../components/Maps/map_show';
-import Facilities from '../../components/Icons/facilities';
 import { ScrollView } from 'react-native-gesture-handler';
+import Facilities from '../../components/Icons/facilities';
 import React, { useRef, useState, useEffect } from 'react';
 import HomeBackground from '../../components/Backgrounds/book_background';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AppStyle, Normalize, KostService, CurrencyPrefix } from '../../config/app.config';
-import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, Octicons } from '@expo/vector-icons';
 
 // creates the promised base http client
 const kostAPI = axios.create({
@@ -32,56 +32,21 @@ export default function KostDetail({ route, navigation }) {
     const bottomSheetRef = useRef(null);
     const sheetCarouselRef = useRef(null);
 
-    // Hooks
-    // TODO: nanti pass prop buat re render
+    // Global variable
     let selectedKostRoom = null
-
-    let roomSheetCaraouselData = [
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-        { uri: "https://reactjs.org/logo-og.png" },
-    ];
-
-    let aroundKost = [
-        {
-            id: "0",
-            icon_id: "0",
-            name: "GOR Kedoya"
-        },
-        {
-            id: "1",
-            icon_id: "1",
-            name: "Mall Citraland"
-        },
-        {
-            id: "2",
-            icon_id: "2",
-            name: "Alfamart"
-        },
-        {
-            id: "3",
-            icon_id: "3",
-            name: "JNE"
-        },
-        {
-            id: "4",
-            icon_id: "4",
-            name: "Restaurant"
-        },
-    ];
 
     function KostPictList() {
 
+        // Function state
         var [kostPictList, setKostPictList] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /picts url in the kost service to fetch the selected kost picts
             kostAPI.get('/' + kostID + '/picts', {
                 cancelToken: cancelSource.token
             })
@@ -97,7 +62,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -128,15 +92,16 @@ export default function KostDetail({ route, navigation }) {
 
     function KostDescription() {
 
+        // Function state
         var [kostDesc, setKostDesc] = useState('')
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID} url in the kost service to fetch the kost description
             kostAPI.get('/' + kostID, {
                 cancelToken: cancelSource.token
             })
@@ -152,7 +117,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -174,15 +138,16 @@ export default function KostDetail({ route, navigation }) {
 
     function KostFacilities() {
 
+        // Function state
         var [kostFacilities, setKostFacilities] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/facilities url in the kost service to fetch the list of kost facilities
             kostAPI.get('/' + kostID + '/facilities', {
                 cancelToken: cancelSource.token
             })
@@ -198,7 +163,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -234,16 +198,17 @@ export default function KostDetail({ route, navigation }) {
 
     function KostLocation() {
 
+        // Function state 
         var [latitude, setLatitude] = useState('')
         var [longitude, setLongitude] = useState('')
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID} url in the kost service to fetch the kost location
             kostAPI.get('/' + kostID, {
                 cancelToken: cancelSource.token
             })
@@ -260,7 +225,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -279,15 +243,16 @@ export default function KostDetail({ route, navigation }) {
 
     function KostBenchmark() {
 
+        // Function state
         var [kostBenchmark, setKostBenchmark] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/benchmark url in the kost service to fetch the list of kost nearby benchmark
             kostAPI.get('/' + kostID + '/benchmark', {
                 cancelToken: cancelSource.token
             })
@@ -303,7 +268,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -333,15 +297,16 @@ export default function KostDetail({ route, navigation }) {
     }
     function KostAccessibility() {
 
+        // Function state
         var [kostAccessibility, setKostAccessibility] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/access url in the kost service to fetch the list of kost nearby accessibility
             kostAPI.get('/' + kostID + '/access', {
                 cancelToken: cancelSource.token
             })
@@ -357,7 +322,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -387,15 +351,16 @@ export default function KostDetail({ route, navigation }) {
     }
     function KostAround() {
 
+        // Function state
         var [kostAround, setKostAround] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/around url in the kost service to fetch the list of kost nearby landmark
             kostAPI.get('/' + kostID + '/around', {
                 cancelToken: cancelSource.token
             })
@@ -411,7 +376,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -445,15 +409,16 @@ export default function KostDetail({ route, navigation }) {
 
     function KostRating() {
 
+        // Function state
         var [kostReview, setKostReview] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/review url in the kost service to fetch the list of other user review about the kost
             kostAPI.get('/' + kostID + '/review', {
                 cancelToken: cancelSource.token
             })
@@ -469,7 +434,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -546,15 +510,16 @@ export default function KostDetail({ route, navigation }) {
 
     function KostReview() {
 
+        // Function state
         var [kostReview, setKostReview] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/review url in the kost service to fetch the list of other user review about the kost
             kostAPI.get('/' + kostID + '/review', {
                 cancelToken: cancelSource.token
             })
@@ -637,15 +602,16 @@ export default function KostDetail({ route, navigation }) {
 
     function KostRooms() {
 
+        // Function state
         var [kostRooms, setKostRooms] = useState([])
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/rooms url in the kost service to fetch the list of kost rooms
             kostAPI.get('/' + kostID + '/rooms', {
                 cancelToken: cancelSource.token
             })
@@ -661,22 +627,22 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
 
         function KostRoomList(props) {
 
+            // Function state
             var [kostRoomDetails, setKostRoomDetails] = useState(null)
 
-            // event before component mount/update/leave
+            // trigger after the first render / component update / component unmount
             useEffect(() => {
 
                 // creates the cancel token source
                 cancelSource = axios.CancelToken.source()
 
-                // triggers the http get request to / url in the kost service to fetch the list of application events
+                // triggers the http get request to /{kostID}/rooms/{roomID}/details url in the kost service to fetch the list of the room detail information 
                 kostAPI.get('/' + kostID + '/rooms/' + props.kostRoom.id + '/details', {
                     cancelToken: cancelSource.token
                 })
@@ -692,7 +658,6 @@ export default function KostDetail({ route, navigation }) {
                         }
                     });
                 return () => {
-                    // cancel the request (the message parameter is optional)
                     cancelSource.cancel();
                 }
             }, []);
@@ -773,6 +738,9 @@ export default function KostDetail({ route, navigation }) {
 
         }
 
+        if (kostRooms === null)
+            return null
+
         if (kostRooms.length === 0) {
             return null
         } else {
@@ -795,15 +763,16 @@ export default function KostDetail({ route, navigation }) {
 
     function KostOwner() {
 
+        // Function state
         var [kostOwner, setKostOwner] = useState(null)
 
-        // event before component mount/update/leave
+        // trigger after the first render / component update / component unmount
         useEffect(() => {
 
             // creates the cancel token source
             cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to / url in the kost service to fetch the list of application events
+            // triggers the http get request to /{kostID}/owner url in the kost service to fetch the kost owner information 
             kostAPI.get('/' + kostID + '/owner', {
                 cancelToken: cancelSource.token
             })
@@ -819,7 +788,6 @@ export default function KostDetail({ route, navigation }) {
                     }
                 });
             return () => {
-                // cancel the request (the message parameter is optional)
                 cancelSource.cancel();
             }
         }, []);
@@ -860,9 +828,11 @@ export default function KostDetail({ route, navigation }) {
 
     function KostBottomSheet() {
 
+        // Function state
         var [kostRoomDetails, setKostRoomDetails] = useState(null)
         var [kostFacilities, setKostFacilities] = useState([])
 
+        // triggers when the bottom sheet starts opening
         function _getRoomData() {
 
             if (selectedKostRoom !== null) {
@@ -890,7 +860,6 @@ export default function KostDetail({ route, navigation }) {
                     })
                 ])
                     .then(responseArr => {
-                        //this will be executed only when all requests are complete
                         setKostRoomDetails(responseArr[0].data)
                         setKostFacilities(responseArr[1].data)
                     })
@@ -936,7 +905,10 @@ export default function KostDetail({ route, navigation }) {
 
         function MappedFacilities(props) {
 
-            if (kostFacilities === null) {
+            if (kostFacilities === null)
+                return null
+
+            if (kostFacilities.length === 0) {
                 return null
             } else {
                 return (

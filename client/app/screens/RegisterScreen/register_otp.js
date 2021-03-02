@@ -1,20 +1,19 @@
 import {
-    popUpModalChange
-} from '../../redux';
-import {
     Text,
     View,
     TextInput,
-    Dimensions,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
+import {
+    popUpModalChange
+} from '../../redux';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import React, { useState, useRef } from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
-import { useSelector, useDispatch } from 'react-redux';
+import { AppStyle, Normalize } from '../../config/app.config';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
@@ -27,21 +26,25 @@ const api = axios.create({
 })
 
 // RegisterOtp is the screen to handle the otp process of the registration flow
-export default function RegisterOtp({ navigation }) {
+export default function RegisterOtp({ route, navigation }) {
+
+    // Get navigation parameter
+    const tempUsername = route.params.tempUsername;
 
     // Function refs
     const firstField = useRef(null);
     const secondField = useRef(null);
     const thirdField = useRef(null);
     const fourthField = useRef(null);
+
     // Function states
     const [firstValue, setFirstInput] = useState("")
     const [secondValue, setSecondInput] = useState("")
     const [thirdValue, setThirdInput] = useState("")
     const [fourthValue, setFourthInput] = useState("")
+
     // Hooks
     const dispatch = useDispatch()
-    const tempUsername = useSelector(state => state.accountRegistrationReducer.username);
 
     // handle otp form submit
     function handleSubmit() {
@@ -56,7 +59,7 @@ export default function RegisterOtp({ navigation }) {
         if (isNaN(res))
             return;
 
-        // triggers the http post request to /register url in the authentication service to process the registration
+        // triggers the http post request to /register/check url to validate the OTP input from the user
         trackPromise(
             api.post(
                 '/register/check',
@@ -64,7 +67,9 @@ export default function RegisterOtp({ navigation }) {
             )
                 .then(response => {
                     if (response.status >= 200 && response.status < 300) {
-                        navigation.replace('RegisterFinal');
+                        navigation.replace('RegisterFinal', {
+                            tempUsername: tempUsername,
+                        });
                     }
                 })
                 .catch(error => {
@@ -80,7 +85,7 @@ export default function RegisterOtp({ navigation }) {
     // handle resend otp code
     function handleResend() {
 
-        // triggers the http post request to /register url in the authentication service to process the registration
+        // triggers the http post request to /register url to resend the OTP if the OTP never recieved by the user
         trackPromise(
             api.post(
                 '/register',

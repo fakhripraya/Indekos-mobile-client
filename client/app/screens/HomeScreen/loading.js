@@ -20,7 +20,7 @@ import { Normalize } from '../../config/app.config';
 const AnimatedView = animated(View)
 
 // Loading is the root of Home stack
-const Loading = ({ navigation }) => {
+const Loading = () => {
 
     // hooks
     const dispatch = useDispatch()
@@ -31,7 +31,7 @@ const Loading = ({ navigation }) => {
         config: { duration: 1000 }
     })
 
-    // trigger event on render
+    // trigger event after the first render to ask the user location based on their permission 
     useEffect(() => {
         (async () => {
 
@@ -57,7 +57,7 @@ const Loading = ({ navigation }) => {
         })();
     }, []);
 
-    // Renders the Splash screen
+    // Renders the Loading screen
     return transitions.map(({ key, props }) =>
         <AnimatedView key={key} style={[props, styles.container]}>
             <ActivityIndicator size="large" color="#0000ff" />
