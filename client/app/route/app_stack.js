@@ -1,14 +1,18 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Home from '../screens/HomeScreen/home';
 import Chats from '../screens/ChatScreen/chats';
 import Loading from '../screens/HomeScreen/loading';
 import Search from '../screens/SearchScreen/search';
-import { useSelector, useDispatch } from 'react-redux';
+import { enableScreens } from 'react-native-screens';
 import MyKosan from '../screens/MyKosanScreen/my_kosan';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomNavBar from '../components/Navigation/bottom_nav_bar';
 import UserProfile from '../screens/UserProfileScreen/user_profile';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// Optimize navigation
+enableScreens();
 
 // Create a bottom tab navigation
 const Tab = createBottomTabNavigator();

@@ -55,6 +55,7 @@ const Splash = ({ navigation }) => {
                 }
             })
             .catch(error => {
+                console.log(error)
                 if (axios.isCancel(error)) {
                     // TODO: development only
                     console.log('Request canceled', error.message);

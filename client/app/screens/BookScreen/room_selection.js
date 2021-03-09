@@ -3,8 +3,6 @@ import {
     Text,
     LogBox,
     FlatList,
-    ScrollView,
-    Dimensions,
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
@@ -372,7 +370,7 @@ export default function RoomSelection({ navigation }) {
         return (
             <View style={{ flex: 1, backgroundColor: 'white', width: AppStyle.windowSize.width, height: AppStyle.windowSize.height }}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => { navigation.replace('KostDetail') }} style={styles.headerIcon}>
+                    <TouchableOpacity onPress={() => { navigation.pop() }} style={styles.headerIcon}>
                         <AntDesign name="left" size={Normalize(24)} color="black" />
                     </TouchableOpacity>
                     <View>

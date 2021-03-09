@@ -5,13 +5,6 @@ import { SecondBackground } from '../../components/Backgrounds/create_user_backg
 
 export default function Agreement() {
 
-    useEffect(() => {
-        effect
-        return () => {
-            cleanup
-        }
-    }, [])
-
     return (
         <SecondBackground>
             <View>

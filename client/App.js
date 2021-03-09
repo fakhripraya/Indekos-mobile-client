@@ -7,6 +7,7 @@ import { StyleSheet, View } from 'react-native';
 import AppStack from './app/route/app_stack.js';
 import LoginStack from './app/route/login_stack';
 import SplashStack from './app/route/splash_stack';
+import { enableScreens } from 'react-native-screens';
 import WelcomeStack from './app/route/welcome_stack';
 import PromiseSpinner from './app/promise/promise_tracker';
 import CreateUserStack from './app/route/create_user_stack';
@@ -14,6 +15,9 @@ import RegistrationStack from './app/route/registration_stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { PopUpMessage } from './app/components/Modal/pop_up_message';
+
+// Optimize navigation
+enableScreens();
 
 // create a root stack navigator
 const RootStack = createStackNavigator();

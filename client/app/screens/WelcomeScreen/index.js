@@ -18,6 +18,7 @@ export default function Welcome({ navigation }) {
 
     // Function refs
     const carouselRef = useRef(null);
+
     // Function states
     const [activeIndex, setActive] = useState(0)
 

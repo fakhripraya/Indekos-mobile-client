@@ -204,6 +204,10 @@ export default function MemberDetails({ navigation }) {
 
     }
 
+    function handleNext() {
+        navigation.push('KTPVerification');
+    }
+
     useEffect(() => {
 
         setMaxMember(4)
@@ -267,7 +271,7 @@ export default function MemberDetails({ navigation }) {
                     )
                 })}
                 <View style={styles.container_3}>
-                    <TouchableOpacity style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
+                    <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
                         <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Next</Text>
                     </TouchableOpacity>
                 </View>

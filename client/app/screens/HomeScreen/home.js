@@ -9,9 +9,11 @@ import { useSelector } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
+import { useAxiosGet } from '../../promise/axios_get';
 import React, { useEffect, useRef, useState } from 'react';
 import HomeBackground from '../../components/Backgrounds/home_background';
 import { AppStyle, Normalize, AuthService, KostService } from '../../config/app.config';
+import SkeletonLoading from '../../components/Feedback/skeleton_loading'
 
 // creates the promised base http auth client
 const authAPI = axios.create({
@@ -170,47 +172,51 @@ export default function Home({ navigation }) {
 
     function NameWrapper() {
 
-        // Function State
-        var [userInfo, setUserInfo] = useState({})
+        const { data, error, status } = useAxiosGet(authAPI, '/', 60);
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        if (data === null || error) {
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+            if (error) {
 
-            // triggers the http get request to the / url in Authentication Service to get the current logged in user information 
-            authAPI.get('/', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setUserInfo(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+                if (status === 401)
+                    // go to welcome screen if user is not authorized
+                    navigation.replace('WelcomeStack');
+
+                useEffect(() => {
+
+                    // Force re-render
+                    const [value, setValue] = useState(0);
+                    setValue(value => value + 1);
+
+                }, []);
+
             }
-        }, []);
 
-        return (
-            <View style={styles.nameWrapper}>
-                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                    <Text style={{ fontSize: Normalize(18), color: 'white', left: AppStyle.windowSize.width * 0.075 }}><Text style={{ fontWeight: 'bold' }}>Hello</Text>, {userInfo.displayname}</Text>
+            return (
+                <View style={styles.nameWrapper}>
+                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075 }}>
+                        <SkeletonLoading />
+                    </View>
+                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075 }}>
+                        <SkeletonLoading />
+                    </View>
                 </View>
-                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                    <TouchableOpacity style={{ width: Normalize(24), justifyContent: 'center', alignItems: 'center', right: AppStyle.windowSize.width * 0.075 }}>
-                        <FontAwesome5 name="bell" size={Normalize(24)} color="white" />
-                    </TouchableOpacity>
+            );
+        }
+        else {
+            return (
+                <View style={styles.nameWrapper}>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                        <Text style={{ fontSize: Normalize(18), color: 'white', left: AppStyle.windowSize.width * 0.075 }}><Text style={{ fontWeight: 'bold' }}>Hello</Text>, {data.displayname}</Text>
+                    </View>
+                    <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <TouchableOpacity style={{ width: Normalize(24), justifyContent: 'center', alignItems: 'center', right: AppStyle.windowSize.width * 0.075 }}>
+                            <FontAwesome5 name="bell" size={Normalize(24)} color="white" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
-        )
+            );
+        }
     }
 
     function NewsCarousel() {
@@ -280,7 +286,7 @@ export default function Home({ navigation }) {
 
                         return (
                             <TouchableOpacity onPress={() => {
-                                navigation.push('BookStack', {
+                                navigation.replace('BookStack', {
                                     screen: 'KostDetail',
                                     params: {
                                         kostID: 3,
@@ -455,7 +461,8 @@ export default function Home({ navigation }) {
                     .catch(error => {
                         if (axios.isCancel(error)) {
                             // TODO: development only
-                            console.log('Request canceled', error.message);
+                            console.log('Request canceled', error.response.data);
+                            setNearYouList([])
                         } else {
                             console.log(error.response.data)
                         }
@@ -475,7 +482,7 @@ export default function Home({ navigation }) {
 
                         return (
                             <TouchableOpacity onPress={() => {
-                                navigation.push('BookStack', {
+                                navigation.replace('BookStack', {
                                     screen: 'KostDetail',
                                     params: {
                                         kostID: item.id,

@@ -728,7 +728,7 @@ export default function KostDetail({ route, navigation }) {
                             </View>
                             <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
                                 <TouchableOpacity onPress={() => {
-                                    navigation.replace('RoomSelection', {
+                                    navigation.push('RoomSelection', {
                                         room: selectedKostRoom,
                                         roomDetails: kostRoomDetails,
                                     });
@@ -1072,7 +1072,7 @@ export default function KostDetail({ route, navigation }) {
                         <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
-                        navigation.replace('RoomSelection', {
+                        navigation.push('RoomSelection', {
                             room: selectedKostRoom,
                             roomDetails: kostRoomDetails,
                         });
@@ -1102,10 +1102,15 @@ export default function KostDetail({ route, navigation }) {
     }
 
     return (
+        //TODO: create function to Prevent double click on navigation, test the leaking memory problem with double click
         <>
             <HomeBackground >
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => { navigation.pop(1) }} style={styles.headerIcon}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.replace('AppStack', {
+                            screen: 'Home'
+                        })
+                    }} style={styles.headerIcon}>
                         <AntDesign name="left" size={Normalize(24)} color="white" />
                     </TouchableOpacity>
                     <View>

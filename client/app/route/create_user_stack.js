@@ -1,10 +1,14 @@
 import React from 'react';
+import { enableScreens } from 'react-native-screens';
 import PickRole from '../screens/CreateUserScreen/pick_role';
 import FillName from '../screens/CreateUserScreen/fill_name';
 import Agreement from '../screens/CreateUserScreen/agreement';
 import { createStackNavigator } from '@react-navigation/stack';
 import OwnerRegist from '../screens/CreateUserScreen/owner_regist';
 import OwnerPaymentMethod from '../screens/CreateUserScreen/owner_payment_method';
+
+// Optimize navigation
+enableScreens();
 
 // create a nested stack navigator
 const NestedStack = createStackNavigator();
