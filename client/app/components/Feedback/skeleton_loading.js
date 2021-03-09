@@ -14,7 +14,7 @@ const SkeletonLoading = () => {
         Animated.loop(
             Animated.timing(animatedValue, {
                 toValue: 1,
-                duration: 1000,
+                duration: 750,
                 useNativeDriver: true,
                 easing: Easing.inOut(Easing.linear)
             })
@@ -28,7 +28,7 @@ const SkeletonLoading = () => {
     })
 
     return (
-        <AnimatedLG colors={["#a0a0a0", "#b0b0b0", "#a0a0a0", "#b0b0b0"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ ...StyleSheet.absoluteFill, transform: [{ translateX: translateX }] }} />
+        <AnimatedLG colors={["#dfdfdf", "#cfcfcf", "#dfdfdf", "#cfcfcf"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ ...StyleSheet.absoluteFill, transform: [{ translateX: translateX }] }} />
     )
 }
 

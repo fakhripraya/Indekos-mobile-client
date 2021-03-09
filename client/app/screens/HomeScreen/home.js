@@ -188,10 +188,10 @@ export default function Home({ navigation }) {
 
             return (
                 <View style={styles.nameWrapper}>
-                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
+                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
                         <SkeletonLoading />
                     </View>
-                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
+                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
                         <SkeletonLoading />
                     </View>
                 </View>
@@ -239,7 +239,7 @@ export default function Home({ navigation }) {
 
             } else {
                 return (
-                    <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: 'gray', borderRadius: 25 }]}>
+                    <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: 25 }]}>
                         <SkeletonLoading />
                     </View>
                 );
@@ -273,7 +273,7 @@ export default function Home({ navigation }) {
 
                         return (
                             <TouchableOpacity onPress={() => {
-                                navigation.replace('BookStack', {
+                                navigation.push('BookStack', {
                                     screen: 'KostDetail',
                                     params: {
                                         kostID: 3,
@@ -447,7 +447,7 @@ export default function Home({ navigation }) {
 
                         return (
                             <TouchableOpacity onPress={() => {
-                                navigation.replace('BookStack', {
+                                navigation.push('BookStack', {
                                     screen: 'KostDetail',
                                     params: {
                                         kostID: item.id,
@@ -500,7 +500,7 @@ export default function Home({ navigation }) {
                                 <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
                             </View>
                             <View style={styles.nearYouListHeader}>
-                                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: 25 }}>
+                                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: 25 }}>
                                     <SkeletonLoading />
                                 </View>
                                 <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
@@ -509,7 +509,7 @@ export default function Home({ navigation }) {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: 'gray', borderTopLeftRadius: 25, borderBottomLeftRadius: 25 }]}>
+                            <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderTopLeftRadius: 25, borderBottomLeftRadius: 25 }]}>
                                 <SkeletonLoading />
                             </View>
                         </>
