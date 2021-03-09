@@ -5,15 +5,16 @@ import {
     ImageBackground,
 } from 'react-native';
 import axios from 'axios';
+import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { useAxiosGet } from '../../promise/axios_get';
-import React, { useEffect, useRef, useState } from 'react';
+import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/home_background';
 import { AppStyle, Normalize, AuthService, KostService } from '../../config/app.config';
-import SkeletonLoading from '../../components/Feedback/skeleton_loading'
+import { useAxiosGetArray, useAxiosGetArrayParams } from '../../promise/axios_get_array';
 
 // creates the promised base http auth client
 const authAPI = axios.create({
@@ -172,7 +173,8 @@ export default function Home({ navigation }) {
 
     function NameWrapper() {
 
-        const { data, error, status } = useAxiosGet(authAPI, '/', 60);
+        // get the data via axios get request
+        const { data, error, status } = useAxiosGet(authAPI, '/', 10000);
 
         if (data === null || error) {
 
@@ -182,22 +184,14 @@ export default function Home({ navigation }) {
                     // go to welcome screen if user is not authorized
                     navigation.replace('WelcomeStack');
 
-                useEffect(() => {
-
-                    // Force re-render
-                    const [value, setValue] = useState(0);
-                    setValue(value => value + 1);
-
-                }, []);
-
             }
 
             return (
                 <View style={styles.nameWrapper}>
-                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075 }}>
+                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
                         <SkeletonLoading />
                     </View>
-                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075 }}>
+                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
                         <SkeletonLoading />
                     </View>
                 </View>
@@ -221,35 +215,6 @@ export default function Home({ navigation }) {
 
     function NewsCarousel() {
 
-        // Function State
-        var [eventList, setEventList] = useState([])
-
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
-
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
-
-            // triggers the http get request to /event/all url in the kost service to fetch the list of application events
-            kostAPI.get('/event/all', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setEventList(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
-            }
-        }, []);
-
         function _renderNewsItem({ item }) {
 
             return (
@@ -261,18 +226,40 @@ export default function Home({ navigation }) {
             )
         }
 
-        return (
-            <View style={styles.newsCarouselContainer}>
-                <Carousel
-                    layout={"default"}
-                    ref={newsCarouselRef}
-                    data={eventList}
-                    itemWidth={AppStyle.windowSize.width * 0.9}
-                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                    renderItem={_renderNewsItem}
-                />
-            </View>
-        )
+        // get the data via axios get request
+        const { dataArray, error, status } = useAxiosGetArray(kostAPI, '/event/all', 10000);
+
+        if (dataArray === null || error) {
+
+            if (error) {
+
+                if (status === 401)
+                    // go to welcome screen if user is not authorized
+                    navigation.replace('WelcomeStack');
+
+            } else {
+                return (
+                    <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: 'gray', borderRadius: 25 }]}>
+                        <SkeletonLoading />
+                    </View>
+                );
+            }
+
+        }
+        else {
+            return (
+                <View style={styles.newsCarouselContainer}>
+                    <Carousel
+                        layout={"default"}
+                        ref={newsCarouselRef}
+                        data={dataArray}
+                        itemWidth={AppStyle.windowSize.width * 0.9}
+                        sliderWidth={AppStyle.windowSize.width * 0.9}
+                        renderItem={_renderNewsItem}
+                    />
+                </View>
+            );
+        }
     }
 
     function BookCarousel() {
@@ -434,43 +421,21 @@ export default function Home({ navigation }) {
 
     function NearYouCarousel() {
 
-        // Function State
-        var [nearYouList, setNearYouList] = useState([])
+        let nearYouList = [];
+        let errorFlag = false;
+        let statusCode = null;
 
-        // Validate to check user location permission 
+        // get the data via axios get request
         if (userLocationPermission === true) {
+            const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, '/my/near', 10000, {
+                params: {
+                    latitude: userLocation.coords.latitude,
+                    longitude: userLocation.coords.longitude
+                },
+                cancelToken: axios.CancelToken.source().token
+            });
 
-            // trigger after the first render / component update / component unmount
-            useEffect(() => {
-
-                // creates the cancel token source
-                cancelSource = axios.CancelToken.source()
-
-                // triggers the http get request to /,y/near url in the kost service to fetch the list of nearby kost based on the user location
-                kostAPI.get('/my/near',
-                    {
-                        params: {
-                            latitude: userLocation.coords.latitude,
-                            longitude: userLocation.coords.longitude
-                        },
-                        cancelToken: cancelSource.token
-                    })
-                    .then(response => {
-                        setNearYouList(response.data)
-                    })
-                    .catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.response.data);
-                            setNearYouList([])
-                        } else {
-                            console.log(error.response.data)
-                        }
-                    });
-                return () => {
-                    cancelSource.cancel();
-                }
-            }, []);
+            nearYouList = dataArray; errorFlag = error; statusCode = status
         }
 
         function _renderNearYouList({ item }) {
@@ -520,33 +485,66 @@ export default function Home({ navigation }) {
         if (userLocationPermission === false) {
             return null
         } else {
-            return (
-                <React.Fragment>
-                    <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
-                    </View>
-                    <View style={styles.nearYouListHeader}>
-                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList.length === 0 ? "" : nearYouList[0].carousel_list[0].city}</Text>
+            if (nearYouList === null || errorFlag) {
+
+                if (errorFlag) {
+
+                    if (statusCode === 401)
+                        // go to welcome screen if user is not authorized
+                        navigation.replace('WelcomeStack');
+
+                } else {
+                    return (
+                        <>
+                            <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
+                                <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
+                            </View>
+                            <View style={styles.nearYouListHeader}>
+                                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'gray', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: 25 }}>
+                                    <SkeletonLoading />
+                                </View>
+                                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                                    <TouchableOpacity disabled={true} style={{ right: AppStyle.windowSize.width * 0.05 }}>
+                                        <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: 'gray', borderTopLeftRadius: 25, borderBottomLeftRadius: 25 }]}>
+                                <SkeletonLoading />
+                            </View>
+                        </>
+                    )
+                }
+
+            } else {
+                return (
+                    <>
+                        <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
+                            <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
                         </View>
-                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                                <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                            </TouchableOpacity>
+                        <View style={styles.nearYouListHeader}>
+                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList === null ? "" : (nearYouList.length === 0 ? "" : nearYouList[0].carousel_list[0].city)}</Text>
+                            </View>
+                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
+                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                    <View style={styles.nearYouListCarouselContainer}>
-                        <Carousel
-                            layout={"default"}
-                            ref={nearYouCarouselRef}
-                            data={nearYouList}
-                            itemWidth={AppStyle.windowSize.width * 0.9}
-                            sliderWidth={AppStyle.windowSize.width * 0.9}
-                            renderItem={_renderNearYouList}
-                        />
-                    </View>
-                </React.Fragment>
-            )
+                        <View style={styles.nearYouListCarouselContainer}>
+                            <Carousel
+                                layout={"default"}
+                                ref={nearYouCarouselRef}
+                                data={nearYouList}
+                                itemWidth={AppStyle.windowSize.width * 0.9}
+                                sliderWidth={AppStyle.windowSize.width * 0.9}
+                                renderItem={_renderNearYouList}
+                            />
+                        </View>
+                    </>
+                )
+            }
         }
     }
 

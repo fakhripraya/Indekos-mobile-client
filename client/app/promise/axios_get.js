@@ -34,7 +34,7 @@ export const useAxiosGet = (service, url, timeout) => {
                 if (!unmounted) {
                     if (axios.isCancel(error)) {
                         // TODO: development only
-                        console.log('Request canceled', error.response.data);
+                        console.log('Request canceled', error);
                     } else {
                         setError(true);
                         setErrorMessage(error.response.data);
