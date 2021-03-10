@@ -7,9 +7,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Facilities from '../../components/Icons/facilities';
 import React, { useRef, useState, useEffect } from 'react';
 import HomeBackground from '../../components/Backgrounds/book_background';
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AppStyle, Normalize, KostService, CurrencyPrefix } from '../../config/app.config';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, Octicons } from '@expo/vector-icons';
+
+// a HOC to throttle button click
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
 const kostAPI = axios.create({
@@ -1106,11 +1110,11 @@ export default function KostDetail({ route, navigation }) {
         <>
             <HomeBackground >
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => {
-                        navigation.pop(1)
+                    <TouchableOpacityPrevent onPress={() => {
+                        navigation.pop()
                     }} style={styles.headerIcon}>
                         <AntDesign name="left" size={Normalize(24)} color="white" />
-                    </TouchableOpacity>
+                    </TouchableOpacityPrevent>
                     <View>
                         <Text style={styles.headerText}>{kostName}</Text>
                     </View>

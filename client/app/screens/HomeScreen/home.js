@@ -5,7 +5,7 @@ import {
     ImageBackground,
 } from 'react-native';
 import axios from 'axios';
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -13,7 +13,7 @@ import Carousel from 'react-native-snap-carousel';
 import { useAxiosGet } from '../../promise/axios_get';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/home_background';
-import { AppStyle, Normalize, AuthService, KostService } from '../../config/app.config';
+import { AppStyle, Normalize, AuthService, KostService, UseForceUpdate } from '../../config/app.config';
 import { useAxiosGetArray, useAxiosGetArrayParams } from '../../promise/axios_get_array';
 
 // creates the promised base http auth client
@@ -173,6 +173,9 @@ export default function Home({ navigation }) {
 
     function NameWrapper() {
 
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
+
         // get the data via axios get request
         const { data, error, status } = useAxiosGet(authAPI, '/', 10000);
 
@@ -181,8 +184,9 @@ export default function Home({ navigation }) {
             if (error) {
 
                 if (status === 401)
-                    // go to welcome screen if user is not authorized
                     navigation.replace('WelcomeStack');
+                else
+                    setFlag(1)
 
             }
 
@@ -215,6 +219,9 @@ export default function Home({ navigation }) {
 
     function NewsCarousel() {
 
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
+
         function _renderNewsItem({ item }) {
 
             return (
@@ -227,23 +234,18 @@ export default function Home({ navigation }) {
         }
 
         // get the data via axios get request
-        const { dataArray, error, status } = useAxiosGetArray(kostAPI, '/event/all', 10000);
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/event/all', 10000);
 
         if (dataArray === null || error) {
 
-            if (error) {
+            if (error)
+                setFlag(1)
 
-                if (status === 401)
-                    // go to welcome screen if user is not authorized
-                    navigation.replace('WelcomeStack');
-
-            } else {
-                return (
-                    <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: 25 }]}>
-                        <SkeletonLoading />
-                    </View>
-                );
-            }
+            return (
+                <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: 25 }]}>
+                    <SkeletonLoading />
+                </View>
+            );
 
         }
         else {
@@ -421,13 +423,16 @@ export default function Home({ navigation }) {
 
     function NearYouCarousel() {
 
+        // Function Hooks
+        let [flag, setFlag] = useState(0)
+
+        // Variables
         let nearYouList = [];
         let errorFlag = false;
-        let statusCode = null;
 
         // get the data via axios get request
         if (userLocationPermission === true) {
-            const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, '/my/near', 10000, {
+            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/my/near', 1, {
                 params: {
                     latitude: userLocation.coords.latitude,
                     longitude: userLocation.coords.longitude
@@ -435,7 +440,7 @@ export default function Home({ navigation }) {
                 cancelToken: axios.CancelToken.source().token
             });
 
-            nearYouList = dataArray; errorFlag = error; statusCode = status
+            nearYouList = dataArray; errorFlag = error;
         }
 
         function _renderNearYouList({ item }) {
@@ -487,34 +492,32 @@ export default function Home({ navigation }) {
         } else {
             if (nearYouList === null || errorFlag) {
 
-                if (errorFlag) {
+                if (errorFlag)
+                    setFlag(1)
 
-                    if (statusCode === 401)
-                        // go to welcome screen if user is not authorized
-                        navigation.replace('WelcomeStack');
+                //TODO: make a counter to count the ammount of rerender caused by the error
+                //TODO: make a manual retry policy if the auto retry get past 10 count
 
-                } else {
-                    return (
-                        <>
-                            <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
-                                <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
-                            </View>
-                            <View style={styles.nearYouListHeader}>
-                                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: 25 }}>
-                                    <SkeletonLoading />
-                                </View>
-                                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                                    <TouchableOpacity disabled={true} style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                                        <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderTopLeftRadius: 25, borderBottomLeftRadius: 25 }]}>
+                return (
+                    <>
+                        <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
+                            <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
+                        </View>
+                        <View style={styles.nearYouListHeader}>
+                            <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: 25 }}>
                                 <SkeletonLoading />
                             </View>
-                        </>
-                    )
-                }
+                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <TouchableOpacity disabled={true} style={{ right: AppStyle.windowSize.width * 0.05 }}>
+                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderTopLeftRadius: 25, borderBottomLeftRadius: 25 }]}>
+                            <SkeletonLoading />
+                        </View>
+                    </>
+                )
 
             } else {
                 return (
