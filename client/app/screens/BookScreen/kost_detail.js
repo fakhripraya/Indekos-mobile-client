@@ -423,6 +423,8 @@ export default function KostDetail({ route, navigation }) {
 
         if (dataArray === null || error) {
 
+            //TODO: add filter response status to determine the dataArray null value before and after the response
+
             if (error) {
                 if (flag < 10) {
                     setTimeout(() => {
@@ -1135,6 +1137,7 @@ export default function KostDetail({ route, navigation }) {
                 renderContent={SheetBody}
                 onOpenStart={() => { _getRoomData() }}
                 enabledContentGestureInteraction={false}
+                enabledContentTapInteraction={false}
                 onCloseEnd={() => {
                     setKostRoomDetails(null)
                     setKostFacilities([])
