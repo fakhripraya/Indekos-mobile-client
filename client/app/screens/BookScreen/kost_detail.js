@@ -3,28 +3,25 @@ import Icons from '../../components/Icons/icons';
 import Carousel from 'react-native-snap-carousel';
 import BottomSheet from 'reanimated-bottom-sheet';
 import MapShow from '../../components/Maps/map_show';
+import { useAxiosGet } from '../../promise/axios_get';
 import { ScrollView } from 'react-native-gesture-handler';
 import Facilities from '../../components/Icons/facilities';
 import React, { useRef, useState, useEffect } from 'react';
+import withDelay from '../../components/HOC/prevent_spam_click';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/book_background';
-import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AppStyle, Normalize, KostService, CurrencyPrefix } from '../../config/app.config';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome5, Octicons } from '@expo/vector-icons';
-import { useAxiosGet } from '../../promise/axios_get';
 
 // a HOC to throttle button click
-const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
+const TouchableOpacityPrevent = withDelay(TouchableOpacity);
 
 // creates the promised base http client
 const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
 })
-
-// axios cancel source
-var cancelSource
 
 export default function KostDetail({ route, navigation }) {
 
@@ -99,9 +96,6 @@ export default function KostDetail({ route, navigation }) {
         // Function Hooks
         const [flag, setFlag] = useState(0)
 
-        // Variables
-        const skeletonPlaceholder = [1, 2, 3]
-
         // Get the data via axios get request
         const { data, error } = useAxiosGet(kostAPI, '/' + kostID, 10000);
 
@@ -120,15 +114,9 @@ export default function KostDetail({ route, navigation }) {
                     <View style={styles.descTitle}>
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
                     </View>
-                    {
-                        skeletonPlaceholder.map((value, index) => {
-                            return (
-                                <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                                    <SkeletonLoading />
-                                </View>
-                            )
-                        })
-                    }
+                    <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                        <SkeletonLoading />
+                    </View>
                 </View>
             );
 
@@ -154,9 +142,6 @@ export default function KostDetail({ route, navigation }) {
         // Function Hooks
         const [flag, setFlag] = useState(0)
 
-        // Variables
-        const skeletonPlaceholder = [1, 2, 3]
-
         // Get the data via axios get request
         const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/facilities', 10000);
 
@@ -175,15 +160,9 @@ export default function KostDetail({ route, navigation }) {
                     <View style={styles.facilitiesTitle}>
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
                     </View>
-                    {
-                        skeletonPlaceholder.map((value, index) => {
-                            return (
-                                <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                                    <SkeletonLoading />
-                                </View>
-                            )
-                        })
-                    }
+                    <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                        <SkeletonLoading />
+                    </View>
                 </View>
             );
 
@@ -260,9 +239,6 @@ export default function KostDetail({ route, navigation }) {
         // Function Hooks
         const [flag, setFlag] = useState(0)
 
-        // Variables
-        const skeletonPlaceholder = [1, 2, 3]
-
         // Get the data via axios get request
         const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/benchmark', 10000);
 
@@ -283,15 +259,9 @@ export default function KostDetail({ route, navigation }) {
                         <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
                     </View >
                     <View style={{ flexDirection: 'column' }}>
-                        {
-                            skeletonPlaceholder.map((item, index) => {
-                                return (
-                                    <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                                        <SkeletonLoading />
-                                    </View>
-                                )
-                            })
-                        }
+                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                            <SkeletonLoading />
+                        </View>
                     </View>
                 </View>
             );
@@ -326,9 +296,6 @@ export default function KostDetail({ route, navigation }) {
         // Function Hooks
         const [flag, setFlag] = useState(0)
 
-        // Variables
-        const skeletonPlaceholder = [1, 2, 3]
-
         // Get the data via axios get request
         const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/access', 10000);
 
@@ -349,15 +316,9 @@ export default function KostDetail({ route, navigation }) {
                         <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
                     </View>
                     <View style={{ flexDirection: 'column' }}>
-                        {
-                            skeletonPlaceholder.map((item, index) => {
-                                return (
-                                    <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                                        <SkeletonLoading />
-                                    </View>
-                                )
-                            })
-                        }
+                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                            <SkeletonLoading />
+                        </View>
                     </View>
                 </View>
             );
@@ -392,9 +353,6 @@ export default function KostDetail({ route, navigation }) {
         // Function Hooks
         const [flag, setFlag] = useState(0)
 
-        // Variables
-        const skeletonPlaceholder = [1, 2, 3]
-
         // Get the data via axios get request
         const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/around', 10000);
 
@@ -414,15 +372,9 @@ export default function KostDetail({ route, navigation }) {
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
                     </View>
                     <View style={styles.aroundKostBody}>
-                        {
-                            skeletonPlaceholder.map((value, index) => {
-                                return (
-                                    <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                                        <SkeletonLoading />
-                                    </View>
-                                )
-                            })
-                        }
+                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                            <SkeletonLoading />
+                        </View>
                     </View>
                 </View>
             );
@@ -456,35 +408,6 @@ export default function KostDetail({ route, navigation }) {
     }
 
     function KostRating() {
-
-        // // Function state
-        // var [kostReview, setKostReview] = useState([])
-
-        // // trigger after the first render / component update / component unmount
-        // useEffect(() => {
-
-        //     // creates the cancel token source
-        //     cancelSource = axios.CancelToken.source()
-
-        //     // triggers the http get request to /{kostID}/review url in the kost service to fetch the list of other user review about the kost
-        //     kostAPI.get('/' + kostID + '/review', {
-        //         cancelToken: cancelSource.token
-        //     })
-        //         .then(response => {
-        //             setKostReview(response.data)
-        //         })
-        //         .catch(error => {
-        //             if (axios.isCancel(error)) {
-        //                 // TODO: development only
-        //                 console.log('Request canceled', error.response.data);
-        //             } else {
-        //                 console.log(error.response.data)
-        //             }
-        //         });
-        //     return () => {
-        //         cancelSource.cancel();
-        //     }
-        // }, []);
 
         // Function Hooks
         const [flag, setFlag] = useState(0)
@@ -592,42 +515,22 @@ export default function KostDetail({ route, navigation }) {
 
     function KostReview() {
 
-        // Function state
-        var [kostReview, setKostReview] = useState([])
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/review', 10000);
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        if (dataArray === null || error) {
 
-            // triggers the http get request to /{kostID}/review url in the kost service to fetch the list of other user review about the kost
-            kostAPI.get('/' + kostID + '/review', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostReview(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.response.data);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                // cancel the request (the message parameter is optional)
-                cancelSource.cancel();
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
 
-        if (kostReview === null)
-            return null
-
-        if (kostReview.length === 0) {
-            return null
-        } else {
             return (
                 <View style={styles.reviewContainer}>
                     <View style={styles.reviewTitle}>
@@ -635,14 +538,43 @@ export default function KostDetail({ route, navigation }) {
                             <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
                         </View>
                         <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <TouchableOpacity>
+                            <TouchableOpacityPrevent>
                                 <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacityPrevent>
                         </View>
                     </View>
+                    <View style={styles.reviewBody}>
+                        <View style={styles.reviewBodyContainer}>
+                            <View style={[styles.reviewUserPict, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
+                                <SkeletonLoading />
+                            </View>
+                            <View style={[styles.reviewUserHeader, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
+                                <SkeletonLoading />
+                            </View>
+                            <View style={[styles.reviewUserBody, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
+                                <SkeletonLoading />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            )
 
+        }
+        else {
+            return (
+                <View style={styles.reviewContainer}>
+                    <View style={styles.reviewTitle}>
+                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                            <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
+                        </View>
+                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                            <TouchableOpacityPrevent>
+                                <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                            </TouchableOpacityPrevent>
+                        </View>
+                    </View>
                     {
-                        kostReview.map((item, index) => {
+                        dataArray.map((item, index) => {
 
                             var avgTotal = (item.cleanliness + item.convenience + item.security + item.facilities) / 4
 
@@ -676,7 +608,6 @@ export default function KostDetail({ route, navigation }) {
                             )
                         })
                     }
-
                 </View>
             )
         }
@@ -684,160 +615,180 @@ export default function KostDetail({ route, navigation }) {
 
     function KostRooms() {
 
-        // Function state
-        var [kostRooms, setKostRooms] = useState([])
-
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
-
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
-
-            // triggers the http get request to /{kostID}/rooms url in the kost service to fetch the list of kost rooms
-            kostAPI.get('/' + kostID + '/rooms', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostRooms(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
-            }
-        }, []);
-
-        function KostRoomList(props) {
-
-            // Function state
-            var [kostRoomDetails, setKostRoomDetails] = useState(null)
-
-            // trigger after the first render / component update / component unmount
-            useEffect(() => {
-
-                // creates the cancel token source
-                cancelSource = axios.CancelToken.source()
-
-                // triggers the http get request to /{kostID}/rooms/{roomID}/details url in the kost service to fetch the list of the room detail information 
-                kostAPI.get('/' + kostID + '/rooms/' + props.kostRoom.id + '/details', {
-                    cancelToken: cancelSource.token
-                })
-                    .then(response => {
-                        setKostRoomDetails(response.data)
-                    })
-                    .catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.message);
-                        } else {
-                            console.log(error.response.data)
-                        }
-                    });
-                return () => {
-                    cancelSource.cancel();
-                }
-            }, []);
-
-            function RoomPicts(props) {
-
-                function _renderRoomPict({ item }) {
-
-                    return (
-                        <ImageBackground
-                            imageStyle={{ borderRadius: Normalize(10) }}
-                            style={[styles.backgroundImg, { height: AppStyle.windowSize.height * 0.2 }]}
-                            source={{ uri: item.url }}
-                        />
-                    )
-                }
-
-                return (
-                    <Carousel
-                        ref={roomPictRef}
-                        layout={"default"}
-                        data={props.RoomPicts}
-                        renderItem={_renderRoomPict}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
-                    />
-                )
-            }
-
-            if (kostRoomDetails === null) {
-                return null
-            } else {
-
-                var roomBookedCount = 0
-                if (kostRoomDetails.room_booked !== null) {
-                    roomBookedCount = kostRoomDetails.room_booked.length
-                }
-
-                var roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
-
-                return (
-                    <View style={styles.roomBody}>
-                        <RoomPicts RoomPicts={kostRoomDetails.room_picts} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
-                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{props.kostRoom.room_length + props.kostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + props.kostRoom.room_width + props.kostRoom.room_area_uom_desc.substring(0, 1)}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{roomAvailability > 0 ? "Available" : "unavailable"}</Text>
-                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: roomAvailability > 2 ? AppStyle.success : AppStyle.error }}>{roomAvailability > 2 ? roomAvailability + " rooms" : roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"}</Text>
-                            </View>
+        // Skeleton Placeholder Function
+        function RoomSkeleton() {
+            return (
+                <View style={styles.roomBody}>
+                    <View style={{ width: AppStyle.windowSize.width * 0.9, height: AppStyle.windowSize.height * 0.2, overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10) }}>
+                        <SkeletonLoading />
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
+                        <View style={{ flexDirection: 'row', width: AppStyle.windowSize.width * 0.33, height: Normalize(24), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                            <SkeletonLoading />
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
-                            <TouchableOpacity onPress={() => {
-                                selectedKostRoom = props.kostRoom
-                                bottomSheetRef.current.snapTo(0)
-                            }}>
-                                <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{CurrencyPrefix(props.kostRoom.room_price_uom_desc) + props.kostRoom.room_price}</Text>
-                                </View>
-                                <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                        <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                            <View style={{ width: AppStyle.windowSize.width * 0.33, height: Normalize(24), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                <SkeletonLoading />
                             </View>
-                            <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.push('RoomSelection', {
-                                        room: selectedKostRoom,
-                                        roomDetails: kostRoomDetails,
-                                    });
-                                }} style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
-                                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
-                                </TouchableOpacity>
+                            <View style={{ width: AppStyle.windowSize.width * 0.33, height: Normalize(24), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                <SkeletonLoading />
                             </View>
                         </View>
                     </View>
-                )
-            }
-
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
+                        <TouchableOpacity style={{ width: AppStyle.windowSize.width * 0.25, height: Normalize(24), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                            <SkeletonLoading />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
+                        <View style={{ flexDirection: 'row', width: AppStyle.windowSize.width * 0.33, height: Normalize(24), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                            <SkeletonLoading />
+                        </View>
+                        <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                            <View style={{ width: AppStyle.windowSize.width * 0.33, height: Normalize(24), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                <SkeletonLoading />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            )
         }
 
-        if (kostRooms === null)
-            return null
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        if (kostRooms.length === 0) {
-            return null
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/rooms', 10000);
+
+        if (dataArray === null || error) {
+
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
+            }
+
+            return (
+                <>
+                    <View style={styles.roomTitle}>
+                        <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+                    </View>
+                    <RoomSkeleton />
+                </>
+            )
+
         } else {
+
+            function KostRoomList(props) {
+
+                // Function Hooks
+                const [flag, setFlag] = useState(0)
+
+                // Get the data via axios get request
+                const { data, error } = useAxiosGet(kostAPI, '/' + kostID + '/rooms/' + props.kostRoom.id + '/details', 10000);
+
+                if (data === null || error) {
+
+                    if (error) {
+                        if (flag < 10) {
+                            setTimeout(() => {
+                                setFlag(flag + 1)
+                            }, 2000);
+                        }
+                    }
+
+                    return (
+                        <RoomSkeleton />
+                    )
+
+                } else {
+
+                    function RoomPicts(props) {
+
+                        function _renderRoomPict({ item }) {
+
+                            return (
+                                <ImageBackground
+                                    imageStyle={{ borderRadius: Normalize(10) }}
+                                    style={[styles.backgroundImg, { height: AppStyle.windowSize.height * 0.2 }]}
+                                    source={{ uri: item.url }}
+                                />
+                            )
+                        }
+
+                        return (
+                            <Carousel
+                                ref={roomPictRef}
+                                layout={"default"}
+                                data={props.RoomPicts}
+                                renderItem={_renderRoomPict}
+                                itemWidth={AppStyle.windowSize.width * 0.9}
+                                sliderWidth={AppStyle.windowSize.width * 0.9}
+                            />
+                        )
+                    }
+
+                    var roomBookedCount = 0
+                    if (data.room_booked !== null) {
+                        roomBookedCount = data.room_booked.length
+                    }
+
+                    var roomAvailability = data.room_details.length - roomBookedCount
+
+                    return (
+                        <View style={styles.roomBody}>
+                            <RoomPicts RoomPicts={data.room_picts} />
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{props.kostRoom.room_length + props.kostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + props.kostRoom.room_width + props.kostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{roomAvailability > 0 ? "Available" : "unavailable"}</Text>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: roomAvailability > 2 ? AppStyle.success : AppStyle.error }}>{roomAvailability > 2 ? roomAvailability + " rooms" : roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"}</Text>
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
+                                <TouchableOpacityPrevent onPress={() => {
+                                    selectedKostRoom = props.kostRoom
+                                    bottomSheetRef.current.snapTo(0)
+                                }}>
+                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
+                                </TouchableOpacityPrevent>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{CurrencyPrefix(props.kostRoom.room_price_uom_desc) + props.kostRoom.room_price}</Text>
+                                    </View>
+                                    <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                                </View>
+                                <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                    <TouchableOpacityPrevent onPress={() => {
+                                        navigation.push('RoomSelection', {
+                                            room: selectedKostRoom,
+                                            roomDetails: data,
+                                        });
+                                    }} style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
+                                    </TouchableOpacityPrevent>
+                                </View>
+                            </View>
+                        </View>
+                    )
+                }
+
+            }
+
             return (
                 <>
                     <View style={styles.roomTitle}>
                         <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
                     </View>
                     {
-                        kostRooms.map((item, index) => {
+                        dataArray.map((item, index) => {
                             return (
                                 <KostRoomList key={index} kostRoom={item} />
                             )
@@ -850,37 +801,48 @@ export default function KostDetail({ route, navigation }) {
 
     function KostOwner() {
 
-        // Function state
-        var [kostOwner, setKostOwner] = useState(null)
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Get the data via axios get request
+        const { data, error } = useAxiosGet(kostAPI, '/' + kostID + '/owner', 10000);
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
-
-            // triggers the http get request to /{kostID}/owner url in the kost service to fetch the kost owner information 
-            kostAPI.get('/' + kostID + '/owner', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostOwner(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+        if (data === null || error) {
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
 
-        if (kostOwner === null) {
-            return null
+            return (
+                <View style={styles.ownerContainer}>
+                    <View style={styles.ownerTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
+                    </View>
+                    <View style={styles.ownerBody}>
+                        <View style={styles.ownerBodyContainer}>
+                            <View style={[styles.ownerUserPict, { overflow: 'hidden', backgroundColor: '#ebebeb' }]}>
+                                <SkeletonLoading />
+                            </View>
+                            <View style={styles.ownerUserHeader}>
+                                <View style={{ width: AppStyle.windowSize.width * 0.2, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                    <SkeletonLoading />
+                                </View>
+                                <View style={{ width: AppStyle.windowSize.width * 0.2, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                    <SkeletonLoading />
+                                </View>
+                            </View>
+                            <View style={styles.ownerUserBody}>
+                                <View style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', borderRadius: Normalize(10), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                    <SkeletonLoading />
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            )
         } else {
             return (
                 <View style={styles.ownerContainer}>
@@ -893,18 +855,18 @@ export default function KostDetail({ route, navigation }) {
                                 <ImageBackground
                                     imageStyle={{ borderRadius: Normalize(10.12) }}
                                     style={styles.backgroundImg}
-                                    source={{ uri: kostOwner.profile_picture }}
+                                    source={{ uri: data.profile_picture }}
                                 />
                             </View>
                             <View style={styles.ownerUserHeader}>
-                                <Text style={{ textAlign: 'center', fontSize: Normalize(14), fontWeight: 'bold' }}>{kostOwner.display_name}</Text>
-                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{kostOwner.city}</Text>
+                                <Text style={{ textAlign: 'center', fontSize: Normalize(14), fontWeight: 'bold' }}>{data.display_name}</Text>
+                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{data.city}</Text>
                             </View>
                             <View style={styles.ownerUserBody}>
-                                <TouchableOpacity style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
+                                <TouchableOpacityPrevent style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
                                     <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
-                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{kostOwner.kost_list.length} Kosan Owned</Text>
-                                </TouchableOpacity>
+                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{data.kost_list.length} Kosan Owned</Text>
+                                </TouchableOpacityPrevent>
                             </View>
                         </View>
                     </View>
@@ -1153,14 +1115,14 @@ export default function KostDetail({ route, navigation }) {
                         </View>
                         <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacityPrevent onPress={() => {
                         navigation.push('RoomSelection', {
                             room: selectedKostRoom,
                             roomDetails: kostRoomDetails,
                         });
                     }} style={styles.bookButton}>
                         <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacityPrevent>
                 </View>
             </View>
         );
@@ -1204,36 +1166,36 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.topBorder} />
                 <View style={styles.topTools}>
                     <View style={styles.toolsLeft}>
-                        <TouchableOpacity style={styles.toolsButton}>
+                        <TouchableOpacityPrevent style={styles.toolsButton}>
                             <Text style={styles.toolsButtonText}>Photo</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.toolsButton}>
+                        </TouchableOpacityPrevent>
+                        <TouchableOpacityPrevent style={styles.toolsButton}>
                             <Text style={styles.toolsButtonText}>Video</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.toolsButton}>
+                        </TouchableOpacityPrevent>
+                        <TouchableOpacityPrevent style={styles.toolsButton}>
                             <Text style={styles.toolsButtonText}>360</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacityPrevent>
                     </View>
                     <View style={styles.toolsRight}>
-                        <TouchableOpacity style={styles.toolsIcon}>
+                        <TouchableOpacityPrevent style={styles.toolsIcon}>
                             <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={'black'} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.toolsIcon}>
+                        </TouchableOpacityPrevent>
+                        <TouchableOpacityPrevent style={styles.toolsIcon}>
                             <MaterialIcons name="favorite-outline" size={Normalize(18)} color="red" />
-                        </TouchableOpacity>
+                        </TouchableOpacityPrevent>
                     </View>
                 </View>
-                {/* <KostDescription />
+                <KostDescription />
                 <View style={styles.softLines} />
                 <KostFacilities />
-                <View style={styles.softLines} /> */}
-                {/* <KostLocation /> */}
-                {/* <View style={styles.landmarkWrapper}>
+                <View style={styles.softLines} />
+                <KostLocation />
+                <View style={styles.landmarkWrapper}>
                     <KostBenchmark />
                     <View style={styles.verticalLine} />
                     <KostAccessibility />
-                </View> */}
-                {/* <KostAround /> */}
+                </View>
+                <KostAround />
                 <View style={styles.softLines} />
                 <KostRating />
                 <KostReview />
