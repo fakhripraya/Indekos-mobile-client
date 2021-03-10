@@ -185,8 +185,13 @@ export default function Home({ navigation }) {
 
                 if (status === 401)
                     navigation.replace('WelcomeStack');
-                else
-                    setFlag(1)
+                else {
+                    if (flag < 10) {
+                        setTimeout(() => {
+                            setFlag(flag + 1)
+                        }, 2000);
+                    }
+                }
 
             }
 
@@ -222,24 +227,18 @@ export default function Home({ navigation }) {
         // Function Hooks
         const [flag, setFlag] = useState(0)
 
-        function _renderNewsItem({ item }) {
-
-            return (
-                <ImageBackground
-                    imageStyle={{ borderRadius: 25 }}
-                    style={styles.backgroundImg}
-                    source={{ uri: item.thumbnail }}
-                />
-            )
-        }
-
-        // get the data via axios get request
+        // Get the data via axios get request
         const { dataArray, error } = useAxiosGetArray(kostAPI, '/event/all', 10000);
 
         if (dataArray === null || error) {
 
-            if (error)
-                setFlag(1)
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
+            }
 
             return (
                 <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: 25 }]}>
@@ -249,6 +248,19 @@ export default function Home({ navigation }) {
 
         }
         else {
+
+            // Carousel Items
+            function _renderNewsItem({ item }) {
+
+                return (
+                    <ImageBackground
+                        imageStyle={{ borderRadius: 25 }}
+                        style={styles.backgroundImg}
+                        source={{ uri: item.thumbnail }}
+                    />
+                )
+            }
+
             return (
                 <View style={styles.newsCarouselContainer}>
                     <Carousel
@@ -427,10 +439,10 @@ export default function Home({ navigation }) {
         let [flag, setFlag] = useState(0)
 
         // Variables
-        let nearYouList = [];
+        let nearYouList = null;
         let errorFlag = false;
 
-        // get the data via axios get request
+        // Get the data via axios get request
         if (userLocationPermission === true) {
             const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/my/near', 1, {
                 params: {
@@ -443,57 +455,18 @@ export default function Home({ navigation }) {
             nearYouList = dataArray; errorFlag = error;
         }
 
-        function _renderNearYouList({ item }) {
-
-            return (
-
-                <View style={{ flexDirection: 'row' }}>
-                    {item.carousel_list.map((item, index) => {
-
-                        return (
-                            <TouchableOpacity onPress={() => {
-                                navigation.push('BookStack', {
-                                    screen: 'KostDetail',
-                                    params: {
-                                        kostID: item.id,
-                                        kostName: item.kost_name,
-                                        city: item.city,
-                                    }
-                                })
-                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
-                                <View style={{ height: '50%' }}>
-                                    <ImageBackground
-                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
-                                        style={styles.backgroundImg}
-                                        source={{ uri: item.thumbnail_url }}
-                                    />
-                                </View>
-                                <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
-                                    <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
-                                    </View>
-                                    <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.city}</Text>
-                                    </View>
-                                    <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.thumbnail_price}</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        )
-
-                    })}
-                </View>
-            )
-        }
-
         if (userLocationPermission === false) {
             return null
         } else {
             if (nearYouList === null || errorFlag) {
 
-                if (errorFlag)
-                    setFlag(1)
+                if (errorFlag) {
+                    if (flag < 10) {
+                        setTimeout(() => {
+                            setFlag(flag + 1)
+                        }, 2000);
+                    }
+                }
 
                 //TODO: make a counter to count the ammount of rerender caused by the error
                 //TODO: make a manual retry policy if the auto retry get past 10 count
@@ -520,6 +493,52 @@ export default function Home({ navigation }) {
                 )
 
             } else {
+
+                // Carousel items
+                function _renderNearYouList({ item }) {
+
+                    return (
+
+                        <View style={{ flexDirection: 'row' }}>
+                            {item.carousel_list.map((item, index) => {
+
+                                return (
+                                    <TouchableOpacity onPress={() => {
+                                        navigation.push('BookStack', {
+                                            screen: 'KostDetail',
+                                            params: {
+                                                kostID: item.id,
+                                                kostName: item.kost_name,
+                                                city: item.city,
+                                            }
+                                        })
+                                    }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                                        <View style={{ height: '50%' }}>
+                                            <ImageBackground
+                                                imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                                style={styles.backgroundImg}
+                                                source={{ uri: item.thumbnail_url }}
+                                            />
+                                        </View>
+                                        <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                                            <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
+                                            </View>
+                                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                                <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.city}</Text>
+                                            </View>
+                                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                                <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.thumbnail_price}</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                )
+
+                            })}
+                        </View>
+                    )
+                }
+
                 return (
                     <>
                         <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>

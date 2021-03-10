@@ -6,11 +6,14 @@ import MapShow from '../../components/Maps/map_show';
 import { ScrollView } from 'react-native-gesture-handler';
 import Facilities from '../../components/Icons/facilities';
 import React, { useRef, useState, useEffect } from 'react';
+import { useAxiosGetArray } from '../../promise/axios_get_array';
+import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/book_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AppStyle, Normalize, KostService, CurrencyPrefix } from '../../config/app.config';
-import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, Octicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialIcons, FontAwesome5, Octicons } from '@expo/vector-icons';
+import { useAxiosGet } from '../../promise/axios_get';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -41,144 +44,154 @@ export default function KostDetail({ route, navigation }) {
 
     function KostPictList() {
 
-        // Function state
-        var [kostPictList, setKostPictList] = useState([])
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/picts', 10000);
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        if (dataArray === null || error) {
 
-            // triggers the http get request to /picts url in the kost service to fetch the selected kost picts
-            kostAPI.get('/' + kostID + '/picts', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostPictList(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
-
-        function _renderKostPict({ item }) {
 
             return (
-                <ImageBackground
-                    style={styles.backgroundImg}
-                    source={{ uri: item.url }}
-                />
+                <View style={[styles.kostCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb' }]}>
+                    <SkeletonLoading />
+                </View>
+            );
+
+        } else {
+
+            // Carousel items
+            function _renderKostPict({ item }) {
+
+                return (
+                    <ImageBackground
+                        style={styles.backgroundImg}
+                        source={{ uri: item.url }}
+                    />
+                )
+            }
+
+            return (
+                <View style={styles.kostCarouselContainer}>
+                    <Carousel
+                        layout={"default"}
+                        ref={kostPictRef}
+                        data={dataArray}
+                        itemWidth={AppStyle.windowSize.width}
+                        sliderWidth={AppStyle.windowSize.width}
+                        renderItem={_renderKostPict}
+                    />
+                </View>
             )
         }
-
-        return (
-            <View style={styles.kostCarouselContainer}>
-                <Carousel
-                    layout={"default"}
-                    ref={kostPictRef}
-                    data={kostPictList}
-                    itemWidth={AppStyle.windowSize.width}
-                    sliderWidth={AppStyle.windowSize.width}
-                    renderItem={_renderKostPict}
-                />
-            </View>
-        )
     }
 
     function KostDescription() {
 
-        // Function state
-        var [kostDesc, setKostDesc] = useState('')
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Variables
+        const skeletonPlaceholder = [1, 2, 3]
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        // Get the data via axios get request
+        const { data, error } = useAxiosGet(kostAPI, '/' + kostID, 10000);
 
-            // triggers the http get request to /{kostID} url in the kost service to fetch the kost description
-            kostAPI.get('/' + kostID, {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostDesc(response.data.kost_desc)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+        if (data === null || error) {
+
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
 
-        return (
-            <View style={styles.descContainer} >
-                <View style={styles.descTitle}>
-                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
+            return (
+                <View style={styles.descContainer} >
+                    <View style={styles.descTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
+                    </View>
+                    {
+                        skeletonPlaceholder.map((value, index) => {
+                            return (
+                                <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                    <SkeletonLoading />
+                                </View>
+                            )
+                        })
+                    }
                 </View>
-                <View style={styles.descBody}>
-                    <Text style={{ fontSize: Normalize(14) }}>
-                        {kostDesc}
-                    </Text>
+            );
+
+        } else {
+            return (
+                <View style={styles.descContainer} >
+                    <View style={styles.descTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
+                    </View>
+                    <View>
+                        <Text style={{ fontSize: Normalize(14) }}>
+                            {data.kost_desc}
+                        </Text>
+                    </View>
                 </View>
-            </View>
-        )
+            )
+        }
 
     }
 
     function KostFacilities() {
 
-        // Function state
-        var [kostFacilities, setKostFacilities] = useState([])
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Variables
+        const skeletonPlaceholder = [1, 2, 3]
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/facilities', 10000);
 
-            // triggers the http get request to /{kostID}/facilities url in the kost service to fetch the list of kost facilities
-            kostAPI.get('/' + kostID + '/facilities', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostFacilities(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+        if (dataArray === null || error) {
+
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
 
-        function MappedFacilities(props) {
+            return (
+                <View style={styles.facilitiesContainer} >
+                    <View style={styles.facilitiesTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
+                    </View>
+                    {
+                        skeletonPlaceholder.map((value, index) => {
+                            return (
+                                <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                    <SkeletonLoading />
+                                </View>
+                            )
+                        })
+                    }
+                </View>
+            );
 
-            if (kostFacilities === null) {
-                return null
-            } else {
+        } else {
+
+            function MappedFacilities(props) {
                 return (
-                    kostFacilities.map((item, index) => {
-
+                    dataArray.map((item, index) => {
                         return (
                             <Facilities key={index} facCategory={props.category} facDesc={item.fac_desc} />
                         )
@@ -186,282 +199,347 @@ export default function KostDetail({ route, navigation }) {
                 )
             }
 
+            return (
+                <View style={styles.facilitiesContainer} >
+                    <View style={styles.facilitiesTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
+                    </View>
+                    <View style={styles.facilitiesBody}>
+                        <MappedFacilities category={0} />
+                    </View>
+                </View>
+            )
         }
-
-        return (
-            <View style={styles.facilitiesContainer} >
-                <View style={styles.facilitiesTitle}>
-                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
-                </View>
-                <View style={styles.facilitiesBody}>
-                    <MappedFacilities category={0} />
-                </View>
-            </View>
-        )
     }
 
     function KostLocation() {
 
-        // Function state 
-        var [latitude, setLatitude] = useState('')
-        var [longitude, setLongitude] = useState('')
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Get the data via axios get request
+        const { data, error } = useAxiosGet(kostAPI, '/' + kostID, 10000);
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        if (data === null || error) {
 
-            // triggers the http get request to /{kostID} url in the kost service to fetch the kost location
-            kostAPI.get('/' + kostID, {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setLatitude(response.data.latitude)
-                    setLongitude(response.data.longitude)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
 
-        return (
-            <View style={styles.locationContainer} >
-                <View style={styles.locationTitle}>
-                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
+            return (
+                <View style={styles.locationContainer} >
+                    <View style={styles.locationTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
+                    </View>
+                    <View style={[styles.locationBody, { backgroundColor: '#ebebeb', overflow: 'hidden' }]}>
+                        <SkeletonLoading />
+                    </View>
                 </View>
-                <View style={styles.locationBody}>
-                    <MapShow latitude={latitude} longitude={longitude} />
+            );
+
+        } else {
+            return (
+                <View style={styles.locationContainer} >
+                    <View style={styles.locationTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
+                    </View>
+                    <View style={styles.locationBody}>
+                        <MapShow latitude={data.latitude} longitude={data.longitude} />
+                    </View>
                 </View>
-            </View>
-        )
+            )
+        }
     }
 
     function KostBenchmark() {
 
-        // Function state
-        var [kostBenchmark, setKostBenchmark] = useState([])
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Variables
+        const skeletonPlaceholder = [1, 2, 3]
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/benchmark', 10000);
 
-            // triggers the http get request to /{kostID}/benchmark url in the kost service to fetch the list of kost nearby benchmark
-            kostAPI.get('/' + kostID + '/benchmark', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostBenchmark(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+        if (dataArray === null || error) {
+
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
 
-        return (
-            <View style={styles.benchmarkContainer}>
-                <View style={styles.benchmarkTitle}>
-                    <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                    <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
-                </View >
-                <View style={{ flexDirection: 'column' }}>
-                    {
-                        kostBenchmark.map((item, index) => {
-
-                            return (
-                                <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                    <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                    {'   '}
-                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.benchmark_desc}</Text>
-                                </Text>
-                            )
-                        })
-                    }
+            return (
+                <View style={styles.benchmarkContainer}>
+                    <View style={styles.benchmarkTitle}>
+                        <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
+                    </View >
+                    <View style={{ flexDirection: 'column' }}>
+                        {
+                            skeletonPlaceholder.map((item, index) => {
+                                return (
+                                    <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                        <SkeletonLoading />
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
                 </View>
-            </View>
-        )
+            );
+
+        } else {
+            return (
+                <View style={styles.benchmarkContainer}>
+                    <View style={styles.benchmarkTitle}>
+                        <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
+                    </View >
+                    <View style={{ flexDirection: 'column' }}>
+                        {
+                            dataArray.map((item, index) => {
+                                return (
+                                    <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                                        <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
+                                        {'   '}
+                                        <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.benchmark_desc}</Text>
+                                    </Text>
+                                )
+                            })
+                        }
+                    </View>
+                </View>
+            )
+        }
     }
+
     function KostAccessibility() {
 
-        // Function state
-        var [kostAccessibility, setKostAccessibility] = useState([])
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Variables
+        const skeletonPlaceholder = [1, 2, 3]
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/access', 10000);
 
-            // triggers the http get request to /{kostID}/access url in the kost service to fetch the list of kost nearby accessibility
-            kostAPI.get('/' + kostID + '/access', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostAccessibility(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+        if (dataArray === null || error) {
+
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
 
-        return (
-            <View style={styles.accessibilityContainer}>
-                <View style={styles.accessibilityTitle}>
-                    <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                    <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
+            return (
+                <View style={styles.accessibilityContainer}>
+                    <View style={styles.accessibilityTitle}>
+                        <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
+                    </View>
+                    <View style={{ flexDirection: 'column' }}>
+                        {
+                            skeletonPlaceholder.map((item, index) => {
+                                return (
+                                    <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                        <SkeletonLoading />
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
                 </View>
-                <View style={{ flexDirection: 'column' }}>
-                    {
-                        kostAccessibility.map((item, index) => {
+            );
 
-                            return (
-                                <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                    <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
-                                    {'   '}
-                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.accessibility_desc}</Text>
-                                </Text>
-                            )
-                        })
-                    }
+        } else {
+            return (
+                <View style={styles.accessibilityContainer}>
+                    <View style={styles.accessibilityTitle}>
+                        <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
+                    </View>
+                    <View style={{ flexDirection: 'column' }}>
+                        {
+                            dataArray.map((item, index) => {
+
+                                return (
+                                    <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                                        <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
+                                        {'   '}
+                                        <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.accessibility_desc}</Text>
+                                    </Text>
+                                )
+                            })
+                        }
+                    </View>
                 </View>
-            </View>
-        )
+            )
+        }
     }
     function KostAround() {
 
-        // Function state
-        var [kostAround, setKostAround] = useState([])
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // Variables
+        const skeletonPlaceholder = [1, 2, 3]
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/around', 10000);
 
-            // triggers the http get request to /{kostID}/around url in the kost service to fetch the list of kost nearby landmark
-            kostAPI.get('/' + kostID + '/around', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostAround(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.message);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
+        if (dataArray === null || error) {
+
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
             }
-        }, []);
-
-        function MappedAroundKost() {
 
             return (
-                kostAround.map((item, index) => {
+                <View style={styles.aroundKostContainer}>
+                    <View style={styles.aroundKostTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
+                    </View>
+                    <View style={styles.aroundKostBody}>
+                        {
+                            skeletonPlaceholder.map((value, index) => {
+                                return (
+                                    <View key={index} style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                        <SkeletonLoading />
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
+                </View>
+            );
 
-                    return (
-                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                            <Icons IconID={item.icon_id} />
-                            <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.around_desc}</Text>
-                        </View>
-                    )
-                })
+        } else {
+            function MappedAroundKost() {
+                return (
+                    dataArray.map((item, index) => {
+
+                        return (
+                            <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                <Icons IconID={item.icon_id} />
+                                <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.around_desc}</Text>
+                            </View>
+                        )
+                    })
+                )
+            }
+
+            return (
+                <View style={styles.aroundKostContainer}>
+                    <View style={styles.aroundKostTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
+                    </View>
+                    <View style={styles.aroundKostBody}>
+                        <MappedAroundKost />
+                    </View>
+                </View>
             )
         }
-
-        return (
-            <View style={styles.aroundKostContainer}>
-                <View style={styles.aroundKostTitle}>
-                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
-                </View>
-                <View style={styles.aroundKostBody}>
-                    <MappedAroundKost />
-                </View>
-            </View>
-        )
     }
 
     function KostRating() {
 
-        // Function state
-        var [kostReview, setKostReview] = useState([])
+        // // Function state
+        // var [kostReview, setKostReview] = useState([])
 
-        // trigger after the first render / component update / component unmount
-        useEffect(() => {
+        // // trigger after the first render / component update / component unmount
+        // useEffect(() => {
 
-            // creates the cancel token source
-            cancelSource = axios.CancelToken.source()
+        //     // creates the cancel token source
+        //     cancelSource = axios.CancelToken.source()
 
-            // triggers the http get request to /{kostID}/review url in the kost service to fetch the list of other user review about the kost
-            kostAPI.get('/' + kostID + '/review', {
-                cancelToken: cancelSource.token
-            })
-                .then(response => {
-                    setKostReview(response.data)
-                })
-                .catch(error => {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error.response.data);
-                    } else {
-                        console.log(error.response.data)
-                    }
-                });
-            return () => {
-                cancelSource.cancel();
-            }
-        }, []);
+        //     // triggers the http get request to /{kostID}/review url in the kost service to fetch the list of other user review about the kost
+        //     kostAPI.get('/' + kostID + '/review', {
+        //         cancelToken: cancelSource.token
+        //     })
+        //         .then(response => {
+        //             setKostReview(response.data)
+        //         })
+        //         .catch(error => {
+        //             if (axios.isCancel(error)) {
+        //                 // TODO: development only
+        //                 console.log('Request canceled', error.response.data);
+        //             } else {
+        //                 console.log(error.response.data)
+        //             }
+        //         });
+        //     return () => {
+        //         cancelSource.cancel();
+        //     }
+        // }, []);
+
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
+
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/review', 10000);
 
         var cleanliness = 0
         var convenience = 0
         var security = 0
         var facilities = 0
+        var avgTotal = 0
 
-        if (kostReview === null)
-            return null
+        if (dataArray === null || error) {
 
-        if (kostReview.length === 0) {
-            return null
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
+            }
+
+            return (
+                <View style={styles.ratingContainer}>
+                    <View style={styles.ratingTitle}>
+                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Rating</Text>
+                    </View>
+                    <View style={styles.ratingBody}>
+                        <View style={styles.ratingBodyLeft}>
+                            <View style={{ flexDirection: 'row', height: Normalize(24), width: AppStyle.windowSize.width * 0.4, overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                <SkeletonLoading />
+                            </View>
+                        </View>
+                        <View style={styles.ratingBodyRight}>
+                            <View style={{ flexDirection: 'row', height: Normalize(24 * 4), marginTop: Normalize(3), marginBottom: Normalize(3), width: AppStyle.windowSize.width * 0.4, overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                <SkeletonLoading />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            );
+
         } else {
 
-            kostReview.forEach(element => {
-                cleanliness += element.cleanliness
-                convenience += element.convenience
-                security += element.security
-                facilities += element.facilities
-            });
+            if (dataArray.length !== 0) {
+                dataArray.forEach(element => {
+                    cleanliness += element.cleanliness
+                    convenience += element.convenience
+                    security += element.security
+                    facilities += element.facilities
+                });
 
-            var avgTotal = ((cleanliness / kostReview.length) + (convenience / kostReview.length) + (security / kostReview.length) + (facilities / kostReview.length)) / 4
+                avgTotal = ((cleanliness / dataArray.length) + (convenience / dataArray.length) + (security / dataArray.length) + (facilities / dataArray.length)) / 4
+            }
 
             return (
                 <View style={styles.ratingContainer}>
@@ -480,28 +558,28 @@ export default function KostDetail({ route, navigation }) {
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(cleanliness / kostReview.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(cleanliness / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
                                 <Text style={{ fontSize: Normalize(14) }}>Cleanliness</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(convenience / kostReview.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(convenience / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
                                 <Text style={{ fontSize: Normalize(14) }}>Convenience</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(security / kostReview.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(security / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
                                 <Text style={{ fontSize: Normalize(14) }}>Security</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(facilities / kostReview.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(facilities / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
                                 <Text style={{ fontSize: Normalize(14) }}>Facilities</Text>
                             </View>
@@ -1145,17 +1223,17 @@ export default function KostDetail({ route, navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <KostDescription />
+                {/* <KostDescription />
                 <View style={styles.softLines} />
                 <KostFacilities />
-                <View style={styles.softLines} />
-                <KostLocation />
-                <View style={styles.landmarkWrapper}>
+                <View style={styles.softLines} /> */}
+                {/* <KostLocation /> */}
+                {/* <View style={styles.landmarkWrapper}>
                     <KostBenchmark />
                     <View style={styles.verticalLine} />
                     <KostAccessibility />
-                </View>
-                <KostAround />
+                </View> */}
+                {/* <KostAround /> */}
                 <View style={styles.softLines} />
                 <KostRating />
                 <KostReview />
@@ -1266,8 +1344,6 @@ const styles = StyleSheet.create({
     },
     descTitle: {
         marginBottom: Normalize(10),
-    },
-    descBody: {
     },
     facilitiesContainer: {
         top: -Normalize(10),
