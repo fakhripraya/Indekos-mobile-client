@@ -2,10 +2,6 @@ import {
     popUpModalChange
 } from '../../redux';
 import {
-    animated,
-    useTransition,
-} from 'react-spring';
-import {
     Text,
     View,
     StyleSheet,
@@ -15,9 +11,6 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthService, Normalize } from '../../config/app.config';
-
-// creates the react spring animated view
-const AnimatedView = animated(View)
 
 // creates the promised base http client
 const api = axios.create({
@@ -32,12 +25,6 @@ const Splash = ({ navigation }) => {
 
     // hooks
     const dispatch = useDispatch()
-    const transitions = useTransition(null, null, {
-        from: { opacity: 0 },
-        enter: { opacity: 1 },
-        leave: { opacity: 0 },
-        config: { duration: 1000 }
-    })
 
     // trigger the event after the first render 
     useEffect(() => {
@@ -75,11 +62,11 @@ const Splash = ({ navigation }) => {
     }, []);
 
     // Renders the Splash screen
-    return transitions.map(({ key, props }) =>
-        <AnimatedView key={key} style={[props, styles.container]}>
+    return (
+        <View style={styles.container}>
             <ActivityIndicator size="large" color="#0000ff" />
             <Text style={{ fontSize: Normalize(12) }}>Loading Application...</Text>
-        </AnimatedView>
+        </View>
     )
 }
 

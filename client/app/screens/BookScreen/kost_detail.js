@@ -11,9 +11,9 @@ import withDelay from '../../components/HOC/prevent_spam_click';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/book_background';
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { AppStyle, Normalize, KostService, CurrencyPrefix } from '../../config/app.config';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome5, Octicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, InteractionManager, ActivityIndicator } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withDelay(TouchableOpacity);
@@ -36,8 +36,27 @@ export default function KostDetail({ route, navigation }) {
     const bottomSheetRef = useRef(null);
     const sheetCarouselRef = useRef(null);
 
+    // Function Hooks
+    const [isReady, setIsReady] = useState(false)
+
     // Global variable
     let selectedKostRoom = null
+
+    useEffect(() => {
+
+        // prevent update on unmounted component
+        let unmounted = false;
+
+        if (unmounted === false) {
+            InteractionManager.runAfterInteractions(() => {
+                setIsReady(true);
+            });
+        }
+
+        return () => {
+            unmounted = true;
+        }
+    }, [])
 
     function KostPictList() {
 
@@ -883,45 +902,6 @@ export default function KostDetail({ route, navigation }) {
         var [kostRoomDetails, setKostRoomDetails] = useState(null)
         var [kostFacilities, setKostFacilities] = useState([])
 
-        // triggers when the bottom sheet starts opening
-        function _getRoomData() {
-
-            if (selectedKostRoom !== null) {
-
-                axios.all([
-                    kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
-                        cancelToken: cancelSource.token
-                    }).catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.message);
-                        } else {
-                            console.log(error.response.data)
-                        }
-                    }),
-                    kostAPI.get('/' + kostID + '/facilities/room/' + selectedKostRoom.id, {
-                        cancelToken: cancelSource.token
-                    }).catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.message);
-                        } else {
-                            console.log(error.response.data)
-                        }
-                    })
-                ])
-                    .then(responseArr => {
-                        setKostRoomDetails(responseArr[0].data)
-                        setKostFacilities(responseArr[1].data)
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-
-            }
-
-        }
-
         function KostSheetPicts() {
 
             function _renderSheetRoomPicts({ item }) {
@@ -974,17 +954,6 @@ export default function KostDetail({ route, navigation }) {
 
         }
 
-        var roomBookedCount = 0
-        var roomAvailability = 0
-        if (selectedKostRoom !== null) {
-            if (kostRoomDetails !== null) {
-                if (kostRoomDetails.room_booked !== null) {
-                    roomBookedCount = kostRoomDetails.room_booked.length
-                }
-                roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
-            }
-        }
-
         function GenderFilter() {
 
             if (selectedKostRoom === null || kostRoomDetails === null) {
@@ -1021,6 +990,56 @@ export default function KostDetail({ route, navigation }) {
                     )
                 }
 
+            }
+        }
+
+        // triggers when the bottom sheet starts opening
+        function _getRoomData() {
+
+            if (selectedKostRoom !== null) {
+
+                axios.all([
+                    kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
+                        cancelToken: cancelSource.token
+                    }).catch(error => {
+                        if (axios.isCancel(error)) {
+                            // TODO: development only
+                            console.log('Request canceled', error.message);
+                        } else {
+                            console.log(error.response.data)
+                        }
+                    }),
+                    kostAPI.get('/' + kostID + '/facilities/room/' + selectedKostRoom.id, {
+                        cancelToken: cancelSource.token
+                    }).catch(error => {
+                        if (axios.isCancel(error)) {
+                            // TODO: development only
+                            console.log('Request canceled', error.message);
+                        } else {
+                            console.log(error.response.data)
+                        }
+                    })
+                ])
+                    .then(responseArr => {
+                        setKostRoomDetails(responseArr[0].data)
+                        setKostFacilities(responseArr[1].data)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
+
+            }
+
+        }
+
+        var roomBookedCount = 0
+        var roomAvailability = 0
+        if (selectedKostRoom !== null) {
+            if (kostRoomDetails !== null) {
+                if (kostRoomDetails.room_booked !== null) {
+                    roomBookedCount = kostRoomDetails.room_booked.length
+                }
+                roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
             }
         }
 
@@ -1148,73 +1167,87 @@ export default function KostDetail({ route, navigation }) {
         )
     }
 
-    return (
-        //TODO: create function to Prevent double click on navigation, test the leaking memory problem with double click
-        <>
-            <HomeBackground >
-                <View style={styles.header}>
-                    <TouchableOpacityPrevent onPress={() => {
-                        navigation.pop()
-                    }} style={styles.headerIcon}>
-                        <AntDesign name="left" size={Normalize(24)} color="white" />
-                    </TouchableOpacityPrevent>
-                    <View>
-                        <Text style={styles.headerText}>{kostName}</Text>
+    if (isReady === false) {
+        // loading screen
+        return (
+            <View style={styles.loadingScreen}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text style={{ fontSize: Normalize(12) }}>Loading Kost...</Text>
+            </View>
+        )
+    } else {
+        return (
+            //TODO: create function to Prevent double click on navigation, test the leaking memory problem with double click
+            <>
+                <HomeBackground >
+                    <View style={styles.header}>
+                        <TouchableOpacityPrevent onPress={() => {
+                            navigation.pop()
+                        }} style={styles.headerIcon}>
+                            <AntDesign name="left" size={Normalize(24)} color="white" />
+                        </TouchableOpacityPrevent>
+                        <View>
+                            <Text style={styles.headerText}>{kostName}</Text>
+                        </View>
                     </View>
-                </View>
-                <View style={styles.headerLocation}>
-                    <Text style={{ color: 'white', fontSize: Normalize(12) }} >{kostCity}</Text>
-                </View>
-                <KostPictList />
-                <View style={styles.topBorder} />
-                <View style={styles.topTools}>
-                    <View style={styles.toolsLeft}>
-                        <TouchableOpacityPrevent style={styles.toolsButton}>
-                            <Text style={styles.toolsButtonText}>Photo</Text>
-                        </TouchableOpacityPrevent>
-                        <TouchableOpacityPrevent style={styles.toolsButton}>
-                            <Text style={styles.toolsButtonText}>Video</Text>
-                        </TouchableOpacityPrevent>
-                        <TouchableOpacityPrevent style={styles.toolsButton}>
-                            <Text style={styles.toolsButtonText}>360</Text>
-                        </TouchableOpacityPrevent>
+                    <View style={styles.headerLocation}>
+                        <Text style={{ color: 'white', fontSize: Normalize(12) }} >{kostCity}</Text>
                     </View>
-                    <View style={styles.toolsRight}>
-                        <TouchableOpacityPrevent style={styles.toolsIcon}>
-                            <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={'black'} />
-                        </TouchableOpacityPrevent>
-                        <TouchableOpacityPrevent style={styles.toolsIcon}>
-                            <MaterialIcons name="favorite-outline" size={Normalize(18)} color="red" />
-                        </TouchableOpacityPrevent>
+                    <KostPictList />
+                    <View style={styles.topBorder} />
+                    <View style={styles.topTools}>
+                        <View style={styles.toolsLeft}>
+                            <TouchableOpacityPrevent style={styles.toolsButton}>
+                                <Text style={styles.toolsButtonText}>Photo</Text>
+                            </TouchableOpacityPrevent>
+                            <TouchableOpacityPrevent style={styles.toolsButton}>
+                                <Text style={styles.toolsButtonText}>Video</Text>
+                            </TouchableOpacityPrevent>
+                            <TouchableOpacityPrevent style={styles.toolsButton}>
+                                <Text style={styles.toolsButtonText}>360</Text>
+                            </TouchableOpacityPrevent>
+                        </View>
+                        <View style={styles.toolsRight}>
+                            <TouchableOpacityPrevent style={styles.toolsIcon}>
+                                <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={'black'} />
+                            </TouchableOpacityPrevent>
+                            <TouchableOpacityPrevent style={styles.toolsIcon}>
+                                <MaterialIcons name="favorite-outline" size={Normalize(18)} color="red" />
+                            </TouchableOpacityPrevent>
+                        </View>
                     </View>
-                </View>
-                <KostDescription />
-                <View style={styles.softLines} />
-                <KostFacilities />
-                <View style={styles.softLines} />
-                <KostLocation />
-                <View style={styles.landmarkWrapper}>
-                    <KostBenchmark />
-                    <View style={styles.verticalLine} />
-                    <KostAccessibility />
-                </View>
-                <KostAround />
-                <View style={styles.softLines} />
-                <KostRating />
-                <KostReview />
-                <View style={[styles.softLines, { top: Normalize(-40) }]} />
-                <KostRooms />
-                <View style={styles.softLines} />
-                <KostOwner />
-            </HomeBackground>
-            <KostBottomSheet />
-        </>
-    )
-
+                    <KostDescription />
+                    <View style={styles.softLines} />
+                    <KostFacilities />
+                    <View style={styles.softLines} />
+                    <KostLocation />
+                    <View style={styles.landmarkWrapper}>
+                        <KostBenchmark />
+                        <View style={styles.verticalLine} />
+                        <KostAccessibility />
+                    </View>
+                    <KostAround />
+                    <View style={styles.softLines} />
+                    <KostRating />
+                    <KostReview />
+                    <View style={[styles.softLines, { top: Normalize(-40) }]} />
+                    <KostRooms />
+                    <View style={styles.softLines} />
+                    <KostOwner />
+                </HomeBackground>
+                <KostBottomSheet />
+            </>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
 
+    loadingScreen: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     header: {
         width: '100%',
         flexDirection: 'row',
@@ -1239,7 +1272,7 @@ const styles = StyleSheet.create({
     kostCarouselContainer: {
         top: -Normalize(35),
         alignSelf: 'center',
-        backgroundColor: 'black',
+        backgroundColor: 'white',
         width: AppStyle.windowSize.width,
         height: AppStyle.windowSize.height * 0.33,
     },
