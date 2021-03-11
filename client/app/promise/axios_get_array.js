@@ -80,6 +80,7 @@ export const useAxiosGetArrayParams = (service, url, timeout, config) => {
             })
             .catch(error => {
                 if (!unmounted) {
+                    //TODO:error can have response or just a simple string,make it dynamic plz
                     console.log("error: " + error)
                     if (axios.isCancel(error)) {
                         // TODO: development only
