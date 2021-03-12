@@ -5,7 +5,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import MapShow from '../../components/Maps/map_show';
 import { useAxiosGet } from '../../promise/axios_get';
 import { ScrollView } from 'react-native-gesture-handler';
-import Facilities from '../../components/Icons/facilities';
+import { MappedFacilities, Facilities } from '../../components/Icons/facilities';
 import React, { useRef, useState, useEffect } from 'react';
 import withDelay from '../../components/HOC/prevent_spam_click';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
@@ -186,24 +186,13 @@ export default function KostDetail({ route, navigation }) {
             );
 
         } else {
-
-            function MappedFacilities(props) {
-                return (
-                    dataArray.map((item, index) => {
-                        return (
-                            <Facilities key={index} facCategory={props.category} facDesc={item.fac_desc} />
-                        )
-                    })
-                )
-            }
-
             return (
                 <View style={styles.facilitiesContainer} >
                     <View style={styles.facilitiesTitle}>
                         <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
                     </View>
                     <View style={styles.facilitiesBody}>
-                        <MappedFacilities category={0} />
+                        <MappedFacilities facilities={dataArray} category={0} />
                     </View>
                 </View>
             )
@@ -900,7 +889,7 @@ export default function KostDetail({ route, navigation }) {
 
         // Function state
         var [kostRoomDetails, setKostRoomDetails] = useState(null)
-        var [kostFacilities, setKostFacilities] = useState([])
+        var [kostFacilities, setKostFacilities] = useState(null)
 
         // triggers when the bottom sheet starts opening
         function _getRoomData() {
@@ -910,21 +899,15 @@ export default function KostDetail({ route, navigation }) {
                     kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
                         cancelToken: cancelSource.token
                     }).catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.message);
-                        } else {
-                            console.log(error.response.data)
+                        if (!axios.isCancel(error)) {
+                            console.log(error)
                         }
                     }),
                     kostAPI.get('/' + kostID + '/facilities/room/' + selectedKostRoom.id, {
                         cancelToken: cancelSource.token
                     }).catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.message);
-                        } else {
-                            console.log(error.response.data)
+                        if (!axios.isCancel(error)) {
+                            console.log(error)
                         }
                     })
                 ])
@@ -953,7 +936,11 @@ export default function KostDetail({ route, navigation }) {
             }
 
             if (kostRoomDetails === null) {
-                return null
+                return (
+                    <View style={[styles.sheetCarouselContainer, { backgroundColor: '#ebebeb', overflow: 'hidden' }]}>
+                        <SkeletonLoading />
+                    </View>
+                )
             } else {
                 return (
                     <View style={styles.sheetCarouselContainer}>
@@ -971,180 +958,301 @@ export default function KostDetail({ route, navigation }) {
 
         }
 
-        function MappedFacilities(props) {
+        function KostSheetTitle() {
 
-            if (kostFacilities === null)
-                return null
-
-            if (kostFacilities.length === 0) {
-                return null
+            if (kostRoomDetails === null) {
+                return (
+                    <View style={styles.sheetRoomTitle}>
+                        <View style={{ width: AppStyle.windowSize.width * 0.5, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                            <SkeletonLoading />
+                        </View>
+                    </View>
+                )
             } else {
                 return (
-                    kostFacilities.map((item, index) => {
-
-                        return (
-                            <Facilities key={index} facCategory={props.category} facDesc={item.fac_desc} />
-                        )
-                    })
+                    <View style={styles.sheetRoomTitle}>
+                        <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
+                    </View>
                 )
             }
 
         }
 
-        function GenderFilter() {
+        function KostSheetTopInfoLeft() {
 
-            if (selectedKostRoom === null || kostRoomDetails === null) {
-                return null
+            if (kostRoomDetails === null) {
+                return (
+                    <View style={[styles.sheetTopInfoLeft, { backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.425 }]}>
+                        <SkeletonLoading />
+                    </View>
+                )
             } else {
-
-                if (selectedKostRoom.allowed_gender === "Male") {
-                    return (
-                        <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.male_color, borderRadius: Normalize(10) }}>
-                            <Ionicons name="male" size={Normalize(24)} color="white" />
-                            <Text style={{ color: 'white', fontSize: Normalize(14) }}>Male</Text>
-                        </View>
-                    )
-                }
-                else if (selectedKostRoom.allowed_gender === "Female") {
-                    return (
-                        <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.female_color, borderRadius: Normalize(10) }}>
-                            <Ionicons name="female" size={Normalize(24)} color="white" />
-                            <Text style={{ color: 'white', fontSize: Normalize(14) }}>Female</Text>
-                        </View>
-                    )
-                } else {
-                    return (
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.male_color, borderRadius: Normalize(10), marginRight: Normalize(5) }}>
-                                <Ionicons name="female" size={Normalize(18)} color="white" />
-                                <Text style={{ color: 'white', fontSize: Normalize(12) }}>Male</Text>
+                return (
+                    <View style={styles.sheetTopInfoLeft}>
+                        <View style={styles.sheetTopInfoLeftItem}>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                    <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
+                                </View>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.female_color, borderRadius: Normalize(10) }}>
-                                <Ionicons name="female" size={Normalize(18)} color="white" />
-                                <Text style={{ color: 'white', fontSize: Normalize(12) }}>Female</Text>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                </View>
                             </View>
                         </View>
-                    )
-                }
-
+                        <View style={styles.sheetTopInfoLeftItem}>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                    <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
+                                </View>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                )
             }
+
+        }
+
+        function KostSheetTopInfoRight(props) {
+
+            function GenderFilter() {
+
+                if (selectedKostRoom === null || kostRoomDetails === null) {
+                    return null
+                } else {
+
+                    if (selectedKostRoom.allowed_gender === "Male") {
+                        return (
+                            <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.male_color, borderRadius: Normalize(10) }}>
+                                <Ionicons name="male" size={Normalize(24)} color="white" />
+                                <Text style={{ color: 'white', fontSize: Normalize(14) }}>Male</Text>
+                            </View>
+                        )
+                    }
+                    else if (selectedKostRoom.allowed_gender === "Female") {
+                        return (
+                            <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.female_color, borderRadius: Normalize(10) }}>
+                                <Ionicons name="female" size={Normalize(24)} color="white" />
+                                <Text style={{ color: 'white', fontSize: Normalize(14) }}>Female</Text>
+                            </View>
+                        )
+                    } else {
+                        return (
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.male_color, borderRadius: Normalize(10), marginRight: Normalize(5) }}>
+                                    <Ionicons name="female" size={Normalize(18)} color="white" />
+                                    <Text style={{ color: 'white', fontSize: Normalize(12) }}>Male</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.female_color, borderRadius: Normalize(10) }}>
+                                    <Ionicons name="female" size={Normalize(18)} color="white" />
+                                    <Text style={{ color: 'white', fontSize: Normalize(12) }}>Female</Text>
+                                </View>
+                            </View>
+                        )
+                    }
+
+                }
+            }
+
+            if (kostRoomDetails === null) {
+                return (
+                    <View style={[styles.sheetTopInfoRight, { backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.425 }]}>
+                        <SkeletonLoading />
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={styles.sheetTopInfoRight}>
+                        <View style={styles.sheetTopInfoRightItem}>
+                            <GenderFilter />
+                        </View>
+                        <View style={styles.sheetTopInfoRightItem}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (props.roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
+                                <Text style={{ color: props.roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: Normalize(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (props.roomAvailability > 2 ? props.roomAvailability + " rooms" : (props.roomAvailability < 2 ? props.roomAvailability + " room left" : props.roomAvailability + " rooms left"))}</Text>
+                            </View>
+                        </View>
+                    </View>
+                )
+            }
+
+        }
+
+        function KostSheetSharingFacility() {
+
+            if (kostRoomDetails === null || kostFacilities === null) {
+                return (
+                    <View style={styles.sheetSharingFac}>
+                        <View style={styles.sheetSharingFacTitle}>
+                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                        </View>
+                        <View style={styles.sheetSharingFacBody}>
+                            <View style={{ backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.9, height: Normalize(24) }}>
+                                <SkeletonLoading />
+                            </View>
+                        </View>
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={styles.sheetSharingFac}>
+                        <View style={styles.sheetSharingFacTitle}>
+                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                        </View>
+                        <View style={styles.sheetSharingFacBody}>
+                            <MappedFacilities facilities={kostFacilities} category={1} />
+                        </View>
+                    </View>
+                )
+            }
+
+        }
+
+        function KostSheetRoomFacility() {
+
+            if (kostRoomDetails === null || kostFacilities === null) {
+                return (
+                    <View style={styles.sheetRoomFac}>
+                        <View style={styles.sheetRoomFacTitle}>
+                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                        </View>
+                        <View style={styles.sheetRoomFacBody}>
+                            <View style={{ backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.9, height: Normalize(24) }}>
+                                <SkeletonLoading />
+                            </View>
+                        </View>
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={styles.sheetRoomFac}>
+                        <View style={styles.sheetRoomFacTitle}>
+                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
+                        </View>
+                        <View style={styles.sheetRoomFacBody}>
+                            <MappedFacilities facilities={kostFacilities} category={2} />
+                        </View>
+                    </View>
+                )
+            }
+
+        }
+
+        function KostSheetNotes() {
+
+            let SkeletonPlaceholder = [0, 1, 2]
+
+            if (kostRoomDetails === null) {
+                return (
+                    <View style={styles.sheetNotes}>
+                        <View style={styles.sheetNotesTitle}>
+                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                        </View>
+                        <View style={styles.sheetNotesBody}>
+                            {
+                                SkeletonPlaceholder.map((item, index) => {
+                                    return (
+                                        <View key={index} style={{ backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.9, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3) }}>
+                                            <SkeletonLoading />
+                                        </View>
+                                    )
+                                })
+                            }
+                        </View>
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={styles.sheetNotes}>
+                        <View style={styles.sheetNotesTitle}>
+                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
+                        </View>
+                        <View style={styles.sheetNotesBody}>
+                            <Text style={{ fontSize: Normalize(14) }}>
+                                {selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.comments}
+                            </Text>
+                        </View>
+                    </View>
+                )
+            }
+
+        }
+
+        function KostSheetPriceTag() {
+
+            if (kostRoomDetails === null) {
+                return (
+                    <View style={styles.priceTag}>
+                        <View style={{ backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.45, height: Normalize(24) }}>
+                            <SkeletonLoading />
+                        </View>
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={styles.priceTag}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
+                        </View>
+                        <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
+                    </View>
+                )
+            }
+
         }
 
         function SheetBody() {
-            if (kostRoomDetails === null) {
-                return null
-            } else {
 
-                var roomBookedCount = 0
-                var roomAvailability = 0
-                if (selectedKostRoom !== null) {
-                    if (kostRoomDetails !== null) {
-                        if (kostRoomDetails.room_booked !== null) {
-                            roomBookedCount = kostRoomDetails.room_booked.length
-                        }
-                        roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
+            var roomBookedCount = 0
+            var roomAvailability = 0
+            if (selectedKostRoom !== null) {
+                if (kostRoomDetails !== null) {
+                    if (kostRoomDetails.room_booked !== null) {
+                        roomBookedCount = kostRoomDetails.room_booked.length
                     }
+                    roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
                 }
-
-                return (
-                    <>
-                        <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-                            <KostSheetPicts />
-                            <View style={styles.sheetRoomTitle}>
-                                <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
-                            </View>
-                            <View style={styles.sheetTopInfo}>
-                                <View style={styles.sheetTopInfoLeft}>
-                                    <View style={styles.sheetTopInfoLeftItem}>
-                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-                                                <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
-                                            </View>
-                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
-                                            </View>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View style={styles.sheetTopInfoLeftItem}>
-                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-                                                <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
-                                            </View>
-                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
-                                            </View>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={styles.sheetTopInfoRight}>
-                                    <View style={styles.sheetTopInfoRightItem}>
-                                        <GenderFilter />
-                                    </View>
-                                    <View style={styles.sheetTopInfoRightItem}>
-                                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
-                                            <Text style={{ color: roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: Normalize(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 2 ? roomAvailability + " rooms" : (roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"))}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={styles.sheetSharingFac}>
-                                <View style={styles.sheetSharingFacTitle}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
-                                </View>
-                                <View style={styles.sheetSharingFacBody}>
-                                    <MappedFacilities category={1} />
-                                </View>
-                            </View>
-                            <View style={styles.sheetRoomFac}>
-                                <View style={styles.sheetRoomFacTitle}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
-                                </View>
-                                <View style={styles.sheetRoomFacBody}>
-                                    <MappedFacilities category={2} />
-                                </View>
-                            </View>
-                            <View style={styles.sheetNotes}>
-                                <View style={styles.sheetNotesTitle}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
-                                </View>
-                                <View style={styles.sheetNotesBody}>
-                                    <Text style={{ fontSize: Normalize(14) }}>
-                                        {selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.comments}
-                                    </Text>
-                                </View>
-                            </View>
-                        </ScrollView>
-                        <View style={styles.stickyContainer}>
-                            <View style={styles.priceTag}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
-                                </View>
-                                <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
-                            </View>
-                            <TouchableOpacityPrevent onPress={() => {
-                                bottomSheetRef.current.close();
-                                navigation.push('RoomSelection', {
-                                    room: selectedKostRoom,
-                                    roomDetails: kostRoomDetails,
-                                });
-                            }} style={styles.bookButton}>
-                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
-                            </TouchableOpacityPrevent>
-                        </View>
-                    </>
-                )
             }
+
+            return (
+                <>
+                    <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+                        <KostSheetPicts />
+                        <KostSheetTitle />
+                        <View style={styles.sheetTopInfo}>
+                            <KostSheetTopInfoLeft />
+                            <KostSheetTopInfoRight roomAvailability={roomAvailability} />
+                        </View>
+                        <KostSheetSharingFacility />
+                        <KostSheetRoomFacility />
+                        <KostSheetNotes />
+                    </ScrollView>
+                    <View style={styles.stickyContainer}>
+                        <KostSheetPriceTag />
+                        <TouchableOpacityPrevent onPress={() => {
+                            bottomSheetRef.current.close();
+                            navigation.push('RoomSelection', {
+                                room: selectedKostRoom,
+                                roomDetails: kostRoomDetails,
+                            });
+                        }} style={styles.bookButton}>
+                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
+                        </TouchableOpacityPrevent>
+                    </View>
+                </>
+            )
         }
         return (
             <RBSheet
@@ -1156,7 +1264,7 @@ export default function KostDetail({ route, navigation }) {
                 onOpen={() => { _getRoomData() }}
                 onClose={() => {
                     setKostRoomDetails(null)
-                    setKostFacilities([])
+                    setKostFacilities(null)
                     selectedKostRoom = null
                 }}
                 height={AppStyle.screenSize.height * 0.85}
@@ -1613,6 +1721,7 @@ const styles = StyleSheet.create({
     },
     sheetTopInfoRight: {
         width: '50%',
+        height: '100%',
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -1630,24 +1739,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginTop: Normalize(15),
-        marginBottom: Normalize(15),
         width: AppStyle.windowSize.width * 0.9,
-        height: AppStyle.windowSize.height * 0.1,
     },
     sheetSharingFacTitle: {
         marginBottom: Normalize(10),
     },
     sheetSharingFacBody: {
         flexWrap: 'wrap',
+        alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: Normalize(5),
         justifyContent: 'space-evenly',
     },
     sheetRoomFac: {
         justifyContent: 'center',
         alignItems: 'flex-start',
-        marginTop: Normalize(15),
-        marginBottom: Normalize(15),
+        marginTop: Normalize(10),
         width: AppStyle.windowSize.width * 0.9,
         height: AppStyle.windowSize.height * 0.1,
     },
@@ -1656,16 +1764,18 @@ const styles = StyleSheet.create({
     },
     sheetRoomFacBody: {
         flexWrap: 'wrap',
+        alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: Normalize(5),
         justifyContent: 'space-evenly',
     },
     sheetNotes: {
         justifyContent: 'center',
         alignItems: 'flex-start',
-        marginTop: Normalize(15),
+        marginTop: Normalize(10),
+        marginBottom: Normalize(15),
         width: AppStyle.windowSize.width * 0.9,
-        marginBottom: Normalize(15) + AppStyle.screenSize.width * 0.15,
     },
     sheetNotesTitle: {
         marginBottom: Normalize(10),

@@ -3,8 +3,17 @@ import { Text, View } from 'react-native';
 import { AppStyle, Normalize } from '../../config/app.config';
 import { AntDesign, MaterialCommunityIcons, MaterialIcons, FontAwesome, Entypo, Ionicons, Feather } from '@expo/vector-icons';
 
-function Facilities(props) {
+export function MappedFacilities(props) {
+    return (
+        props.facilities.map((item, index) => {
+            return (
+                <Facilities key={index} facCategory={props.category} facDesc={item.fac_desc} />
+            )
+        })
+    )
+}
 
+export function Facilities(props) {
 
     if (props.facCategory === 0) {
         if (props.facDesc == "AC")
@@ -122,7 +131,4 @@ function Facilities(props) {
             return null
     }
 
-
 }
-
-export default Facilities
