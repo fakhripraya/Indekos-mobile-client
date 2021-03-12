@@ -1133,6 +1133,7 @@ export default function KostDetail({ route, navigation }) {
                                 <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
                             </View>
                             <TouchableOpacityPrevent onPress={() => {
+                                bottomSheetRef.current.close();
                                 navigation.push('RoomSelection', {
                                     room: selectedKostRoom,
                                     roomDetails: kostRoomDetails,
