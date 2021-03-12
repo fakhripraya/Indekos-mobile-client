@@ -902,6 +902,43 @@ export default function KostDetail({ route, navigation }) {
         var [kostRoomDetails, setKostRoomDetails] = useState(null)
         var [kostFacilities, setKostFacilities] = useState([])
 
+        // triggers when the bottom sheet starts opening
+        function _getRoomData() {
+            if (selectedKostRoom !== null) {
+
+                axios.all([
+                    kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
+                        cancelToken: cancelSource.token
+                    }).catch(error => {
+                        if (axios.isCancel(error)) {
+                            // TODO: development only
+                            console.log('Request canceled', error.message);
+                        } else {
+                            console.log(error.response.data)
+                        }
+                    }),
+                    kostAPI.get('/' + kostID + '/facilities/room/' + selectedKostRoom.id, {
+                        cancelToken: cancelSource.token
+                    }).catch(error => {
+                        if (axios.isCancel(error)) {
+                            // TODO: development only
+                            console.log('Request canceled', error.message);
+                        } else {
+                            console.log(error.response.data)
+                        }
+                    })
+                ])
+                    .then(responseArr => {
+                        setKostRoomDetails(responseArr[0].data)
+                        setKostFacilities(responseArr[1].data)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
+
+            }
+        }
+
         function KostSheetPicts() {
 
             function _renderSheetRoomPicts({ item }) {
@@ -993,158 +1030,125 @@ export default function KostDetail({ route, navigation }) {
             }
         }
 
-        // triggers when the bottom sheet starts opening
-        function _getRoomData() {
-
-            if (selectedKostRoom !== null) {
-
-                axios.all([
-                    kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
-                        cancelToken: cancelSource.token
-                    }).catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.message);
-                        } else {
-                            console.log(error.response.data)
-                        }
-                    }),
-                    kostAPI.get('/' + kostID + '/facilities/room/' + selectedKostRoom.id, {
-                        cancelToken: cancelSource.token
-                    }).catch(error => {
-                        if (axios.isCancel(error)) {
-                            // TODO: development only
-                            console.log('Request canceled', error.message);
-                        } else {
-                            console.log(error.response.data)
-                        }
-                    })
-                ])
-                    .then(responseArr => {
-                        setKostRoomDetails(responseArr[0].data)
-                        setKostFacilities(responseArr[1].data)
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-
-            }
-
-        }
-
-        var roomBookedCount = 0
-        var roomAvailability = 0
-        if (selectedKostRoom !== null) {
-            if (kostRoomDetails !== null) {
-                if (kostRoomDetails.room_booked !== null) {
-                    roomBookedCount = kostRoomDetails.room_booked.length
-                }
-                roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
-            }
-        }
-
         function SheetBody() {
-            return (
-                <>
-                    <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-                        <KostSheetPicts />
-                        <View style={styles.sheetRoomTitle}>
-                            <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
-                        </View>
-                        <View style={styles.sheetTopInfo}>
-                            <View style={styles.sheetTopInfoLeft}>
-                                <View style={styles.sheetTopInfoLeftItem}>
-                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
+            if (kostRoomDetails === null) {
+                return null
+            } else {
+
+                var roomBookedCount = 0
+                var roomAvailability = 0
+                if (selectedKostRoom !== null) {
+                    if (kostRoomDetails !== null) {
+                        if (kostRoomDetails.room_booked !== null) {
+                            roomBookedCount = kostRoomDetails.room_booked.length
+                        }
+                        roomAvailability = kostRoomDetails.room_details.length - roomBookedCount
+                    }
+                }
+
+                return (
+                    <>
+                        <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+                            <KostSheetPicts />
+                            <View style={styles.sheetRoomTitle}>
+                                <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
+                            </View>
+                            <View style={styles.sheetTopInfo}>
+                                <View style={styles.sheetTopInfoLeft}>
+                                    <View style={styles.sheetTopInfoLeftItem}>
+                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                                <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
+                                            </View>
+                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
+                                            </View>
                                         </View>
-                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
+                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                            </View>
                                         </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                    <View style={styles.sheetTopInfoLeftItem}>
+                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                                <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
+                                            </View>
+                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
+                                            </View>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                            <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                                <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
+                                            </View>
                                         </View>
                                     </View>
                                 </View>
-                                <View style={styles.sheetTopInfoLeftItem}>
-                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
-                                        </View>
-                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
-                                        </View>
+                                <View style={styles.sheetTopInfoRight}>
+                                    <View style={styles.sheetTopInfoRightItem}>
+                                        <GenderFilter />
                                     </View>
-                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
+                                    <View style={styles.sheetTopInfoRightItem}>
+                                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
+                                            <Text style={{ color: roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: Normalize(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 2 ? roomAvailability + " rooms" : (roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"))}</Text>
                                         </View>
                                     </View>
                                 </View>
                             </View>
-                            <View style={styles.sheetTopInfoRight}>
-                                <View style={styles.sheetTopInfoRightItem}>
-                                    <GenderFilter />
+                            <View style={styles.sheetSharingFac}>
+                                <View style={styles.sheetSharingFacTitle}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
                                 </View>
-                                <View style={styles.sheetTopInfoRightItem}>
-                                    <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
-                                        <Text style={{ color: roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: Normalize(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 2 ? roomAvailability + " rooms" : (roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"))}</Text>
-                                    </View>
+                                <View style={styles.sheetSharingFacBody}>
+                                    <MappedFacilities category={1} />
                                 </View>
                             </View>
+                            <View style={styles.sheetRoomFac}>
+                                <View style={styles.sheetRoomFacTitle}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
+                                </View>
+                                <View style={styles.sheetRoomFacBody}>
+                                    <MappedFacilities category={2} />
+                                </View>
+                            </View>
+                            <View style={styles.sheetNotes}>
+                                <View style={styles.sheetNotesTitle}>
+                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
+                                </View>
+                                <View style={styles.sheetNotesBody}>
+                                    <Text style={{ fontSize: Normalize(14) }}>
+                                        {selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.comments}
+                                    </Text>
+                                </View>
+                            </View>
+                        </ScrollView>
+                        <View style={styles.stickyContainer}>
+                            <View style={styles.priceTag}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
+                                </View>
+                                <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
+                            </View>
+                            <TouchableOpacityPrevent onPress={() => {
+                                navigation.push('RoomSelection', {
+                                    room: selectedKostRoom,
+                                    roomDetails: kostRoomDetails,
+                                });
+                            }} style={styles.bookButton}>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
+                            </TouchableOpacityPrevent>
                         </View>
-                        <View style={styles.sheetSharingFac}>
-                            <View style={styles.sheetSharingFacTitle}>
-                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
-                            </View>
-                            <View style={styles.sheetSharingFacBody}>
-                                <MappedFacilities category={1} />
-                            </View>
-                        </View>
-                        <View style={styles.sheetRoomFac}>
-                            <View style={styles.sheetRoomFacTitle}>
-                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
-                            </View>
-                            <View style={styles.sheetRoomFacBody}>
-                                <MappedFacilities category={2} />
-                            </View>
-                        </View>
-                        <View style={styles.sheetNotes}>
-                            <View style={styles.sheetNotesTitle}>
-                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
-                            </View>
-                            <View style={styles.sheetNotesBody}>
-                                <Text style={{ fontSize: Normalize(14) }}>
-                                    {selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.comments}
-                                </Text>
-                            </View>
-                        </View>
-                    </ScrollView>
-                    <View style={styles.stickyContainer}>
-                        <View style={styles.priceTag}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
-                            </View>
-                            <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
-                        </View>
-                        <TouchableOpacityPrevent onPress={() => {
-                            navigation.push('RoomSelection', {
-                                room: selectedKostRoom,
-                                roomDetails: kostRoomDetails,
-                            });
-                        }} style={styles.bookButton}>
-                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
-                        </TouchableOpacityPrevent>
-                    </View>
-                </>
-            )
+                    </>
+                )
+            }
         }
         return (
             <RBSheet
                 ref={bottomSheetRef}
+                animationType={"slide"}
                 closeOnDragDown={true}
                 dragFromTopOnly={true}
                 closeOnPressMask={false}
@@ -1155,10 +1159,13 @@ export default function KostDetail({ route, navigation }) {
                     selectedKostRoom = null
                 }}
                 height={AppStyle.screenSize.height * 0.85}
-                openDuration={500}
+                openDuration={1000}
                 customStyles={{
                     wrapper: {
                         backgroundColor: "transparent"
+                    },
+                    container: {
+                        height: AppStyle.windowSize.height * 0.85
                     },
                     draggableIcon: {
                         backgroundColor: "gray"
