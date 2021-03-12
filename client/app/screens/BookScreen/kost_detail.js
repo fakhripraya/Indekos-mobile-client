@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Icons from '../../components/Icons/icons';
 import Carousel from 'react-native-snap-carousel';
-import BottomSheet from 'reanimated-bottom-sheet';
+import RBSheet from "react-native-raw-bottom-sheet";
 import MapShow from '../../components/Maps/map_show';
 import { useAxiosGet } from '../../promise/axios_get';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -773,8 +773,8 @@ export default function KostDetail({ route, navigation }) {
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
                                 <TouchableOpacityPrevent onPress={() => {
-                                    selectedKostRoom = props.kostRoom
-                                    bottomSheetRef.current.snapTo(0)
+                                    selectedKostRoom = props.kostRoom;
+                                    bottomSheetRef.current.open();
                                 }}>
                                     <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
                                 </TouchableOpacityPrevent>
@@ -1043,128 +1043,131 @@ export default function KostDetail({ route, navigation }) {
             }
         }
 
-        const SheetHeader = () => (
-            <View style={styles.sheetHeader}>
-                <Ionicons name="ios-chevron-down-outline" size={Normalize(14)} color="gray" />
-                <Text style={{ fontSize: Normalize(12), color: 'gray', marginLeft: Normalize(10) }}>Close</Text>
-            </View>
-        );
-
-        const SheetBody = () => (
-            <View style={{ backgroundColor: 'white', height: AppStyle.windowSize.height * 0.8, alignItems: 'center' }}>
-                <ScrollView>
-                    <KostSheetPicts />
-                    <View style={styles.sheetRoomTitle}>
-                        <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
-                    </View>
-                    <View style={styles.sheetTopInfo}>
-                        <View style={styles.sheetTopInfoLeft}>
-                            <View style={styles.sheetTopInfoLeftItem}>
-                                <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                    <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
+        function SheetBody() {
+            return (
+                <>
+                    <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+                        <KostSheetPicts />
+                        <View style={styles.sheetRoomTitle}>
+                            <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
+                        </View>
+                        <View style={styles.sheetTopInfo}>
+                            <View style={styles.sheetTopInfoLeft}>
+                                <View style={styles.sheetTopInfoLeftItem}>
+                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
+                                        </View>
+                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                    <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                            <View style={styles.sheetTopInfoLeftItem}>
-                                <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                    <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
+                                <View style={styles.sheetTopInfoLeftItem}>
+                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
+                                        </View>
+                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                    <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
+                                    <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                        <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-                        </View>
-                        <View style={styles.sheetTopInfoRight}>
-                            <View style={styles.sheetTopInfoRightItem}>
-                                <GenderFilter />
-                            </View>
-                            <View style={styles.sheetTopInfoRightItem}>
-                                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
-                                    <Text style={{ color: roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: Normalize(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 2 ? roomAvailability + " rooms" : (roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"))}</Text>
+                            <View style={styles.sheetTopInfoRight}>
+                                <View style={styles.sheetTopInfoRightItem}>
+                                    <GenderFilter />
+                                </View>
+                                <View style={styles.sheetTopInfoRightItem}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
+                                        <Text style={{ color: roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: Normalize(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (roomAvailability > 2 ? roomAvailability + " rooms" : (roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"))}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
+                        <View style={styles.sheetSharingFac}>
+                            <View style={styles.sheetSharingFacTitle}>
+                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                            </View>
+                            <View style={styles.sheetSharingFacBody}>
+                                <MappedFacilities category={1} />
+                            </View>
+                        </View>
+                        <View style={styles.sheetRoomFac}>
+                            <View style={styles.sheetRoomFacTitle}>
+                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
+                            </View>
+                            <View style={styles.sheetRoomFacBody}>
+                                <MappedFacilities category={2} />
+                            </View>
+                        </View>
+                        <View style={styles.sheetNotes}>
+                            <View style={styles.sheetNotesTitle}>
+                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
+                            </View>
+                            <View style={styles.sheetNotesBody}>
+                                <Text style={{ fontSize: Normalize(14) }}>
+                                    {selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.comments}
+                                </Text>
+                            </View>
+                        </View>
+                    </ScrollView>
+                    <View style={styles.stickyContainer}>
+                        <View style={styles.priceTag}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
+                            </View>
+                            <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
+                        </View>
+                        <TouchableOpacityPrevent onPress={() => {
+                            navigation.push('RoomSelection', {
+                                room: selectedKostRoom,
+                                roomDetails: kostRoomDetails,
+                            });
+                        }} style={styles.bookButton}>
+                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
+                        </TouchableOpacityPrevent>
                     </View>
-                    <View style={styles.sheetSharingFac}>
-                        <View style={styles.sheetSharingFacTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
-                        </View>
-                        <View style={styles.sheetSharingFacBody}>
-                            <MappedFacilities category={1} />
-                        </View>
-                    </View>
-                    <View style={styles.sheetRoomFac}>
-                        <View style={styles.sheetRoomFacTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
-                        </View>
-                        <View style={styles.sheetRoomFacBody}>
-                            <MappedFacilities category={2} />
-                        </View>
-                    </View>
-                    <View style={styles.sheetNotes}>
-                        <View style={styles.sheetNotesTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
-                        </View>
-                        <View style={styles.sheetNotesBody}>
-                            <Text style={{ fontSize: Normalize(14) }}>
-                                {selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.comments}
-                            </Text>
-                        </View>
-                    </View>
-                </ScrollView>
-                <View style={styles.stickyContainer}>
-                    <View style={styles.priceTag}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
-                        </View>
-                        <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
-                    </View>
-                    <TouchableOpacityPrevent onPress={() => {
-                        navigation.push('RoomSelection', {
-                            room: selectedKostRoom,
-                            roomDetails: kostRoomDetails,
-                        });
-                    }} style={styles.bookButton}>
-                        <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
-                    </TouchableOpacityPrevent>
-                </View>
-            </View>
-        );
-
+                </>
+            )
+        }
         return (
-            <BottomSheet
-                initialSnap={1}
+            <RBSheet
                 ref={bottomSheetRef}
-                renderHeader={SheetHeader}
-                renderContent={SheetBody}
-                onOpenStart={() => { _getRoomData() }}
-                enabledContentGestureInteraction={false}
-                enabledContentTapInteraction={false}
-                onCloseEnd={() => {
+                closeOnDragDown={true}
+                dragFromTopOnly={true}
+                closeOnPressMask={false}
+                onOpen={() => { _getRoomData() }}
+                onClose={() => {
                     setKostRoomDetails(null)
                     setKostFacilities([])
                     selectedKostRoom = null
                 }}
-                snapPoints={[AppStyle.windowSize.height * 0.85, 0]}
-            />
-        )
+                height={AppStyle.screenSize.height * 0.85}
+                openDuration={500}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: "transparent"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "gray"
+                    },
+                }}
+            >
+                <SheetBody />
+            </RBSheet>
+        );
     }
 
     if (isReady === false) {
@@ -1666,14 +1669,13 @@ const styles = StyleSheet.create({
     },
     stickyContainer: {
         elevation: 10,
-        position: 'absolute',
+        // position: 'absolute',
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'white',
         justifyContent: 'space-between',
         width: AppStyle.screenSize.width,
         height: AppStyle.screenSize.width * 0.15,
-        top: AppStyle.windowSize.height * 0.8 - AppStyle.screenSize.width * 0.15
     },
     priceTag: {
         flexDirection: 'row',
