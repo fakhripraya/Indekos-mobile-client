@@ -8,8 +8,6 @@ import { AppStyle, Normalize } from '../../config/app.config';
 
 // BookBackground is the background image for the book stack
 export default function BookBackground(props) {
-
-    // Renders the HomeStack background
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             <View style={{ width: '100%', height: AppStyle.screenSize.height }}>

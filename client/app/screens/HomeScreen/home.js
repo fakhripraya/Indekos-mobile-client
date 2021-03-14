@@ -5,15 +5,15 @@ import {
     ImageBackground,
 } from 'react-native';
 import axios from 'axios';
-import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import React, { useRef, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { useAxiosGet } from '../../promise/axios_get';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/home_background';
-import { AppStyle, Normalize, AuthService, KostService, UseForceUpdate } from '../../config/app.config';
+import { AppStyle, Normalize, AuthService, KostService } from '../../config/app.config';
 import { useAxiosGetArray, useAxiosGetArrayParams } from '../../promise/axios_get_array';
 
 // creates the promised base http auth client
@@ -25,9 +25,6 @@ const authAPI = axios.create({
 const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
 })
-
-// axios cancel source
-var cancelSource
 
 export default function Home({ navigation }) {
 

@@ -8,8 +8,6 @@ import { AppStyle, Normalize } from '../../config/app.config';
 
 // RegistrationBackground is the background image for the registration stack
 export default function RegistrationBackground(props) {
-
-    // Renders the RegistrationStack background
     return (
         <View style={{ flex: 1, width: AppStyle.windowSize.width, height: AppStyle.windowSize.height }}>
             <View style={{ width: '100%', height: AppStyle.screenSize.height }}>

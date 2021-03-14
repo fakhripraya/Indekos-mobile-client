@@ -8,8 +8,6 @@ import { AppStyle, Normalize } from '../../config/app.config';
 
 // LoginBackground is the background image for the login stack
 export default function LoginBackground(props) {
-
-    // Renders the LoginStack background
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>

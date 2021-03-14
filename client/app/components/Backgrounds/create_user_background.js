@@ -8,8 +8,6 @@ import { AppStyle, Normalize } from '../../config/app.config';
 
 // FirstBackground is the first background image for the Create user stack
 export function FirstBackground(props) {
-
-    // Renders the First background
     return (
         <View style={{ flex: 1 }}>
             <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
