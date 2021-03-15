@@ -11,14 +11,12 @@ export default function SearchBackground(props) {
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={styles.backgroundContainer} >
-                        <View style={styles.background_2} />
-                        <View style={styles.background_1} />
-                        <View style={styles.background_3} />
-                    </View>
-                    {props.children}
-                </ScrollView>
+                <View style={styles.backgroundContainer} >
+                    <View style={styles.background_2} />
+                    <View style={styles.background_1} />
+                    <View style={styles.background_3} />
+                </View>
+                {props.children}
             </View>
         </View>
     )

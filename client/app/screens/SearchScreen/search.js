@@ -1,8 +1,16 @@
+import axios from 'axios';
 import Carousel from 'react-native-snap-carousel';
 import React, { useRef, useState, useEffect } from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { useAxiosGetArray } from '../../promise/axios_get_array';
+import { MappedFacilities } from '../../components/Icons/facilities';
+import { AppStyle, Normalize, KostService } from '../../config/app.config';
 import SearchBackground from '../../components/Backgrounds/search_background';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground } from 'react-native';
+
+// creates the promised base http client
+const kostAPI = axios.create({
+    baseURL: "http://" + KostService.host + KostService.port + "/"
+})
 
 export default function Search() {
 
@@ -10,10 +18,7 @@ export default function Search() {
     const filterCarouselRef = useRef(null);
 
     // Function states
-    const [filterList, setFilterList] = useState(null)
-
-    // data dummy 
-    const filters = [
+    const [filters, setFilters] = useState([
         [
             {
                 id: 0,
@@ -58,70 +63,162 @@ export default function Search() {
                 state: false,
             }
         ],
-    ]
+    ])
 
-    function _renderFilters({ item, index }) {
-        let parent = index
+    function FilterList() {
+
+        function _renderFilters({ item, index }) {
+            let parent = index
+
+            return (
+                <View style={styles.buttonWrapper}>
+                    {item.map((item, index) => {
+
+                        const txtColor = item.state ? "white" : 'black'
+                        const bgColor = item.state ? AppStyle.fourt_main_color : "white"
+
+                        return (
+                            <TouchableOpacity key={index} onPress={() => { updateFilterList(index, parent) }}>
+                                <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
+                                    <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: Normalize(12) }}>{item.desc}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
+
+                    })}
+                </View>
+            )
+        }
+
+
+        // update the state of the period
+        const updateFilterList = (index, parent) => {
+
+            const newArr = [...filters];
+
+            if (filters[parent][index].state === false)
+                newArr[parent][index].state = true;
+            else
+                newArr[parent][index].state = false;
+
+            setFilters(newArr);
+        }
 
         return (
-            <View style={styles.buttonWrapper}>
-                {item.map((item, index) => {
-
-                    const txtColor = item.state ? "white" : 'black'
-                    const bgColor = item.state ? AppStyle.fourt_main_color : "white"
-
-                    return (
-                        <TouchableOpacity key={index} onPress={() => { updateFilterList(index, parent) }}>
-                            <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: Normalize(12) }}>{item.desc}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )
-
-                })}
+            <View style={styles.carouselContainer}>
+                <Carousel
+                    layout={"default"}
+                    ref={filterCarouselRef}
+                    data={filters}
+                    itemWidth={AppStyle.windowSize.width * 0.9}
+                    sliderWidth={AppStyle.windowSize.width * 0.9}
+                    renderItem={_renderFilters}
+                />
             </View>
         )
+
     }
 
-    // update the state of the period
-    const updateFilterList = (index, parent) => {
+    function SearchList() {
 
-        const newArr = [...filterList];
+        // Function Hooks
+        const [flag, setFlag] = useState(0)
+        const [flagDetail, setFlagDetail] = useState(0)
+        // const [page, setPage] = useState(1)
 
-        if (filterList[parent][index].state === false)
-            newArr[parent][index].state = true;
-        else
-            newArr[parent][index].state = false;
+        // Get the data via axios get request
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + 1, 10000);
 
-        setFilterList(newArr);
+        function _renderSearchList({ item, index }) {
+
+            // Get the data via axios get request
+            const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + item.id + '/facilities', 10000);
+
+            if (dataArray === null || error) {
+
+                if (error) {
+                    if (flagDetail < 10) {
+                        setTimeout(() => {
+                            setFlagDetail(flagDetail + 1)
+                        }, 2000);
+                    }
+                }
+
+                return (
+                    <View>
+                    </View>
+                );
+
+            } else {
+                return (
+                    <View style={styles.itemWrapper}>
+                        <View style={styles.thumbnailContainer}>
+                            <ImageBackground
+                                style={styles.backgroundImg}
+                                source={{ uri: item.thumbnail_url }}
+                            />
+                        </View>
+                        <View style={styles.itemContainer}>
+                            <View style={styles.itemTitle}>
+                                <Text>{item.kost_name}</Text>
+                            </View>
+                            <View style={styles.itemLocation}>
+                                <Text>{item.city}</Text>
+                            </View>
+                            <View style={styles.itemFacilities}>
+                                <MappedFacilities facilities={dataArray} category={0} />
+                            </View>
+                            <View style={styles.itemPrice}>
+                                <Text>Test</Text>
+                            </View>
+                        </View>
+                        <View style={styles.favButton}>
+                        </View>
+                    </View>
+                )
+            }
+        }
+
+        // function handleScroll() {
+        //     setPage(page + 1)
+        // }
+
+        if (dataArray === null || error) {
+            if (error) {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
+            }
+
+            return null
+        } else {
+            return (
+                <FlatList
+                    data={dataArray}
+                    renderItem={_renderSearchList}
+                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={1}
+                // onEndReached={() => {
+                //     handleScroll();
+                // }}
+                // onEndReachedThreshold={0}
+                />
+            )
+        }
+
     }
 
-    // fetch the data from the server
-    useEffect(() => {
-        if (filterList === null)
-            setFilterList(filters)
-    }, [])
-
-    if (filterList === null) {
-        return null
-    } else {
-        return (
-            <SearchBackground>
-                <View style={styles.headerContainer}>
-                    <View style={styles.searchBar}>
-                        <TextInput />
-                    </View>
-                    <View style={styles.carouselContainer}>
-                        <Carousel
-                            layout={"default"}
-                            ref={filterCarouselRef}
-                            data={filterList}
-                            itemWidth={AppStyle.windowSize.width * 0.9}
-                            sliderWidth={AppStyle.windowSize.width * 0.9}
-                            renderItem={_renderFilters}
-                        />
-                    </View>
+    return (
+        <SearchBackground>
+            <View style={styles.headerContainer}>
+                <View style={styles.searchBar}>
+                    <TextInput />
                 </View>
+                <FilterList />
+            </View>
+            <View style={styles.sortButtonWrapperContaner}>
                 <View style={styles.sortButtonWrapper}>
                     <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1 }]}>
                         <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Filter</Text>
@@ -133,9 +230,10 @@ export default function Search() {
                         <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Map</Text>
                     </TouchableOpacity>
                 </View>
-            </SearchBackground>
-        )
-    }
+            </View>
+            {/* <SearchList /> */}
+        </SearchBackground>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -174,11 +272,21 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(10),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
+    sortButtonWrapperContaner: {
+        width: '100%',
+        alignItems: 'center',
+        height: Normalize(60),
+        backgroundColor: 'white',
+        backgroundColor: 'white',
+        justifyContent: 'flex-start',
+    },
     sortButtonWrapper: {
+        elevation: 5,
         width: '100%',
         alignItems: 'center',
         flexDirection: 'row',
         height: Normalize(42),
+        backgroundColor: 'white',
         justifyContent: 'space-evenly',
     },
     sortButton: {
@@ -187,6 +295,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.windowSize.width * 0.9 / 3,
+    },
+    backgroundImg: {
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center",
+    },
+    thumbnailContainer: {
+
     }
 
 })
