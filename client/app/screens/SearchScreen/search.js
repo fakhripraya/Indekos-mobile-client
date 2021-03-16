@@ -6,6 +6,7 @@ import { MappedFacilities } from '../../components/Icons/facilities';
 import { AppStyle, Normalize, KostService } from '../../config/app.config';
 import SearchBackground from '../../components/Backgrounds/search_background';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground } from 'react-native';
+import { filter } from 'lodash';
 
 // creates the promised base http client
 const kostAPI = axios.create({
@@ -18,7 +19,10 @@ export default function Search() {
     const filterCarouselRef = useRef(null);
 
     // Function states
-    const [filters, setFilters] = useState([
+    const [filters, setFilters] = useState(null)
+    const [page, setPage] = useState(1)
+
+    dummyFilter = [
         [
             {
                 id: 0,
@@ -63,177 +67,165 @@ export default function Search() {
                 state: false,
             }
         ],
-    ])
+    ]
 
-    function FilterList() {
-
-        function _renderFilters({ item, index }) {
-            let parent = index
-
-            return (
-                <View style={styles.buttonWrapper}>
-                    {item.map((item, index) => {
-
-                        const txtColor = item.state ? "white" : 'black'
-                        const bgColor = item.state ? AppStyle.fourt_main_color : "white"
-
-                        return (
-                            <TouchableOpacity key={index} onPress={() => { updateFilterList(index, parent) }}>
-                                <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                                    <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: Normalize(12) }}>{item.desc}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        )
-
-                    })}
-                </View>
-            )
-        }
-
-
-        // update the state of the period
-        const updateFilterList = (index, parent) => {
-
-            const newArr = [...filters];
-
-            if (filters[parent][index].state === false)
-                newArr[parent][index].state = true;
-            else
-                newArr[parent][index].state = false;
-
-            setFilters(newArr);
-        }
+    function _renderFilters({ item, index }) {
+        let parent = index
 
         return (
-            <View style={styles.carouselContainer}>
-                <Carousel
-                    layout={"default"}
-                    ref={filterCarouselRef}
-                    data={filters}
-                    itemWidth={AppStyle.windowSize.width * 0.9}
-                    sliderWidth={AppStyle.windowSize.width * 0.9}
-                    renderItem={_renderFilters}
-                />
+            <View style={styles.buttonWrapper}>
+                {item.map((item, index) => {
+
+                    const txtColor = item.state ? "white" : 'black'
+                    const bgColor = item.state ? AppStyle.fourt_main_color : "white"
+
+                    return (
+                        <TouchableOpacity key={index} onPress={() => { updateFilterList(index, parent) }}>
+                            <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
+                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: Normalize(12) }}>{item.desc}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    )
+
+                })}
             </View>
         )
+    }
 
+    // update the state of the period
+    const updateFilterList = (index, parent) => {
+
+        const newArr = [...dummyFilter];
+
+        if (filters[parent][index].state === false)
+            newArr[parent][index].state = true;
+        else
+            newArr[parent][index].state = false;
+
+        setFilters(newArr);
     }
 
     function SearchList() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
-        const [flagDetail, setFlagDetail] = useState(0)
-        // const [page, setPage] = useState(1)
+        const [dataArrayList, setDataArrayList] = useState([])
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + 1, 10000);
+        if (dataArrayList !== null) {
+            if (dataArrayList.length === 0) {
+                // Get the data via axios get request
+                const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + page, 10000);
+                setDataArrayList(dataArray)
+            }
+        }
 
         function _renderSearchList({ item, index }) {
 
-            // Get the data via axios get request
-            const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + item.id + '/facilities', 10000);
+            // // Get the data via axios get request
+            // const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + item.id + '/facilities', 10000);
 
-            if (dataArray === null || error) {
-
-                if (error) {
-                    if (flagDetail < 10) {
-                        setTimeout(() => {
-                            setFlagDetail(flagDetail + 1)
-                        }, 2000);
-                    }
-                }
-
-                return (
-                    <View>
+            return (
+                <View style={styles.itemWrapper}>
+                    <View style={styles.thumbnailContainer}>
+                        <ImageBackground
+                            style={styles.backgroundImg}
+                            source={{ uri: item.thumbnail_url }}
+                        />
                     </View>
-                );
+                    <View style={styles.itemContainer}>
+                        <View style={styles.itemTitle}>
+                            <Text>{item.kost_name}</Text>
+                        </View>
+                        <View style={styles.itemLocation}>
+                            <Text>{item.city}</Text>
+                        </View>
+                        <View style={styles.itemFacilities}>
+                            {/* <MappedFacilities facilities={dataArray} category={0} /> */}
+                        </View>
+                        <View style={styles.itemPrice}>
+                            <Text>Test</Text>
+                        </View>
+                    </View>
+                    <View style={styles.favButton}>
+                    </View>
+                </View>
+            )
+        }
 
+        function handleScroll() {
+
+            const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + page, 10000);
+            setPage(page + 1)
+            setDataArrayList(dataArrayList.concat(dataArray))
+        }
+
+        if (dataArrayList === null) {
+            return null
+        } else {
+            if (dataArrayList.length === 0) {
+                return null
             } else {
                 return (
-                    <View style={styles.itemWrapper}>
-                        <View style={styles.thumbnailContainer}>
-                            <ImageBackground
-                                style={styles.backgroundImg}
-                                source={{ uri: item.thumbnail_url }}
-                            />
-                        </View>
-                        <View style={styles.itemContainer}>
-                            <View style={styles.itemTitle}>
-                                <Text>{item.kost_name}</Text>
-                            </View>
-                            <View style={styles.itemLocation}>
-                                <Text>{item.city}</Text>
-                            </View>
-                            <View style={styles.itemFacilities}>
-                                <MappedFacilities facilities={dataArray} category={0} />
-                            </View>
-                            <View style={styles.itemPrice}>
-                                <Text>Test</Text>
-                            </View>
-                        </View>
-                        <View style={styles.favButton}>
-                        </View>
-                    </View>
+                    <FlatList
+                        data={dataArrayList}
+                        renderItem={_renderSearchList}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={1}
+                        onEndReached={() => {
+                            handleScroll();
+                        }}
+                        onEndReachedThreshold={0}
+                    />
                 )
             }
         }
 
-        // function handleScroll() {
-        //     setPage(page + 1)
-        // }
-
-        if (dataArray === null || error) {
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
-            }
-
-            return null
-        } else {
-            return (
-                <FlatList
-                    data={dataArray}
-                    renderItem={_renderSearchList}
-                    keyExtractor={(item, index) => index.toString()}
-                    numColumns={1}
-                // onEndReached={() => {
-                //     handleScroll();
-                // }}
-                // onEndReachedThreshold={0}
-                />
-            )
-        }
-
     }
 
-    return (
-        <SearchBackground>
-            <View style={styles.headerContainer}>
-                <View style={styles.searchBar}>
-                    <TextInput />
+    useEffect(() => {
+        if (filters === null)
+            setFilters(dummyFilter)
+
+        return () => {
+        }
+    }, [])
+
+    if (filters === null) {
+        return null
+    } else {
+        return (
+            <SearchBackground>
+                <View style={styles.headerContainer}>
+                    <View style={styles.searchBar}>
+                        <TextInput />
+                    </View>
+                    <View style={styles.carouselContainer}>
+                        <Carousel
+                            layout={"default"}
+                            ref={filterCarouselRef}
+                            data={filters}
+                            itemWidth={AppStyle.windowSize.width * 0.9}
+                            sliderWidth={AppStyle.windowSize.width * 0.9}
+                            renderItem={_renderFilters}
+                        />
+                    </View>
                 </View>
-                <FilterList />
-            </View>
-            <View style={styles.sortButtonWrapperContaner}>
-                <View style={styles.sortButtonWrapper}>
-                    <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1 }]}>
-                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Filter</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.sortButton}>
-                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Sort</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1 }]}>
-                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Map</Text>
-                    </TouchableOpacity>
+                <View style={styles.sortButtonWrapperContaner}>
+                    <View style={styles.sortButtonWrapper}>
+                        <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1 }]}>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Filter</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.sortButton}>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Sort</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1 }]}>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Map</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
-            {/* <SearchList /> */}
-        </SearchBackground>
-    )
+                <SearchList />
+            </SearchBackground>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
