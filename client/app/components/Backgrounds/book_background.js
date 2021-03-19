@@ -4,7 +4,8 @@ import {
     ScrollView,
 } from 'react-native';
 import React from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 
 // BookBackground is the background image for the book stack
 export default function BookBackground(props) {

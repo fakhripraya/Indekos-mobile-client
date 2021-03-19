@@ -4,12 +4,12 @@ import {
     Modal,
     StyleSheet,
     ScrollView,
-    Dimensions,
     TouchableOpacity
 } from 'react-native';
 import React from 'react';
 import { popUpModalChange } from '../../redux';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 import { useSelector, useDispatch } from 'react-redux';
 import { animated, useTransition } from 'react-spring';
 

@@ -4,7 +4,8 @@ import {
     StyleSheet,
 } from 'react-native';
 import React from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 
 // FirstBackground is the first background image for the Create user stack
 export function FirstBackground(props) {

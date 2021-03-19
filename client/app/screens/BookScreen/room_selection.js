@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 import React, { useEffect, useRef, useState } from 'react';
 
 export default function RoomSelection({ navigation }) {

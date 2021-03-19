@@ -10,7 +10,7 @@ import {
 import React, { useEffect } from 'react';
 import * as Location from 'expo-location';
 import { useDispatch } from 'react-redux';
-import { Normalize } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 
 // Loading is the root of Home stack
 const Loading = () => {

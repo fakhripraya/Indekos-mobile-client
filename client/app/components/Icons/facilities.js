@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 import { AntDesign, MaterialCommunityIcons, MaterialIcons, FontAwesome, Entypo, Ionicons, Feather } from '@expo/vector-icons';
 
 export function MappedFacilities(props) {

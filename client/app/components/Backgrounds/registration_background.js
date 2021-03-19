@@ -4,7 +4,8 @@ import {
     StyleSheet,
 } from 'react-native';
 import React from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 
 // RegistrationBackground is the background image for the registration stack
 export default function RegistrationBackground(props) {

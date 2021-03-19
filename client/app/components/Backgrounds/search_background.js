@@ -4,7 +4,8 @@ import {
     ScrollView,
 } from 'react-native';
 import React from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 
 // SearchBackground is the background image for the search screen
 export default function SearchBackground(props) {

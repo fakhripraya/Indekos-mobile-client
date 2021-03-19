@@ -17,7 +17,7 @@ export const useAxiosGet = (service, url, timeout) => {
         let unmounted = false;
 
         // creates the cancel token source
-        cancelSource = axios.CancelToken.source()
+        var cancelSource = axios.CancelToken.source()
 
         // triggers the http get request to the / url in Authentication Service to get the current logged in user information 
         service.get(url, {

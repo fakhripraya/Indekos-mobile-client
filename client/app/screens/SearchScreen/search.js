@@ -1,12 +1,21 @@
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { popUpModalChange } from '../../redux';
 import Carousel from 'react-native-snap-carousel';
+import { trackPromise } from 'react-promise-tracker';
+import { Normalize } from '../../functions/normalize';
 import React, { useRef, useState, useEffect } from 'react';
+import { AppStyle, KostService } from '../../config/app.config';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
 import { MappedFacilities } from '../../components/Icons/facilities';
-import { AppStyle, Normalize, KostService } from '../../config/app.config';
+import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import SearchBackground from '../../components/Backgrounds/search_background';
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+import { Entypo, Feather, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground } from 'react-native';
-import { filter } from 'lodash';
+
+// a HOC to throttle button click
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
 const kostAPI = axios.create({
@@ -15,12 +24,18 @@ const kostAPI = axios.create({
 
 export default function Search() {
 
+    // Hooks
+    const dispatch = useDispatch()
+
     // Function Refs
     const filterCarouselRef = useRef(null);
 
     // Function states
     const [filters, setFilters] = useState(null)
-    const [page, setPage] = useState(1)
+
+    // Global Variable
+    let KostList = [];
+    let page = 1;
 
     dummyFilter = [
         [
@@ -107,45 +122,49 @@ export default function Search() {
 
     function SearchList() {
 
-        // Function Hooks
-        const [dataArrayList, setDataArrayList] = useState([])
-
-        if (dataArrayList !== null) {
-            if (dataArrayList.length === 0) {
-                // Get the data via axios get request
-                const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + page, 10000);
-                setDataArrayList(dataArray)
-            }
-        }
+        // Get the kost data from the server
+        // 1 page of kost list is 10 kost 
+        const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + page, 10000);
+        KostList = dataArray;
 
         function _renderSearchList({ item, index }) {
-
-            // // Get the data via axios get request
-            // const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + item.id + '/facilities', 10000);
 
             return (
                 <View style={styles.itemWrapper}>
                     <View style={styles.thumbnailContainer}>
                         <ImageBackground
+                            imageStyle={{ borderRadius: Normalize(15) }}
                             style={styles.backgroundImg}
-                            source={{ uri: item.thumbnail_url }}
+                            source={{ uri: item.kost.thumbnail_url }}
                         />
                     </View>
                     <View style={styles.itemContainer}>
                         <View style={styles.itemTitle}>
-                            <Text>{item.kost_name}</Text>
+                            <Text style={{ fontWeight: 'bold' }}>{item.kost.kost_name}</Text>
                         </View>
                         <View style={styles.itemLocation}>
-                            <Text>{item.city}</Text>
+                            <Entypo name="location" size={Normalize(14)} color="black" style={{ marginRight: Normalize(12.5) }} />
+                            <Text style={{ fontWeight: 'bold' }}>{item.kost.city}</Text>
                         </View>
-                        <View style={styles.itemFacilities}>
-                            {/* <MappedFacilities facilities={dataArray} category={0} /> */}
+                        <View style={styles.itemFacilitiesContainer}>
+                            <View style={styles.itemFacilities}>
+                                <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(0, 2)} category={0} />
+                            </View>
+                            <View style={styles.itemFacilities}>
+                                <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(2, 4)} category={0} />
+                            </View>
                         </View>
                         <View style={styles.itemPrice}>
-                            <Text>Test</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={{ fontSize: Normalize(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                            </View>
+                            <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
                         </View>
                     </View>
-                    <View style={styles.favButton}>
+                    <View style={styles.favButtonContainer}>
+                        <TouchableOpacityPrevent style={styles.favButton}>
+                            <Feather name="heart" size={Normalize(24)} color="red" />
+                        </TouchableOpacityPrevent>
                     </View>
                 </View>
             )
@@ -153,30 +172,50 @@ export default function Search() {
 
         function handleScroll() {
 
-            const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + page, 10000);
-            setPage(page + 1)
-            setDataArrayList(dataArrayList.concat(dataArray))
+            page++;
+            var cancelSource = axios.CancelToken.source()
+
+            trackPromise(
+                kostAPI.get('/all/' + page, {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
+                })
+                    .then(response => {
+                        //TODO: check all axios request after the prototype done
+                        response.data.forEach(function (item, index) {
+                            KostList.push(item)
+                        });
+                    })
+                    .catch(error => {
+                        if (!axios.isCancel(error)) {
+                            if (error.response.status !== 200) {
+
+                                // dispatch the popUpModalChange actions to store the generic message modal state
+                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                            }
+                        }
+                    })
+            );
+
         }
 
-        if (dataArrayList === null) {
+        if (KostList === null) {
             return null
         } else {
-            if (dataArrayList.length === 0) {
-                return null
-            } else {
-                return (
+            return (
+                <>
                     <FlatList
-                        data={dataArrayList}
+                        data={KostList}
                         renderItem={_renderSearchList}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={1}
                         onEndReached={() => {
                             handleScroll();
                         }}
-                        onEndReachedThreshold={0}
+                        onEndReachedThreshold={1}
                     />
-                )
-            }
+                </>
+            )
         }
 
     }
@@ -211,13 +250,16 @@ export default function Search() {
                 </View>
                 <View style={styles.sortButtonWrapperContaner}>
                     <View style={styles.sortButtonWrapper}>
-                        <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1 }]}>
+                        <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1, flexDirection: 'row' }]}>
+                            <AntDesign name="filter" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
                             <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Filter</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.sortButton}>
+                        <TouchableOpacity style={[styles.sortButton, { flexDirection: 'row' }]}>
+                            <MaterialCommunityIcons name="sort" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
                             <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Sort</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1 }]}>
+                        <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
+                            <Ionicons name="map-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
                             <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Map</Text>
                         </TouchableOpacity>
                     </View>
@@ -258,8 +300,8 @@ const styles = StyleSheet.create({
     buttonPeriod: {
         borderWidth: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         padding: Normalize(10),
+        justifyContent: 'center',
         marginRight: Normalize(10),
         borderRadius: Normalize(10),
         borderColor: 'rgba(0, 0, 0, 0.15)',
@@ -288,13 +330,67 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.windowSize.width * 0.9 / 3,
     },
+    itemWrapper: {
+        flexDirection: 'row',
+        marginBottom: Normalize(15),
+        justifyContent: 'space-between',
+        left: AppStyle.windowSize.width * 0.05,
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.2,
+    },
     backgroundImg: {
         flex: 1,
         resizeMode: "cover",
         justifyContent: "center",
     },
     thumbnailContainer: {
-
-    }
-
+        alignSelf: 'center',
+        width: AppStyle.windowSize.width * 0.9 * 0.375,
+        height: AppStyle.windowSize.width * 0.9 * 0.375,
+    },
+    itemContainer: {
+        alignSelf: 'center',
+        paddingLeft: Normalize(15),
+        width: AppStyle.windowSize.width * 0.9 * 0.525,
+        height: AppStyle.windowSize.width * 0.9 * 0.375,
+    },
+    itemTitle: {
+        marginTop: Normalize(5),
+        justifyContent: 'center',
+    },
+    itemLocation: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginTop: Normalize(5),
+        marginBottom: Normalize(10),
+    },
+    itemFacilitiesContainer: {
+        flexDirection: 'column',
+        marginBottom: Normalize(5),
+        height: AppStyle.windowSize.width * 0.9 * 0.375 * 0.3,
+    },
+    itemFacilities: {
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    itemPrice: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    favButtonContainer: {
+        alignSelf: 'center',
+        width: AppStyle.windowSize.width * 0.9 * 0.100,
+        height: AppStyle.windowSize.width * 0.9 * 0.375,
+    },
+    favButton: {
+        elevation: 2,
+        alignItems: 'center',
+        padding: Normalize(5),
+        alignSelf: 'flex-start',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderRadius: Normalize(100),
+        width: AppStyle.windowSize.width * 0.9 * 0.125,
+        height: AppStyle.windowSize.width * 0.9 * 0.125,
+    },
 })

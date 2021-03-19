@@ -4,14 +4,16 @@ import Carousel from 'react-native-snap-carousel';
 import RBSheet from "react-native-raw-bottom-sheet";
 import MapShow from '../../components/Maps/map_show';
 import { useAxiosGet } from '../../promise/axios_get';
+import { Normalize } from '../../functions/normalize';
+import { CurrencyPrefix } from '../../functions/currency';
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
+import { AppStyle, KostService } from '../../config/app.config';
 import withDelay from '../../components/HOC/prevent_spam_click';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
 import { MappedFacilities } from '../../components/Icons/facilities';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/book_background';
-import { AppStyle, Normalize, KostService, CurrencyPrefix } from '../../config/app.config';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, InteractionManager, ActivityIndicator } from 'react-native';
 

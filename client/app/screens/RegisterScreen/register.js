@@ -11,10 +11,11 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { AppStyle } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 

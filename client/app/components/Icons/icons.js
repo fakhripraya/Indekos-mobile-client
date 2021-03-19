@@ -1,6 +1,7 @@
 import React from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
-import { AntDesign, Ionicons, MaterialIcons, FontAwesome, FontAwesome5, SimpleLineIcons, Octicons } from '@expo/vector-icons';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
+import { Ionicons, MaterialIcons, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 
 function Icons(props) {
 

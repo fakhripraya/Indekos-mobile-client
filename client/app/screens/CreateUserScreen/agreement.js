@@ -1,5 +1,6 @@
 import React from 'react'
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from 'react-native'
 import { SecondBackground } from '../../components/Backgrounds/create_user_background'

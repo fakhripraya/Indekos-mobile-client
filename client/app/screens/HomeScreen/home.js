@@ -11,9 +11,10 @@ import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { useAxiosGet } from '../../promise/axios_get';
+import { Normalize } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/home_background';
-import { AppStyle, Normalize, AuthService, KostService } from '../../config/app.config';
+import { AppStyle, AuthService, KostService } from '../../config/app.config';
 import { useAxiosGetArray, useAxiosGetArrayParams } from '../../promise/axios_get_array';
 
 // creates the promised base http auth client

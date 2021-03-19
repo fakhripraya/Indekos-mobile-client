@@ -1,13 +1,13 @@
 import {
     Text,
     View,
-    Dimensions,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
 import React, { useState, useRef } from 'react';
 import Carousel from 'react-native-snap-carousel';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
 // a HOC to throttle button click

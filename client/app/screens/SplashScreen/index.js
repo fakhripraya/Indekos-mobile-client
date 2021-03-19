@@ -10,7 +10,8 @@ import {
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { AuthService, Normalize } from '../../config/app.config';
+import { AuthService } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 
 // creates the promised base http client
 const api = axios.create({

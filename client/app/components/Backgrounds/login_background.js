@@ -4,7 +4,8 @@ import {
     StyleSheet,
 } from 'react-native';
 import React from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 
 // LoginBackground is the background image for the login stack
 export default function LoginBackground(props) {

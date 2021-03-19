@@ -1,5 +1,6 @@
 import React from 'react';
-import { AppStyle, Normalize } from '../../config/app.config';
+import { AppStyle } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 

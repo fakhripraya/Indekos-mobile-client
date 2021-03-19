@@ -8,7 +8,8 @@ import React from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { trackPromise } from 'react-promise-tracker';
-import { AppStyle, Normalize, UserService } from '../../config/app.config';
+import { Normalize } from '../../functions/normalize';
+import { AppStyle, UserService } from '../../config/app.config';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background'
 
 // creates the promised base http client

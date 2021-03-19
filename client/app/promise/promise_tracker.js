@@ -6,7 +6,8 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import { AppStyle, Normalize } from '../config/app.config';
+import { AppStyle } from '../config/app.config';
+import { Normalize } from '../functions/normalize';
 import { animated, useTransition } from 'react-spring';
 import { usePromiseTracker } from "react-promise-tracker";
 
@@ -14,7 +15,7 @@ import { usePromiseTracker } from "react-promise-tracker";
 const AnimatedView = animated(View)
 
 // PromiseSpinner is a spinner that triggers while the application doang the http request
-const PromiseSpinner = (props) => {
+const PromiseSpinner = () => {
 
     // Function Hooks
     const { promiseInProgress } = usePromiseTracker();
