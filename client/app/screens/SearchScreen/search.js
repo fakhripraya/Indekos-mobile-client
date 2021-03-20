@@ -13,6 +13,8 @@ import SearchBackground from '../../components/Backgrounds/search_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { Entypo, Feather, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground } from 'react-native';
+import { TouchableHighlight } from 'react-native';
+import { TouchableNativeFeedback } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -22,7 +24,7 @@ const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
 })
 
-export default function Search() {
+export default function Search({ navigation }) {
 
     // Hooks
     const dispatch = useDispatch()
@@ -130,43 +132,54 @@ export default function Search() {
         function _renderSearchList({ item, index }) {
 
             return (
-                <View style={styles.itemWrapper}>
-                    <View style={styles.thumbnailContainer}>
-                        <ImageBackground
-                            imageStyle={{ borderRadius: Normalize(15) }}
-                            style={styles.backgroundImg}
-                            source={{ uri: item.kost.thumbnail_url }}
-                        />
-                    </View>
-                    <View style={styles.itemContainer}>
-                        <View style={styles.itemTitle}>
-                            <Text style={{ fontWeight: 'bold' }}>{item.kost.kost_name}</Text>
+                <TouchableNativeFeedback onPress={() => {
+                    navigation.push('BookStack', {
+                        screen: 'KostDetail',
+                        params: {
+                            kostID: item.kost.id,
+                            kostName: item.kost.kost_name,
+                            city: item.kost.city,
+                        }
+                    })
+                }} >
+                    <View style={styles.itemWrapper} >
+                        <View style={styles.thumbnailContainer}>
+                            <ImageBackground
+                                imageStyle={{ borderRadius: Normalize(15) }}
+                                style={styles.backgroundImg}
+                                source={{ uri: item.kost.thumbnail_url }}
+                            />
                         </View>
-                        <View style={styles.itemLocation}>
-                            <Entypo name="location" size={Normalize(14)} color="black" style={{ marginRight: Normalize(12.5) }} />
-                            <Text style={{ fontWeight: 'bold' }}>{item.kost.city}</Text>
-                        </View>
-                        <View style={styles.itemFacilitiesContainer}>
-                            <View style={styles.itemFacilities}>
-                                <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(0, 2)} category={0} />
+                        <View style={styles.itemContainer}>
+                            <View style={styles.itemTitle}>
+                                <Text style={{ fontWeight: 'bold' }}>{item.kost.kost_name}</Text>
                             </View>
-                            <View style={styles.itemFacilities}>
-                                <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(2, 4)} category={0} />
+                            <View style={styles.itemLocation}>
+                                <Entypo name="location" size={Normalize(14)} color="black" style={{ marginRight: Normalize(12.5) }} />
+                                <Text style={{ fontWeight: 'bold' }}>{item.kost.city}</Text>
+                            </View>
+                            <View style={styles.itemFacilitiesContainer}>
+                                <View style={styles.itemFacilities}>
+                                    <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(0, 2)} category={0} />
+                                </View>
+                                <View style={styles.itemFacilities}>
+                                    <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(2, 4)} category={0} />
+                                </View>
+                            </View>
+                            <View style={styles.itemPrice}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ fontSize: Normalize(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                                </View>
+                                <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
                             </View>
                         </View>
-                        <View style={styles.itemPrice}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ fontSize: Normalize(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
-                            </View>
-                            <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                        <View style={styles.favButtonContainer}>
+                            <TouchableOpacityPrevent style={styles.favButton}>
+                                <Feather name="heart" size={Normalize(24)} color="red" />
+                            </TouchableOpacityPrevent>
                         </View>
-                    </View>
-                    <View style={styles.favButtonContainer}>
-                        <TouchableOpacityPrevent style={styles.favButton}>
-                            <Feather name="heart" size={Normalize(24)} color="red" />
-                        </TouchableOpacityPrevent>
-                    </View>
-                </View>
+                    </View >
+                </TouchableNativeFeedback>
             )
         }
 
@@ -334,8 +347,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: Normalize(15),
         justifyContent: 'space-between',
-        left: AppStyle.windowSize.width * 0.05,
-        width: AppStyle.windowSize.width * 0.9,
+        width: AppStyle.windowSize.width * 1,
         height: AppStyle.windowSize.height * 0.2,
     },
     backgroundImg: {
@@ -345,6 +357,7 @@ const styles = StyleSheet.create({
     },
     thumbnailContainer: {
         alignSelf: 'center',
+        left: AppStyle.windowSize.width * 0.05,
         width: AppStyle.windowSize.width * 0.9 * 0.375,
         height: AppStyle.windowSize.width * 0.9 * 0.375,
     },
@@ -390,6 +403,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: Normalize(100),
+        right: AppStyle.windowSize.width * 0.05,
         width: AppStyle.windowSize.width * 0.9 * 0.125,
         height: AppStyle.windowSize.width * 0.9 * 0.125,
     },
