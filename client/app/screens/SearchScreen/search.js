@@ -13,6 +13,7 @@ import SearchBackground from '../../components/Backgrounds/search_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { Entypo, Feather, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground, TouchableNativeFeedback } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -213,10 +214,14 @@ export default function Search({ navigation }) {
         }
 
         if (KostList === null) {
-            return null
+            return (
+                <View style={styles.flatListContainer}>
+                    <ActivityIndicator size="large" color={AppStyle.main_color} />
+                </View>
+            )
         } else {
             return (
-                <View style={{ height: AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.275) + Normalize(60) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2)) }}>
+                <View style={styles.flatListContainer}>
                     <FlatList
                         data={KostList}
                         renderItem={_renderSearchList}
@@ -225,7 +230,7 @@ export default function Search({ navigation }) {
                         onEndReached={() => {
                             handleScroll();
                         }}
-                        onEndReachedThreshold={1}
+                        onEndReachedThreshold={0.1}
                     />
                 </View>
             )
@@ -342,6 +347,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.windowSize.width * 0.9 / 3,
+    },
+    flatListContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.275) + Normalize(60) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2)),
     },
     itemWrapper: {
         flexDirection: 'row',
