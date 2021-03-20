@@ -216,7 +216,7 @@ export default function Search({ navigation }) {
             return null
         } else {
             return (
-                <>
+                <View style={{ height: AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.275) + Normalize(60) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2)) }}>
                     <FlatList
                         data={KostList}
                         renderItem={_renderSearchList}
@@ -227,7 +227,7 @@ export default function Search({ navigation }) {
                         }}
                         onEndReachedThreshold={1}
                     />
-                </>
+                </View>
             )
         }
 
@@ -286,8 +286,8 @@ export default function Search({ navigation }) {
 const styles = StyleSheet.create({
 
     headerContainer: {
-        width: AppStyle.screenSize.width,
-        height: AppStyle.screenSize.height * 0.275,
+        width: AppStyle.windowSize.width,
+        height: AppStyle.windowSize.height * 0.275,
     },
     searchBar: {
         position: 'absolute',
@@ -297,14 +297,14 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(10),
         width: AppStyle.windowSize.width * 0.9,
         left: AppStyle.windowSize.width * 0.05,
-        top: ((AppStyle.screenSize.height * 0.275) / 2) - (Normalize(36) / 2),
+        top: ((AppStyle.windowSize.height * 0.275) / 2) - (Normalize(36) / 2),
     },
     carouselContainer: {
         position: 'absolute',
         justifyContent: 'center',
         width: AppStyle.windowSize.width * 0.9,
         left: AppStyle.windowSize.width * 0.05,
-        top: ((((AppStyle.screenSize.height * 0.275) / 2) + (AppStyle.screenSize.height * 0.275) / 3)) - (Normalize(36) / 2),
+        top: ((((AppStyle.windowSize.height * 0.275) / 2) + (AppStyle.windowSize.height * 0.275) / 3)) - (Normalize(36) / 2),
     },
     buttonWrapper: {
         width: '100%',

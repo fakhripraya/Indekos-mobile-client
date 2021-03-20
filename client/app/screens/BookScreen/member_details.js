@@ -242,7 +242,7 @@ export default function MemberDetails({ navigation }) {
                     </View>
                     <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Person</Text>
                     <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>This room maximum is {maxMember} persons</Text>
-                    <View style={{ flexDirection: 'row', marginTop: AppStyle.screenSize.height * 0.03355, marginBottom: AppStyle.screenSize.height * 0.03355 }}>
+                    <View style={{ flexDirection: 'row', marginTop: AppStyle.windowSize.height * 0.03355, marginBottom: AppStyle.windowSize.height * 0.03355 }}>
                         <View>
                             <TouchableOpacity style={[styles.icon, { marginRight: Normalize(30), marginLeft: Normalize(10) }]} >
                                 <MaterialIcons name="person-add-alt" size={Normalize(36)} color="black" />
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     },
     headerIcon: {
         position: 'absolute',
-        left: AppStyle.screenSize.width * 0.05,
+        left: AppStyle.windowSize.width * 0.05,
     },
     absoluteContainer: {
         elevation: 5,
@@ -311,9 +311,8 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(15),
         marginBottom: Normalize(10),
         paddingBottom: Normalize(15),
-        width: AppStyle.screenSize.width * 0.9,
+        width: AppStyle.windowSize.width * 0.9,
         height: Normalize(250),
-        // height: AppStyle.screenSize.height * 0.45,
     },
     mappedContainer: {
         paddingLeft: '5%',
@@ -321,12 +320,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         marginBottom: Normalize(25),
-        width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.425,
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.425,
     },
     checkboxWrapper: {
-        marginTop: AppStyle.screenSize.height * 0.045,
-        marginBottom: AppStyle.screenSize.height * 0.045,
+        marginTop: AppStyle.windowSize.height * 0.045,
+        marginBottom: AppStyle.windowSize.height * 0.045,
     },
     checkboxContainer: {
         flexDirection: 'row',
@@ -341,13 +340,13 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
-        marginBottom: AppStyle.screenSize.height * 0.025,
+        marginBottom: AppStyle.windowSize.height * 0.025,
     },
     phoneInput: {
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
-        marginBottom: AppStyle.screenSize.height * 0.025,
+        marginBottom: AppStyle.windowSize.height * 0.025,
     },
     nameInputBox: {
         width: '100%',
@@ -356,7 +355,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
         borderRadius: Normalize(7.5),
-        height: AppStyle.screenSize.height * 0.06,
+        height: AppStyle.windowSize.height * 0.06,
     },
     phoneInputBox: {
         width: '100%',
@@ -365,7 +364,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
         borderRadius: Normalize(7.5),
-        height: AppStyle.screenSize.height * 0.06,
+        height: AppStyle.windowSize.height * 0.06,
     },
     genderInput: {
         width: '100%',
@@ -378,16 +377,16 @@ const styles = StyleSheet.create({
         paddingTop: Normalize(15),
         borderRadius: Normalize(10),
         paddingBottom: Normalize(15),
-        paddingLeft: AppStyle.screenSize.width * 0.125,
-        paddingRight: AppStyle.screenSize.width * 0.125,
+        paddingLeft: AppStyle.windowSize.width * 0.125,
+        paddingRight: AppStyle.windowSize.width * 0.125,
     },
     icon: {
         alignItems: 'center',
         backgroundColor: 'white',
         justifyContent: 'center',
         borderRadius: Normalize(50),
-        width: AppStyle.screenSize.width * 0.1,
-        height: AppStyle.screenSize.height * 0.05,
+        width: AppStyle.windowSize.width * 0.1,
+        height: AppStyle.windowSize.height * 0.05,
     },
     plus: {
         borderWidth: 1,
@@ -397,15 +396,15 @@ const styles = StyleSheet.create({
         marginRight: Normalize(10),
         borderRadius: Normalize(50),
         borderColor: AppStyle.fourt_main_color,
-        width: AppStyle.screenSize.width * 0.1,
-        height: AppStyle.screenSize.width * 0.1,
+        width: AppStyle.windowSize.width * 0.1,
+        height: AppStyle.windowSize.width * 0.1,
     },
     container_3: {
         justifyContent: 'center',
-        marginTop: Normalize(30),
-        marginBottom: Normalize(15),
-        width: AppStyle.screenSize.width,
-        paddingRight: AppStyle.screenSize.width * 0.05,
+        marginTop: Normalize(40),
+        marginBottom: Normalize(30),
+        width: AppStyle.windowSize.width,
+        paddingRight: AppStyle.windowSize.width * 0.05,
     },
     nextBtn: {
         borderWidth: 1,
@@ -416,6 +415,6 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(50),
         paddingBottom: Normalize(10),
         borderColor: 'rgba(0, 0, 0, 0.15)',
-        width: AppStyle.screenSize.width * 0.275,
+        width: AppStyle.windowSize.width * 0.275,
     },
 })

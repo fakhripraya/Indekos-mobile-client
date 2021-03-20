@@ -11,7 +11,7 @@ import { Normalize } from '../../functions/normalize';
 export default function HomeBackground(props) {
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
-            <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
+            <View style={{ width: '100%', height: AppStyle.windowSize.height }}>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.backgroundContainer} >
                         <View style={styles.background_2} />
