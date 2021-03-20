@@ -12,12 +12,11 @@ import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import SearchBackground from '../../components/Backgrounds/search_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { Entypo, Feather, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground } from 'react-native';
-import { TouchableHighlight } from 'react-native';
-import { TouchableNativeFeedback } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground, TouchableNativeFeedback } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
+const TouchableNativeFeedbackPrevent = withPreventDoubleClick(TouchableNativeFeedback);
 
 // creates the promised base http client
 const kostAPI = axios.create({
@@ -129,10 +128,10 @@ export default function Search({ navigation }) {
         const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + page, 10000);
         KostList = dataArray;
 
-        function _renderSearchList({ item, index }) {
+        function _renderSearchList({ item }) {
 
             return (
-                <TouchableNativeFeedback onPress={() => {
+                <TouchableNativeFeedbackPrevent onPress={() => {
                     navigation.push('BookStack', {
                         screen: 'KostDetail',
                         params: {
@@ -179,7 +178,7 @@ export default function Search({ navigation }) {
                             </TouchableOpacityPrevent>
                         </View>
                     </View >
-                </TouchableNativeFeedback>
+                </TouchableNativeFeedbackPrevent>
             )
         }
 
