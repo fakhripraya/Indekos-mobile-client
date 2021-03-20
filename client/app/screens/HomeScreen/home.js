@@ -442,7 +442,7 @@ export default function Home({ navigation }) {
 
         // Get the data via axios get request
         if (userLocationPermission === true) {
-            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/my/near', 1, {
+            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/near', 1, {
                 params: {
                     latitude: userLocation.coords.latitude,
                     longitude: userLocation.coords.longitude
