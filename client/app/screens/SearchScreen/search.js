@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     flatListContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        height: AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.275) + Normalize(60) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2)),
+        height: AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.275) + Normalize(60) + (AppStyle.windowSize.width * 0.2)),
     },
     itemWrapper: {
         flexDirection: 'row',
