@@ -38,6 +38,7 @@ export default function Search({ navigation }) {
     let KostList = [];
     let page = 1;
 
+    //TODO: offer the user to activate the gps to enable using the nearby / near you filter
     dummyFilter = [
         [
             {
