@@ -897,6 +897,9 @@ export default function KostDetail({ route, navigation }) {
         function _getRoomData() {
             if (selectedKostRoom !== null) {
 
+                // creates the cancel token source
+                var cancelSource = axios.CancelToken.source()
+
                 axios.all([
                     kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
                         cancelToken: cancelSource.token
