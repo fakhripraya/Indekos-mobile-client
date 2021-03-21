@@ -9,8 +9,8 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
 import React, { useEffect, useRef, useState } from 'react';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 
 export default function RoomSelection({ navigation }) {
 
@@ -257,7 +257,7 @@ export default function RoomSelection({ navigation }) {
                     return (
                         <TouchableOpacity key={index} onPress={() => { updatePeriodList(index, parent) }}>
                             <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: Normalize(12) }}>{item.desc}</Text>
+                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: NormalizeFont(12) }}>{item.desc}</Text>
                             </View>
                         </TouchableOpacity>
                     )
@@ -285,11 +285,11 @@ export default function RoomSelection({ navigation }) {
 
         return (
             <View style={styles.absoluteContainer}>
-                <View style={styles.roomFloor}><Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>{dataList[containerIndex].RoomLevel}</Text></View>
+                <View style={styles.roomFloor}><Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>{dataList[containerIndex].RoomLevel}</Text></View>
                 <View style={styles.roomInfo}>
                     <View >
-                        <Text style={{ fontSize: Normalize(12) }}>{dataList[containerIndex].RoomDesc}</Text>
-                        <Text style={{ fontSize: Normalize(12) }}>{dataList[containerIndex].RoomSize}</Text>
+                        <Text style={{ fontSize: NormalizeFont(12) }}>{dataList[containerIndex].RoomDesc}</Text>
+                        <Text style={{ fontSize: NormalizeFont(12) }}>{dataList[containerIndex].RoomSize}</Text>
                     </View>
                     <View style={{ position: 'absolute', flexDirection: 'row', left: '70%' }} >
                         <TouchableOpacity style={styles.arrow} onPress={() => { prevRoom() }}>
@@ -322,14 +322,14 @@ export default function RoomSelection({ navigation }) {
         if (item.occupied === true) {
             return (
                 <View style={[styles.roomList, { backgroundColor: 'gray' }]}>
-                    <Text style={{ color: 'white', fontSize: Normalize(14) }}>Full</Text>
+                    <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>Full</Text>
                 </View>
             )
         } else {
             return (
                 <TouchableOpacity onPress={() => { updateDataList(index) }}>
                     <View style={[styles.roomList, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                        <Text style={{ color: txtColor, fontSize: Normalize(14) }}>{item.key}</Text>
+                        <Text style={{ color: txtColor, fontSize: NormalizeFont(14) }}>{item.key}</Text>
                     </View>
                 </TouchableOpacity>
             )
@@ -394,19 +394,19 @@ export default function RoomSelection({ navigation }) {
                     <Text style={styles.containerTitle}>Date</Text>
                     <View style={styles.buttonWrapper}>
                         <View style={[styles.buttonDate, { width: AppStyle.windowSize.width * 0.225 }]}>
-                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>12</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>12</Text>
                         </View>
                         <View style={[styles.buttonDate, { width: AppStyle.windowSize.width * 0.40 }]}>
-                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>October</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>October</Text>
                         </View>
                         <View style={[styles.buttonDate, { width: AppStyle.windowSize.width * 0.225 }]}>
-                            <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>2012</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>2012</Text>
                         </View>
                     </View>
                 </View>
                 <View style={styles.container_3}>
                     <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Next</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
     headerText: {
         color: '#333',
         fontWeight: 'bold',
-        fontSize: Normalize(18),
+        fontSize: NormalizeFont(18),
     },
     headerIcon: {
         position: 'absolute',
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: '2%',
         alignSelf: 'flex-start',
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
     },
     nextBtn: {
         borderWidth: 1,

@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { AppStyle } from '../config/app.config';
-import { Normalize } from '../functions/normalize';
+import { Normalize, NormalizeFont } from '../functions/normalize';
 import { animated, useTransition } from 'react-spring';
 import { usePromiseTracker } from "react-promise-tracker";
 
@@ -37,7 +37,7 @@ const PromiseSpinner = () => {
             >
                 <View style={styles.spinner}>
                     <ActivityIndicator size="large" color={AppStyle.main_color} />
-                    <Text style={{ fontSize: Normalize(14) }}>Loading...</Text>
+                    <Text style={{ fontSize: NormalizeFont(14) }}>Loading...</Text>
                 </View>
             </Modal>
         </AnimatedView>
@@ -56,11 +56,11 @@ const styles = StyleSheet.create({
         flex: 1,
         elevation: 5,
         alignItems: 'center',
-        borderRadius: 50 / 2,
         backgroundColor: 'white',
         justifyContent: 'center',
-        maxWidth: (AppStyle.screenSize.width * 0.33),
-        maxHeight: (AppStyle.screenSize.height * 0.2),
+        maxWidth: Normalize(100),
+        maxHeight: Normalize(100),
+        borderRadius: Normalize(25),
         left: (AppStyle.screenSize.width - (AppStyle.screenSize.width / 2)) - (AppStyle.screenSize.width * 0.167),
         top: (AppStyle.screenSize.height - (AppStyle.screenSize.height / 2)) - (AppStyle.screenSize.height * 0.15),
     },

@@ -7,14 +7,14 @@ import {
 } from 'react-native';
 import {
     popUpModalChange
-} from '../../redux'
+} from '../../redux';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
@@ -154,7 +154,7 @@ export default function RegisterFinal({ route, navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: Normalize(14), fontWeight: 'bold' }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold' }]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
-        fontSize: Normalize(32),
+        fontSize: NormalizeFont(32),
         bottom: AppStyle.screenSize.height / 4,
     },
     inputContainer: {
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     authInputTitle: {
         fontWeight: 'bold',
         bottom: Normalize(5),
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
         alignSelf: 'flex-start',
     },
     authInput: {
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     },
     authInputText: {
         flex: 1,
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
         paddingLeft: Normalize(10),
     },
     o2AuthWrapper: {

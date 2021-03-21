@@ -11,7 +11,7 @@ import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { useAxiosGet } from '../../promise/axios_get';
-import { Normalize } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import HomeBackground from '../../components/Backgrounds/home_background';
 import { AppStyle, AuthService, KostService } from '../../config/app.config';
@@ -195,10 +195,10 @@ export default function Home({ navigation }) {
 
             return (
                 <View style={styles.nameWrapper}>
-                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
+                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
                         <SkeletonLoading />
                     </View>
-                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: 25 }}>
+                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
                         <SkeletonLoading />
                     </View>
                 </View>
@@ -208,7 +208,7 @@ export default function Home({ navigation }) {
             return (
                 <View style={styles.nameWrapper}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'white', left: AppStyle.windowSize.width * 0.075 }}><Text style={{ fontWeight: 'bold' }}>Hello</Text>, {data.displayname}</Text>
+                        <Text style={{ fontSize: NormalizeFont(18), color: 'white', left: AppStyle.windowSize.width * 0.075 }}><Text style={{ fontWeight: 'bold' }}>Hello</Text>, {data.displayname}</Text>
                     </View>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                         <TouchableOpacity style={{ width: Normalize(24), justifyContent: 'center', alignItems: 'center', right: AppStyle.windowSize.width * 0.075 }}>
@@ -239,7 +239,7 @@ export default function Home({ navigation }) {
             }
 
             return (
-                <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: 25 }]}>
+                <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(25) }]}>
                     <SkeletonLoading />
                 </View>
             );
@@ -252,7 +252,7 @@ export default function Home({ navigation }) {
 
                 return (
                     <ImageBackground
-                        imageStyle={{ borderRadius: 25 }}
+                        imageStyle={{ borderRadius: Normalize(25) }}
                         style={styles.backgroundImg}
                         source={{ uri: item.thumbnail }}
                     />
@@ -293,26 +293,26 @@ export default function Home({ navigation }) {
                                         city: "Jakarta Barat",
                                     }
                                 })
-                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
                                 <View style={{ height: '50%' }}>
                                     <ImageBackground
-                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                        imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
                                         style={styles.backgroundImg}
                                         source={{ uri: item.uri }}
                                     />
                                 </View>
                                 <View style={{ height: '50%' }}>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.nama}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.alamat}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -327,11 +327,11 @@ export default function Home({ navigation }) {
             <React.Fragment>
                 <View style={styles.bookListHeader}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Book It Now</Text>
+                        <Text style={{ fontSize: NormalizeFont(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Book It Now</Text>
                     </View>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                         <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                            <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -340,12 +340,12 @@ export default function Home({ navigation }) {
                         <View style={{ left: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
                     </View>
                     <View style={{ width: AppStyle.windowSize.width - Normalize(98), position: 'absolute', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                        <Text style={{ marginRight: Normalize(10), fontSize: Normalize(18), color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>1</Text></View>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>2</Text></View>
-                        <Text style={{ marginRight: Normalize(5), fontSize: Normalize(14), color: AppStyle.main_color }}>:</Text>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
-                        <View style={styles.timerBox}><Text style={{ fontSize: Normalize(14), color: 'white' }}>0</Text></View>
+                        <Text style={{ marginRight: Normalize(10), fontSize: NormalizeFont(18), color: 'black', fontWeight: 'bold', color: AppStyle.main_color }}>Will be ended in</Text>
+                        <View style={styles.timerBox}><Text style={{ fontSize: NormalizeFont(14), color: 'white' }}>1</Text></View>
+                        <View style={styles.timerBox}><Text style={{ fontSize: NormalizeFont(14), color: 'white' }}>2</Text></View>
+                        <Text style={{ marginRight: Normalize(5), fontSize: NormalizeFont(14), color: AppStyle.main_color }}>:</Text>
+                        <View style={styles.timerBox}><Text style={{ fontSize: NormalizeFont(14), color: 'white' }}>0</Text></View>
+                        <View style={styles.timerBox}><Text style={{ fontSize: NormalizeFont(14), color: 'white' }}>0</Text></View>
                     </View>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                         <View style={{ right: Normalize(10), width: Normalize(39), height: 1, backgroundColor: 'rgba(0,0,0,0.1)' }} />
@@ -375,26 +375,26 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
                                 <View style={{ height: '50%' }}>
                                     <ImageBackground
-                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                        imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
                                         style={styles.backgroundImg}
                                         source={{ uri: item.uri }}
                                     />
                                 </View>
                                 <View style={{ height: '50%' }}>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.nama}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.alamat}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -409,11 +409,11 @@ export default function Home({ navigation }) {
             <React.Fragment>
                 <View style={styles.promoListHeader}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Promo</Text>
+                        <Text style={{ fontSize: NormalizeFont(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Promo</Text>
                     </View>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                         <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                            <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -472,19 +472,19 @@ export default function Home({ navigation }) {
                 return (
                     <>
                         <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
-                            <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
+                            <Text style={{ fontSize: NormalizeFont(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
                         </View>
                         <View style={styles.nearYouListHeader}>
-                            <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: 25 }}>
+                            <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: Normalize(10) }}>
                                 <SkeletonLoading />
                             </View>
                             <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                                 <TouchableOpacity disabled={true} style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                    <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderTopLeftRadius: 25, borderBottomLeftRadius: 25 }]}>
+                        <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderTopLeftRadius: Normalize(10), borderBottomLeftRadius: Normalize(10) }]}>
                             <SkeletonLoading />
                         </View>
                     </>
@@ -510,23 +510,23 @@ export default function Home({ navigation }) {
                                                 city: item.city,
                                             }
                                         })
-                                    }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                                    }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
                                         <View style={{ height: '50%' }}>
                                             <ImageBackground
-                                                imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                                imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
                                                 style={styles.backgroundImg}
                                                 source={{ uri: item.thumbnail_url }}
                                             />
                                         </View>
                                         <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
                                             <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
+                                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
                                             </View>
                                             <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.city}</Text>
+                                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
                                             </View>
                                             <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.thumbnail_price}</Text>
+                                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.thumbnail_price}</Text>
                                             </View>
                                         </View>
                                     </TouchableOpacity>
@@ -540,15 +540,15 @@ export default function Home({ navigation }) {
                 return (
                     <>
                         <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
-                            <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
+                            <Text style={{ fontSize: NormalizeFont(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
                         </View>
                         <View style={styles.nearYouListHeader}>
                             <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                <Text style={{ fontSize: Normalize(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList === null ? "" : (nearYouList.length === 0 ? "" : nearYouList[0].carousel_list[0].city)}</Text>
+                                <Text style={{ fontSize: NormalizeFont(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList === null ? "" : (nearYouList.length === 0 ? "" : nearYouList[0].carousel_list[0].city)}</Text>
                             </View>
                             <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                                 <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                    <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -578,26 +578,26 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: 25, borderColor: '#BBBBBB' }}>
+                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
                                 <View style={{ height: '50%' }}>
                                     <ImageBackground
-                                        imageStyle={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+                                        imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
                                         style={styles.backgroundImg}
                                         source={{ uri: item.uri }}
                                     />
                                 </View>
                                 <View style={{ height: '50%' }}>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.nama}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.alamat}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                     </View>
                                     <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: Normalize(10), fontWeight: 'bold' }}>{item.harga}</Text>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -612,11 +612,11 @@ export default function Home({ navigation }) {
             <React.Fragment>
                 <View style={styles.recListHeader}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ fontSize: Normalize(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Recommendation</Text>
+                        <Text style={{ fontSize: NormalizeFont(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>Recommendation</Text>
                     </View>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                         <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                            <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                            <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -656,9 +656,9 @@ const styles = StyleSheet.create({
     },
     newsCarouselContainer: {
         alignSelf: 'center',
+        height: Normalize(125),
         width: AppStyle.windowSize.width * 0.9,
         top: AppStyle.windowSize.height * 0.025,
-        height: AppStyle.windowSize.height * 0.2,
     },
     backgroundImg: {
         flex: 1,

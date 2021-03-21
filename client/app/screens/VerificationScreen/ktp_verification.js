@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import React, { useRef, useState } from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { AppStyle } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default function KTPVerification({ navigation }) {
@@ -88,12 +88,12 @@ export default function KTPVerification({ navigation }) {
                 />
             </View>
             <TouchableOpacity style={styles.selfieBtn} onPress={() => { handleCamera() }}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>
                     Take Selfie
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { handleNext() }} style={styles.nextBtn}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Next</Text>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Next</Text>
             </TouchableOpacity>
         </>
     )
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     headerText: {
         color: '#333',
         fontWeight: 'bold',
-        fontSize: Normalize(18),
+        fontSize: NormalizeFont(18),
     },
     headerIcon: {
         position: 'absolute',

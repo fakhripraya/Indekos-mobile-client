@@ -8,11 +8,11 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppStyle } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
-import { trackPromise } from 'react-promise-tracker'
-import { AuthService } from '../../config/app.config';
-import Background from '../../components/Backgrounds/login_background'
+import { trackPromise } from 'react-promise-tracker';
+import { NormalizeFont } from '../../functions/normalize';
+import { AppStyle, AuthService } from '../../config/app.config';
+import Background from '../../components/Backgrounds/login_background';
 
 // creates the promised base http client
 const api = axios.create({
@@ -59,7 +59,7 @@ export default function Login({ navigation }) {
                 </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.authInputWrapper}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 14, alignSelf: 'flex-start', bottom: 5 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: 5 }}>
                             Username
                         </Text>
                         <View style={styles.authInput}>
@@ -68,11 +68,11 @@ export default function Login({ navigation }) {
                                 onChangeText={(newVal) => setInput(newVal)}
                                 value={inputValue}
                                 textAlign="left"
-                                style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
+                                style={{ flex: 1, paddingLeft: 10, fontSize: NormalizeFont(16) }} />
                         </View>
                     </View>
                     <View style={styles.authInputWrapper}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 14, alignSelf: 'flex-start', bottom: 5 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: 5 }}>
                             Password
                         </Text>
                         <View style={styles.authInput}>
@@ -81,7 +81,7 @@ export default function Login({ navigation }) {
                                 onChangeText={(newVal) => setInput(newVal)}
                                 value={inputValue}
                                 textAlign="left"
-                                style={{ flex: 1, paddingLeft: 10, fontSize: 16 }} />
+                                style={{ flex: 1, paddingLeft: 10, fontSize: NormalizeFont(16) }} />
                         </View>
                     </View>
                     <View style={styles.o2AuthWrapper}>
@@ -95,13 +95,13 @@ export default function Login({ navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: 16 }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(16) }]}>
                             Submit
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: 14 }} >
+                    <Text style={{ fontSize: NormalizeFont(14) }} >
                         Forgot Password? <Text style={{ color: AppStyle.fourt_main_color }}>Click Here</Text>
                     </Text>
                 </View>
@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        fontSize: NormalizeFont(32),
         bottom: AppStyle.screenSize.height / 4,
-        fontSize: 32
     },
     inputContainer: {
         elevation: 5,

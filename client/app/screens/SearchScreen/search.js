@@ -3,10 +3,10 @@ import { useDispatch } from 'react-redux';
 import { popUpModalChange } from '../../redux';
 import Carousel from 'react-native-snap-carousel';
 import { trackPromise } from 'react-promise-tracker';
-import { Normalize } from '../../functions/normalize';
 import React, { useRef, useState, useEffect } from 'react';
 import { AppStyle, KostService } from '../../config/app.config';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { MappedFacilities } from '../../components/Icons/facilities';
 import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import SearchBackground from '../../components/Backgrounds/search_background';
@@ -99,7 +99,7 @@ export default function Search({ navigation }) {
                     return (
                         <TouchableOpacity key={index} onPress={() => { updateFilterList(index, parent) }}>
                             <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: Normalize(12) }}>{item.desc}</Text>
+                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: NormalizeFont(12) }}>{item.desc}</Text>
                             </View>
                         </TouchableOpacity>
                     )
@@ -145,18 +145,18 @@ export default function Search({ navigation }) {
                     <View style={styles.itemWrapper} >
                         <View style={styles.thumbnailContainer}>
                             <ImageBackground
-                                imageStyle={{ borderRadius: Normalize(15) }}
+                                imageStyle={{ borderRadius: Normalize(10) }}
                                 style={styles.backgroundImg}
                                 source={{ uri: item.kost.thumbnail_url }}
                             />
                         </View>
                         <View style={styles.itemContainer}>
                             <View style={styles.itemTitle}>
-                                <Text style={{ fontWeight: 'bold' }}>{item.kost.kost_name}</Text>
+                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.kost_name.length > 15 ? item.kost.kost_name.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.kost_name}</Text>
                             </View>
                             <View style={styles.itemLocation}>
                                 <Entypo name="location" size={Normalize(14)} color="black" style={{ marginRight: Normalize(12.5) }} />
-                                <Text style={{ fontWeight: 'bold' }}>{item.kost.city}</Text>
+                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.city.length > 15 ? item.kost.city.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.city}</Text>
                             </View>
                             <View style={styles.itemFacilitiesContainer}>
                                 <View style={styles.itemFacilities}>
@@ -168,9 +168,9 @@ export default function Search({ navigation }) {
                             </View>
                             <View style={styles.itemPrice}>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ fontSize: Normalize(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                                    <Text style={{ fontSize: NormalizeFont(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
                                 </View>
-                                <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                                <Text style={{ fontSize: NormalizeFont(14), top: 5, color: 'gray' }}>/Month</Text>
                             </View>
                         </View>
                         <View style={styles.favButtonContainer}>
@@ -269,15 +269,15 @@ export default function Search({ navigation }) {
                     <View style={styles.sortButtonWrapper}>
                         <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1, flexDirection: 'row' }]}>
                             <AntDesign name="filter" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Filter</Text>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Filter</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.sortButton, { flexDirection: 'row' }]}>
                             <MaterialCommunityIcons name="sort" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Sort</Text>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Sort</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
                             <Ionicons name="map-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: Normalize(12) }}>Map</Text>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Map</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -354,10 +354,10 @@ const styles = StyleSheet.create({
     },
     itemWrapper: {
         flexDirection: 'row',
+        height: Normalize(100),
         marginBottom: Normalize(15),
         justifyContent: 'space-between',
         width: AppStyle.windowSize.width * 1,
-        height: AppStyle.windowSize.height * 0.2,
     },
     backgroundImg: {
         flex: 1,
@@ -366,29 +366,26 @@ const styles = StyleSheet.create({
     },
     thumbnailContainer: {
         alignSelf: 'center',
+        width: Normalize(100),
+        height: Normalize(100),
         left: AppStyle.windowSize.width * 0.05,
-        width: AppStyle.windowSize.width * 0.9 * 0.375,
-        height: AppStyle.windowSize.width * 0.9 * 0.375,
     },
     itemContainer: {
         alignSelf: 'center',
+        height: Normalize(100),
         paddingLeft: Normalize(15),
+        justifyContent: 'space-evenly',
         width: AppStyle.windowSize.width * 0.9 * 0.525,
-        height: AppStyle.windowSize.width * 0.9 * 0.375,
     },
     itemTitle: {
-        marginTop: Normalize(5),
         justifyContent: 'center',
     },
     itemLocation: {
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: Normalize(5),
-        marginBottom: Normalize(10),
     },
     itemFacilitiesContainer: {
         flexDirection: 'column',
-        marginBottom: Normalize(5),
         height: AppStyle.windowSize.width * 0.9 * 0.375 * 0.3,
     },
     itemFacilities: {

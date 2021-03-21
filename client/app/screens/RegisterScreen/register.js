@@ -15,7 +15,7 @@ import { AppStyle } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
@@ -145,7 +145,7 @@ export default function Register({ navigation }) {
                                 textAlign="left"
                                 value={inputValue}
                                 onChangeText={(newVal) => setInput(newVal)}
-                                style={{ flex: 1, paddingLeft: Normalize(10), fontSize: Normalize(14) }} />
+                                style={{ flex: 1, paddingLeft: Normalize(10), fontSize: NormalizeFont(14) }} />
                         </View>
                     </View>
                     <View style={styles.o2AuthWrapper}>
@@ -165,11 +165,11 @@ export default function Register({ navigation }) {
                     </TouchableOpacityPrevent>
                 </View>
                 <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: Normalize(14) }} >
+                    <Text style={{ fontSize: NormalizeFont(14) }} >
                         Have an account ?{' '}
                     </Text>
                     <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
-                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: Normalize(14) }}>
+                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(14) }}>
                             Login
                         </Text>
                     </TouchableOpacityPrevent>
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
-        fontSize: Normalize(32),
+        fontSize: NormalizeFont(32),
         bottom: AppStyle.screenSize.height / 4,
     },
     inputContainer: {
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     warnMessageText: {
         color: 'white',
         textAlign: 'center',
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
     },
     authInputWrapper: {
         width: '100%',
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     authInputTitle: {
         fontWeight: 'bold',
         bottom: Normalize(5),
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
         alignSelf: 'flex-start',
     },
     authInput: {
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     },
     submitBtnText: {
         fontWeight: 'bold',
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
         backgroundColor: AppStyle.sub_main_color,
     },
     loginBtn: {

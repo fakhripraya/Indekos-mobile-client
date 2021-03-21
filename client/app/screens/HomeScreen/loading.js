@@ -10,7 +10,7 @@ import {
 import React, { useEffect } from 'react';
 import * as Location from 'expo-location';
 import { useDispatch } from 'react-redux';
-import { Normalize } from '../../functions/normalize';
+import { NormalizeFont } from '../../functions/normalize';
 
 // Loading is the root of Home stack
 const Loading = () => {
@@ -48,7 +48,7 @@ const Loading = () => {
     return (
         <View style={styles.container}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text style={{ fontSize: Normalize(12) }}>Loading Home...</Text>
+            <Text style={{ fontSize: NormalizeFont(12) }}>Loading Home...</Text>
         </View>
     )
 }

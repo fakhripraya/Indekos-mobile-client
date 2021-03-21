@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { UserService } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background';
 
 // creates the promised base http client
@@ -56,18 +56,18 @@ export default function FillName({ navigation }) {
     return (
         <FirstBackground>
             <View style={styles.wrapper}>
-                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(18) }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(18) }}>My <Text style={{ color: AppStyle.fourt_main_color }}>name</Text> is</Text>
                 <View style={styles.input}>
                     <TextInput
                         textAlign="center"
                         value={inputValue}
                         onChangeText={(newVal) => setInput(newVal)}
-                        style={{ flex: 1, paddingLeft: 0, fontSize: Normalize(14) }} />
+                        style={{ flex: 1, paddingLeft: 0, fontSize: NormalizeFont(14) }} />
 
                 </View>
                 <TouchableOpacity onPress={() => handleSubmit()}>
                     <View style={[styles.submitButton, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Submit</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Submit</Text>
                     </View>
                 </TouchableOpacity>
             </View>

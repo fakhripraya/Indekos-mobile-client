@@ -9,9 +9,9 @@ import {
 import React from 'react';
 import { popUpModalChange } from '../../redux';
 import { AppStyle } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
 import { useSelector, useDispatch } from 'react-redux';
 import { animated, useTransition } from 'react-spring';
+import { NormalizeFont } from '../../functions/normalize';
 
 // spring animated view element
 const AnimatedView = animated(View)
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: 'bold',
-        fontSize: Normalize(22),
+        fontSize: NormalizeFont(22),
         color: AppStyle.sub_main_color,
     },
     messageWrapper: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     },
     messageText: {
         textAlign: 'center',
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
     },
     buttonWrapper: {
         flex: 1,
@@ -130,6 +130,6 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
     }
 });

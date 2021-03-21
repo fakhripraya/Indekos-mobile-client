@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { AppStyle } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
-import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from 'react-native'
-import { SecondBackground } from '../../components/Backgrounds/create_user_background'
+import { Normalize, NormalizeFont } from '../../functions/normalize';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { SecondBackground } from '../../components/Backgrounds/create_user_background';
 
 export default function Agreement() {
     return (
@@ -17,7 +17,7 @@ export default function Agreement() {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        <Text style={{ color: 'black', fontSize: Normalize(14) }}>
+                        <Text style={{ color: 'black', fontSize: NormalizeFont(14) }}>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia libero nemo perspiciatis nam hic soluta aut labore, at porro autem deleniti repellendus eveniet cumque placeat provident rerum maiores ipsa! Molestiae.
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. At recusandae sed animi hic quidem suscipit pariatur quisquam perspiciatis laborum doloremque voluptates non, velit quis corporis molestias tempora illum tenetur ipsum.
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda cupiditate illo odio laboriosam nisi id repellendus maxime sequi veritatis magni, veniam culpa. Aut veniam nobis assumenda eveniet? Nostrum, reiciendis dolorum!
@@ -30,7 +30,7 @@ export default function Agreement() {
                 <View style={styles.buttonWrapper}>
                     <TouchableOpacity style={styles.agreeButton}>
                         <View >
-                            <Text style={{ color: 'white', fontSize: Normalize(14) }}>
+                            <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>
                                 Agree
                             </Text>
                         </View>

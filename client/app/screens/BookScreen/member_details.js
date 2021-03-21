@@ -10,7 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { AppStyle } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 
 export default function MemberDetails({ navigation }) {
 
@@ -131,42 +131,42 @@ export default function MemberDetails({ navigation }) {
         return (
             <View style={styles.mappedContainer}>
                 <View style={styles.detailHeader}>
-                    <View style={{ position: 'absolute', alignSelf: 'flex-start' }}><Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Details</Text></View>
-                    <View style={{ position: 'absolute', alignSelf: 'flex-end' }}><Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Member {children.index + 1}</Text></View>
+                    <View style={{ position: 'absolute', alignSelf: 'flex-start' }}><Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Details</Text></View>
+                    <View style={{ position: 'absolute', alignSelf: 'flex-end' }}><Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Member {children.index + 1}</Text></View>
                 </View>
                 <View style={styles.nameInput}>
-                    <Text style={{ alignSelf: 'flex-start', paddingBottom: Normalize(10), fontWeight: 'bold', fontSize: Normalize(14) }}>Member Name</Text>
+                    <Text style={{ alignSelf: 'flex-start', paddingBottom: Normalize(10), fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Member Name</Text>
                     <View style={styles.nameInputBox}>
                         <TextInput
                             textAlign="left"
                             value={name}
                             onChangeText={(newVal) => setName(newVal)}
                             onEndEditing={() => { handleName(name, children.index) }}
-                            style={{ flex: 1, paddingLeft: Normalize(10), fontSize: Normalize(14) }} />
+                            style={{ flex: 1, paddingLeft: Normalize(10), fontSize: NormalizeFont(14) }} />
                     </View>
                 </View>
                 <View style={styles.phoneInput}>
-                    <Text style={{ alignSelf: 'flex-start', paddingBottom: Normalize(10), fontWeight: 'bold', fontSize: Normalize(14) }}>Phone</Text>
+                    <Text style={{ alignSelf: 'flex-start', paddingBottom: Normalize(10), fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Phone</Text>
                     <View style={styles.phoneInputBox}>
                         <TextInput
                             textAlign="left"
                             value={phone}
                             onChangeText={(newVal) => setPhone(newVal)}
                             onEndEditing={() => { handlePhone(phone, children.index) }}
-                            style={{ flex: 1, paddingLeft: Normalize(10), fontSize: Normalize(14) }} />
+                            style={{ flex: 1, paddingLeft: Normalize(10), fontSize: NormalizeFont(14) }} />
                     </View>
                 </View>
                 <View style={styles.genderInput}>
-                    <Text style={{ alignSelf: 'flex-start', paddingBottom: Normalize(10), fontWeight: 'bold', fontSize: Normalize(14) }}>Gender</Text>
+                    <Text style={{ alignSelf: 'flex-start', paddingBottom: Normalize(10), fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Gender</Text>
                     <View style={styles.genderWrapper}>
                         <TouchableOpacity onPress={() => { toggleGender(0, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-start', backgroundColor: bgColorMale, borderColor: txtColorMale }]}>
                             <View>
-                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: Normalize(14), color: txtColorMale }}>Male</Text>
+                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: NormalizeFont(14), color: txtColorMale }}>Male</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { toggleGender(1, children.index) }} style={[styles.buttonGender, { position: 'absolute', alignSelf: 'flex-end', backgroundColor: bgColorFemale, borderColor: txtColorFemale }]}>
                             <View>
-                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: Normalize(14), color: txtColorFemale }}>Female</Text>
+                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: NormalizeFont(14), color: txtColorFemale }}>Female</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -229,19 +229,19 @@ export default function MemberDetails({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.absoluteContainer}>
-                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>This Room For</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>This Room For</Text>
                     <View style={styles.checkboxWrapper}>
                         <View style={styles.checkboxContainer}>
                             <CustomCheckboxMe />
-                            <Text onPress={() => checkMe()} style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: Normalize(14) }}>Me</Text>
+                            <Text onPress={() => checkMe()} style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Me</Text>
                         </View>
                         <View style={styles.checkboxContainer}>
                             <CustomCheckboxOther />
-                            <Text onPress={() => checkOther()} style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: Normalize(14) }}>Other</Text>
+                            <Text onPress={() => checkOther()} style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Other</Text>
                         </View>
                     </View>
-                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Person</Text>
-                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>This room maximum is {maxMember} persons</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Person</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>This room maximum is {maxMember} persons</Text>
                     <View style={{ flexDirection: 'row', marginTop: AppStyle.windowSize.height * 0.03355, marginBottom: AppStyle.windowSize.height * 0.03355 }}>
                         <View>
                             <TouchableOpacity style={[styles.icon, { marginRight: Normalize(30), marginLeft: Normalize(10) }]} >
@@ -253,7 +253,7 @@ export default function MemberDetails({ navigation }) {
                                 <AntDesign name="minus" size={Normalize(24)} color={AppStyle.fourt_main_color} />
                             </TouchableOpacity>
                             <View style={[styles.icon, { marginRight: Normalize(10), marginLeft: 0 }]}>
-                                <Text style={{ fontSize: Normalize(24) }}>
+                                <Text style={{ fontSize: NormalizeFont(24) }}>
                                     {loopingInput.length}
                                 </Text>
                             </View>
@@ -273,7 +273,7 @@ export default function MemberDetails({ navigation }) {
                 })}
                 <View style={styles.container_3}>
                     <TouchableOpacity onPress={() => { handleNext() }} style={[styles.nextBtn, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Next</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     headerText: {
         color: '#333',
         fontWeight: 'bold',
-        fontSize: Normalize(18),
+        fontSize: NormalizeFont(18),
     },
     headerIcon: {
         position: 'absolute',

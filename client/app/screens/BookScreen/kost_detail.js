@@ -4,7 +4,6 @@ import Carousel from 'react-native-snap-carousel';
 import RBSheet from "react-native-raw-bottom-sheet";
 import MapShow from '../../components/Maps/map_show';
 import { useAxiosGet } from '../../promise/axios_get';
-import { Normalize } from '../../functions/normalize';
 import { CurrencyPrefix } from '../../functions/currency';
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
@@ -12,8 +11,9 @@ import { AppStyle, KostService } from '../../config/app.config';
 import withDelay from '../../components/HOC/prevent_spam_click';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
 import { MappedFacilities } from '../../components/Icons/facilities';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
-import HomeBackground from '../../components/Backgrounds/book_background';
+import BookBackground from '../../components/Backgrounds/book_background';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, InteractionManager, ActivityIndicator } from 'react-native';
 
@@ -133,7 +133,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.descContainer} >
                     <View style={styles.descTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Description</Text>
                     </View>
                     <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
                         <SkeletonLoading />
@@ -145,10 +145,10 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.descContainer} >
                     <View style={styles.descTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Description</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Description</Text>
                     </View>
                     <View>
-                        <Text style={{ fontSize: Normalize(14) }}>
+                        <Text style={{ fontSize: NormalizeFont(14) }}>
                             {data.kost_desc}
                         </Text>
                     </View>
@@ -179,7 +179,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.facilitiesContainer} >
                     <View style={styles.facilitiesTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Main Facilities</Text>
                     </View>
                     <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
                         <SkeletonLoading />
@@ -191,7 +191,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.facilitiesContainer} >
                     <View style={styles.facilitiesTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Main Facilities</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Main Facilities</Text>
                     </View>
                     <View style={styles.facilitiesBody}>
                         <MappedFacilities facilities={dataArray} category={0} />
@@ -222,7 +222,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.locationContainer} >
                     <View style={styles.locationTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Location</Text>
                     </View>
                     <View style={[styles.locationBody, { backgroundColor: '#ebebeb', overflow: 'hidden' }]}>
                         <SkeletonLoading />
@@ -234,7 +234,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.locationContainer} >
                     <View style={styles.locationTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Location</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Location</Text>
                     </View>
                     <View style={styles.locationBody}>
                         <MapShow latitude={data.latitude} longitude={data.longitude} />
@@ -266,7 +266,7 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.benchmarkContainer}>
                     <View style={styles.benchmarkTitle}>
                         <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
+                        <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Benchmark</Text>
                     </View >
                     <View style={{ flexDirection: 'column' }}>
                         <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
@@ -281,7 +281,7 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.benchmarkContainer}>
                     <View style={styles.benchmarkTitle}>
                         <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Benchmark</Text>
+                        <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Benchmark</Text>
                     </View >
                     <View style={{ flexDirection: 'column' }}>
                         {
@@ -290,7 +290,7 @@ export default function KostDetail({ route, navigation }) {
                                     <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                                         <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
                                         {'   '}
-                                        <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.benchmark_desc}</Text>
+                                        <Text style={{ textAlign: 'center', fontSize: NormalizeFont(12) }}>{item.benchmark_desc}</Text>
                                     </Text>
                                 )
                             })
@@ -323,7 +323,7 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.accessibilityContainer}>
                     <View style={styles.accessibilityTitle}>
                         <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
+                        <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Accessibility</Text>
                     </View>
                     <View style={{ flexDirection: 'column' }}>
                         <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
@@ -338,7 +338,7 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.accessibilityContainer}>
                     <View style={styles.accessibilityTitle}>
                         <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                        <Text style={{ color: 'gray', fontSize: Normalize(18) }}>Accessibility</Text>
+                        <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Accessibility</Text>
                     </View>
                     <View style={{ flexDirection: 'column' }}>
                         {
@@ -348,7 +348,7 @@ export default function KostDetail({ route, navigation }) {
                                     <Text key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                                         <Octicons name="primitive-dot" size={Normalize(12)} color="black" />
                                         {'   '}
-                                        <Text style={{ textAlign: 'center', fontSize: Normalize(12) }}>{item.accessibility_desc}</Text>
+                                        <Text style={{ textAlign: 'center', fontSize: NormalizeFont(12) }}>{item.accessibility_desc}</Text>
                                     </Text>
                                 )
                             })
@@ -379,7 +379,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.aroundKostContainer}>
                     <View style={styles.aroundKostTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Around Kost</Text>
                     </View>
                     <View style={styles.aroundKostBody}>
                         <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
@@ -397,7 +397,7 @@ export default function KostDetail({ route, navigation }) {
                         return (
                             <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                 <Icons IconID={item.icon_id} />
-                                <Text style={{ fontSize: Normalize(12), marginRight: Normalize(10) }}>{' ' + item.around_desc}</Text>
+                                <Text style={{ fontSize: NormalizeFont(12), marginRight: Normalize(10) }}>{' ' + item.around_desc}</Text>
                             </View>
                         )
                     })
@@ -407,7 +407,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.aroundKostContainer}>
                     <View style={styles.aroundKostTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Around Kost</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Around Kost</Text>
                     </View>
                     <View style={styles.aroundKostBody}>
                         <MappedAroundKost />
@@ -446,7 +446,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.ratingContainer}>
                     <View style={styles.ratingTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Rating</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Rating</Text>
                     </View>
                     <View style={styles.ratingBody}>
                         <View style={styles.ratingBodyLeft}>
@@ -479,44 +479,44 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.ratingContainer}>
                     <View style={styles.ratingTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Rating</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Rating</Text>
                     </View>
                     <View style={styles.ratingBody}>
                         <View style={styles.ratingBodyLeft}>
                             <View style={{ flexDirection: 'row' }}>
                                 <AntDesign name="star" size={Normalize(24)} color="#FFB800" />
-                                <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(20) }}>{avgTotal.toString().substring(0, 3)}</Text>
+                                <Text style={{ marginLeft: Normalize(5), fontSize: NormalizeFont(20) }}>{avgTotal.toString().substring(0, 3)}</Text>
                             </View>
-                            <Text style={{ fontSize: Normalize(16), top: 5, color: 'gray' }}>/5.0</Text>
+                            <Text style={{ fontSize: NormalizeFont(16), top: 5, color: 'gray' }}>/5.0</Text>
                         </View>
                         <View style={styles.ratingBodyRight}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(cleanliness / dataArray.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: NormalizeFont(14) }}>{(cleanliness / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Cleanliness</Text>
+                                <Text style={{ fontSize: NormalizeFont(14) }}>Cleanliness</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(convenience / dataArray.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: NormalizeFont(14) }}>{(convenience / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Convenience</Text>
+                                <Text style={{ fontSize: NormalizeFont(14) }}>Convenience</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(security / dataArray.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: NormalizeFont(14) }}>{(security / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Security</Text>
+                                <Text style={{ fontSize: NormalizeFont(14) }}>Security</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', marginRight: Normalize(10) }}>
                                     <AntDesign name="star" size={Normalize(14)} color="#FFB800" />
-                                    <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(14) }}>{(facilities / dataArray.length).toString().substring(0, 3)}</Text>
+                                    <Text style={{ marginLeft: Normalize(5), fontSize: NormalizeFont(14) }}>{(facilities / dataArray.length).toString().substring(0, 3)}</Text>
                                 </View>
-                                <Text style={{ fontSize: Normalize(14) }}>Facilities</Text>
+                                <Text style={{ fontSize: NormalizeFont(14) }}>Facilities</Text>
                             </View>
                         </View>
                     </View>
@@ -547,11 +547,11 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.reviewContainer}>
                     <View style={styles.reviewTitle}>
                         <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
                         </View>
                         <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                             <TouchableOpacityPrevent>
-                                <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                             </TouchableOpacityPrevent>
                         </View>
                     </View>
@@ -577,11 +577,11 @@ export default function KostDetail({ route, navigation }) {
                 <View style={styles.reviewContainer}>
                     <View style={styles.reviewTitle}>
                         <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
                         </View>
                         <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                             <TouchableOpacityPrevent>
-                                <Text style={{ fontSize: Normalize(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
                             </TouchableOpacityPrevent>
                         </View>
                     </View>
@@ -606,12 +606,12 @@ export default function KostDetail({ route, navigation }) {
                                         <View style={styles.reviewUserHeader}>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <AntDesign name="star" size={Normalize(14)} color="#FFB800" style={{ marginRight: Normalize(5) }} />
-                                                <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{avgTotal.toString().substring(0, 3)}</Text>
+                                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{avgTotal.toString().substring(0, 3)}</Text>
                                             </View>
-                                            <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{item.display_name}</Text>
+                                            <Text style={{ textAlign: 'center', color: 'gray', fontSize: NormalizeFont(12) }}>{item.display_name}</Text>
                                         </View>
                                         <View style={styles.reviewUserBody}>
-                                            <Text style={{ textAlign: 'left', fontSize: Normalize(12), fontWeight: 'bold' }}>
+                                            <Text style={{ textAlign: 'left', fontSize: NormalizeFont(12), fontWeight: 'bold' }}>
                                                 {item.comments}
                                             </Text>
                                         </View>
@@ -685,7 +685,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <>
                     <View style={styles.roomTitle}>
-                        <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
                     </View>
                     <RoomSkeleton />
                 </>
@@ -755,11 +755,11 @@ export default function KostDetail({ route, navigation }) {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(40), marginTop: Normalize(20), marginBottom: Normalize(10) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <FontAwesome5 name="ruler" size={Normalize(20)} color="black" style={{ marginRight: Normalize(5) }} />
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>{props.kostRoom.room_length + props.kostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + props.kostRoom.room_width + props.kostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{props.kostRoom.room_length + props.kostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + props.kostRoom.room_width + props.kostRoom.room_area_uom_desc.substring(0, 1)}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: AppStyle.main_color }}>{roomAvailability > 0 ? "Available" : "unavailable"}</Text>
-                                    <Text style={{ fontSize: Normalize(14), fontWeight: 'bold', color: roomAvailability > 2 ? AppStyle.success : AppStyle.error }}>{roomAvailability > 2 ? roomAvailability + " rooms" : roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"}</Text>
+                                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: AppStyle.main_color }}>{roomAvailability > 0 ? "Available" : "unavailable"}</Text>
+                                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: roomAvailability > 2 ? AppStyle.success : AppStyle.error }}>{roomAvailability > 2 ? roomAvailability + " rooms" : roomAvailability < 2 ? roomAvailability + " room left" : roomAvailability + " rooms left"}</Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20) }}>
@@ -767,15 +767,15 @@ export default function KostDetail({ route, navigation }) {
                                     selectedKostRoom = props.kostRoom;
                                     bottomSheetRef.current.open();
                                 }}>
-                                    <Text style={{ fontSize: Normalize(12), color: AppStyle.fourt_main_color }}>See Details</Text>
+                                    <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.fourt_main_color }}>See Details</Text>
                                 </TouchableOpacityPrevent>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: Normalize(20), marginBottom: Normalize(20) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{CurrencyPrefix(props.kostRoom.room_price_uom_desc) + props.kostRoom.room_price}</Text>
+                                        <Text style={{ marginLeft: Normalize(5), fontSize: NormalizeFont(16) }}>{CurrencyPrefix(props.kostRoom.room_price_uom_desc) + props.kostRoom.room_price}</Text>
                                     </View>
-                                    <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/Month</Text>
+                                    <Text style={{ fontSize: NormalizeFont(14), top: 5, color: 'gray' }}>/Month</Text>
                                 </View>
                                 <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
                                     <TouchableOpacityPrevent onPress={() => {
@@ -784,7 +784,7 @@ export default function KostDetail({ route, navigation }) {
                                             roomDetails: data,
                                         });
                                     }} style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>
-                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: Normalize(14) }}>Choose</Text>
+                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Choose</Text>
                                     </TouchableOpacityPrevent>
                                 </View>
                             </View>
@@ -797,7 +797,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <>
                     <View style={styles.roomTitle}>
-                        <Text style={{ fontSize: Normalize(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
                     </View>
                     {
                         dataArray.map((item, index) => {
@@ -831,7 +831,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.ownerContainer}>
                     <View style={styles.ownerTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Owner</Text>
                     </View>
                     <View style={styles.ownerBody}>
                         <View style={styles.ownerBodyContainer}>
@@ -859,7 +859,7 @@ export default function KostDetail({ route, navigation }) {
             return (
                 <View style={styles.ownerContainer}>
                     <View style={styles.ownerTitle}>
-                        <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Owner</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Owner</Text>
                     </View>
                     <View style={styles.ownerBody}>
                         <View style={styles.ownerBodyContainer}>
@@ -871,13 +871,13 @@ export default function KostDetail({ route, navigation }) {
                                 />
                             </View>
                             <View style={styles.ownerUserHeader}>
-                                <Text style={{ textAlign: 'center', fontSize: Normalize(14), fontWeight: 'bold' }}>{data.display_name}</Text>
-                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: Normalize(12) }}>{data.city}</Text>
+                                <Text style={{ textAlign: 'center', fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{data.display_name}</Text>
+                                <Text style={{ textAlign: 'center', color: 'gray', fontSize: NormalizeFont(12) }}>{data.city}</Text>
                             </View>
                             <View style={styles.ownerUserBody}>
-                                <TouchableOpacityPrevent style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
+                                <TouchableOpacityPrevent style={{ flexDirection: 'row', padding: Normalize(10), alignSelf: 'flex-end', justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.third_main_color }}>
                                     <MaterialIcons name="storefront" size={Normalize(24)} color="white" style={{ marginRight: Normalize(7.5) }} />
-                                    <Text style={{ textAlign: 'center', fontSize: Normalize(12), fontWeight: 'bold', color: 'white' }}>{data.kost_list.length} Kosan Owned</Text>
+                                    <Text style={{ textAlign: 'center', fontSize: NormalizeFont(12), fontWeight: 'bold', color: 'white' }}>{data.kost_list.length} Kosan Owned</Text>
                                 </TouchableOpacityPrevent>
                             </View>
                         </View>
@@ -976,7 +976,7 @@ export default function KostDetail({ route, navigation }) {
             } else {
                 return (
                     <View style={styles.sheetRoomTitle}>
-                        <Text style={{ fontSize: Normalize(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
+                        <Text style={{ fontSize: NormalizeFont(18), fontWeight: 'bold' }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_desc}</Text>
                     </View>
                 )
             }
@@ -1000,12 +1000,12 @@ export default function KostDetail({ route, navigation }) {
                                     <FontAwesome5 name="ruler" size={Normalize(24)} color="black" />
                                 </View>
                                 <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Size</Text>
+                                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Size</Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
+                                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.room_length + selectedKostRoom.room_area_uom_desc.substring(0, 1) + ' x ' + selectedKostRoom.room_width + selectedKostRoom.room_area_uom_desc.substring(0, 1)}</Text>
                                 </View>
                             </View>
                         </View>
@@ -1015,12 +1015,12 @@ export default function KostDetail({ route, navigation }) {
                                     <MaterialIcons name="people-outline" size={Normalize(24)} color="black" />
                                 </View>
                                 <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(14) }}>Guest</Text>
+                                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Guest</Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', height: '50%', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <View style={{ height: '100%', width: '50%', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: Normalize(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
+                                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (selectedKostRoom.max_person > 1 ? selectedKostRoom.max_person + " Person" : selectedKostRoom.max_person + " Persons")}</Text>
                                 </View>
                             </View>
                         </View>
@@ -1042,7 +1042,7 @@ export default function KostDetail({ route, navigation }) {
                         return (
                             <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.male_color, borderRadius: Normalize(10) }}>
                                 <Ionicons name="male" size={Normalize(24)} color="white" />
-                                <Text style={{ color: 'white', fontSize: Normalize(14) }}>Male</Text>
+                                <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>Male</Text>
                             </View>
                         )
                     }
@@ -1050,7 +1050,7 @@ export default function KostDetail({ route, navigation }) {
                         return (
                             <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.female_color, borderRadius: Normalize(10) }}>
                                 <Ionicons name="female" size={Normalize(24)} color="white" />
-                                <Text style={{ color: 'white', fontSize: Normalize(14) }}>Female</Text>
+                                <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>Female</Text>
                             </View>
                         )
                     } else {
@@ -1058,11 +1058,11 @@ export default function KostDetail({ route, navigation }) {
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.male_color, borderRadius: Normalize(10), marginRight: Normalize(5) }}>
                                     <Ionicons name="female" size={Normalize(18)} color="white" />
-                                    <Text style={{ color: 'white', fontSize: Normalize(12) }}>Male</Text>
+                                    <Text style={{ color: 'white', fontSize: NormalizeFont(12) }}>Male</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', height: Normalize(35), padding: Normalize(10), justifyContent: 'center', alignItems: 'center', backgroundColor: AppStyle.female_color, borderRadius: Normalize(10) }}>
                                     <Ionicons name="female" size={Normalize(18)} color="white" />
-                                    <Text style={{ color: 'white', fontSize: Normalize(12) }}>Female</Text>
+                                    <Text style={{ color: 'white', fontSize: NormalizeFont(12) }}>Female</Text>
                                 </View>
                             </View>
                         )
@@ -1085,8 +1085,8 @@ export default function KostDetail({ route, navigation }) {
                         </View>
                         <View style={styles.sheetTopInfoRightItem}>
                             <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={{ color: AppStyle.main_color, fontSize: Normalize(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (props.roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
-                                <Text style={{ color: props.roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: Normalize(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (props.roomAvailability > 2 ? props.roomAvailability + " rooms" : (props.roomAvailability < 2 ? props.roomAvailability + " room left" : props.roomAvailability + " rooms left"))}</Text>
+                                <Text style={{ color: AppStyle.main_color, fontSize: NormalizeFont(14) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : (props.roomAvailability > 0 ? "Available" : "Unavailable")}</Text>
+                                <Text style={{ color: props.roomAvailability > 2 ? AppStyle.success : AppStyle.error, fontSize: NormalizeFont(12) }}> {selectedKostRoom === null || kostRoomDetails === null ? "" : (props.roomAvailability > 2 ? props.roomAvailability + " rooms" : (props.roomAvailability < 2 ? props.roomAvailability + " room left" : props.roomAvailability + " rooms left"))}</Text>
                             </View>
                         </View>
                     </View>
@@ -1101,7 +1101,7 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View style={styles.sheetSharingFac}>
                         <View style={styles.sheetSharingFacTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
                         </View>
                         <View style={styles.sheetSharingFacBody}>
                             <View style={{ backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.9, height: Normalize(24) }}>
@@ -1114,7 +1114,7 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View style={styles.sheetSharingFac}>
                         <View style={styles.sheetSharingFacTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
                         </View>
                         <View style={styles.sheetSharingFacBody}>
                             <MappedFacilities facilities={kostFacilities} category={1} />
@@ -1131,7 +1131,7 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View style={styles.sheetRoomFac}>
                         <View style={styles.sheetRoomFacTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
                         </View>
                         <View style={styles.sheetRoomFacBody}>
                             <View style={{ backgroundColor: '#ebebeb', overflow: 'hidden', width: AppStyle.windowSize.width * 0.9, height: Normalize(24) }}>
@@ -1144,7 +1144,7 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View style={styles.sheetRoomFac}>
                         <View style={styles.sheetRoomFacTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Room Facilities</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Room Facilities</Text>
                         </View>
                         <View style={styles.sheetRoomFacBody}>
                             <MappedFacilities facilities={kostFacilities} category={2} />
@@ -1163,7 +1163,7 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View style={styles.sheetNotes}>
                         <View style={styles.sheetNotesTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Sharing Facilities</Text>
                         </View>
                         <View style={styles.sheetNotesBody}>
                             {
@@ -1182,10 +1182,10 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View style={styles.sheetNotes}>
                         <View style={styles.sheetNotesTitle}>
-                            <Text style={{ fontSize: Normalize(14), fontWeight: 'bold' }}>Notes</Text>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Notes</Text>
                         </View>
                         <View style={styles.sheetNotesBody}>
-                            <Text style={{ fontSize: Normalize(14) }}>
+                            <Text style={{ fontSize: NormalizeFont(14) }}>
                                 {selectedKostRoom === null || kostRoomDetails === null ? "" : selectedKostRoom.comments}
                             </Text>
                         </View>
@@ -1209,9 +1209,9 @@ export default function KostDetail({ route, navigation }) {
                 return (
                     <View style={styles.priceTag}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ marginLeft: Normalize(5), fontSize: Normalize(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
+                            <Text style={{ marginLeft: Normalize(5), fontSize: NormalizeFont(16) }}>{selectedKostRoom === null || kostRoomDetails === null ? "" : CurrencyPrefix(selectedKostRoom.room_price_uom_desc) + selectedKostRoom.room_price}</Text>
                         </View>
-                        <Text style={{ fontSize: Normalize(14), top: 5, color: 'gray' }}>/ Month</Text>
+                        <Text style={{ fontSize: NormalizeFont(14), top: 5, color: 'gray' }}>/ Month</Text>
                     </View>
                 )
             }
@@ -1253,7 +1253,7 @@ export default function KostDetail({ route, navigation }) {
                                 roomDetails: kostRoomDetails,
                             });
                         }} style={styles.bookButton}>
-                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: Normalize(14) }}>Book Now</Text>
+                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Book Now</Text>
                         </TouchableOpacityPrevent>
                     </View>
                 </>
@@ -1296,14 +1296,14 @@ export default function KostDetail({ route, navigation }) {
         return (
             <View style={styles.loadingScreen}>
                 <ActivityIndicator size="large" color="#0000ff" />
-                <Text style={{ fontSize: Normalize(12) }}>Loading Kost...</Text>
+                <Text style={{ fontSize: NormalizeFont(12) }}>Loading Kost...</Text>
             </View>
         )
     } else {
         return (
             //TODO: create function to Prevent double click on navigation, test the leaking memory problem with double click
             <>
-                <HomeBackground >
+                <BookBackground >
                     <View style={styles.header}>
                         <TouchableOpacityPrevent onPress={() => {
                             navigation.pop()
@@ -1315,7 +1315,7 @@ export default function KostDetail({ route, navigation }) {
                         </View>
                     </View>
                     <View style={styles.headerLocation}>
-                        <Text style={{ color: 'white', fontSize: Normalize(12) }} >{kostCity}</Text>
+                        <Text style={{ color: 'white', fontSize: NormalizeFont(12) }} >{kostCity}</Text>
                     </View>
                     <KostPictList />
                     <View style={styles.topBorder} />
@@ -1358,7 +1358,7 @@ export default function KostDetail({ route, navigation }) {
                     <KostRooms />
                     <View style={styles.softLines} />
                     <KostOwner />
-                </HomeBackground>
+                </BookBackground>
                 <KostBottomSheet />
             </>
         )
@@ -1382,7 +1382,7 @@ const styles = StyleSheet.create({
     headerText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: Normalize(20),
+        fontSize: NormalizeFont(20),
     },
     headerIcon: {
         position: 'absolute',
@@ -1446,7 +1446,7 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(10),
     },
     toolsButtonText: {
-        fontSize: Normalize(12),
+        fontSize: NormalizeFont(12),
     },
     toolsIcon: {
         elevation: 2,

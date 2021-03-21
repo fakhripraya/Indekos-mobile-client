@@ -1,5 +1,6 @@
 import { Camera } from 'expo-camera';
 import React, { useState, useEffect } from 'react';
+import { NormalizeFont } from '../../functions/normalize';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default function CameraUtility() {
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        fontSize: 18,
         color: 'white',
+        fontSize: NormalizeFont(18),
     },
 });

@@ -11,7 +11,7 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthService } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
+import { NormalizeFont } from '../../functions/normalize';
 
 // creates the promised base http client
 const api = axios.create({
@@ -66,7 +66,7 @@ const Splash = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text style={{ fontSize: Normalize(12) }}>Loading Application...</Text>
+            <Text style={{ fontSize: NormalizeFont(12) }}>Loading Application...</Text>
         </View>
     )
 }

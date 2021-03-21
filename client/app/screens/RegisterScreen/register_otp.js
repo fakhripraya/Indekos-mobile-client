@@ -11,10 +11,10 @@ import {
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import React, { useState, useRef } from 'react';
+import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
-import { AppStyle } from '../../config/app.config';
-import { Normalize } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 
@@ -233,11 +233,11 @@ export default function RegisterOtp({ route, navigation }) {
                         </View>
                     </View>
                     <View style={styles.resendText}>
-                        <Text style={{ fontSize: Normalize(14), color: 'gray' }}>
+                        <Text style={{ fontSize: NormalizeFont(14), color: 'gray' }}>
                             Haven't receive a code?{' '}
                         </Text>
                         <TouchableOpacityPrevent onPress={() => handleResend()} >
-                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: Normalize(14) }}>
+                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(14) }}>
                                 Resend Again
                             </Text>
                         </TouchableOpacityPrevent>
@@ -246,12 +246,12 @@ export default function RegisterOtp({ route, navigation }) {
                 </View>
                 <View style={styles.submitBtn}>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
-                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: Normalize(14), fontWeight: 'bold', }]}>
+                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: NormalizeFont(14), fontWeight: 'bold', }]}>
                             <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
                         </Text>
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: Normalize(14), fontWeight: 'bold', }]}>
+                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold', }]}>
                             Submit
                         </Text>
                     </TouchableOpacityPrevent>
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
-        fontSize: Normalize(32),
+        fontSize: NormalizeFont(32),
         bottom: AppStyle.screenSize.height / 4,
     },
     inputContainer: {
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     otpWrapperText: {
         fontWeight: 'bold',
         alignSelf: 'flex-start',
-        fontSize: Normalize(14),
+        fontSize: NormalizeFont(14),
     },
     otpFieldContainer: {
         height: '70%',
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        fontSize: Normalize(32),
+        fontSize: NormalizeFont(32),
     },
     resendText: {
         flex: 0.15,
