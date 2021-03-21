@@ -11,9 +11,8 @@ import { MappedFacilities } from '../../components/Icons/facilities';
 import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import SearchBackground from '../../components/Backgrounds/search_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
-import { Entypo, Feather, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground, TouchableNativeFeedback } from 'react-native';
-import { ActivityIndicator } from 'react-native';
+import { Entypo, MaterialIcons, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList, ImageBackground, TouchableNativeFeedback, ActivityIndicator } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -176,7 +175,7 @@ export default function Search({ navigation }) {
                         </View>
                         <View style={styles.favButtonContainer}>
                             <TouchableOpacityPrevent style={styles.favButton}>
-                                <Feather name="heart" size={Normalize(24)} color="red" />
+                                <MaterialIcons name="favorite-outline" size={Normalize(18)} color="red" />
                             </TouchableOpacityPrevent>
                         </View>
                     </View >
@@ -408,13 +407,13 @@ const styles = StyleSheet.create({
     favButton: {
         elevation: 2,
         alignItems: 'center',
+        width: Normalize(34),
         padding: Normalize(5),
+        height: Normalize(34),
         alignSelf: 'flex-start',
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: Normalize(100),
         right: AppStyle.windowSize.width * 0.05,
-        width: AppStyle.windowSize.width * 0.9 * 0.125,
-        height: AppStyle.windowSize.width * 0.9 * 0.125,
     },
 })
