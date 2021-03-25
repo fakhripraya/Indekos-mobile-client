@@ -60,9 +60,7 @@ export default function Search({ navigation }) {
                 id: 3,
                 desc: "Et cetera",
                 state: false,
-            }
-        ],
-        [
+            },
             {
                 id: 4,
                 desc: "Et cetera",
@@ -255,13 +253,15 @@ export default function Search({ navigation }) {
                         <TextInput />
                     </View>
                     <View style={styles.carouselContainer}>
-                        <Carousel
-                            layout={"default"}
+                        <FlatList
                             ref={filterCarouselRef}
                             data={filters}
-                            itemWidth={AppStyle.windowSize.width * 0.9}
-                            sliderWidth={AppStyle.windowSize.width * 0.9}
                             renderItem={_renderFilters}
+                            keyExtractor={(item, index) => index.toString()}
+                            numColumns={1}
+                            horizontal={true}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
                         />
                     </View>
                 </View>

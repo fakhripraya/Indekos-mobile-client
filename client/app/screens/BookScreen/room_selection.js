@@ -206,9 +206,7 @@ export default function RoomSelection({ navigation }) {
             {
                 desc: "Annualy",
                 state: false,
-            }
-        ],
-        [
+            },
             {
                 desc: "Decadely",
                 state: false,
@@ -381,13 +379,15 @@ export default function RoomSelection({ navigation }) {
                 <RoomListView />
                 <View style={styles.container_1}>
                     <Text style={styles.containerTitle}>Period</Text>
-                    <Carousel
+                    <FlatList
                         ref={periodCarouselRef}
-                        layout={"default"}
                         data={periodDataList}
-                        sliderWidth={AppStyle.windowSize.width}
-                        itemWidth={AppStyle.windowSize.width}
                         renderItem={_renderFirstCarousel}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={1}
+                        horizontal={true}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
                 <View style={styles.container_2}>

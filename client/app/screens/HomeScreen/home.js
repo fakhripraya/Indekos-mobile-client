@@ -1,6 +1,7 @@
 import {
     Text,
     View,
+    FlatList,
     StyleSheet,
     ImageBackground,
 } from 'react-native';
@@ -60,8 +61,6 @@ export default function Home({ navigation }) {
                 alamat: "Tanah Abang",
                 harga: "Rp. 2000.000",
             },
-        ],
-        [
             {
                 uri: "https://reactjs.org/logo-og.png",
                 nama: "Kost Majapahit",
@@ -103,8 +102,6 @@ export default function Home({ navigation }) {
                 alamat: "Tanah Abang",
                 harga: "Rp. 2000.000",
             },
-        ],
-        [
             {
                 uri: "https://reactjs.org/logo-og.png",
                 nama: "Kost Majapahit",
@@ -146,8 +143,6 @@ export default function Home({ navigation }) {
                 alamat: "Tanah Abang",
                 harga: "Rp. 2000.000",
             },
-        ],
-        [
             {
                 uri: "https://reactjs.org/logo-og.png",
                 nama: "Kost Majapahit",
@@ -239,7 +234,7 @@ export default function Home({ navigation }) {
             }
 
             return (
-                <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(25) }]}>
+                <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(15) }]}>
                     <SkeletonLoading />
                 </View>
             );
@@ -252,7 +247,7 @@ export default function Home({ navigation }) {
 
                 return (
                     <ImageBackground
-                        imageStyle={{ borderRadius: Normalize(25) }}
+                        imageStyle={{ borderRadius: Normalize(15) }}
                         style={styles.backgroundImg}
                         source={{ uri: item.thumbnail }}
                     />
@@ -352,13 +347,15 @@ export default function Home({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.bookListCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
+                    <FlatList
                         ref={bookCarouselRef}
                         data={bookCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
                         renderItem={_renderBookList}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={1}
+                        horizontal={true}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
             </React.Fragment>
@@ -418,13 +415,15 @@ export default function Home({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.promoListCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
+                    <FlatList
                         ref={promoCarouselRef}
                         data={promoCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
                         renderItem={_renderPromoList}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={1}
+                        horizontal={true}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
             </React.Fragment>
@@ -442,7 +441,7 @@ export default function Home({ navigation }) {
 
         // Get the data via axios get request
         if (userLocationPermission === true) {
-            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/near', 1, {
+            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/near', 10000, {
                 params: {
                     latitude: userLocation.coords.latitude,
                     longitude: userLocation.coords.longitude
@@ -621,13 +620,15 @@ export default function Home({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.recListCarouselContainer}>
-                    <Carousel
-                        layout={"default"}
+                    <FlatList
                         ref={recCarouselRef}
                         data={recCaraouselData}
-                        itemWidth={AppStyle.windowSize.width * 0.9}
-                        sliderWidth={AppStyle.windowSize.width * 0.9}
                         renderItem={_renderRecList}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={1}
+                        horizontal={true}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
             </React.Fragment>
