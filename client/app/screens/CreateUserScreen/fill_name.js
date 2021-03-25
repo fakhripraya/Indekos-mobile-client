@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         position: 'absolute',
+        bottom: Normalize(75),
         width: AppStyle.windowSize.width,
-        bottom: AppStyle.windowSize.height * 0.075,
     },
     button: {
         color: 'white',

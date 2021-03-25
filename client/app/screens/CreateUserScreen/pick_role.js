@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'row',
         position: 'absolute',
+        bottom: Normalize(75),
         justifyContent: 'space-around',
-        bottom: AppStyle.windowSize.height * 0.075,
     },
     button: {
         color: 'white',
