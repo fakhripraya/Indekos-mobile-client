@@ -85,11 +85,10 @@ const styles = StyleSheet.create({
 
     wrapper: {
         width: '100%',
-        position: 'absolute',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        height: AppStyle.screenSize.height * 0.45,
-        bottom: AppStyle.screenSize.height * 0.35,
+        height: AppStyle.screenSize.height * 0.5,
+        marginTop: AppStyle.screenSize.height * 0.1,
     },
     input: {
         height: Normalize(40),
@@ -101,8 +100,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: Normalize(25),
         width: AppStyle.windowSize.width,
+        bottom: AppStyle.windowSize.height * 0.075,
     },
     button: {
         color: 'white',

@@ -111,13 +111,13 @@ export default function PickRole({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+
     wrapper: {
         width: '100%',
-        position: 'absolute',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        height: AppStyle.screenSize.height * 0.45,
-        bottom: AppStyle.screenSize.height * 0.35,
+        height: AppStyle.screenSize.height * 0.5,
+        marginTop: AppStyle.screenSize.height * 0.1,
     },
     buttonWrapper: {
         flexDirection: 'row',
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'row',
         position: 'absolute',
-        bottom: Normalize(25),
         justifyContent: 'space-around',
+        bottom: AppStyle.windowSize.height * 0.075,
     },
     button: {
         color: 'white',
@@ -148,4 +148,5 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(50),
         paddingBottom: Normalize(10),
     },
+
 })
