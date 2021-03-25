@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         position: 'absolute',
-        height: Normalize(36),
+        height: Normalize(40),
         backgroundColor: 'white',
         justifyContent: 'center',
         borderRadius: Normalize(10),
