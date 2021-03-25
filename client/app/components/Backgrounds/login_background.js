@@ -7,8 +7,8 @@ import React from 'react';
 import { AppStyle } from '../../config/app.config';
 import { Normalize } from '../../functions/normalize';
 
-// HomeBackground is the background image for the home stack
-export default function HomeBackground(props) {
+// LoginBackground is the background image for the login stack
+export default function LoginBackground(props) {
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             <View style={{ width: '100%', height: AppStyle.windowSize.height }}>

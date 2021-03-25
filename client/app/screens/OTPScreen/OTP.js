@@ -15,8 +15,8 @@ import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+import OTPBackground from '../../components/Backgrounds/registration_background';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -177,235 +177,240 @@ export default function OTP({ route, navigation }) {
 
     }
 
+    function handleBack() {
+
+        if (otpType === 0) {
+            navigation.replace('Register')
+        } else if (otpType === 1) {
+            navigation.replace('Login')
+        }
+
+    }
+
     // Renders the OTP screen
     return (
-        <Background>
-            <View style={styles.wrapper}>
-                <Text style={styles.title}>
-                    Register
+        <OTPBackground>
+            <Text style={styles.title}>
+                Register
                 </Text>
-                <View style={styles.inputContainer}>
-                    <View style={styles.otpWrapper}>
-                        <Text style={styles.otpWrapperText}>
-                            OTP Number
-                        </Text>
-                        <View style={styles.otpFieldContainer}>
-                            <View style={styles.otpField}>
-                                <TextInput
-                                    keyboardType="numeric"
-                                    ref={firstField}
-                                    autoFocus={true}
-                                    selectTextOnFocus={true}
-                                    onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace')
-                                            firstField.current.focus();
-                                    }}
-                                    onChangeText={newVal => {
-                                        if (isNaN(newVal) || newVal === ' ')
-                                            firstField.current.focus();
-                                        else {
-                                            setFirstInput(newVal);
-                                            if (newVal !== '')
-                                                secondField.current.focus();
-                                        }
-                                    }}
-                                    onSelectionChange={({ nativeEvent }) => {
-                                        if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
-                                            return;
-                                        if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+            <View style={styles.inputContainer}>
+                <View style={styles.otpWrapper}>
+                    <Text style={styles.otpWrapperText}>
+                        OTP Number
+                    </Text>
+                    <View style={styles.otpFieldContainer}>
+                        <View style={styles.otpField}>
+                            <TextInput
+                                keyboardType="numeric"
+                                ref={firstField}
+                                autoFocus={true}
+                                selectTextOnFocus={true}
+                                onKeyPress={({ nativeEvent }) => {
+                                    if (nativeEvent.key === 'Backspace')
+                                        firstField.current.focus();
+                                }}
+                                onChangeText={newVal => {
+                                    if (isNaN(newVal) || newVal === ' ')
+                                        firstField.current.focus();
+                                    else {
+                                        setFirstInput(newVal);
+                                        if (newVal !== '')
                                             secondField.current.focus();
-                                    }}
-                                    value={firstValue}
-                                    maxLength={1}
-                                    textAlign="center"
-                                    style={styles.otpFieldInput} />
-                            </View>
-                            <View style={styles.otpField}>
-                                <TextInput
-                                    keyboardType="numeric"
-                                    ref={secondField}
-                                    selectTextOnFocus={true}
-                                    onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace')
-                                            firstField.current.focus();
-                                    }}
-                                    onChangeText={(newVal) => {
-                                        if (isNaN(newVal) || newVal === ' ')
-                                            secondField.current.focus();
-                                        else {
-                                            setSecondInput(newVal);
-                                            if (newVal !== '')
-                                                thirdField.current.focus();
-                                        }
-                                    }}
-                                    onSelectionChange={({ nativeEvent }) => {
-                                        if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
-                                            return
-                                        if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                    }
+                                }}
+                                onSelectionChange={({ nativeEvent }) => {
+                                    if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
+                                        return;
+                                    if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                        secondField.current.focus();
+                                }}
+                                value={firstValue}
+                                maxLength={1}
+                                textAlign="center"
+                                style={styles.otpFieldInput} />
+                        </View>
+                        <View style={styles.otpField}>
+                            <TextInput
+                                keyboardType="numeric"
+                                ref={secondField}
+                                selectTextOnFocus={true}
+                                onKeyPress={({ nativeEvent }) => {
+                                    if (nativeEvent.key === 'Backspace')
+                                        firstField.current.focus();
+                                }}
+                                onChangeText={(newVal) => {
+                                    if (isNaN(newVal) || newVal === ' ')
+                                        secondField.current.focus();
+                                    else {
+                                        setSecondInput(newVal);
+                                        if (newVal !== '')
                                             thirdField.current.focus();
-                                    }}
-                                    value={secondValue}
-                                    maxLength={1}
-                                    textAlign="center"
-                                    style={styles.otpFieldInput} />
-                            </View>
-                            <View style={styles.otpField}>
-                                <TextInput
-                                    keyboardType="numeric"
-                                    ref={thirdField}
-                                    selectTextOnFocus={true}
-                                    onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace')
-                                            secondField.current.focus();
-                                    }}
-                                    onChangeText={(newVal) => {
-                                        if (isNaN(newVal) || newVal === ' ')
-                                            thirdField.current.focus();
-                                        else {
-                                            setThirdInput(newVal);
-                                            if (newVal !== '')
-                                                fourthField.current.focus();
-                                        }
-                                    }}
-                                    onSelectionChange={({ nativeEvent }) => {
-                                        if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
-                                            return;
-                                        if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                    }
+                                }}
+                                onSelectionChange={({ nativeEvent }) => {
+                                    if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
+                                        return
+                                    if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                        thirdField.current.focus();
+                                }}
+                                value={secondValue}
+                                maxLength={1}
+                                textAlign="center"
+                                style={styles.otpFieldInput} />
+                        </View>
+                        <View style={styles.otpField}>
+                            <TextInput
+                                keyboardType="numeric"
+                                ref={thirdField}
+                                selectTextOnFocus={true}
+                                onKeyPress={({ nativeEvent }) => {
+                                    if (nativeEvent.key === 'Backspace')
+                                        secondField.current.focus();
+                                }}
+                                onChangeText={(newVal) => {
+                                    if (isNaN(newVal) || newVal === ' ')
+                                        thirdField.current.focus();
+                                    else {
+                                        setThirdInput(newVal);
+                                        if (newVal !== '')
                                             fourthField.current.focus();
-                                    }}
-                                    value={thirdValue}
-                                    maxLength={1}
-                                    textAlign="center"
-                                    style={styles.otpFieldInput} />
-                            </View>
-                            <View style={styles.otpField}>
-                                <TextInput
-                                    keyboardType="numeric"
-                                    ref={fourthField}
-                                    selectTextOnFocus={true}
-                                    onKeyPress={({ nativeEvent }) => {
-                                        if (nativeEvent.key === 'Backspace')
-                                            thirdField.current.focus();
-                                    }}
-                                    onChangeText={(newVal) => {
-                                        if (isNaN(newVal) || newVal === ' ')
-                                            fourthField.current.focus();
-                                        else
-                                            setFourthInput(newVal);
-                                    }}
-                                    value={fourthValue}
-                                    maxLength={1}
-                                    textAlign="center"
-                                    style={styles.otpFieldInput} />
-                            </View>
+                                    }
+                                }}
+                                onSelectionChange={({ nativeEvent }) => {
+                                    if (nativeEvent.selection.start === 0 && nativeEvent.selection.end === 1)
+                                        return;
+                                    if (nativeEvent.selection.start === 1 && nativeEvent.selection.end === 1)
+                                        fourthField.current.focus();
+                                }}
+                                value={thirdValue}
+                                maxLength={1}
+                                textAlign="center"
+                                style={styles.otpFieldInput} />
+                        </View>
+                        <View style={styles.otpField}>
+                            <TextInput
+                                keyboardType="numeric"
+                                ref={fourthField}
+                                selectTextOnFocus={true}
+                                onKeyPress={({ nativeEvent }) => {
+                                    if (nativeEvent.key === 'Backspace')
+                                        thirdField.current.focus();
+                                }}
+                                onChangeText={(newVal) => {
+                                    if (isNaN(newVal) || newVal === ' ')
+                                        fourthField.current.focus();
+                                    else
+                                        setFourthInput(newVal);
+                                }}
+                                value={fourthValue}
+                                maxLength={1}
+                                textAlign="center"
+                                style={styles.otpFieldInput} />
                         </View>
                     </View>
-                    <View style={styles.resendText}>
-                        <Text style={{ fontSize: NormalizeFont(14), color: 'gray' }}>
-                            Haven't receive a code?{' '}
-                        </Text>
-                        <TouchableOpacityPrevent onPress={() => handleResend()} >
-                            <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(14) }}>
-                                Resend Again
+                </View>
+                <View style={styles.resendText}>
+                    <Text style={{ fontSize: NormalizeFont(14), color: 'gray' }}>
+                        Haven't receive a code?{' '}
+                    </Text>
+                    <TouchableOpacityPrevent onPress={() => handleResend()} >
+                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(14) }}>
+                            Resend Again
                             </Text>
-                        </TouchableOpacityPrevent>
-                    </View>
+                    </TouchableOpacityPrevent>
+                </View>
 
-                </View>
-                <View style={styles.submitBtn}>
-                    <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => navigation.replace('Register')}>
-                        <Text style={[styles.button, { backgroundColor: 'white', fontSize: NormalizeFont(14), fontWeight: 'bold', }]}>
-                            <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
-                        </Text>
-                    </TouchableOpacityPrevent>
-                    <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold', }]}>
-                            Submit
-                        </Text>
-                    </TouchableOpacityPrevent>
-                </View>
             </View>
-        </Background >
+            <View style={styles.submitBtn}>
+                <TouchableOpacityPrevent style={{ width: Normalize(100) }} onPress={() => handleBack()}>
+                    <Text style={[styles.button, { backgroundColor: 'white', fontSize: NormalizeFont(14), fontWeight: 'bold', }]}>
+                        <Text style={{ color: AppStyle.fourt_main_color }}>Back</Text>
+                    </Text>
+                </TouchableOpacityPrevent>
+                <TouchableOpacityPrevent style={{ width: Normalize(100) }} onPress={() => handleSubmit()}>
+                    <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold', }]}>
+                        Submit
+                    </Text>
+                </TouchableOpacityPrevent>
+            </View>
+        </OTPBackground >
     )
 }
 
 // the render elements style
 const styles = StyleSheet.create({
-    wrapper: {
-        alignSelf: 'center',
-        position: 'absolute',
-        alignItems: 'center',
-        flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.375,
-    },
+
     title: {
-        right: '5%',
+        right: '10%',
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        marginTop: Normalize(80),
         fontSize: NormalizeFont(32),
-        bottom: AppStyle.screenSize.height / 4,
     },
     inputContainer: {
         elevation: 5,
+        paddingTop: '5%',
         paddingLeft: '5%',
         paddingRight: '5%',
-        alignItems: 'flex-start',
+        paddingBottom: '5%',
+        alignSelf: 'center',
+        alignItems: 'center',
         backgroundColor: 'white',
+        marginTop: Normalize(10),
         borderRadius: Normalize(15),
         justifyContent: 'space-evenly',
-        bottom: AppStyle.screenSize.height / 4.5,
-        width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        height: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.662),
+        width: AppStyle.windowSize.width * 0.9,
     },
     otpWrapper: {
-        flex: 0.6,
+        alignSelf: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
     },
     otpWrapperText: {
         fontWeight: 'bold',
         alignSelf: 'flex-start',
         fontSize: NormalizeFont(14),
+        marginBottom: Normalize(10),
     },
     otpFieldContainer: {
-        height: '70%',
         width: '100%',
+        alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        height: Normalize(100),
+        justifyContent: 'space-around',
     },
     otpField: {
         width: '22.5%',
         height: '100%',
-        borderWidth: 0.7,
         borderColor: 'grey',
+        borderWidth: Normalize(3),
         borderRadius: Normalize(10),
     },
     otpFieldInput: {
-        flex: 1,
         width: '100%',
         height: '100%',
         fontSize: NormalizeFont(32),
     },
     resendText: {
-        flex: 0.15,
         color: 'grey',
         alignSelf: 'center',
         flexDirection: 'row',
+        marginTop: Normalize(10),
     },
     submitBtn: {
-        flex: 1,
+        alignSelf: 'center',
         flexDirection: 'row',
-        bottom: AppStyle.screenSize.height / 7,
+        position: 'absolute',
+        bottom: Normalize(25),
     },
     button: {
         color: 'white',
         textAlign: 'center',
-        borderColor: 'white',
-        paddingTop: Normalize(15),
+        paddingTop: Normalize(10),
         borderRadius: Normalize(50),
-        paddingBottom: Normalize(15),
+        paddingBottom: Normalize(10),
     },
 })

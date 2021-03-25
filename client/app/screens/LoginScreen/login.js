@@ -106,11 +106,11 @@ export default function Login({ navigation }) {
                 </View>
             </View>
             <View style={styles.submitBtn}>
-                <TouchableOpacity style={{ width: Normalize(125) }} onPress={() => handleSubmit()}>
+                <TouchableOpacityPrevent style={{ width: Normalize(125) }} onPress={() => handleSubmit()}>
                     <Text style={[styles.button, { fontWeight: 'bold', backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(16) }]}>
                         Submit
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacityPrevent>
             </View>
             <View style={styles.loginBtn}>
                 <Text style={{ fontSize: NormalizeFont(14) }} >
@@ -123,6 +123,7 @@ export default function Login({ navigation }) {
 
 // the render elements style
 const styles = StyleSheet.create({
+
     title: {
         right: '10%',
         color: 'white',
@@ -151,11 +152,11 @@ const styles = StyleSheet.create({
     },
     authInput: {
         width: '100%',
-        borderWidth: 1,
         borderColor: 'gray',
         flexDirection: 'row',
         height: Normalize(40),
         alignSelf: 'flex-start',
+        borderWidth: Normalize(3),
         borderRadius: Normalize(10),
     },
     o2AuthWrapper: {

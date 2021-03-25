@@ -16,8 +16,8 @@ import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+import RegisterBackground from '../../components/Backgrounds/registration_background';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -121,96 +121,88 @@ export default function Register({ navigation }) {
 
     // Renders the Register screen
     return (
-        <Background>
-            <View style={styles.wrapper}>
-                <Text style={styles.title}>
-                    Register
+        <RegisterBackground>
+            <Text style={styles.title}>
+                Register
                 </Text>
-                <View style={styles.inputContainer}>
-                    <View style={styles.warnMessage}>
-                        <Text style={styles.warnMessageText} >
-                            Make sure you have whatsapp
+            <View style={styles.inputContainer}>
+                <View style={styles.warnMessage}>
+                    <Text style={styles.warnMessageText} >
+                        Make sure you have whatsapp
                         </Text>
-                        <Text style={styles.warnMessageText} >
-                            account when you registering your
+                    <Text style={styles.warnMessageText} >
+                        account when you registering your
                         </Text>
-                        <Text style={styles.warnMessageText} >
-                            phone number
+                    <Text style={styles.warnMessageText} >
+                        phone number
                         </Text>
-                    </View>
-                    <View style={styles.authInputWrapper}>
-                        <Text style={styles.authInputTitle}>
-                            Phone / Email
+                </View>
+                <View style={styles.authInputWrapper}>
+                    <Text style={styles.authInputTitle}>
+                        Phone / Email
                         </Text>
-                        <View style={styles.authInput}>
-                            <TextInput
-                                textAlign="left"
-                                value={inputValue}
-                                onChangeText={(newVal) => setInput(newVal)}
-                                style={{ flex: 1, paddingLeft: Normalize(10), fontSize: NormalizeFont(14) }} />
-                        </View>
-                    </View>
-                    <View style={styles.o2AuthWrapper}>
-                        <TouchableOpacityPrevent >
-                            <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
-                        </TouchableOpacityPrevent>
-                        <TouchableOpacityPrevent >
-                            <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
-                        </TouchableOpacityPrevent>
+                    <View style={styles.authInput}>
+                        <TextInput
+                            textAlign="left"
+                            value={inputValue}
+                            onChangeText={(newVal) => setInput(newVal)}
+                            style={{ flex: 1, paddingLeft: Normalize(10), fontSize: NormalizeFont(14) }} />
                     </View>
                 </View>
-                <View style={styles.submitBtn}>
-                    <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, styles.submitBtnText]}>
-                            Submit
-                        </Text>
+                <View style={styles.o2AuthWrapper}>
+                    <TouchableOpacityPrevent >
+                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
                     </TouchableOpacityPrevent>
-                </View>
-                <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: NormalizeFont(14) }} >
-                        Have an account ?{' '}
-                    </Text>
-                    <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
-                        <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(14) }}>
-                            Login
-                        </Text>
+                    <TouchableOpacityPrevent >
+                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
                     </TouchableOpacityPrevent>
                 </View>
             </View>
-        </Background >
+            <View style={styles.submitBtn}>
+                <TouchableOpacityPrevent style={{ width: Normalize(125) }} onPress={() => handleSubmit()}>
+                    <Text style={[styles.button, { fontWeight: 'bold', backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(16) }]}>
+                        Submit
+                    </Text>
+                </TouchableOpacityPrevent>
+            </View>
+            <View style={styles.loginBtn}>
+                <Text style={{ fontSize: NormalizeFont(14) }} >
+                    Have an account ?{' '}
+                </Text>
+                <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
+                    <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(14) }}>
+                        Login
+                    </Text>
+                </TouchableOpacityPrevent>
+            </View>
+        </RegisterBackground >
     )
 }
 
 // the render elements style
 const styles = StyleSheet.create({
-    wrapper: {
-        alignSelf: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.3,
-    },
+
     title: {
-        right: '5%',
+        right: '10%',
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        marginTop: Normalize(60),
         fontSize: NormalizeFont(32),
-        bottom: AppStyle.screenSize.height / 4,
     },
     inputContainer: {
         elevation: 5,
-        borderRadius: 15,
         paddingTop: '5%',
-        paddingBottom: '5%',
         paddingLeft: '5%',
         paddingRight: '5%',
+        paddingBottom: '5%',
+        alignSelf: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
+        marginTop: Normalize(10),
+        borderRadius: Normalize(15),
         justifyContent: 'space-evenly',
-        width: AppStyle.screenSize.width * 0.9,
-        bottom: AppStyle.screenSize.height / 4.5,
-        height: AppStyle.screenSize.height * 0.5,
+        width: AppStyle.windowSize.width * 0.9,
     },
     warnMessage: {
         width: '100%',
@@ -219,7 +211,7 @@ const styles = StyleSheet.create({
         paddingBottom: '5%',
         alignItems: 'center',
         justifyContent: 'center',
-        height: AppStyle.screenSize.height * 0.15,
+        height: Normalize(90),
         backgroundColor: AppStyle.fourt_main_color,
     },
     warnMessageText: {
@@ -228,48 +220,43 @@ const styles = StyleSheet.create({
         fontSize: NormalizeFont(14),
     },
     authInputWrapper: {
-        width: '100%',
-        marginTop: '10%',
-        marginBottom: '5%'
+        marginTop: Normalize(25),
+        marginBottom: Normalize(10),
     },
     authInputTitle: {
         fontWeight: 'bold',
         bottom: Normalize(5),
-        fontSize: NormalizeFont(14),
         alignSelf: 'flex-start',
+        fontSize: NormalizeFont(14),
     },
     authInput: {
         width: '100%',
         borderWidth: 1,
-        borderRadius: 7.5,
         borderColor: 'gray',
         flexDirection: 'row',
+        height: Normalize(40),
         alignSelf: 'flex-start',
-        height: AppStyle.screenSize.height * 0.06,
+        borderRadius: Normalize(10),
     },
     o2AuthWrapper: {
         flexDirection: 'row',
     },
     submitBtn: {
-        flex: 1,
-        bottom: AppStyle.screenSize.height / 7,
-    },
-    submitBtnText: {
-        fontWeight: 'bold',
-        fontSize: NormalizeFont(14),
-        backgroundColor: AppStyle.sub_main_color,
+        alignSelf: 'center',
+        position: 'absolute',
+        bottom: Normalize(75),
     },
     loginBtn: {
-        flex: 1,
+        alignSelf: 'center',
         flexDirection: 'row',
-        bottom: AppStyle.screenSize.height / 9,
+        position: 'absolute',
+        bottom: Normalize(25),
     },
     button: {
         color: 'white',
         textAlign: 'center',
-        borderColor: 'white',
-        paddingTop: Normalize(15),
+        paddingTop: Normalize(10),
         borderRadius: Normalize(50),
-        paddingBottom: Normalize(15),
+        paddingBottom: Normalize(10),
     },
 })

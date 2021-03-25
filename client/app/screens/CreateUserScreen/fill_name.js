@@ -13,6 +13,10 @@ import { trackPromise } from 'react-promise-tracker';
 import { UserService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { FirstBackground } from '../../components/Backgrounds/create_user_background';
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+
+// a HOC to throttle button click
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
 const api = axios.create({
@@ -62,20 +66,23 @@ export default function FillName({ navigation }) {
                         textAlign="center"
                         value={inputValue}
                         onChangeText={(newVal) => setInput(newVal)}
-                        style={{ flex: 1, paddingLeft: 0, fontSize: NormalizeFont(14) }} />
+                        style={{ flex: 1, fontSize: NormalizeFont(16) }} />
 
                 </View>
-                <TouchableOpacity onPress={() => handleSubmit()}>
-                    <View style={[styles.submitButton, { backgroundColor: AppStyle.sub_main_color }]}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Submit</Text>
-                    </View>
-                </TouchableOpacity>
+            </View>
+            <View style={styles.submitBtn}>
+                <TouchableOpacityPrevent style={{ width: Normalize(125) }} onPress={() => handleSubmit()}>
+                    <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold', }]}>
+                        Submit
+                    </Text>
+                </TouchableOpacityPrevent>
             </View>
         </FirstBackground>
     )
 }
 
 const styles = StyleSheet.create({
+
     wrapper: {
         width: '100%',
         position: 'absolute',
@@ -85,17 +92,24 @@ const styles = StyleSheet.create({
         bottom: AppStyle.screenSize.height * 0.35,
     },
     input: {
+        height: Normalize(40),
         backgroundColor: 'white',
         borderRadius: Normalize(10),
-        width: AppStyle.screenSize.width * 0.80,
-        height: AppStyle.screenSize.height * 0.070,
+        width: AppStyle.screenSize.width * 0.8,
     },
-    submitButton: {
+    submitBtn: {
+        alignSelf: 'center',
         alignItems: 'center',
-        backgroundColor: 'grey',
-        justifyContent: 'center',
+        position: 'absolute',
+        bottom: Normalize(25),
+        width: AppStyle.windowSize.width,
+    },
+    button: {
+        color: 'white',
+        textAlign: 'center',
+        paddingTop: Normalize(10),
         borderRadius: Normalize(50),
-        width: AppStyle.screenSize.width * 0.4,
-        height: AppStyle.screenSize.height * 0.075,
-    }
+        paddingBottom: Normalize(10),
+    },
+
 })

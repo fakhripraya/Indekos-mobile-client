@@ -15,8 +15,8 @@ import { AppStyle } from '../../config/app.config';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import Background from '../../components/Backgrounds/registration_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+import RegisterBackground from '../../components/Backgrounds/registration_background';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -86,10 +86,17 @@ export default function RegisterFinal({ route, navigation }) {
     function handleSubmit() {
 
         // validation
+        if (passwordValue === '' || passwordValue === null) {
+
+            // dispatch the popUpModalChange actions to store the generic message modal state
+            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: "Password tidak boleh kosong" }));
+            return;
+        }
+
         if (confirmPasswordValue !== passwordValue) {
 
             // dispatch the popUpModalChange actions to store the generic message modal state
-            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: "Password confirmation does not match" }));
+            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: "Password tidak sesuai dengan password konfirmasi" }));
             return;
         }
 
@@ -119,119 +126,127 @@ export default function RegisterFinal({ route, navigation }) {
 
     // Renders the RegisterFinal screen
     return (
-        <Background>
-            <View style={styles.wrapper}>
-                <Text style={styles.title}>
-                    Register
-                </Text>
-                <View style={styles.inputContainer}>
-                    <View style={styles.authInputWrapper}>
-                        <Text style={styles.authInputTitle}>
-                            Password
+        <RegisterBackground>
+            <Text style={styles.title}>
+                Register
+            </Text>
+            <View style={styles.inputContainer}>
+                <View style={styles.authInputWrapper}>
+                    <Text style={styles.authInputTitle}>
+                        Password
                         </Text>
-                        <View style={styles.authInput}>
-                            <TextInput
-                                secureTextEntry={true}
-                                onChangeText={(newVal) => { onChangePassword(newVal) }}
-                                value={passwordValue}
-                                textAlign="left"
-                                style={styles.authInputText} />
-                        </View>
-                    </View>
-                    <View style={styles.authInputWrapper}>
-                        <Text style={styles.authInputTitle}>
-                            Confirm Password
-                        </Text>
-                        <View style={styles.authInput}>
-                            <TextInput
-                                secureTextEntry={true}
-                                onChangeText={(newVal) => setConfirmPassword(newVal)}
-                                value={confirmPasswordValue}
-                                textAlign="left"
-                                style={styles.authInputText} />
-                        </View>
+                    <View style={styles.authInput}>
+                        <TextInput
+                            secureTextEntry={true}
+                            onChangeText={(newVal) => { onChangePassword(newVal) }}
+                            value={passwordValue}
+                            textAlign="left"
+                            style={styles.authInputText} />
                     </View>
                 </View>
-                <View style={styles.submitBtn}>
-                    <TouchableOpacityPrevent style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold' }]}>
-                            Submit
+                <View style={styles.authInputWrapper}>
+                    <Text style={styles.authInputTitle}>
+                        Confirm Password
                         </Text>
-                    </TouchableOpacityPrevent>
+                    <View style={styles.authInput}>
+                        <TextInput
+                            secureTextEntry={true}
+                            onChangeText={(newVal) => setConfirmPassword(newVal)}
+                            value={confirmPasswordValue}
+                            textAlign="left"
+                            style={styles.authInputText} />
+                    </View>
                 </View>
             </View>
-        </Background >
+            <View style={styles.submitBtn}>
+                <TouchableOpacityPrevent style={{ width: Normalize(125) }} onPress={() => handleSubmit()}>
+                    <Text style={[styles.button, { fontWeight: 'bold', backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(16) }]}>
+                        Submit
+                    </Text>
+                </TouchableOpacityPrevent>
+            </View>
+            <View style={styles.loginBtn}>
+                <Text style={{ fontSize: NormalizeFont(14) }} >
+                    Have an account ?{' '}
+                </Text>
+                <TouchableOpacityPrevent onPress={() => { navigation.push('LoginStack'); }} >
+                    <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(14) }}>
+                        Login
+                    </Text>
+                </TouchableOpacityPrevent>
+            </View>
+        </RegisterBackground >
     )
 }
 
 // the render elements style
 const styles = StyleSheet.create({
-    wrapper: {
-        alignSelf: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.375,
-    },
+
     title: {
-        right: '5%',
+        right: '10%',
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        marginTop: Normalize(80),
         fontSize: NormalizeFont(32),
-        bottom: AppStyle.screenSize.height / 4,
     },
     inputContainer: {
         elevation: 5,
         paddingTop: '5%',
-        paddingBottom: '5%',
         paddingLeft: '5%',
         paddingRight: '5%',
+        paddingBottom: '5%',
+        alignSelf: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
+        marginTop: Normalize(10),
         borderRadius: Normalize(15),
         justifyContent: 'space-evenly',
-        bottom: AppStyle.screenSize.height / 4.5,
-        width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        height: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.6525),
+        width: AppStyle.windowSize.width * 0.9,
     },
     authInputWrapper: {
-        width: '100%',
-        marginTop: '5%',
-        marginBottom: '5%',
+        marginTop: Normalize(10),
+        marginBottom: Normalize(10),
     },
     authInputTitle: {
         fontWeight: 'bold',
         bottom: Normalize(5),
-        fontSize: NormalizeFont(14),
         alignSelf: 'flex-start',
+        fontSize: NormalizeFont(14),
     },
     authInput: {
         width: '100%',
-        borderWidth: 1,
         borderColor: 'gray',
         flexDirection: 'row',
+        height: Normalize(40),
         alignSelf: 'flex-start',
+        borderWidth: Normalize(3),
         borderRadius: Normalize(10),
-        height: AppStyle.screenSize.height * 0.06,
     },
     authInputText: {
-        flex: 1,
-        fontSize: NormalizeFont(14),
+        width: '100%',
         paddingLeft: Normalize(10),
+        fontSize: NormalizeFont(16),
     },
     o2AuthWrapper: {
         flexDirection: 'row',
     },
     submitBtn: {
-        flex: 1,
-        bottom: AppStyle.screenSize.height / 7,
+        alignSelf: 'center',
+        position: 'absolute',
+        bottom: Normalize(75),
+    },
+    loginBtn: {
+        alignSelf: 'center',
+        flexDirection: 'row',
+        position: 'absolute',
+        bottom: Normalize(25),
     },
     button: {
         color: 'white',
         textAlign: 'center',
-        paddingTop: Normalize(15),
+        paddingTop: Normalize(10),
         borderRadius: Normalize(50),
-        paddingBottom: Normalize(15),
+        paddingBottom: Normalize(10),
     },
 })

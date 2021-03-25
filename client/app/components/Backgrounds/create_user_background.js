@@ -12,11 +12,13 @@ export function FirstBackground(props) {
     return (
         <View style={{ flex: 1 }}>
             <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-                <View style={firstStyles.container}>
+                <ScrollView style={firstStyles.container} contentContainerStyle={{ height: '100%' }}>
+                    {/* 
+                    Mungkin bisa dipakai lagi jadi di comment dl
                     <View style={firstStyles.background_1} />
-                    <View style={firstStyles.background_2} />
+                    <View style={firstStyles.background_2} /> */}
                     {props.children}
-                </View>
+                </ScrollView>
             </View>
         </View >
     )
