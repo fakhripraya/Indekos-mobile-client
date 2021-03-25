@@ -152,11 +152,11 @@ const styles = StyleSheet.create({
     },
     authInput: {
         width: '100%',
+        borderWidth: 1,
         borderColor: 'gray',
         flexDirection: 'row',
         height: Normalize(40),
         alignSelf: 'flex-start',
-        borderWidth: Normalize(3),
         borderRadius: Normalize(10),
     },
     o2AuthWrapper: {
@@ -180,4 +180,5 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(50),
         paddingBottom: Normalize(10),
     },
+
 })

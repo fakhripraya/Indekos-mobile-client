@@ -384,9 +384,9 @@ const styles = StyleSheet.create({
     },
     otpField: {
         width: '22.5%',
+        borderWidth: 1,
         height: '100%',
         borderColor: 'grey',
-        borderWidth: Normalize(3),
         borderRadius: Normalize(10),
     },
     otpFieldInput: {
@@ -413,4 +413,5 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(50),
         paddingBottom: Normalize(10),
     },
+
 })

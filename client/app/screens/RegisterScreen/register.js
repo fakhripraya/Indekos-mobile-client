@@ -259,4 +259,5 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(50),
         paddingBottom: Normalize(10),
     },
+
 })
