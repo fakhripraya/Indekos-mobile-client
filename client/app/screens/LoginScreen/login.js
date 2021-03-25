@@ -56,7 +56,6 @@ export default function Login({ navigation }) {
                     }
                 })
                 .catch(error => {
-                    console.log(error.response)
                     if (error.response.status !== 200) {
                         // dispatch the popUpModalChange actions to store the generic message modal state
                         dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
