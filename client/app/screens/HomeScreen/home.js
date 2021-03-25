@@ -14,6 +14,7 @@ import Carousel from 'react-native-snap-carousel';
 import { useAxiosGet } from '../../promise/axios_get';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
+import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import HomeBackground from '../../components/Backgrounds/home_background';
 import { AppStyle, AuthService, KostService } from '../../config/app.config';
 import { useAxiosGetArray, useAxiosGetArrayParams } from '../../promise/axios_get_array';
@@ -497,41 +498,35 @@ export default function Home({ navigation }) {
                     return (
 
                         <View style={{ flexDirection: 'row' }}>
-                            {item.carousel_list.map((item, index) => {
-
-                                return (
-                                    <TouchableOpacity onPress={() => {
-                                        navigation.push('BookStack', {
-                                            screen: 'KostDetail',
-                                            params: {
-                                                kostID: item.id,
-                                                kostName: item.kost_name,
-                                                city: item.city,
-                                            }
-                                        })
-                                    }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
-                                        <View style={{ height: '50%' }}>
-                                            <ImageBackground
-                                                imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
-                                                style={styles.backgroundImg}
-                                                source={{ uri: item.thumbnail_url }}
-                                            />
-                                        </View>
-                                        <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
-                                            <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
-                                            </View>
-                                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
-                                            </View>
-                                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.thumbnail_price}</Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
-
-                            })}
+                            <TouchableOpacity onPress={() => {
+                                navigation.push('BookStack', {
+                                    screen: 'KostDetail',
+                                    params: {
+                                        kostID: item.id,
+                                        kostName: item.kost_name,
+                                        city: item.city,
+                                    }
+                                })
+                            }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                                <View style={{ height: '50%' }}>
+                                    <ImageBackground
+                                        imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
+                                        style={styles.backgroundImg}
+                                        source={{ uri: item.thumbnail_url }}
+                                    />
+                                </View>
+                                <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                                    <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
+                                    </View>
+                                    <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
+                                    </View>
+                                    <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
                     )
                 }
@@ -543,7 +538,7 @@ export default function Home({ navigation }) {
                         </View>
                         <View style={styles.nearYouListHeader}>
                             <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                <Text style={{ fontSize: NormalizeFont(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList === null ? "" : (nearYouList.length === 0 ? "" : nearYouList[0].carousel_list[0].city)}</Text>
+                                <Text style={{ fontSize: NormalizeFont(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList === null ? "" : (nearYouList.length === 0 ? "" : nearYouList[0].city)}</Text>
                             </View>
                             <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                                 <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
@@ -552,13 +547,15 @@ export default function Home({ navigation }) {
                             </View>
                         </View>
                         <View style={styles.nearYouListCarouselContainer}>
-                            <Carousel
-                                layout={"default"}
+                            <FlatList
                                 ref={nearYouCarouselRef}
                                 data={nearYouList}
-                                itemWidth={AppStyle.windowSize.width * 0.9}
-                                sliderWidth={AppStyle.windowSize.width * 0.9}
                                 renderItem={_renderNearYouList}
+                                keyExtractor={(item, index) => index.toString()}
+                                numColumns={1}
+                                horizontal={true}
+                                showsVerticalScrollIndicator={false}
+                                showsHorizontalScrollIndicator={false}
                             />
                         </View>
                     </>
