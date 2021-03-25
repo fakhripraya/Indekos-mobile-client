@@ -26,11 +26,13 @@ const api = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
-// RegisterOtp is the screen to handle the otp process of the registration flow
-export default function RegisterOtp({ route, navigation }) {
+// OTP is the screen to handle the otp process of the registration flow
+export default function OTP({ route, navigation }) {
 
     // Get navigation parameter
     const tempUsername = route.params.tempUsername;
+    const tempPassword = route.params.tempPassword;
+    const otpType = route.params.otpType;
 
     // Function refs
     const firstField = useRef(null);
@@ -43,6 +45,24 @@ export default function RegisterOtp({ route, navigation }) {
     const [secondValue, setSecondInput] = useState("")
     const [thirdValue, setThirdInput] = useState("")
     const [fourthValue, setFourthInput] = useState("")
+
+    // define url and param
+    let url = '';
+    let resendUrl = '';
+
+    switch (otpType) {
+        case 0:
+            url = '/register/check'
+            resendUrl = '/register'
+            break;
+        case 1:
+            url = '/login/check'
+            resendUrl = '/login'
+            break;
+        default:
+            url = '/register/check'
+            resendUrl = resendUrl = '/register'
+    }
 
     // Hooks
     const dispatch = useDispatch()
@@ -60,17 +80,44 @@ export default function RegisterOtp({ route, navigation }) {
         if (isNaN(res))
             return;
 
-        // triggers the http post request to /register/check url to validate the OTP input from the user
+        let param = {};
+        switch (otpType) {
+            case 0:
+                param = {
+                    otp_code: res
+                }
+                break;
+            case 1:
+                param = {
+                    username: tempUsername,
+                    otp_code: res
+                }
+                break;
+            default:
+                param = {
+                    otp_code: res
+                }
+        }
+
+        // check the OTP, if OTP valid, navigate to the screen based on the OTP type
         trackPromise(
             api.post(
-                '/register/check',
-                { otp_code: res }
+                url,
+                param
             )
                 .then(response => {
                     if (response.status >= 200 && response.status < 300) {
-                        navigation.replace('RegisterFinal', {
-                            tempUsername: tempUsername,
-                        });
+
+                        // 0 = register
+                        // 1 = login
+                        if (otpType === 0) {
+                            navigation.replace('RegisterFinal', {
+                                tempUsername: tempUsername,
+                            });
+                        } else if (otpType === 1) {
+                            navigation.replace('AppStack');
+                        }
+
                     }
                 })
                 .catch(error => {
@@ -81,16 +128,36 @@ export default function RegisterOtp({ route, navigation }) {
                     }
                 })
         );
+
     }
 
     // handle resend otp code
     function handleResend() {
 
-        // triggers the http post request to /register url to resend the OTP if the OTP never recieved by the user
+        let param = {};
+        switch (otpType) {
+            case 0:
+                param = {
+                    username: tempUsername
+                }
+                break;
+            case 1:
+                param = {
+                    username: tempUsername,
+                    password: tempPassword
+                }
+                break;
+            default:
+                param = {
+                    username: tempUsername
+                }
+        }
+
+        // Resend the OTP code based on the OTP type
         trackPromise(
             api.post(
-                '/register',
-                { username: tempUsername }
+                resendUrl,
+                param
             )
                 .then(response => {
                     if (response.status >= 200 && response.status < 300) {
@@ -107,9 +174,10 @@ export default function RegisterOtp({ route, navigation }) {
                     }
                 })
         );
+
     }
 
-    // Renders the RegisterOtp screen
+    // Renders the OTP screen
     return (
         <Background>
             <View style={styles.wrapper}>

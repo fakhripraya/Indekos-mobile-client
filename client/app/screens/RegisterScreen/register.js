@@ -102,8 +102,10 @@ export default function Register({ navigation }) {
             )
                 .then(response => {
                     if (response.status >= 200 && response.status < 300) {
-                        navigation.replace('RegisterOtp', {
+                        navigation.replace('OTP', {
                             tempUsername: inputValue,
+                            tempPassword: '',
+                            otpType: 0
                         });
                     }
                 })
@@ -150,10 +152,10 @@ export default function Register({ navigation }) {
                     </View>
                     <View style={styles.o2AuthWrapper}>
                         <TouchableOpacityPrevent >
-                            <SocialIcon iconSize={Normalize(24)} style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100, marginRight: Normalize(5) }} button type='google' />
+                            <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
                         </TouchableOpacityPrevent>
                         <TouchableOpacityPrevent >
-                            <SocialIcon iconSize={Normalize(24)} style={{ width: AppStyle.screenSize.width / 8, height: AppStyle.screenSize.width / 8, borderRadius: 100 }} button type='facebook' />
+                            <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
                         </TouchableOpacityPrevent>
                     </View>
                 </View>

@@ -1,29 +1,27 @@
 import {
     View,
-    ScrollView,
     StyleSheet,
+    ScrollView,
 } from 'react-native';
 import React from 'react';
 import { AppStyle } from '../../config/app.config';
 import { Normalize } from '../../functions/normalize';
 
-// LoginBackground is the background image for the login stack
-export default function LoginBackground(props) {
+// HomeBackground is the background image for the home stack
+export default function HomeBackground(props) {
     return (
-        <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ width: '100%', height: AppStyle.screenSize.height }}>
-                    <View style={styles.container}>
-                        <View style={styles.backgroundContainer} >
-                            <View style={styles.background_1} />
-                            <View style={styles.background_2} />
-                        </View>
-                        <View style={styles.backgroundContainer_2} />
-                        {props.children}
+        <View style={{ backgroundColor: 'white', flex: 1 }}>
+            <View style={{ width: '100%', height: AppStyle.windowSize.height }}>
+                <ScrollView style={{ flex: 1 }} contentContainerStyle={{ height: '100%' }}>
+                    <View style={styles.backgroundContainer} >
+                        <View style={styles.background_2} />
+                        <View style={styles.background_1} />
+                        <View style={styles.background_3} />
                     </View>
-                </View>
-            </ScrollView>
-        </View >
+                    {props.children}
+                </ScrollView>
+            </View>
+        </View>
     )
 }
 
@@ -31,35 +29,42 @@ export default function LoginBackground(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height: '100%',
         flexDirection: 'column',
         backgroundColor: 'white',
     },
     backgroundContainer: {
-        flex: 0.40,
+        position: 'absolute',
+        width: AppStyle.windowSize.width,
         backgroundColor: AppStyle.third_main_color,
+        height: AppStyle.windowSize.height * 0.425,
     },
-    backgroundContainer_2: {
-        flex: 0.60,
-        backgroundColor: 'white',
-    },
-    background_1: {
+    background_3: {
         alignSelf: 'center',
         position: 'absolute',
+        backgroundColor: 'white',
+        width: AppStyle.windowSize.width,
+        height: AppStyle.windowSize.height * 0.3,
+        top: (AppStyle.windowSize.height * 0.425),
+    },
+    background_1: {
+        position: 'absolute',
         borderRadius: Normalize(300),
-        width: AppStyle.screenSize.width * 0.6,
-        top: (AppStyle.screenSize.height * 0.2),
-        height: AppStyle.screenSize.height * 0.3,
-        right: (AppStyle.screenSize.width * 0.60),
+        bottom: -AppStyle.windowSize.height * 0.2,
+        width: AppStyle.windowSize.height * 0.425,
+        left: -AppStyle.windowSize.height * 0.15,
+        height: AppStyle.windowSize.height * 0.425,
+        transform: [{ scaleX: 0.75 }, { scaleY: 0.75 }],
         backgroundColor: AppStyle.fourt_main_color,
     },
     background_2: {
         position: 'absolute',
-        borderRadius: Normalize(300),
+        borderRadius: Normalize(100),
+        top: -AppStyle.windowSize.height * 0.425,
+        width: AppStyle.windowSize.height * 0.425,
+        height: AppStyle.windowSize.height * 0.425,
+        right: -AppStyle.windowSize.height * 0.425,
+        transform: [{ scaleX: 3.25 }, { scaleY: 2.75 }],
         backgroundColor: AppStyle.main_color,
-        width: AppStyle.screenSize.width * 0.5,
-        left: (AppStyle.screenSize.width) * 0.7,
-        height: AppStyle.screenSize.height * 0.5,
-        bottom: (AppStyle.screenSize.height * 0.575),
-        transform: [{ scaleX: 3 }, { scaleY: 3 }, { rotate: '5deg' }],
     },
 })

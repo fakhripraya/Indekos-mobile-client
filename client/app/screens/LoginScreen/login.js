@@ -8,11 +8,16 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { popUpModalChange, } from '../../redux';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
-import { NormalizeFont } from '../../functions/normalize';
+import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { AppStyle, AuthService } from '../../config/app.config';
-import Background from '../../components/Backgrounds/login_background';
+import LoginBackground from '../../components/Backgrounds/login_background';
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+
+// a HOC to throttle button click
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
 const api = axios.create({
@@ -24,8 +29,10 @@ export default function Login({ navigation }) {
 
     // Redux dispatch
     const dispatch = useDispatch()
+
     // Function state
-    const [inputValue, setInput] = useState('')
+    const [inputUsername, setInputUsername] = useState('')
+    const [inputPassword, setInputPassword] = useState('')
 
     // handle login form submit
     function handleSubmit() {
@@ -33,18 +40,26 @@ export default function Login({ navigation }) {
         // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(
             api.post(
-                '/register',
-                { username: inputValue }
+                '/login',
+                {
+                    username: inputUsername,
+                    password: inputPassword
+                }
             )
                 .then(response => {
-                    if (response.status === 200) {
-                        navigation.replace('AppStack');
+                    if (response.status >= 200 && response.status < 300) {
+                        navigation.replace('OTP', {
+                            tempUsername: inputUsername,
+                            tempPassword: inputPassword,
+                            otpType: 1
+                        });
                     }
                 })
                 .catch(error => {
+                    console.log(error.response)
                     if (error.response.status !== 200) {
-                        // TODO: development only, delete when development done
-                        console.log(error.response.data.message);
+                        // dispatch the popUpModalChange actions to store the generic message modal state
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
                     }
                 })
         );
@@ -52,127 +67,117 @@ export default function Login({ navigation }) {
 
     // Renders the Login screen
     return (
-        <Background >
-            <View style={styles.wrapper}>
-                <Text style={styles.title}>
-                    Login
+        <LoginBackground >
+            <Text style={styles.title}>
+                Login
                 </Text>
-                <View style={styles.inputContainer}>
-                    <View style={styles.authInputWrapper}>
-                        <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: 5 }}>
-                            Username
-                        </Text>
-                        <View style={styles.authInput}>
-                            <TextInput
-                                secureTextEntry={true}
-                                onChangeText={(newVal) => setInput(newVal)}
-                                value={inputValue}
-                                textAlign="left"
-                                style={{ flex: 1, paddingLeft: 10, fontSize: NormalizeFont(16) }} />
-                        </View>
-                    </View>
-                    <View style={styles.authInputWrapper}>
-                        <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: 5 }}>
-                            Password
-                        </Text>
-                        <View style={styles.authInput}>
-                            <TextInput
-                                secureTextEntry={true}
-                                onChangeText={(newVal) => setInput(newVal)}
-                                value={inputValue}
-                                textAlign="left"
-                                style={{ flex: 1, paddingLeft: 10, fontSize: NormalizeFont(16) }} />
-                        </View>
-                    </View>
-                    <View style={styles.o2AuthWrapper}>
-                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6, marginRight: 5 }}>
-                            <SocialIcon button type='google' />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{ width: AppStyle.screenSize.width / 6 }}>
-                            <SocialIcon button type='facebook' />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.submitBtn}>
-                    <TouchableOpacity style={{ width: AppStyle.screenSize.width / 3 }} onPress={() => handleSubmit()}>
-                        <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(16) }]}>
-                            Submit
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.loginBtn}>
-                    <Text style={{ fontSize: NormalizeFont(14) }} >
-                        Forgot Password? <Text style={{ color: AppStyle.fourt_main_color }}>Click Here</Text>
+            <View style={styles.inputContainer}>
+                <View style={styles.authInputWrapper}>
+                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: Normalize(5) }}>
+                        Username
                     </Text>
+                    <View style={styles.authInput}>
+                        <TextInput
+                            onChangeText={(newVal) => setInputUsername(newVal)}
+                            value={inputUsername}
+                            textAlign="left"
+                            style={{ width: '100%', paddingLeft: Normalize(10), fontSize: NormalizeFont(16) }} />
+                    </View>
+                </View>
+                <View style={styles.authInputWrapper}>
+                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: Normalize(5) }}>
+                        Password
+                    </Text>
+                    <View style={styles.authInput}>
+                        <TextInput
+                            secureTextEntry={true}
+                            onChangeText={(newVal) => setInputPassword(newVal)}
+                            value={inputPassword}
+                            textAlign="left"
+                            style={{ width: '100%', paddingLeft: Normalize(10), fontSize: NormalizeFont(16) }} />
+                    </View>
+                </View>
+                <View style={styles.o2AuthWrapper}>
+                    <TouchableOpacityPrevent >
+                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
+                    </TouchableOpacityPrevent>
+                    <TouchableOpacityPrevent >
+                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
+                    </TouchableOpacityPrevent>
                 </View>
             </View>
-        </Background >
+            <View style={styles.submitBtn}>
+                <TouchableOpacity style={{ width: Normalize(125) }} onPress={() => handleSubmit()}>
+                    <Text style={[styles.button, { fontWeight: 'bold', backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(16) }]}>
+                        Submit
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.loginBtn}>
+                <Text style={{ fontSize: NormalizeFont(14) }} >
+                    Forgot Password? <Text style={{ color: AppStyle.fourt_main_color }}>Click Here</Text>
+                </Text>
+            </View>
+        </LoginBackground >
     )
 }
 
 // the render elements style
 const styles = StyleSheet.create({
-    wrapper: {
-        alignSelf: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        flexDirection: 'column',
-        top: AppStyle.screenSize.height * 0.375,
-    },
     title: {
-        right: '5%',
+        right: '10%',
         color: 'white',
         fontWeight: 'bold',
         alignSelf: 'flex-end',
+        marginTop: Normalize(80),
         fontSize: NormalizeFont(32),
-        bottom: AppStyle.screenSize.height / 4,
     },
     inputContainer: {
         elevation: 5,
-        borderRadius: 15,
         paddingTop: '5%',
-        paddingBottom: '5%',
         paddingLeft: '5%',
         paddingRight: '5%',
+        paddingBottom: '5%',
+        alignSelf: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
+        marginTop: Normalize(10),
+        borderRadius: Normalize(15),
         justifyContent: 'space-evenly',
-        bottom: AppStyle.screenSize.height / 4.5,
-        width: AppStyle.screenSize.width - (AppStyle.screenSize.width * 0.1),
-        height: AppStyle.screenSize.height - (AppStyle.screenSize.height * 0.55),
+        width: AppStyle.windowSize.width * 0.9,
     },
     authInputWrapper: {
-        width: '100%',
-        marginTop: '5%',
-        marginBottom: '5%',
+        marginTop: Normalize(10),
+        marginBottom: Normalize(10),
     },
     authInput: {
         width: '100%',
         borderWidth: 1,
-        borderRadius: 7.5,
         borderColor: 'gray',
         flexDirection: 'row',
+        height: Normalize(40),
         alignSelf: 'flex-start',
-        height: AppStyle.screenSize.height * 0.075,
+        borderRadius: Normalize(10),
     },
     o2AuthWrapper: {
         flexDirection: 'row',
     },
     submitBtn: {
-        flex: 1,
-        bottom: AppStyle.screenSize.height / 7,
+        alignSelf: 'center',
+        position: 'absolute',
+        bottom: Normalize(75),
     },
     loginBtn: {
-        flex: 1,
+        alignSelf: 'center',
         flexDirection: 'row',
-        bottom: AppStyle.screenSize.height / 9,
+        position: 'absolute',
+        bottom: Normalize(25),
     },
     button: {
-        paddingTop: 15,
         color: 'white',
-        borderRadius: 50,
-        paddingBottom: 15,
         textAlign: 'center',
-        borderColor: 'white',
+        paddingTop: Normalize(10),
+        borderRadius: Normalize(50),
+        paddingBottom: Normalize(10),
     },
 })

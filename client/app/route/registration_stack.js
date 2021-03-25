@@ -1,8 +1,8 @@
 import React from 'react';
+import OTP from '../screens/OTPScreen/OTP';
 import { enableScreens } from 'react-native-screens';
 import Register from '../screens/RegisterScreen/register';
 import { createStackNavigator } from '@react-navigation/stack';
-import RegisterOtp from '../screens/RegisterScreen/register_otp';
 import RegisterFinal from '../screens/RegisterScreen/register_final';
 
 // Optimize navigation
@@ -16,7 +16,7 @@ export default function RegistrationStack() {
     return (
         <NestedStack.Navigator>
             <NestedStack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-            <NestedStack.Screen name="RegisterOtp" component={RegisterOtp} options={{ headerTransparent: true, title: '', headerTintColor: 'white' }} />
+            <NestedStack.Screen name="OTP" component={OTP} options={{ headerTransparent: true, title: '', headerTintColor: 'white' }} />
             <NestedStack.Screen name="RegisterFinal" component={RegisterFinal} options={{ headerTransparent: true, title: '', headerTintColor: 'white' }} />
         </NestedStack.Navigator>
     );
