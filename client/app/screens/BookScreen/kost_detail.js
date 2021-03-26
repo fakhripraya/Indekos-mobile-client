@@ -1379,6 +1379,7 @@ const styles = StyleSheet.create({
     loadingScreen: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: 'white',
         justifyContent: 'center',
     },
     header: {

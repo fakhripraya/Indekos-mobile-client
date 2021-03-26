@@ -670,7 +670,6 @@ export default function Home({ navigation }) {
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#0000ff" />
-                <Text style={{ fontSize: NormalizeFont(12) }}>Loading Home...</Text>
             </View>
         )
     } else {
@@ -692,6 +691,7 @@ const styles = StyleSheet.create({
     loadingContainer: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: 'white',
         justifyContent: 'center',
     },
     nameWrapper: {
