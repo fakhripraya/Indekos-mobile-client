@@ -53,7 +53,7 @@ export const useAxiosGetArray = (service, url, timeout) => {
 };
 
 // get array of data with parameter
-export const useAxiosGetArrayParams = (service, url, timeout, config) => {
+export const useAxiosGetArrayParams = (service, url, config) => {
 
     // Function State
     var [dataArray, setDataArray] = useState(null)
@@ -81,14 +81,12 @@ export const useAxiosGetArrayParams = (service, url, timeout, config) => {
             .catch(error => {
                 if (!unmounted) {
                     //TODO:error can have response or just a simple string,make it dynamic plz
-                    console.log("error: " + error)
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error);
-                    } else {
-                        setError(true);
-                        setErrorMessage(error.response.data);
-                        setStatus(error.response.status)
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            setError(true);
+                            setErrorMessage(error.response.data);
+                            setStatus(error.response.status)
+                        }
                     }
                 }
             });
@@ -96,7 +94,7 @@ export const useAxiosGetArrayParams = (service, url, timeout, config) => {
             unmounted = true;
             cancelSource.cancel();
         }
-    }, [service, url, timeout]);
+    }, [service, url, config]);
 
     return { dataArray, error, errorMessage, status };
 };

@@ -1,9 +1,9 @@
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
 import { popUpModalChange } from '../../redux';
 import { userLocationState } from '../../redux';
 import { trackPromise } from 'react-promise-tracker';
-import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef, useState, useEffect } from 'react';
 import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
@@ -28,8 +28,6 @@ export default function Search({ navigation }) {
 
     // Hooks
     const dispatch = useDispatch()
-    const userLocation = useSelector(state => state.userReducer.location);
-    const userLocationPermission = useSelector(state => state.userReducer.locationPermission);
 
     // Function Refs
     const filterCarouselRef = useRef(null);
@@ -91,11 +89,11 @@ export default function Search({ navigation }) {
                     const bgColor = item.state ? AppStyle.fourt_main_color : "white"
 
                     return (
-                        <TouchableOpacity key={index} onPress={() => { updateFilterList(index, parent) }}>
+                        <TouchableOpacityPrevent key={index} onPress={() => { updateFilterList(index, parent) }}>
                             <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
                                 <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: NormalizeFont(12) }}>{item.desc}</Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacityPrevent>
                     )
 
                 })}
@@ -109,6 +107,10 @@ export default function Search({ navigation }) {
         const newArr = [...dummyFilter];
 
         if (filters[parent][index].state === false) {
+
+            // set state to true
+            newArr[parent][index].state = true;
+
             // if the selected filter is near you
             // user need to enable the location first
             // validate if the user location enabled or not
@@ -125,21 +127,28 @@ export default function Search({ navigation }) {
                         // second permission
                         let location = await Location.getCurrentPositionAsync({});
                         dispatch(userLocationState({ locationPermission: true, location: location, locationFlag: true }));
-
-                        // set new state
-                        newArr[parent][index].state = true;
-                        setFilters(newArr);
-                        setSelectedFilters(newArr[parent][index].id)
+                        setRequestConfig({
+                            params: {
+                                latitude: location.coords.latitude,
+                                longitude: location.coords.longitude
+                            },
+                            cancelToken: axios.CancelToken.source().token,
+                            timeout: 10000
+                        });
                     } catch (e) {
                         // if user didn't get to the second permission
+                        setFilters(dummyFilter);
+                        setSelectedFilters(0)
                         dispatch(userLocationState({ locationPermission: false, location: null, locationFlag: true }));
                         return;
                     }
                 })();
+                // set new state
+                setFilters(newArr);
+                setSelectedFilters(newArr[parent][index].id)
                 return;
             } else {
                 // set new state
-                newArr[parent][index].state = true;
                 setSelectedFilters(newArr[parent][index].id)
             }
         }
@@ -156,7 +165,7 @@ export default function Search({ navigation }) {
 
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/' + selectedFilter + '/' + page, 10000, requestConfig);
+        const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/' + selectedFilter + '/' + page, requestConfig);
         KostList = dataArray;
 
         function _renderSearchList({ item }) {
@@ -216,13 +225,9 @@ export default function Search({ navigation }) {
         function handleScroll() {
 
             page++;
-            var cancelSource = axios.CancelToken.source()
 
             trackPromise(
-                kostAPI.get('/all/' + page, {
-                    cancelToken: cancelSource.token,
-                    timeout: 10000
-                })
+                kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
                     .then(response => {
                         //TODO: check all axios request after the prototype done
                         response.data.forEach(function (item, index) {

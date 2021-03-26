@@ -444,12 +444,13 @@ export default function Home({ navigation }) {
 
         // Get the data via axios get request
         if (userLocationPermission === true) {
-            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/near', 10000, {
+            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/near', {
                 params: {
                     latitude: userLocation.coords.latitude,
                     longitude: userLocation.coords.longitude
                 },
-                cancelToken: axios.CancelToken.source().token
+                cancelToken: axios.CancelToken.source().token,
+                timeout: 10000
             });
 
             nearYouList = dataArray; errorFlag = error;
