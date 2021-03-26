@@ -23,7 +23,6 @@ const Loading = () => {
         (async () => {
 
             let { status } = await Location.requestPermissionsAsync();
-
             if (status !== 'granted') {
 
                 dispatch(userLocationState({ locationPermission: false, location: null, locationFlag: true }));
