@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import * as Location from 'expo-location';
 import { popUpModalChange } from '../../redux';
-import Carousel from 'react-native-snap-carousel';
+import { userLocationState } from '../../redux';
 import { trackPromise } from 'react-promise-tracker';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef, useState, useEffect } from 'react';
 import { AppStyle, KostService } from '../../config/app.config';
-import { useAxiosGetArray } from '../../promise/axios_get_array';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { MappedFacilities } from '../../components/Icons/facilities';
+import { useAxiosGetArrayParams } from '../../promise/axios_get_array';
 import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import SearchBackground from '../../components/Backgrounds/search_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
@@ -27,12 +28,22 @@ export default function Search({ navigation }) {
 
     // Hooks
     const dispatch = useDispatch()
+    const userLocation = useSelector(state => state.userReducer.location);
+    const userLocationPermission = useSelector(state => state.userReducer.locationPermission);
 
     // Function Refs
     const filterCarouselRef = useRef(null);
 
     // Function states
     const [filters, setFilters] = useState(null)
+    // 0 = all kost // Initial val
+    // 1 = Near You
+    // 2 = Most Popular
+    // 3 = Most Facilited
+    // 4 = Most Expensive
+    // 5 = Most Cheap
+    const [selectedFilter, setSelectedFilters] = useState(0)
+    const [requestConfig, setRequestConfig] = useState({})
 
     // Global Variable
     let KostList = [];
@@ -42,43 +53,28 @@ export default function Search({ navigation }) {
     dummyFilter = [
         [
             {
-                id: 0,
-                desc: "Most Popular",
-                state: false,
-            },
-            {
                 id: 1,
                 desc: "Near You",
                 state: false,
             },
             {
                 id: 2,
-                desc: "Cheapest",
+                desc: "Most Popular",
                 state: false,
             },
             {
                 id: 3,
-                desc: "Et cetera",
+                desc: "Most Facilited",
                 state: false,
             },
             {
                 id: 4,
-                desc: "Et cetera",
+                desc: "Most Expensive",
                 state: false,
             },
             {
                 id: 5,
-                desc: "Secondly",
-                state: false,
-            },
-            {
-                id: 6,
-                desc: "Minutely",
-                state: false,
-            },
-            {
-                id: 7,
-                desc: "Hourly",
+                desc: "Most Cheap",
                 state: false,
             }
         ],
@@ -112,11 +108,47 @@ export default function Search({ navigation }) {
 
         const newArr = [...dummyFilter];
 
-        if (filters[parent][index].state === false)
-            newArr[parent][index].state = true;
-        else
-            newArr[parent][index].state = false;
+        if (filters[parent][index].state === false) {
+            // if the selected filter is near you
+            // user need to enable the location first
+            // validate if the user location enabled or not
+            if (filters[parent][index].id === 1) {
+                (async () => {
+                    // first permission
+                    let { status } = await Location.requestPermissionsAsync();
+                    if (status !== 'granted') {
+                        dispatch(userLocationState({ locationPermission: false, location: null, locationFlag: true }));
+                        return;
+                    }
 
+                    try {
+                        // second permission
+                        let location = await Location.getCurrentPositionAsync({});
+                        dispatch(userLocationState({ locationPermission: true, location: location, locationFlag: true }));
+
+                        // set new state
+                        newArr[parent][index].state = true;
+                        setFilters(newArr);
+                        setSelectedFilters(newArr[parent][index].id)
+                    } catch (e) {
+                        // if user didn't get to the second permission
+                        dispatch(userLocationState({ locationPermission: false, location: null, locationFlag: true }));
+                        return;
+                    }
+                })();
+                return;
+            } else {
+                // set new state
+                newArr[parent][index].state = true;
+                setSelectedFilters(newArr[parent][index].id)
+            }
+        }
+        else {
+            newArr[parent][index].state = false;
+            setSelectedFilters(0)
+        }
+
+        setRequestConfig({});
         setFilters(newArr);
     }
 
@@ -124,7 +156,7 @@ export default function Search({ navigation }) {
 
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/all/' + page, 10000);
+        const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/' + selectedFilter + '/' + page, 10000, requestConfig);
         KostList = dataArray;
 
         function _renderSearchList({ item }) {

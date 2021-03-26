@@ -29,6 +29,8 @@ const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
 })
 
+//TODO: ganti jadi interaction manager untuk permission location
+//TODO: fucking rework the location pls
 export default function Home({ navigation }) {
 
     // Get the user location from the redux state
