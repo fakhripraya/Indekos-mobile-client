@@ -1311,7 +1311,6 @@ export default function KostDetail({ route, navigation }) {
         )
     } else {
         return (
-            //TODO: create function to Prevent double click on navigation, test the leaking memory problem with double click
             <>
                 <BookBackground >
                     <View style={styles.header}>
