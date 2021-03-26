@@ -1,10 +1,8 @@
-import { userReducer } from './user_state/reducers';
 import { combineReducers, createStore } from 'redux';
 import { popUpModalReducer } from './pop_up_state/reducers';
 
 // rootReducer combines all the available reducers into one
 const rootReducer = combineReducers({
-    userReducer,
     popUpModalReducer,
 })
 

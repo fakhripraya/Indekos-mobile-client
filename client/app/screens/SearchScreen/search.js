@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
 import { popUpModalChange } from '../../redux';
-import { userLocationState } from '../../redux';
 import { trackPromise } from 'react-promise-tracker';
 import React, { useRef, useState, useEffect } from 'react';
 import { AppStyle, KostService } from '../../config/app.config';
@@ -47,7 +46,6 @@ export default function Search({ navigation }) {
     let KostList = [];
     let page = 1;
 
-    //TODO: offer the user to activate the gps to enable using the nearby / near you filter
     dummyFilter = [
         [
             {
@@ -119,14 +117,14 @@ export default function Search({ navigation }) {
                     // first permission
                     let { status } = await Location.requestPermissionsAsync();
                     if (status !== 'granted') {
-                        dispatch(userLocationState({ locationPermission: false, location: null, locationFlag: true }));
+                        setFilters(dummyFilter);
+                        setSelectedFilters(0);
                         return;
                     }
 
                     try {
                         // second permission
                         let location = await Location.getCurrentPositionAsync({});
-                        dispatch(userLocationState({ locationPermission: true, location: location, locationFlag: true }));
                         setRequestConfig({
                             params: {
                                 latitude: location.coords.latitude,
@@ -138,8 +136,7 @@ export default function Search({ navigation }) {
                     } catch (e) {
                         // if user didn't get to the second permission
                         setFilters(dummyFilter);
-                        setSelectedFilters(0)
-                        dispatch(userLocationState({ locationPermission: false, location: null, locationFlag: true }));
+                        setSelectedFilters(0);
                         return;
                     }
                 })();
@@ -229,17 +226,17 @@ export default function Search({ navigation }) {
             trackPromise(
                 kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
                     .then(response => {
-                        //TODO: check all axios request after the prototype done
                         response.data.forEach(function (item, index) {
                             KostList.push(item)
                         });
                     })
                     .catch(error => {
-                        if (!axios.isCancel(error)) {
-                            if (error.response.status !== 200) {
-
-                                // dispatch the popUpModalChange actions to store the generic message modal state
-                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                if (error.response.status !== 200) {
+                                    // dispatch the popUpModalChange actions to store the generic message modal state
+                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                }
                             }
                         }
                     })

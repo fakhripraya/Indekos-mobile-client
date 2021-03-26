@@ -1,1 +1,0 @@
-export const LOCATION_STATE = 'LOCATION_STATE'

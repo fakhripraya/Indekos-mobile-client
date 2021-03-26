@@ -32,14 +32,12 @@ export const useAxiosGetArray = (service, url, timeout) => {
             })
             .catch(error => {
                 if (!unmounted) {
-                    console.log("error: " + error)
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error);
-                    } else {
-                        setError(true);
-                        setErrorMessage(error.response.data);
-                        setStatus(error.response.status)
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            setError(true);
+                            setErrorMessage(error.response.data);
+                            setStatus(error.response.status)
+                        }
                     }
                 }
             });
@@ -80,7 +78,6 @@ export const useAxiosGetArrayParams = (service, url, config) => {
             })
             .catch(error => {
                 if (!unmounted) {
-                    //TODO:error can have response or just a simple string,make it dynamic plz
                     if (typeof (error.response) !== 'undefined') {
                         if (!axios.isCancel(error)) {
                             setError(true);

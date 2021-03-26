@@ -904,15 +904,21 @@ export default function KostDetail({ route, navigation }) {
                     kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
                         cancelToken: cancelSource.token
                     }).catch(error => {
-                        if (!axios.isCancel(error)) {
-                            console.log(error)
+                        //TODO: Development only console.log
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                console.log(error)
+                            }
                         }
                     }),
                     kostAPI.get('/' + kostID + '/facilities/room/' + selectedKostRoom.id, {
                         cancelToken: cancelSource.token
                     }).catch(error => {
-                        if (!axios.isCancel(error)) {
-                            console.log(error)
+                        //TODO: Development only console.log
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                console.log(error)
+                            }
                         }
                     })
                 ])
@@ -921,7 +927,11 @@ export default function KostDetail({ route, navigation }) {
                         setKostFacilities(responseArr[1].data)
                     })
                     .catch((err) => {
-                        console.log(err)
+                        if (typeof (err.response) !== 'undefined') {
+                            if (!axios.isCancel(err)) {
+                                console.log(err)
+                            }
+                        }
                     });
 
             }

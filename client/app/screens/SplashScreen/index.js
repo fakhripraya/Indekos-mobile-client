@@ -1,17 +1,10 @@
-import {
-    popUpModalChange
-} from '../../redux';
-import {
-    Text,
-    View,
-    StyleSheet,
-    ActivityIndicator,
-} from 'react-native';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { popUpModalChange } from '../../redux';
 import { AuthService } from '../../config/app.config';
 import { NormalizeFont } from '../../functions/normalize';
+import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
 
 // creates the promised base http client
 const api = axios.create({
@@ -43,16 +36,15 @@ const Splash = ({ navigation }) => {
                 }
             })
             .catch(error => {
-                if (axios.isCancel(error)) {
-                    // TODO: development only
-                    console.log('Request canceled', error.message);
-                } else {
-                    if (error.response.status === 401)
-                        // go to welcome screen if user is not authorized
-                        navigation.replace('WelcomeStack');
-                    else
-                        // dispatch the popUpModalChange actions to store the generic message modal state
-                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                if (typeof (error.response) !== 'undefined') {
+                    if (!axios.isCancel(error)) {
+                        if (error.response.status === 401)
+                            // go to welcome screen if user is not authorized
+                            navigation.replace('WelcomeStack');
+                        else
+                            // dispatch the popUpModalChange actions to store the generic message modal state
+                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                    }
                 }
             });
         return () => {

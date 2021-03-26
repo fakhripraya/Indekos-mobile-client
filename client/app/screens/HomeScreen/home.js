@@ -1,23 +1,17 @@
-import {
-    Text,
-    View,
-    FlatList,
-    StyleSheet,
-    ImageBackground,
-} from 'react-native';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import React, { useRef, useState } from 'react';
+import * as Location from 'expo-location';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { useAxiosGet } from '../../promise/axios_get';
+import React, { useRef, useState, useEffect } from 'react';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import HomeBackground from '../../components/Backgrounds/home_background';
 import { AppStyle, AuthService, KostService } from '../../config/app.config';
 import { useAxiosGetArray, useAxiosGetArrayParams } from '../../promise/axios_get_array';
+import { Text, View, FlatList, StyleSheet, ImageBackground, InteractionManager, ActivityIndicator } from 'react-native';
 
 // creates the promised base http auth client
 const authAPI = axios.create({
@@ -33,9 +27,10 @@ const kostAPI = axios.create({
 //TODO: fucking rework the location pls
 export default function Home({ navigation }) {
 
-    // Get the user location from the redux state
-    const userLocation = useSelector(state => state.userReducer.location);
-    const userLocationPermission = useSelector(state => state.userReducer.locationPermission);
+    // Function Hooks
+    const [isReady, setIsReady] = useState(false)
+    const [userLocation, setUserLocation] = useState(null)
+    const [userLocationPermission, setUserLocationPermission] = useState(false)
 
     // Function refs
     const recCarouselRef = useRef(null);
@@ -43,6 +38,44 @@ export default function Home({ navigation }) {
     const bookCarouselRef = useRef(null);
     const promoCarouselRef = useRef(null);
     const nearYouCarouselRef = useRef(null);
+
+    // run after render
+    useEffect(() => {
+
+        // prevent update on unmounted component
+        let unmounted = false;
+
+        if (unmounted === false) {
+            InteractionManager.runAfterInteractions(() => {
+                (async () => {
+
+                    let { status } = await Location.requestPermissionsAsync();
+                    if (status !== 'granted') {
+                        setUserLocationPermission(await Location.hasServicesEnabledAsync());
+                        setIsReady(true);
+                        return;
+                    }
+
+                    try {
+                        let location = await Location.getCurrentPositionAsync({});
+                        setUserLocation(location)
+                        setUserLocationPermission(await Location.hasServicesEnabledAsync());
+                        setIsReady(true);
+                        return;
+
+                    } catch (e) {
+                        setUserLocationPermission(await Location.hasServicesEnabledAsync());
+                        setIsReady(true);
+                        return;
+                    }
+                })();
+            });
+        }
+
+        return () => {
+            unmounted = true;
+        }
+    }, [])
 
     let bookCaraouselData = [
         [
@@ -634,21 +667,35 @@ export default function Home({ navigation }) {
             </React.Fragment>
         )
     }
-
-    return (
-        <HomeBackground >
-            <NameWrapper />
-            <NewsCarousel />
-            <BookCarousel />
-            <PromoCarousel />
-            <NearYouCarousel />
-            <RecommendedCarousel />
-        </HomeBackground>
-    )
+    if (isReady === false) {
+        // Renders the Loading screen
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text style={{ fontSize: NormalizeFont(12) }}>Loading Home...</Text>
+            </View>
+        )
+    } else {
+        return (
+            <HomeBackground >
+                <NameWrapper />
+                <NewsCarousel />
+                <BookCarousel />
+                <PromoCarousel />
+                <NearYouCarousel />
+                <RecommendedCarousel />
+            </HomeBackground>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
 
+    loadingContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     nameWrapper: {
         flexDirection: 'row',
         alignItems: 'flex-end',

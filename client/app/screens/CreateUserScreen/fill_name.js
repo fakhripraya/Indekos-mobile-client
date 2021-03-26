@@ -47,12 +47,16 @@ export default function FillName({ navigation }) {
                     }
                 })
                 .catch(error => {
-                    if (error.response.status === 401)
-                        // go to welcome screen if user is not authorized
-                        navigation.replace('WelcomeStack');
-                    else
-                        // dispatch the popUpModalChange actions to store the generic message modal state
-                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            if (error.response.status === 401)
+                                // go to welcome screen if user is not authorized
+                                navigation.replace('WelcomeStack');
+                            else
+                                // dispatch the popUpModalChange actions to store the generic message modal state
+                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                        }
+                    }
                 })
         );
     }

@@ -32,13 +32,12 @@ export const useAxiosGet = (service, url, timeout) => {
             })
             .catch(error => {
                 if (!unmounted) {
-                    if (axios.isCancel(error)) {
-                        // TODO: development only
-                        console.log('Request canceled', error);
-                    } else {
-                        setError(true);
-                        setErrorMessage(error.response.data);
-                        setStatus(error.response.status)
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            setError(true);
+                            setErrorMessage(error.response.data);
+                            setStatus(error.response.status)
+                        }
                     }
                 }
             });

@@ -56,9 +56,13 @@ export default function Login({ navigation }) {
                     }
                 })
                 .catch(error => {
-                    if (error.response.status !== 200) {
-                        // dispatch the popUpModalChange actions to store the generic message modal state
-                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            if (error.response.status !== 200) {
+                                // dispatch the popUpModalChange actions to store the generic message modal state
+                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                            }
+                        }
                     }
                 })
         );
