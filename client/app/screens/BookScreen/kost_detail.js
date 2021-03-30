@@ -780,7 +780,7 @@ export default function KostDetail({ route, navigation }) {
                                 <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
                                     <TouchableOpacityPrevent onPress={() => {
                                         navigation.push('RoomSelection', {
-                                            room: selectedKostRoom,
+                                            room: props.kostRoom,
                                             roomDetails: data,
                                         });
                                     }} style={{ flexDirection: 'row', height: Normalize(25), width: Normalize(90), justifyContent: 'center', alignItems: 'center', borderRadius: Normalize(10), backgroundColor: AppStyle.sub_main_color }}>

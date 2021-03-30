@@ -1,285 +1,133 @@
-import {
-    View,
-    Text,
-    LogBox,
-    FlatList,
-    StyleSheet,
-    TouchableOpacity,
-} from 'react-native';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
-import Carousel from 'react-native-snap-carousel';
-import { AppStyle } from '../../config/app.config';
-import React, { useEffect, useRef, useState } from 'react';
+import { popUpModalChange, } from '../../redux';
+import React, { useEffect, useState } from 'react';
+import { groupBy } from '../../functions/group_by';
+import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
+import { View, Text, LogBox, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function RoomSelection({ navigation }) {
+// creates the promised base http client
+const kostAPI = axios.create({
+    baseURL: "http://" + KostService.host + KostService.port + "/"
+})
 
-    // Function refs
-    const periodCarouselRef = useRef(null);
+export default function RoomSelection({ route, navigation }) {
+
+    // Hooks
+    const dispatch = useDispatch()
+
+    // get navigation parameter
+    const room = route.params.room;
+    const roomDetails = route.params.roomDetails;
 
     // Function states
     const [dataList, setDataList] = useState(null)
-    const [periodDataList, setPeriodDataList] = useState(null)
     const [containerIndex, setContainerIndex] = useState(0)
+    const [periodDataList, setPeriodDataList] = useState(null)
 
-    // data dummy 1
-    const RoomListData = [
-        {
-            state: false,
-            RoomID: 1,
-            RoomLevel: "level 1",
-            RoomDesc: "Kamar Mayat",
-            RoomSize: "(20m x 20m)",
-            RoomDetailList: [
-                {
-                    state: false,
-                    occupied: false,
-                    key: "1",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "2",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "3",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "4",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "5",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "6",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "7",
-                },
-            ]
-        },
-        {
-            state: false,
-            RoomID: 2,
-            RoomLevel: "level 2",
-            RoomDesc: "Luxury Room",
-            RoomSize: "(20m x 20m)",
-            RoomDetailList: [
-                {
-                    state: false,
-                    occupied: false,
-                    key: "1",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "2",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "3",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "4",
-                },
-            ]
-        },
-        {
-            state: false,
-            RoomID: 3,
-            RoomLevel: "level 3",
-            RoomDesc: "Kamar Mandi",
-            RoomSize: "(5m x 5m)",
-            RoomDetailList: [
-                {
-                    state: false,
-                    occupied: false,
-                    key: "1",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "2",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "3",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "4",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "5",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "6",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "7",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "8",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "9",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "10",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "11",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "12",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "13",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "14",
-                },
-                {
-                    state: false,
-                    occupied: false,
-                    key: "15",
-                },
-                {
-                    state: false,
-                    occupied: true,
-                    key: "16",
-                },
-            ]
-        },
-    ]
+    // map room array from database
+    function KostPeriod() {
 
-    // data dummy 2
-    const PeriodDataList = [
-        [
-            {
-                desc: "Daily",
-                state: false,
-            },
-            {
-                desc: "Weekly",
-                state: false,
-            },
-            {
-                desc: "Monthly",
-                state: false,
-            },
-            {
-                desc: "Annualy",
-                state: false,
-            },
-            {
-                desc: "Decadely",
-                state: false,
-            },
-            {
-                desc: "Secondly",
-                state: false,
-            },
-            {
-                desc: "Minutely",
-                state: false,
-            },
-            {
-                desc: "Hourly",
-                state: false,
+        // Renders the elements of the period carousel
+        function _renderFirstCarousel({ item, index }) {
+
+            const txtColor = item.state ? "white" : AppStyle.fourt_main_color;
+            const bgColor = item.state ? AppStyle.fourt_main_color : "white";
+
+            return (
+                <TouchableOpacity onPress={() => { updatePeriodList(index) }}>
+                    <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
+                        <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: NormalizeFont(12) }}>{item.desc}</Text>
+                    </View>
+                </TouchableOpacity>
+
+            )
+        }
+
+        // update the state of the period
+        const updatePeriodList = (index) => {
+
+            const newArr = [...periodDataList];
+
+            if (periodDataList[index].state === false) {
+                newArr.forEach(element => {
+                    element.state = false
+                });
+
+                newArr[index].state = true;
             }
-        ],
-    ]
+            else
+                newArr[index].state = false;
 
-    function nextRoom() {
-        if (containerIndex + 1 >= dataList.length)
-            return
-
-        setContainerIndex(containerIndex + 1)
-    }
-
-    function prevRoom() {
-        if (containerIndex - 1 < 0)
-            return
-
-        setContainerIndex(containerIndex - 1)
-    }
-
-    // Renders the elements of the period carousel
-    function _renderFirstCarousel({ item, index }) {
-
-        let parent = index
+            setPeriodDataList(newArr);
+        }
 
         return (
-            <View style={styles.buttonWrapper}>
-                {item.map((item, index) => {
-
-                    const txtColor = item.state ? "white" : AppStyle.fourt_main_color
-                    const bgColor = item.state ? AppStyle.fourt_main_color : "white"
-
-                    return (
-                        <TouchableOpacity key={index} onPress={() => { updatePeriodList(index, parent) }}>
-                            <View style={[styles.buttonPeriod, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                                <Text style={{ fontWeight: 'bold', color: txtColor, fontSize: NormalizeFont(12) }}>{item.desc}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )
-
-                })}
+            <View style={styles.container_1}>
+                <Text style={styles.containerTitle}>Period</Text>
+                <View style={styles.buttonWrapper}>
+                    <FlatList
+                        data={periodDataList}
+                        renderItem={_renderFirstCarousel}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={1}
+                        horizontal={true}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </View>
             </View>
         )
-    }
 
-    // update the state of the period
-    const updatePeriodList = (index, parent) => {
-
-        const newArr = [...PeriodDataList];
-
-        if (periodDataList[parent][index].state === false)
-            newArr[parent][index].state = true;
-        else
-            newArr[parent][index].state = false;
-
-        setPeriodDataList(newArr);
     }
 
     // map room array from database
     function RoomListView() {
+
+        // Renders the elements of the room detail flat list
+        function _renderFlatList({ item, index }) {
+
+            const txtColor = item.state ? "white" : AppStyle.fourt_main_color
+            const bgColor = item.state ? AppStyle.fourt_main_color : "white"
+
+            if (item.occupied === true) {
+                return (
+                    <View style={[styles.roomList, { backgroundColor: 'gray' }]}>
+                        <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>Full</Text>
+                    </View>
+                )
+            } else {
+                return (
+                    <TouchableOpacity onPress={() => { updateDataList(index) }}>
+                        <View style={[styles.roomList, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
+                            <Text style={{ color: txtColor, fontSize: NormalizeFont(14) }}>{item.key}</Text>
+                        </View>
+                    </TouchableOpacity>
+                )
+            }
+        }
+
+        // update the state of the room detail
+        const updateDataList = (index) => {
+
+            const newArr = [...dataList];
+
+            if (dataList[containerIndex].RoomDetailList[index].state === false) {
+                newArr.forEach(element => {
+                    element.RoomDetailList.forEach(element => {
+                        element.state = false
+                    });
+                });
+
+                newArr[containerIndex].RoomDetailList[index].state = true;
+            }
+            else
+                newArr[containerIndex].RoomDetailList[index].state = false;
+
+            setDataList(newArr);
+        }
 
         return (
             <View style={styles.absoluteContainer}>
@@ -311,40 +159,18 @@ export default function RoomSelection({ navigation }) {
 
     }
 
-    // Renders the elements of the room detail flat list
-    function _renderFlatList({ item, index }) {
+    function nextRoom() {
+        if (containerIndex + 1 >= dataList.length)
+            return
 
-        const txtColor = item.state ? "white" : AppStyle.fourt_main_color
-        const bgColor = item.state ? AppStyle.fourt_main_color : "white"
-
-        if (item.occupied === true) {
-            return (
-                <View style={[styles.roomList, { backgroundColor: 'gray' }]}>
-                    <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>Full</Text>
-                </View>
-            )
-        } else {
-            return (
-                <TouchableOpacity onPress={() => { updateDataList(index) }}>
-                    <View style={[styles.roomList, { backgroundColor: bgColor, borderColor: AppStyle.fourt_main_color }]}>
-                        <Text style={{ color: txtColor, fontSize: NormalizeFont(14) }}>{item.key}</Text>
-                    </View>
-                </TouchableOpacity>
-            )
-        }
+        setContainerIndex(containerIndex + 1)
     }
 
-    // update the state of the room detail
-    const updateDataList = (index) => {
+    function prevRoom() {
+        if (containerIndex - 1 < 0)
+            return
 
-        const newArr = [...RoomListData];
-
-        if (dataList[containerIndex].RoomDetailList[index].state === false)
-            newArr[containerIndex].RoomDetailList[index].state = true;
-        else
-            newArr[containerIndex].RoomDetailList[index].state = false;
-
-        setDataList(newArr);
+        setContainerIndex(containerIndex - 1)
     }
 
     function handleNext() {
@@ -353,19 +179,89 @@ export default function RoomSelection({ navigation }) {
 
     // fetch the data from the server
     useEffect(() => {
+
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-        if (dataList === null)
-            setDataList(RoomListData)
 
-        if (periodDataList === null)
-            setPeriodDataList(PeriodDataList)
+        if (dataList === null) {
 
-        return () => {
+            let finalRooms = [];
+            const groupedRooms = groupBy('floor_level', roomDetails.room_details);
+            var groupedRoomsLevel = Object.keys(groupedRooms);
+
+            for (var i in groupedRooms) {
+
+                let rooms = [];
+
+                for (var j in groupedRooms[i]) {
+                    if (roomDetails.room_booked === null) {
+                        let newRoom = {
+                            state: false,
+                            occupied: false,
+                            key: groupedRooms[i][j].room_number.toUpperCase(),
+                        }
+                        rooms = rooms.concat(newRoom)
+                    }
+                }
+
+                let newFinalRoom = {
+                    state: false,
+                    RoomID: room.id,
+                    RoomLevel: 'Level ' + groupedRoomsLevel[i - 1],
+                    RoomDesc: room.room_desc,
+                    RoomSize: room.room_length + room.room_area_uom_desc.substring(0, 1) + ' x ' + room.room_width + room.room_area_uom_desc.substring(0, 1),
+                    RoomDetailList: rooms
+                }
+
+                finalRooms = finalRooms.concat(newFinalRoom)
+
+            }
+
+            setDataList(finalRooms)
         }
+
+        if (periodDataList === null) {
+
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
+
+            // Get the data via axios get request
+            kostAPI.get('/' + room.kost_id + '/period', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (response.data !== null) {
+                        let finalPeriods = [];
+                        response.data.forEach(element => {
+
+                            let newFinalPeriod = {
+                                state: false,
+                                id: element.period_id,
+                                desc: element.period_desc,
+                            }
+
+                            finalPeriods = [...finalPeriods, newFinalPeriod]
+                        });
+
+                        setPeriodDataList(finalPeriods);
+                    }
+                })
+                .catch(error => {
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            // dispatch the popUpModalChange actions to store the generic message modal state
+                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                        }
+                    }
+                });
+        }
+
     }, [])
 
     //if null dont render yet
-    if (dataList !== null) {
+    if (dataList === null || periodDataList === null) {
+        return null
+    } else {
         return (
             <View style={{ flex: 1, backgroundColor: 'white', width: AppStyle.windowSize.width, height: AppStyle.windowSize.height }}>
                 <View style={styles.header}>
@@ -377,19 +273,7 @@ export default function RoomSelection({ navigation }) {
                     </View>
                 </View>
                 <RoomListView />
-                <View style={styles.container_1}>
-                    <Text style={styles.containerTitle}>Period</Text>
-                    <FlatList
-                        ref={periodCarouselRef}
-                        data={periodDataList}
-                        renderItem={_renderFirstCarousel}
-                        keyExtractor={(item, index) => index.toString()}
-                        numColumns={1}
-                        horizontal={true}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </View>
+                <KostPeriod />
                 <View style={styles.container_2}>
                     <Text style={styles.containerTitle}>Date</Text>
                     <View style={styles.buttonWrapper}>
@@ -411,8 +295,6 @@ export default function RoomSelection({ navigation }) {
                 </View>
             </View>
         )
-    } else {
-        return null
     }
 }
 
