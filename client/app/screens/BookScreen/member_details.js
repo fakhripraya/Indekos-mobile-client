@@ -1,18 +1,22 @@
-import {
-    View,
-    Text,
-    ScrollView,
-    TextInput,
-    StyleSheet,
-    TouchableOpacity,
-} from 'react-native';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
+import { popUpModalChange, } from '../../redux';
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
 import { AppStyle } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
+import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function MemberDetails({ navigation }) {
+export default function MemberDetails({ route, navigation }) {
+
+    // Hooks
+    const dispatch = useDispatch()
+
+    // get navigation parameter
+    const room = route.params.room;
+    const roomDetails = route.params.roomDetails;
+    const selectedRoom = route.params.selectedRoom;
+    const selectedPeriod = route.params.selectedPeriod;
 
     // member gender 0 is male
     // member gender 1 is female
@@ -25,13 +29,12 @@ export default function MemberDetails({ navigation }) {
         },
     ])
 
-    const [maxMember, setMaxMember] = useState(null)
     const [toggleCheckMe, setToggleCheckMe] = useState(true)
     const [toggleCheckOther, setToggleCheckOther] = useState(false)
 
     function increaseMember() {
 
-        if (loopingInput.length < maxMember) {
+        if (loopingInput.length < room.max_person) {
 
             const newArr = [...loopingInput];
 
@@ -83,6 +86,58 @@ export default function MemberDetails({ navigation }) {
             setToggleCheckMe(false)
         }
 
+    }
+
+    function CustomCheckboxMe() {
+
+        if (toggleCheckMe) {
+            return (
+                <MaterialIcons onPress={() => checkMe()} name="check-box" size={Normalize(24)} color={AppStyle.success} />
+            )
+        }
+        else {
+            return (
+                <MaterialIcons onPress={() => checkMe()} name="check-box-outline-blank" size={Normalize(24)} color="gray" />
+            )
+        }
+
+    }
+
+    function CustomCheckboxOther() {
+
+        if (toggleCheckOther) {
+            return (
+                <MaterialIcons onPress={() => checkOther()} name="check-box" size={Normalize(24)} color={AppStyle.success} />
+            )
+        }
+        else {
+            return (
+                <MaterialIcons onPress={() => checkOther()} name="check-box-outline-blank" size={Normalize(24)} color="gray" />
+            )
+        }
+
+    }
+
+    function handleNext() {
+
+        for (i = 0; i < loopingInput.length; i++) {
+            if (loopingInput[i].memberName === "" || loopingInput[i].memberName === null || typeof (loopingInput[i].memberName) !== 'undefined' === "") {
+                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: 'Silahkan isi nama member ke ' + (i + 1) }));
+                return;
+            }
+            if (loopingInput[i].memberPhone === "" || loopingInput[i].memberPhone === null || typeof (loopingInput[i].memberPhone) !== 'undefined' === "") {
+                // value became "-" because people probably don't have phone
+                loopingInput[i].memberPhone = "-"
+            }
+        }
+
+        navigation.push('KTPVerification', {
+            room: room,
+            loopingInput: loopingInput,
+            selectedRoom: selectedRoom,
+            selectedPeriod: selectedPeriod,
+            roomDetails: roomDetails,
+        });
     }
 
     // Renders the elements of the member detail input
@@ -175,48 +230,6 @@ export default function MemberDetails({ navigation }) {
         )
     }
 
-    function CustomCheckboxMe() {
-
-        if (toggleCheckMe) {
-            return (
-                <MaterialIcons onPress={() => checkMe()} name="check-box" size={Normalize(24)} color={AppStyle.success} />
-            )
-        }
-        else {
-            return (
-                <MaterialIcons onPress={() => checkMe()} name="check-box-outline-blank" size={Normalize(24)} color="gray" />
-            )
-        }
-
-    }
-
-    function CustomCheckboxOther() {
-
-        if (toggleCheckOther) {
-            return (
-                <MaterialIcons onPress={() => checkOther()} name="check-box" size={Normalize(24)} color={AppStyle.success} />
-            )
-        }
-        else {
-            return (
-                <MaterialIcons onPress={() => checkOther()} name="check-box-outline-blank" size={Normalize(24)} color="gray" />
-            )
-        }
-
-    }
-
-    function handleNext() {
-        navigation.push('KTPVerification');
-    }
-
-    useEffect(() => {
-
-        setMaxMember(4)
-
-        return () => {
-        }
-    }, [])
-
     return (
         <View style={{ flex: 1, backgroundColor: 'white', width: '100%', height: '100%' }}>
             <ScrollView style={{ flex: 1 }}>
@@ -241,7 +254,7 @@ export default function MemberDetails({ navigation }) {
                         </View>
                     </View>
                     <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Person</Text>
-                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>This room maximum is {maxMember} persons</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>This room maximum is {room.max_person} persons</Text>
                     <View style={{ flexDirection: 'row', marginTop: AppStyle.windowSize.height * 0.03355, marginBottom: AppStyle.windowSize.height * 0.03355 }}>
                         <View>
                             <TouchableOpacity style={[styles.icon, { marginRight: Normalize(30), marginLeft: Normalize(10) }]} >

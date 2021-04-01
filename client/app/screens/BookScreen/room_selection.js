@@ -174,7 +174,49 @@ export default function RoomSelection({ route, navigation }) {
     }
 
     function handleNext() {
-        navigation.push('MemberDetails');
+
+        let selectedRoom = {};
+        let selectedPeriod = {};
+
+        dataList.forEach(element => {
+            element.RoomDetailList.forEach(element => {
+                if (element.state === true) {
+                    selectedRoom = element
+                }
+            });
+        });
+
+        periodDataList.forEach(element => {
+            if (element.state === true) {
+                selectedPeriod = element
+            }
+        });
+
+        if ((typeof (selectedRoom) !== 'undefined' && typeof (selectedPeriod) !== 'undefined') && (selectedRoom !== null && selectedPeriod !== null)) {
+            if ((Object.keys(selectedRoom).length === 0 && selectedRoom.constructor === Object) && (Object.keys(selectedPeriod).length === 0 && selectedPeriod.constructor === Object)) {
+                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: 'Silahkan pilih ruangan dan periode kost' }));
+                return;
+            }
+            if (Object.keys(selectedRoom).length === 0 && selectedRoom.constructor === Object) {
+                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: 'Silahkan pilih ruangan kost' }));
+                return;
+            }
+            if ((Object.keys(selectedPeriod).length === 0 && selectedPeriod.constructor === Object)) {
+                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: 'Silahkan pilih periode kost' }));
+                return;
+            }
+        } else {
+            // dispatch the popUpModalChange actions to store the generic message modal state
+            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: 'Silahkan pilih ruangan dan periode kost' }));
+            return;
+        }
+
+        navigation.push('MemberDetails', {
+            room: room,
+            selectedRoom: selectedRoom,
+            selectedPeriod: selectedPeriod,
+            roomDetails: roomDetails,
+        });
     }
 
     // fetch the data from the server
@@ -195,8 +237,9 @@ export default function RoomSelection({ route, navigation }) {
                 for (var j in groupedRooms[i]) {
                     if (roomDetails.room_booked === null) {
                         let newRoom = {
+                            id: groupedRooms[i][j].id,
                             state: false,
-                            occupied: false,
+                            occupied: false, //TODO: masih placeholder nanti diganti
                             key: groupedRooms[i][j].room_number.toUpperCase(),
                         }
                         rooms = rooms.concat(newRoom)

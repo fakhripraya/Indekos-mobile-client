@@ -40,13 +40,16 @@ export default function Search({ navigation }) {
     // 4 = Most Expensive
     // 5 = Most Cheap
     const [selectedFilter, setSelectedFilters] = useState(0)
-    const [requestConfig, setRequestConfig] = useState({})
+    const [requestConfig, setRequestConfig] = useState({
+        cancelToken: axios.CancelToken.source().token,
+        timeout: 10000
+    })
 
     // Global Variable
     let KostList = [];
     let page = 1;
 
-    dummyFilter = [
+    let initialFilter = [
         [
             {
                 id: 1,
@@ -102,7 +105,7 @@ export default function Search({ navigation }) {
     // update the state of the period
     const updateFilterList = (index, parent) => {
 
-        const newArr = [...dummyFilter];
+        const newArr = [...initialFilter];
 
         if (filters[parent][index].state === false) {
 
@@ -117,7 +120,7 @@ export default function Search({ navigation }) {
                     // first permission
                     let { status } = await Location.requestPermissionsAsync();
                     if (status !== 'granted') {
-                        setFilters(dummyFilter);
+                        setFilters(initialFilter);
                         setSelectedFilters(0);
                         return;
                     }
@@ -135,7 +138,7 @@ export default function Search({ navigation }) {
                         });
                     } catch (e) {
                         // if user didn't get to the second permission
-                        setFilters(dummyFilter);
+                        setFilters(initialFilter);
                         setSelectedFilters(0);
                         return;
                     }
@@ -154,7 +157,10 @@ export default function Search({ navigation }) {
             setSelectedFilters(0)
         }
 
-        setRequestConfig({});
+        setRequestConfig({
+            cancelToken: axios.CancelToken.source().token,
+            timeout: 10000
+        });
         setFilters(newArr);
     }
 
@@ -271,7 +277,7 @@ export default function Search({ navigation }) {
 
     useEffect(() => {
         if (filters === null)
-            setFilters(dummyFilter)
+            setFilters(initialFilter)
 
         return () => {
         }
