@@ -108,20 +108,34 @@ export default function MyKosan() {
         if (KostList === null) {
             if (status === 200) {
                 return (
-                    <View style={styles.nullContainer}>
-                        <Text>No Kost Found</Text>
-                    </View>
+                    <>
+                        <View style={styles.addKosanWrapper}>
+                            <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: 0</Text>
+                            <TouchableOpacityPrevent style={styles.addKosanButton}>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
+                            </TouchableOpacityPrevent>
+                        </View>
+                        <View style={styles.tabNullContainer}>
+                            <Text>No kosan found</Text>
+                        </View>
+                    </>
                 )
             } else if (status === null) {
                 return (
-                    <View style={styles.nullContainer}>
+                    <View style={styles.tabNullContainer}>
                         <ActivityIndicator size="large" color={AppStyle.main_color} />
                     </View>
                 )
             }
         } else {
             return (
-                <View style={styles.tabContainer}>
+                <>
+                    <View style={styles.addKosanWrapper}>
+                        <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList.length}</Text>
+                        <TouchableOpacityPrevent style={styles.addKosanButton}>
+                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
+                        </TouchableOpacityPrevent>
+                    </View>
                     <FlatList
                         data={KostList}
                         renderItem={_renderSearchList}
@@ -132,7 +146,7 @@ export default function MyKosan() {
                         }}
                         onEndReachedThreshold={0.1}
                     />
-                </View>
+                </>
             )
         }
     }
@@ -162,13 +176,9 @@ export default function MyKosan() {
                     <Text style={{ fontWeight: 'bold', color: tabIndex === 1 ? 'white' : 'black', fontSize: NormalizeFont(14) }}>Tracker</Text>
                 </TouchableOpacityPrevent>
             </View>
-            <View style={styles.addKosanWrapper}>
-                <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList === null ? 0 : KostList.length}</Text>
-                <TouchableOpacityPrevent style={styles.addKosanButton}>
-                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
-                </TouchableOpacityPrevent>
+            <View style={styles.tabContainer}>
+                <TabContent />
             </View>
-            <TabContent />
         </MyKosanBackground>
     )
 }
@@ -193,18 +203,17 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(15),
         width: AppStyle.windowSize.width * 0.375,
     },
-    tabContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: AppStyle.windowSize.width,
-        height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2) + (Normalize(60) / 2) + Normalize(55) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2))),
-    },
-    nullContainer: {
+    tabNullContainer: {
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
         width: AppStyle.windowSize.width,
-        height: AppStyle.windowSize.height,
+        height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2) + (Normalize(60) / 2) - Normalize(60) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2)))
+    },
+    tabContainer: {
+        alignItems: 'center',
+        width: AppStyle.windowSize.width,
+        height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2) + (Normalize(60) / 2) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2))),
     },
     addKosanWrapper: {
         alignSelf: 'center',
