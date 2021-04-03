@@ -36,7 +36,7 @@ export default function MyKosan() {
     function MyKosan() {
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/' + 6 + '/' + page, requestConfig);
+        const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, '/all/' + 6 + '/' + page, requestConfig);
         KostList = dataArray;
 
         function _renderSearchList({ item }) {
@@ -106,18 +106,22 @@ export default function MyKosan() {
         }
 
         if (KostList === null) {
-            return (
-                <ActivityIndicator size="large" color={AppStyle.main_color} />
-            )
+            if (status === 200) {
+                return (
+                    <View style={styles.nullContainer}>
+                        <Text>No Kost Found</Text>
+                    </View>
+                )
+            } else if (status === null) {
+                return (
+                    <View style={styles.nullContainer}>
+                        <ActivityIndicator size="large" color={AppStyle.main_color} />
+                    </View>
+                )
+            }
         } else {
             return (
-                <>
-                    <View style={styles.addKosanWrapper}>
-                        <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: 2</Text>
-                        <TouchableOpacityPrevent style={styles.addKosanButton}>
-                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
-                        </TouchableOpacityPrevent>
-                    </View>
+                <View style={styles.tabContainer}>
                     <FlatList
                         data={KostList}
                         renderItem={_renderSearchList}
@@ -128,7 +132,7 @@ export default function MyKosan() {
                         }}
                         onEndReachedThreshold={0.1}
                     />
-                </>
+                </View>
             )
         }
     }
@@ -158,9 +162,13 @@ export default function MyKosan() {
                     <Text style={{ fontWeight: 'bold', color: tabIndex === 1 ? 'white' : 'black', fontSize: NormalizeFont(14) }}>Tracker</Text>
                 </TouchableOpacityPrevent>
             </View>
-            <View style={styles.tabContainer}>
-                <TabContent />
+            <View style={styles.addKosanWrapper}>
+                <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList === null ? 0 : KostList.length}</Text>
+                <TouchableOpacityPrevent style={styles.addKosanButton}>
+                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
+                </TouchableOpacityPrevent>
             </View>
+            <TabContent />
         </MyKosanBackground>
     )
 }
@@ -189,7 +197,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: AppStyle.windowSize.width,
-        height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2) + (Normalize(60) / 2) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2))),
+        height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2) + (Normalize(60) / 2) + Normalize(55) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2))),
+    },
+    nullContainer: {
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: AppStyle.windowSize.width,
+        height: AppStyle.windowSize.height,
     },
     addKosanWrapper: {
         alignSelf: 'center',
