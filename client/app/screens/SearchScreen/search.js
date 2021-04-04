@@ -307,18 +307,24 @@ export default function Search({ navigation }) {
                 </View>
                 <View style={styles.sortButtonWrapperContaner}>
                     <View style={styles.sortButtonWrapper}>
-                        <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1, flexDirection: 'row' }]}>
-                            <AntDesign name="filter" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Filter</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.sortButton, { flexDirection: 'row' }]}>
-                            <MaterialCommunityIcons name="sort" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Sort</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
-                            <Ionicons name="map-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Map</Text>
-                        </TouchableOpacity>
+                        <View style={[styles.sortButton, { borderRightWidth: 1, flexDirection: 'row' }]}>
+                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                                <AntDesign name="filter" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Filter</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.sortButton, { flexDirection: 'row' }]}>
+                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                                <MaterialCommunityIcons name="sort" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Sort</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
+                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                                <Ionicons name="map-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Map</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <SearchList />
@@ -368,7 +374,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: Normalize(60),
         backgroundColor: 'white',
-        backgroundColor: 'white',
         justifyContent: 'flex-start',
     },
     sortButtonWrapper: {
@@ -381,8 +386,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     sortButton: {
+        height: '80%',
         alignItems: 'center',
-        height: Normalize(30),
         justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.windowSize.width * 0.9 / 3,

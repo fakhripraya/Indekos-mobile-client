@@ -80,18 +80,24 @@ export default function MyKosan() {
                     </TouchableNativeFeedbackPrevent>
                     <View style={styles.sortButtonWrapperContaner}>
                         <View style={styles.sortButtonWrapper}>
-                            <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1, flexDirection: 'row' }]}>
-                                <AntDesign name="edit" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Edit</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.sortButton, { flexDirection: 'row' }]}>
-                                <Feather name="star" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Promote</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
-                                <MaterialIcons name="delete-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Delete</Text>
-                            </TouchableOpacity>
+                            <View style={[styles.sortButton, { borderRightWidth: 1, flexDirection: 'row' }]}>
+                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                                    <AntDesign name="edit" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Edit</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[styles.sortButton, { flexDirection: 'row' }]}>
+                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                                    <Feather name="star" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Promote</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
+                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                                    <MaterialIcons name="delete-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Delete</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </>
@@ -315,8 +321,8 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
     sortButton: {
+        height: '80%',
         alignItems: 'center',
-        height: Normalize(30),
         justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.15)',
         width: AppStyle.windowSize.width * 0.9 / 3,
