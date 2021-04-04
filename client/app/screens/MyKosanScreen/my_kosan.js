@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { trackPromise } from 'react-promise-tracker';
-import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { MappedFacilities } from '../../components/Icons/facilities';
@@ -9,6 +8,7 @@ import { useAxiosGetArrayParams } from '../../promise/axios_get_array';
 import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import MyKosanBackground from '../../components/Backgrounds/my_kosan_background';
+import { Entypo, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableNativeFeedback, ImageBackground, ActivityIndicator, FlatList } from 'react-native';
 
 // a HOC to throttle button click
@@ -42,41 +42,59 @@ export default function MyKosan() {
         function _renderSearchList({ item }) {
 
             return (
-                <TouchableNativeFeedbackPrevent onPress={() => {
-                }} >
-                    <View style={styles.itemWrapper} >
-                        <View style={styles.thumbnailContainer}>
-                            <ImageBackground
-                                imageStyle={{ borderRadius: Normalize(10) }}
-                                style={styles.backgroundImg}
-                                source={{ uri: item.kost.thumbnail_url }}
-                            />
+                <>
+                    <TouchableNativeFeedbackPrevent onPress={() => {
+                    }} >
+                        <View style={styles.itemWrapper} >
+                            <View style={styles.thumbnailContainer}>
+                                <ImageBackground
+                                    imageStyle={{ borderRadius: Normalize(10) }}
+                                    style={styles.backgroundImg}
+                                    source={{ uri: item.kost.thumbnail_url }}
+                                />
+                            </View>
+                            <View style={styles.itemContainer}>
+                                <View style={styles.itemTitle}>
+                                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.kost_name.length > 15 ? item.kost.kost_name.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.kost_name}</Text>
+                                </View>
+                                <View style={styles.itemLocation}>
+                                    <Entypo name="location" size={Normalize(14)} color="black" style={{ marginRight: Normalize(12.5) }} />
+                                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.city.length > 15 ? item.kost.city.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.city}</Text>
+                                </View>
+                                <View style={styles.itemFacilitiesContainer}>
+                                    <View style={styles.itemFacilities}>
+                                        <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(0, 2)} category={0} />
+                                    </View>
+                                    <View style={styles.itemFacilities}>
+                                        <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(2, 4)} category={0} />
+                                    </View>
+                                </View>
+                                <View style={styles.itemPrice}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ fontSize: NormalizeFont(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                                    </View>
+                                    <Text style={{ fontSize: NormalizeFont(14), top: 5, color: 'gray' }}>/Month</Text>
+                                </View>
+                            </View>
+                        </View >
+                    </TouchableNativeFeedbackPrevent>
+                    <View style={styles.sortButtonWrapperContaner}>
+                        <View style={styles.sortButtonWrapper}>
+                            <TouchableOpacity style={[styles.sortButton, { borderRightWidth: 1, flexDirection: 'row' }]}>
+                                <AntDesign name="edit" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Edit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.sortButton, { flexDirection: 'row' }]}>
+                                <Feather name="star" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Promote</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
+                                <MaterialIcons name="delete-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Delete</Text>
+                            </TouchableOpacity>
                         </View>
-                        <View style={styles.itemContainer}>
-                            <View style={styles.itemTitle}>
-                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.kost_name.length > 15 ? item.kost.kost_name.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.kost_name}</Text>
-                            </View>
-                            <View style={styles.itemLocation}>
-                                <Entypo name="location" size={Normalize(14)} color="black" style={{ marginRight: Normalize(12.5) }} />
-                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.city.length > 15 ? item.kost.city.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.city}</Text>
-                            </View>
-                            <View style={styles.itemFacilitiesContainer}>
-                                <View style={styles.itemFacilities}>
-                                    <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(0, 2)} category={0} />
-                                </View>
-                                <View style={styles.itemFacilities}>
-                                    <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(2, 4)} category={0} />
-                                </View>
-                            </View>
-                            <View style={styles.itemPrice}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ fontSize: NormalizeFont(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
-                                </View>
-                                <Text style={{ fontSize: NormalizeFont(14), top: 5, color: 'gray' }}>/Month</Text>
-                            </View>
-                        </View>
-                    </View >
-                </TouchableNativeFeedbackPrevent>
+                    </View>
+                </>
             )
         }
 
@@ -276,5 +294,31 @@ const styles = StyleSheet.create({
     itemPrice: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
+    },
+    sortButtonWrapperContaner: {
+        width: '100%',
+        alignItems: 'center',
+        height: Normalize(60),
+        backgroundColor: 'white',
+        backgroundColor: 'white',
+        justifyContent: 'flex-start',
+    },
+    sortButtonWrapper: {
+        width: '90%',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        height: Normalize(42),
+        backgroundColor: 'white',
+        justifyContent: 'space-evenly',
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+    },
+    sortButton: {
+        alignItems: 'center',
+        height: Normalize(30),
+        justifyContent: 'center',
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+        width: AppStyle.windowSize.width * 0.9 / 3,
     },
 })
