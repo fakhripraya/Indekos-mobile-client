@@ -1,11 +1,7 @@
-import {
-    View,
-    StyleSheet,
-    ScrollView,
-} from 'react-native';
 import React from 'react';
 import { AppStyle } from '../../config/app.config';
 import { Normalize } from '../../functions/normalize';
+import { View, StyleSheet, ScrollView, } from 'react-native';
 
 // BookBackground is the background image for the book stack
 export default function BookBackground(props) {
@@ -35,35 +31,35 @@ const styles = StyleSheet.create({
     },
     backgroundContainer: {
         position: 'absolute',
-        width: AppStyle.screenSize.width,
-        height: AppStyle.screenSize.height * 0.3,
+        width: AppStyle.windowSize.width,
+        height: AppStyle.windowSize.height * 0.3,
         backgroundColor: AppStyle.third_main_color,
     },
     background_3: {
         alignSelf: 'center',
         position: 'absolute',
         backgroundColor: 'white',
-        width: AppStyle.screenSize.width,
-        top: (AppStyle.screenSize.height * 0.3),
-        height: AppStyle.screenSize.height * 0.3,
+        width: AppStyle.windowSize.width,
+        top: (AppStyle.windowSize.height * 0.3),
+        height: AppStyle.windowSize.height * 0.3,
     },
     background_1: {
         position: 'absolute',
         borderRadius: Normalize(300),
-        width: AppStyle.screenSize.height * 0.25,
+        width: AppStyle.windowSize.height * 0.25,
         transform: [{ scaleX: 1 }, { scaleY: 1 }],
-        height: AppStyle.screenSize.height * 0.25,
-        right: -AppStyle.screenSize.height * 0.175,
+        height: AppStyle.windowSize.height * 0.25,
+        right: -AppStyle.windowSize.height * 0.175,
         backgroundColor: AppStyle.fourt_main_color,
-        top: (AppStyle.screenSize.height * 0.3 - AppStyle.screenSize.height * 0.25) / 2,
+        top: (AppStyle.windowSize.height * 0.3 - AppStyle.windowSize.height * 0.25) / 2,
     },
     background_2: {
         position: 'absolute',
         borderRadius: Normalize(300),
         backgroundColor: AppStyle.main_color,
-        width: AppStyle.screenSize.height * 0.3,
-        height: AppStyle.screenSize.height * 0.3,
-        left: -AppStyle.screenSize.height * 0.1,
+        width: AppStyle.windowSize.height * 0.3,
+        height: AppStyle.windowSize.height * 0.3,
+        left: -AppStyle.windowSize.height * 0.1,
         transform: [{ scaleX: 2 }, { scaleY: 2 }],
     },
 })

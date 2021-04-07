@@ -9,6 +9,7 @@ import LoginStack from './app/route/login_stack';
 import SplashStack from './app/route/splash_stack';
 import { enableScreens } from 'react-native-screens';
 import WelcomeStack from './app/route/welcome_stack';
+import MyKosanStack from './app/route/my_kosan_stack.js';
 import PromiseSpinner from './app/promise/promise_tracker';
 import CreateUserStack from './app/route/create_user_stack';
 import RegistrationStack from './app/route/registration_stack';
@@ -68,6 +69,11 @@ export default function App() {
             <RootStack.Screen
               name="BookStack"
               component={BookStack}
+              options={{ headerShown: false }}
+            />
+            <RootStack.Screen
+              name="MyKosanStack"
+              component={MyKosanStack}
               options={{ headerShown: false }}
             />
           </RootStack.Navigator>

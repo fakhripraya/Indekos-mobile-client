@@ -81,8 +81,8 @@ export default function KTPVerification({ navigation }) {
                     ref={textPlaceholderRef}
                     layout={"default"}
                     data={textPlaceholderData}
-                    sliderWidth={AppStyle.screenSize.width}
-                    itemWidth={AppStyle.screenSize.width}
+                    sliderWidth={AppStyle.windowSize.width}
+                    itemWidth={AppStyle.windowSize.width}
                     renderItem={_renderTextPlaceholder}
                     onSnapToItem={(index) => { setActive(index) }}
                 />
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     },
     headerIcon: {
         position: 'absolute',
-        left: AppStyle.screenSize.width * 0.05,
+        left: AppStyle.windowSize.width * 0.05,
     },
     selfieBtn: {
         alignSelf: 'center',
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         paddingTop: Normalize(10),
         borderRadius: Normalize(10),
         paddingBottom: Normalize(10),
-        width: AppStyle.screenSize.width * 0.5,
+        width: AppStyle.windowSize.width * 0.5,
         backgroundColor: AppStyle.fourt_main_color,
     },
     nextBtn: {

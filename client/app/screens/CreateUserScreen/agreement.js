@@ -45,22 +45,22 @@ const styles = StyleSheet.create({
     container: {
         alignSelf: 'center',
         position: 'absolute',
-        top: AppStyle.screenSize.height * 0.1,
-        width: AppStyle.screenSize.width * 0.9,
-        height: AppStyle.screenSize.height * 0.9,
+        top: AppStyle.windowSize.height * 0.1,
+        width: AppStyle.windowSize.width * 0.9,
+        height: AppStyle.windowSize.height * 0.9,
     },
     scroll: {
         elevation: 5,
         width: '100%',
         backgroundColor: 'white',
         borderRadius: Normalize(15),
-        height: AppStyle.screenSize.height * 0.9 * 0.8,
+        height: AppStyle.windowSize.height * 0.9 * 0.8,
     },
     buttonWrapper: {
         width: '100%',
         alignSelf: 'center',
         justifyContent: 'center',
-        height: AppStyle.screenSize.height * 0.9 * 0.2,
+        height: AppStyle.windowSize.height * 0.9 * 0.2,
     },
     agreeButton: {
         width: '45%',

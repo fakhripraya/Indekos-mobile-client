@@ -76,8 +76,8 @@ export default function Welcome({ navigation }) {
                     ref={carouselRef}
                     layout={"default"}
                     data={caraouselData}
-                    sliderWidth={AppStyle.screenSize.width}
-                    itemWidth={AppStyle.screenSize.width}
+                    sliderWidth={AppStyle.windowSize.width}
+                    itemWidth={AppStyle.windowSize.width}
                     renderItem={_renderItem}
                     onSnapToItem={(index) => { setActive(index) }}
                 />
@@ -85,7 +85,7 @@ export default function Welcome({ navigation }) {
                     <TouchableOpacityPrevent
                         onPress={() => { carouselRef.current.snapToPrev(); }}
                         style={[
-                            { width: AppStyle.screenSize.width / 3 },
+                            { width: AppStyle.windowSize.width / 3 },
                             activeIndex == 0 ? { display: 'none' } : { display: 'flex' }]
                         }>
                         <Text style={[styles.button, { backgroundColor: AppStyle.fifth_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold' }]}>Prev</Text>
@@ -97,7 +97,7 @@ export default function Welcome({ navigation }) {
                             else
                                 carouselRef.current.snapToNext();
                         }}
-                        style={{ width: AppStyle.screenSize.width / 3 }}>
+                        style={{ width: AppStyle.windowSize.width / 3 }}>
                         <Text style={[styles.button, { backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(14), fontWeight: 'bold' }]}>{activeIndex == 0 ? "Start" : "Next"}</Text>
                     </TouchableOpacityPrevent>
                 </View>

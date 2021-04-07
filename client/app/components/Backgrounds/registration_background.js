@@ -1,11 +1,7 @@
-import {
-    View,
-    StyleSheet,
-    ScrollView,
-} from 'react-native';
 import React from 'react';
 import { AppStyle } from '../../config/app.config';
 import { Normalize } from '../../functions/normalize';
+import { View, StyleSheet, ScrollView, } from 'react-native';
 
 // RegistrationBackground is the background image for the register stack
 export default function RegistrationBackground(props) {

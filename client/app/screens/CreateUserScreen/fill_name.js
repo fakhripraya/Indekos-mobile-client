@@ -91,14 +91,14 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        height: AppStyle.screenSize.height * 0.5,
-        marginTop: AppStyle.screenSize.height * 0.1,
+        height: AppStyle.windowSize.height * 0.5,
+        marginTop: AppStyle.windowSize.height * 0.1,
     },
     input: {
         height: Normalize(40),
         backgroundColor: 'white',
         borderRadius: Normalize(10),
-        width: AppStyle.screenSize.width * 0.8,
+        width: AppStyle.windowSize.width * 0.8,
     },
     submitBtn: {
         alignSelf: 'center',

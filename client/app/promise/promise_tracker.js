@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         maxWidth: Normalize(100),
         maxHeight: Normalize(100),
         borderRadius: Normalize(25),
-        top: (AppStyle.screenSize.height - (AppStyle.screenSize.height / 2)) - (Normalize(100) / 2),
+        top: (AppStyle.windowSize.height - (AppStyle.windowSize.height / 2)) - (Normalize(100) / 2),
     },
 });
 

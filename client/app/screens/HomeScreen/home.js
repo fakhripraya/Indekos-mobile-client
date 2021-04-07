@@ -773,6 +773,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: AppStyle.windowSize.width * 0.9,
         height: AppStyle.windowSize.height * 0.26,
-        marginBottom: ((AppStyle.screenSize.width * 0.15 / 2) + (AppStyle.screenSize.width * 0.175) + Normalize(30))
+        marginBottom: ((AppStyle.windowSize.width * 0.15 / 2) + (AppStyle.windowSize.width * 0.175) + Normalize(30))
     }
 })

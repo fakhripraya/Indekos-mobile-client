@@ -1282,7 +1282,7 @@ export default function KostDetail({ route, navigation }) {
                     setKostFacilities(null)
                     selectedKostRoom = null
                 }}
-                height={AppStyle.screenSize.height * 0.85}
+                height={AppStyle.windowSize.height * 0.85}
                 openDuration={1000}
                 customStyles={{
                     wrapper: {
@@ -1807,12 +1807,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         justifyContent: 'space-between',
-        width: AppStyle.screenSize.width,
-        height: AppStyle.screenSize.width * 0.15,
+        width: AppStyle.windowSize.width,
+        height: AppStyle.windowSize.width * 0.15,
     },
     priceTag: {
         flexDirection: 'row',
-        marginLeft: AppStyle.screenSize.width * 0.05,
+        marginLeft: AppStyle.windowSize.width * 0.05,
     },
     bookButton: {
         alignItems: 'center',
@@ -1821,7 +1821,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: Normalize(20),
         backgroundColor: AppStyle.sub_main_color,
-        marginRight: AppStyle.screenSize.width * 0.05,
+        marginRight: AppStyle.windowSize.width * 0.05,
     },
 
 })

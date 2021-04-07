@@ -7,8 +7,8 @@ import { MappedFacilities } from '../../components/Icons/facilities';
 import { useAxiosGetArrayParams } from '../../promise/axios_get_array';
 import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
-import { MyKosanBackground } from '../../components/Backgrounds/my_kosan_background';
 import { Entypo, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
+import { MyKosanDetailBackground } from '../../components/Backgrounds/my_kosan_background';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableNativeFeedback, ImageBackground, ActivityIndicator, FlatList } from 'react-native';
 
 // a HOC to throttle button click
@@ -20,7 +20,10 @@ const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
 })
 
-export default function MyKosan({ navigation }) {
+export default function MyKosanDetail({ route, navigation }) {
+
+    // get navigation parameter
+    const kost = route.params.kost;
 
     // Function Hooks
     const [tabIndex, setTabIndex] = useState(0)
@@ -30,26 +33,20 @@ export default function MyKosan({ navigation }) {
     })
 
     // Global Variable
-    let KostList = [];
+    let RoomList = [];
     let page = 1;
 
-    function MyKosan() {
+    function MyKosanRoomList() {
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
         const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, '/all/' + 6 + '/' + page, requestConfig);
-        KostList = dataArray;
+        RoomList = dataArray;
 
         function _renderSearchList({ item }) {
 
             return (
                 <>
                     <TouchableNativeFeedbackPrevent onPress={() => {
-                        navigation.push('MyKosanStack', {
-                            screen: 'MyKosanDetail',
-                            params: {
-                                kost: item.kost,
-                            }
-                        })
                     }} >
                         <View style={styles.itemWrapper} >
                             <View style={styles.thumbnailContainer}>
@@ -118,7 +115,7 @@ export default function MyKosan({ navigation }) {
                 kostAPI.get('/all/' + 6 + '/' + page, requestConfig)
                     .then(response => {
                         response.data.forEach(function (item, index) {
-                            KostList.push(item)
+                            RoomList.push(item)
                         });
                     })
                     .catch(error => {
@@ -135,7 +132,7 @@ export default function MyKosan({ navigation }) {
 
         }
 
-        if (KostList === null) {
+        if (RoomList === null) {
             if (status === 200) {
                 return (
                     <>
@@ -160,14 +157,8 @@ export default function MyKosan({ navigation }) {
         } else {
             return (
                 <>
-                    <View style={styles.addKosanWrapper}>
-                        <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList.length}</Text>
-                        <TouchableOpacityPrevent style={styles.addKosanButton}>
-                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
-                        </TouchableOpacityPrevent>
-                    </View>
                     <FlatList
-                        data={KostList}
+                        data={RoomList}
                         renderItem={_renderSearchList}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={1}
@@ -181,40 +172,118 @@ export default function MyKosan({ navigation }) {
         }
     }
 
-    function Tracker() {
-        return (
-            <View></View>
-        )
-    }
-
-    function TabContent() {
-
-        if (tabIndex === 0) {
-            return MyKosan();
-        } else if (tabIndex === 1) {
-            return Tracker();
-        }
-    }
-
     return (
-        <MyKosanBackground>
-            <View style={styles.tabButtonContainer}>
-                <TouchableOpacityPrevent onPress={() => { setTabIndex(0) }} style={[styles.tabButton, { backgroundColor: tabIndex === 0 ? AppStyle.fourt_main_color : 'white' }]}>
-                    <Text style={{ fontWeight: 'bold', color: tabIndex === 0 ? 'white' : 'black', fontSize: NormalizeFont(14) }}>My Kosan</Text>
+        <MyKosanDetailBackground>
+            <View style={styles.header}>
+                <TouchableOpacityPrevent onPress={() => {
+                    navigation.pop()
+                }} style={styles.headerIcon}>
+                    <AntDesign name="left" size={Normalize(24)} color="white" />
                 </TouchableOpacityPrevent>
-                <TouchableOpacityPrevent onPress={() => { setTabIndex(1) }} style={[styles.tabButton, { backgroundColor: tabIndex === 1 ? AppStyle.fourt_main_color : 'white' }]}>
-                    <Text style={{ fontWeight: 'bold', color: tabIndex === 1 ? 'white' : 'black', fontSize: NormalizeFont(14) }}>Tracker</Text>
-                </TouchableOpacityPrevent>
+                <View>
+                    <Text style={styles.headerText}>{kost.kost_name}</Text>
+                </View>
             </View>
-            <View style={styles.tabContainer}>
-                <TabContent />
+            <View style={styles.headerLocation}>
+                <Text style={{ color: 'white', fontSize: NormalizeFont(12) }} >{kost.city}</Text>
             </View>
-        </MyKosanBackground>
+            <View style={styles.topBorder} />
+            <View style={styles.pickerWrapper}>
+                <View style={styles.pickerContainer}>
+                    <View style={styles.pickerTextContainer}>
+                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>All</Text>
+                    </View>
+                    <View style={styles.pickerArrowContainer}>
+                        <AntDesign name="caretdown" size={Normalize(18)} color="white" />
+                    </View>
+                </View>
+                <View style={styles.roomCounterWrapper}>
+                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.length}</Text>
+                    <View style={styles.addRoomButton}>
+                        <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
+                    </View>
+                </View>
+            </View>
+            {/* <View style={styles.tabContainer}>
+                <MyKosanRoomList />
+            </View> */}
+        </MyKosanDetailBackground>
     )
 }
 
 const styles = StyleSheet.create({
 
+    header: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: Normalize(60),
+        justifyContent: 'center',
+    },
+    headerText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: NormalizeFont(20),
+    },
+    headerIcon: {
+        position: 'absolute',
+        left: AppStyle.windowSize.width * 0.05,
+    },
+    headerLocation: {
+        alignItems: 'center',
+        marginTop: Normalize(10),
+        justifyContent: 'center',
+    },
+    topBorder: {
+        position: 'absolute',
+        height: Normalize(15),
+        borderTopLeftRadius: 25,
+        backgroundColor: 'white',
+        borderTopRightRadius: 25,
+        width: AppStyle.windowSize.width,
+        top: AppStyle.windowSize.height * 0.225 - Normalize(15),
+    },
+    pickerWrapper: {
+        alignSelf: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: Normalize(70),
+        marginTop: Normalize(25),
+        justifyContent: 'space-between',
+        width: AppStyle.windowSize.width * 0.9,
+    },
+    pickerContainer: {
+        width: '60%',
+        flexDirection: 'row',
+        height: Normalize(45),
+    },
+    pickerTextContainer: {
+        width: '80%',
+        height: '100%',
+        borderWidth: 1,
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderColor: 'rgba(0,0,0,0.4)',
+        borderTopLeftRadius: Normalize(10),
+        borderBottomLeftRadius: Normalize(10),
+    },
+    pickerArrowContainer: {
+        width: '20%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderTopRightRadius: Normalize(10),
+        borderBottomRightRadius: Normalize(10),
+        backgroundColor: AppStyle.fourt_main_color,
+    },
+    addRoomButton: {
+        alignItems: 'center',
+        width: Normalize(90),
+        padding: Normalize(5),
+        justifyContent: 'center',
+        borderRadius: Normalize(10),
+        backgroundColor: AppStyle.sub_main_color,
+    },
     tabButtonContainer: {
         alignSelf: 'center',
         flexDirection: 'row',
@@ -253,16 +322,6 @@ const styles = StyleSheet.create({
         height: Normalize(60),
         justifyContent: 'center',
         width: AppStyle.windowSize.width,
-    },
-    addKosanButton: {
-        position: 'absolute',
-        alignItems: 'center',
-        width: Normalize(90),
-        padding: Normalize(5),
-        justifyContent: 'center',
-        borderRadius: Normalize(10),
-        right: AppStyle.windowSize.width * 0.05,
-        backgroundColor: AppStyle.sub_main_color,
     },
     itemWrapper: {
         flexDirection: 'row',

@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        height: AppStyle.screenSize.height * 0.5,
-        marginTop: AppStyle.screenSize.height * 0.1,
+        height: AppStyle.windowSize.height * 0.5,
+        marginTop: AppStyle.windowSize.height * 0.1,
     },
     buttonWrapper: {
         flexDirection: 'row',
@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         borderRadius: Normalize(20),
         paddingBottom: Normalize(20),
-        marginLeft: AppStyle.screenSize.width * 0.025,
-        marginRight: AppStyle.screenSize.width * 0.025,
+        marginLeft: AppStyle.windowSize.width * 0.025,
+        marginRight: AppStyle.windowSize.width * 0.025,
     },
     submitBtn: {
         width: '100%',
