@@ -17,6 +17,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { PopUpMessage } from './app/components/Modal/pop_up_message';
 
+// TODO: white background disetiap imagebackground
 // Optimize navigation
 enableScreens();
 
