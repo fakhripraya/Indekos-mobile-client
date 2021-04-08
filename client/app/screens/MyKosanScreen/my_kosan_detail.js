@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import { trackPromise } from 'react-promise-tracker';
 import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import { MappedFacilities } from '../../components/Icons/facilities';
 import { useAxiosGetArrayParams } from '../../promise/axios_get_array';
-import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
+import { Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
-import { Entypo, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { MyKosanDetailBackground } from '../../components/Backgrounds/my_kosan_background';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableNativeFeedback, ImageBackground, ActivityIndicator, FlatList } from 'react-native';
 
@@ -39,7 +37,7 @@ export default function MyKosanDetail({ route, navigation }) {
     function MyKosanRoomList() {
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, '/all/' + 6 + '/' + page, requestConfig);
+        const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, kost.id + '/rooms/' + 'all/' + '/details', requestConfig);
         RoomList = dataArray;
 
         function _renderSearchList({ item }) {
@@ -48,36 +46,17 @@ export default function MyKosanDetail({ route, navigation }) {
                 <>
                     <TouchableNativeFeedbackPrevent onPress={() => {
                     }} >
-                        <View style={styles.itemWrapper} >
-                            <View style={styles.thumbnailContainer}>
-                                <ImageBackground
-                                    imageStyle={{ borderRadius: Normalize(10) }}
-                                    style={styles.backgroundImg}
-                                    source={{ uri: item.kost.thumbnail_url }}
-                                />
+                        <View style={styles.roomContainer} >
+                            <View style={styles.roomHeader}>
+                                <View style={{ flexDirection: 'column', height: '70%', alignItems: 'center', justifyContent: 'space-around' }}>
+                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(24) }}>{item.room_number}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(12) }}>{item.room_desc.length > 10 ? item.room_desc.substring(0, 10).replace(/\s*$/, "") + '...' : item.room_desc}</Text>
+                                </View>
+                                <View style={{ height: '30%', alignItems: 'center', justifyContent: 'center', backgroundColor: AppStyle.main_color, borderBottomLeftRadius: Normalize(15), borderBottomRightRadius: Normalize(15) }}>
+                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(12) }}>Lantai {item.floor_level}</Text>
+                                </View>
                             </View>
-                            <View style={styles.itemContainer}>
-                                <View style={styles.itemTitle}>
-                                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.kost_name.length > 15 ? item.kost.kost_name.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.kost_name}</Text>
-                                </View>
-                                <View style={styles.itemLocation}>
-                                    <Entypo name="location" size={Normalize(14)} color="black" style={{ marginRight: Normalize(12.5) }} />
-                                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost.city.length > 15 ? item.kost.city.substring(0, 15).replace(/\s*$/, "") + '...' : item.kost.city}</Text>
-                                </View>
-                                <View style={styles.itemFacilitiesContainer}>
-                                    <View style={styles.itemFacilities}>
-                                        <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(0, 2)} category={0} />
-                                    </View>
-                                    <View style={styles.itemFacilities}>
-                                        <MappedFacilities facilities={item.facilities === null ? [] : item.facilities.slice(2, 4)} category={0} />
-                                    </View>
-                                </View>
-                                <View style={styles.itemPrice}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ fontSize: NormalizeFont(16), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
-                                    </View>
-                                    <Text style={{ fontSize: NormalizeFont(14), top: 5, color: 'gray' }}>/Month</Text>
-                                </View>
+                            <View style={styles.roomBody}>
                             </View>
                         </View >
                     </TouchableNativeFeedbackPrevent>
@@ -91,8 +70,8 @@ export default function MyKosanDetail({ route, navigation }) {
                             </View>
                             <View style={[styles.sortButton, { flexDirection: 'row' }]}>
                                 <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-                                    <Feather name="star" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
-                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Promote</Text>
+                                    <Ionicons name="megaphone-outline" size={Normalize(24)} color="black" style={{ marginRight: Normalize(5) }} />
+                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(12) }}>Remind</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={[styles.sortButton, { borderLeftWidth: 1, flexDirection: 'row' }]}>
@@ -112,7 +91,7 @@ export default function MyKosanDetail({ route, navigation }) {
             page++;
 
             trackPromise(
-                kostAPI.get('/all/' + 6 + '/' + page, requestConfig)
+                kostAPI.get(kost.id + '/rooms/' + 'all/' + '/details', requestConfig)
                     .then(response => {
                         response.data.forEach(function (item, index) {
                             RoomList.push(item)
@@ -135,17 +114,9 @@ export default function MyKosanDetail({ route, navigation }) {
         if (RoomList === null) {
             if (status === 200) {
                 return (
-                    <>
-                        <View style={styles.addKosanWrapper}>
-                            <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: 0</Text>
-                            <TouchableOpacityPrevent style={styles.addKosanButton}>
-                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
-                            </TouchableOpacityPrevent>
-                        </View>
-                        <View style={styles.tabNullContainer}>
-                            <Text>No kosan found</Text>
-                        </View>
-                    </>
+                    <View style={styles.tabNullContainer}>
+                        <Text>No Room found</Text>
+                    </View>
                 )
             } else if (status === null) {
                 return (
@@ -191,7 +162,7 @@ export default function MyKosanDetail({ route, navigation }) {
             <View style={styles.pickerWrapper}>
                 <View style={styles.pickerContainer}>
                     <View style={styles.pickerTextContainer}>
-                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>All</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14), marginLeft: Normalize(10) }}>All</Text>
                     </View>
                     <View style={styles.pickerArrowContainer}>
                         <AntDesign name="caretdown" size={Normalize(18)} color="white" />
@@ -204,9 +175,9 @@ export default function MyKosanDetail({ route, navigation }) {
                     </View>
                 </View>
             </View>
-            {/* <View style={styles.tabContainer}>
+            <View style={styles.tabContainer}>
                 <MyKosanRoomList />
-            </View> */}
+            </View>
         </MyKosanDetailBackground>
     )
 }
@@ -247,8 +218,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
-        height: Normalize(70),
-        marginTop: Normalize(25),
+        height: Normalize(100),
+        marginTop: Normalize(10),
         justifyContent: 'space-between',
         width: AppStyle.windowSize.width * 0.9,
     },
@@ -276,6 +247,11 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: Normalize(10),
         backgroundColor: AppStyle.fourt_main_color,
     },
+    roomCounterWrapper: {
+        height: '80%',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+    },
     addRoomButton: {
         alignItems: 'center',
         width: Normalize(90),
@@ -284,24 +260,20 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(10),
         backgroundColor: AppStyle.sub_main_color,
     },
-    tabButtonContainer: {
-        alignSelf: 'center',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: Normalize(60),
-        elevation: Normalize(5),
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        borderRadius: Normalize(20),
-        width: AppStyle.windowSize.width * 0.8,
-        marginTop: AppStyle.windowSize.height * 0.2 - (Normalize(60) / 2),
+    roomContainer: {
+        height: Normalize(100),
+        marginBottom: Normalize(15),
+        width: AppStyle.windowSize.width * 0.9,
     },
-    tabButton: {
-        alignItems: 'center',
-        height: Normalize(45),
-        justifyContent: 'center',
+    roomHeader: {
+        width: '30%',
+        height: '100%',
+        flexDirection: 'column',
         borderRadius: Normalize(15),
-        width: AppStyle.windowSize.width * 0.375,
+        backgroundColor: AppStyle.fourt_main_color,
+    },
+    roomBody: {
+
     },
     tabNullContainer: {
         position: 'absolute',
@@ -314,58 +286,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: AppStyle.windowSize.width,
         height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2) + (Normalize(60) / 2) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2))),
-    },
-    addKosanWrapper: {
-        alignSelf: 'center',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: Normalize(60),
-        justifyContent: 'center',
-        width: AppStyle.windowSize.width,
-    },
-    itemWrapper: {
-        flexDirection: 'row',
-        height: Normalize(100),
-        marginBottom: Normalize(15),
-        width: AppStyle.windowSize.width * 1,
-    },
-    backgroundImg: {
-        flex: 1,
-        resizeMode: "cover",
-        justifyContent: "center",
-    },
-    thumbnailContainer: {
-        alignSelf: 'center',
-        width: Normalize(100),
-        height: Normalize(100),
-        left: AppStyle.windowSize.width * 0.05,
-    },
-    itemContainer: {
-        alignSelf: 'center',
-        height: Normalize(100),
-        marginLeft: Normalize(20),
-        paddingLeft: Normalize(15),
-        justifyContent: 'space-evenly',
-        width: AppStyle.windowSize.width * 0.9 * 0.525,
-    },
-    itemTitle: {
-        justifyContent: 'center',
-    },
-    itemLocation: {
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-    itemFacilitiesContainer: {
-        flexDirection: 'column',
-        height: AppStyle.windowSize.width * 0.9 * 0.375 * 0.3,
-    },
-    itemFacilities: {
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-    itemPrice: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
     },
     sortButtonWrapperContaner: {
         width: '100%',
