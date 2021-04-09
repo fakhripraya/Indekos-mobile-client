@@ -49,7 +49,7 @@ export default function PickRole({ route, navigation }) {
         // roleId = 2 (owner)
 
         if (roleId === 1) {
-            // if owner, finish the user creation and navigate to home screen
+            // if user, finish the user creation and navigate to home screen
             trackPromise(
                 api.patch('/update/signed', {
                     displayname: tempDisplayName,
