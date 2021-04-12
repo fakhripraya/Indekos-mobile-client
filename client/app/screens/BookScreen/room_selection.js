@@ -234,16 +234,24 @@ export default function RoomSelection({ route, navigation }) {
 
                 let rooms = [];
 
-                for (var j in groupedRooms[i]) {
-                    if (roomDetails.room_booked === null) {
-                        let newRoom = {
-                            id: groupedRooms[i][j].id,
-                            state: false,
-                            occupied: false, //TODO: masih placeholder nanti diganti
-                            key: groupedRooms[i][j].room_number.toUpperCase(),
-                        }
-                        rooms = rooms.concat(newRoom)
+                for (var j = 0; j < groupedRooms[i].length; j++) {
+
+                    let newRoom = {
+                        id: groupedRooms[i][j].id,
+                        state: false,
+                        occupied: false,
+                        key: groupedRooms[i][j].room_number.toUpperCase(),
                     }
+
+                    if (roomDetails.room_booked !== null) {
+                        for (var x = 0; x < roomDetails.room_booked.length; x++) {
+                            if (roomDetails.room_booked[x].room_detail_id === groupedRooms[i][j].id) {
+                                newRoom.occupied = true
+                            }
+                        }
+                    }
+
+                    rooms = rooms.concat(newRoom)
                 }
 
                 let newFinalRoom = {
