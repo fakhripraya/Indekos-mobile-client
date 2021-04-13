@@ -40,8 +40,15 @@ export default function MyKosanDetail({ route, navigation }) {
         const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, kost.id + '/rooms/' + 'all/' + '/details', requestConfig);
         RoomList = dataArray;
 
-        function _renderSearchList({ item }) {
+        function RoomBody() {
+            return (
+                <View>
 
+                </View>
+            )
+        }
+
+        function _renderSearchList({ item }) {
             return (
                 <>
                     <TouchableNativeFeedbackPrevent onPress={() => {
@@ -56,7 +63,8 @@ export default function MyKosanDetail({ route, navigation }) {
                                     <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(12) }}>Lantai {item.floor_level}</Text>
                                 </View>
                             </View>
-                            <View style={styles.roomBody}>
+                            <View style={styles.roomBodyContainer}>
+                                <RoomBody />
                             </View>
                         </View >
                     </TouchableNativeFeedbackPrevent>
@@ -128,6 +136,22 @@ export default function MyKosanDetail({ route, navigation }) {
         } else {
             return (
                 <>
+                    <View style={styles.pickerWrapper}>
+                        <View style={styles.pickerContainer}>
+                            <View style={styles.pickerTextContainer}>
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14), marginLeft: Normalize(10) }}>All</Text>
+                            </View>
+                            <View style={styles.pickerArrowContainer}>
+                                <AntDesign name="caretdown" size={Normalize(18)} color="white" />
+                            </View>
+                        </View>
+                        <View style={styles.roomCounterWrapper}>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.length}</Text>
+                            <View style={styles.addRoomButton}>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
+                            </View>
+                        </View>
+                    </View>
                     <FlatList
                         data={RoomList}
                         renderItem={_renderSearchList}
@@ -159,22 +183,6 @@ export default function MyKosanDetail({ route, navigation }) {
                 <Text style={{ color: 'white', fontSize: NormalizeFont(12) }} >{kost.city}</Text>
             </View>
             <View style={styles.topBorder} />
-            <View style={styles.pickerWrapper}>
-                <View style={styles.pickerContainer}>
-                    <View style={styles.pickerTextContainer}>
-                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14), marginLeft: Normalize(10) }}>All</Text>
-                    </View>
-                    <View style={styles.pickerArrowContainer}>
-                        <AntDesign name="caretdown" size={Normalize(18)} color="white" />
-                    </View>
-                </View>
-                <View style={styles.roomCounterWrapper}>
-                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.length}</Text>
-                    <View style={styles.addRoomButton}>
-                        <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
-                    </View>
-                </View>
-            </View>
             <View style={styles.tabContainer}>
                 <MyKosanRoomList />
             </View>
@@ -272,7 +280,7 @@ const styles = StyleSheet.create({
         borderRadius: Normalize(15),
         backgroundColor: AppStyle.fourt_main_color,
     },
-    roomBody: {
+    roomBodyContainer: {
 
     },
     tabNullContainer: {
@@ -285,7 +293,7 @@ const styles = StyleSheet.create({
     tabContainer: {
         alignItems: 'center',
         width: AppStyle.windowSize.width,
-        height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2) + (Normalize(60) / 2) + (AppStyle.windowSize.width * 0.175) + (AppStyle.windowSize.width * 0.15 / 2))),
+        height: (AppStyle.windowSize.height - ((AppStyle.windowSize.height * 0.2))),
     },
     sortButtonWrapperContaner: {
         width: '100%',
