@@ -5,7 +5,9 @@ import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { useAxiosGetArrayParams } from '../../promise/axios_get_array';
 import { Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { CurrencyFormat, CurrencyPrefix } from '../../functions/currency';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+import { RoomDetailStatusString, RoomDetailStatusColor } from '../../functions/status';
 import { MyKosanDetailBackground } from '../../components/Backgrounds/my_kosan_background';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableNativeFeedback, ImageBackground, ActivityIndicator, FlatList } from 'react-native';
 
@@ -24,28 +26,75 @@ export default function MyKosanDetail({ route, navigation }) {
     const kost = route.params.kost;
 
     // Function Hooks
-    const [tabIndex, setTabIndex] = useState(0)
     const [requestConfig, setRequestConfig] = useState({
         cancelToken: axios.CancelToken.source().token,
         timeout: 10000
     })
 
     // Global Variable
-    let RoomList = [];
+    let RoomList = {};
     let page = 1;
 
     function MyKosanRoomList() {
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, kost.id + '/rooms/' + 'all/' + '/details', requestConfig);
+        const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig);
         RoomList = dataArray;
 
-        function RoomBody() {
-            return (
-                <View>
-
-                </View>
-            )
+        function RoomBody(props) {
+            if (props.kostRoomDetail.booker !== null) {
+                return (
+                    <View style={{ height: '100%', width: '100%', justifyContent: 'center', flexDirection: 'column' }}>
+                        <View style={{ marginLeft: Normalize(10), height: '50%', width: '100%', justifyContent: 'center' }}>
+                            <View style={{ height: '100%', width: '100%', justifyContent: 'center', flexDirection: 'row' }}>
+                                <View style={{ height: '100%', width: '50%', flexDirection: 'row' }}>
+                                    <View style={styles.ownerUserPict}>
+                                        <ImageBackground
+                                            imageStyle={{ borderRadius: Normalize(10.12) }}
+                                            style={styles.backgroundImg}
+                                            source={{ uri: props.kostRoomDetail.booker.profile_picture }}
+                                        />
+                                    </View>
+                                    <View style={{ height: Normalize(40), alignSelf: 'center', marginLeft: Normalize(5) }}>
+                                        <View style={{ height: '100%', alignSelf: 'center', justifyContent: 'flex-start' }}>
+                                            <Text style={{ fontSize: NormalizeFont(12) }}>{props.kostRoomDetail.booker.displayname.length > 10 ? props.kostRoomDetail.booker.displayname.substring(0, 10).replace(/\s*$/, "") + '...' : props.kostRoomDetail.booker.displayname}</Text>
+                                            <Text style={{ fontSize: NormalizeFont(12) }}>{'#' + (props.kostRoomDetail.booker.id.length > 4 ? props.kostRoomDetail.booker.id.substring(0, 3) : props.kostRoomDetail.booker.id)}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={{ height: '100%', width: '50%', justifyContent: 'center' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>{CurrencyFormat(CurrencyPrefix(props.kostRoomDetail.currency), props.kostRoomDetail.price).length > 15 ? CurrencyFormat(CurrencyPrefix(props.kostRoomDetail.currency), props.kostRoomDetail.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(props.kostRoomDetail.currency), props.kostRoomDetail.price)}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={{ marginLeft: Normalize(10), height: '50%', width: '100%', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
+                            <View style={{ height: '100%', width: '33%', justifyContent: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(11), fontWeight: 'bold' }}>Prev Payment</Text>
+                                <Text style={{ fontSize: NormalizeFont(11) }}>{props.kostRoomDetail.prev_payment.substr(0, props.kostRoomDetail.prev_payment.indexOf('T'))}</Text>
+                            </View>
+                            <View style={{ height: '100%', width: '33%', justifyContent: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(11), fontWeight: 'bold' }}>next Payment</Text>
+                                <Text style={{ fontSize: NormalizeFont(11) }}>{props.kostRoomDetail.next_payment.substr(0, props.kostRoomDetail.next_payment.indexOf('T'))}</Text>
+                            </View>
+                            <View style={{ height: '100%', width: '33%', justifyContent: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(11), fontWeight: 'bold' }}>Status</Text>
+                                <Text style={{ fontSize: NormalizeFont(11), color: RoomDetailStatusColor(props.kostRoomDetail.status) }}>{RoomDetailStatusString(props.kostRoomDetail.status)}</Text>
+                            </View>
+                        </View>
+                    </View >
+                )
+            } else {
+                return (
+                    <View style={{ height: '100%', width: '100%', justifyContent: 'center', flexDirection: 'row' }}>
+                        <View style={{ height: '100%', width: '50%', justifyContent: 'center' }}>
+                            <Text style={{ marginLeft: Normalize(10), fontWeight: 'bold', fontSize: NormalizeFont(12) }}>Empty</Text>
+                        </View>
+                        <View style={{ height: '100%', width: '50%', justifyContent: 'center' }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(12) }}>{CurrencyFormat(CurrencyPrefix(props.kostRoomDetail.currency), props.kostRoomDetail.price).length > 15 ? CurrencyFormat(CurrencyPrefix(props.kostRoomDetail.currency), props.kostRoomDetail.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(props.kostRoomDetail.currency), props.kostRoomDetail.price)}</Text>
+                        </View>
+                    </View>
+                )
+            }
         }
 
         function _renderSearchList({ item }) {
@@ -56,7 +105,7 @@ export default function MyKosanDetail({ route, navigation }) {
                         <View style={styles.roomContainer} >
                             <View style={styles.roomHeader}>
                                 <View style={{ flexDirection: 'column', height: '70%', alignItems: 'center', justifyContent: 'space-around' }}>
-                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(24) }}>{item.room_number}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(24) }}>{item.room_number.toUpperCase()}</Text>
                                     <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(12) }}>{item.room_desc.length > 10 ? item.room_desc.substring(0, 10).replace(/\s*$/, "") + '...' : item.room_desc}</Text>
                                 </View>
                                 <View style={{ height: '30%', alignItems: 'center', justifyContent: 'center', backgroundColor: AppStyle.main_color, borderBottomLeftRadius: Normalize(15), borderBottomRightRadius: Normalize(15) }}>
@@ -64,7 +113,7 @@ export default function MyKosanDetail({ route, navigation }) {
                                 </View>
                             </View>
                             <View style={styles.roomBodyContainer}>
-                                <RoomBody />
+                                <RoomBody kostRoomDetail={item} />
                             </View>
                         </View >
                     </TouchableNativeFeedbackPrevent>
@@ -97,12 +146,11 @@ export default function MyKosanDetail({ route, navigation }) {
         function handleScroll() {
 
             page++;
-
             trackPromise(
-                kostAPI.get(kost.id + '/rooms/' + 'all/' + '/details', requestConfig)
+                kostAPI.get(kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig)
                     .then(response => {
-                        response.data.forEach(function (item, index) {
-                            RoomList.push(item)
+                        response.data.kost_room_detail.forEach(function (item, index) {
+                            RoomList.kost_room_detail.push(item)
                         });
                     })
                     .catch(error => {
@@ -146,14 +194,14 @@ export default function MyKosanDetail({ route, navigation }) {
                             </View>
                         </View>
                         <View style={styles.roomCounterWrapper}>
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.length}</Text>
+                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.kost_room_detail_sum}</Text>
                             <View style={styles.addRoomButton}>
                                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
                             </View>
                         </View>
                     </View>
                     <FlatList
-                        data={RoomList}
+                        data={RoomList.kost_room_detail}
                         renderItem={_renderSearchList}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={1}
@@ -192,6 +240,19 @@ export default function MyKosanDetail({ route, navigation }) {
 
 const styles = StyleSheet.create({
 
+    backgroundImg: {
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center",
+    },
+    ownerUserPict: {
+        alignSelf: 'center',
+        width: Normalize(40),
+        height: Normalize(40),
+        borderWidth: Normalize(4),
+        borderRadius: Normalize(10.12),
+        borderColor: AppStyle.fifth_main_color,
+    },
     header: {
         width: '100%',
         flexDirection: 'row',
@@ -269,6 +330,7 @@ const styles = StyleSheet.create({
         backgroundColor: AppStyle.sub_main_color,
     },
     roomContainer: {
+        flexDirection: 'row',
         height: Normalize(100),
         marginBottom: Normalize(15),
         width: AppStyle.windowSize.width * 0.9,
@@ -281,7 +343,8 @@ const styles = StyleSheet.create({
         backgroundColor: AppStyle.fourt_main_color,
     },
     roomBodyContainer: {
-
+        width: '70%',
+        height: '100%',
     },
     tabNullContainer: {
         position: 'absolute',
