@@ -1,9 +1,18 @@
-import React from 'react';
-import { AppStyle } from '../../config/app.config';
+import axios from 'axios';
+import React, { useEffect } from 'react';
+import { GetZero } from '../../functions/string';
+import { useAxiosGet } from '../../promise/axios_get';
+import { AppStyle, AuthService } from '../../config/app.config';
 import { EvilIcons, Ionicons, Entypo } from '@expo/vector-icons';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import UserProfileBackground from '../../components/Backgrounds/user_profile_background';
+import { FlatList, LogBox, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+// creates the promised base http auth client
+const authAPI = axios.create({
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
+})
 
 export default function UserProfile() {
 
@@ -34,55 +43,91 @@ export default function UserProfile() {
         }
     ]
 
+    // get the data via axios get request
+    const { data, error, status } = useAxiosGet(authAPI, '/', 10000);
+
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    })
+
     function _renderFlatMenu({ item, index }) {
         return (
-            <View style={{ backgroundColor: 'white', margin: Normalize(5), borderRadius: Normalize(20), elevation: 5, height: Normalize(80), width: Normalize(80), justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity style={{ backgroundColor: 'white', margin: Normalize(5), borderRadius: Normalize(20), elevation: 5, height: Normalize(80), width: Normalize(80), justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.desc}</Text>
-            </View>
+            </TouchableOpacity>
         )
     }
 
-    return (
-        <UserProfileBackground>
-            <View style={{ marginTop: AppStyle.windowSize.height * 0.075, flexDirection: 'row', width: AppStyle.windowSize.width * 0.9, alignSelf: 'center' }}>
-                <View style={{ height: Normalize(85), width: Normalize(85), borderRadius: Normalize(25), borderWidth: Normalize(5) }}>
-                    <ImageBackground
-                        imageStyle={{ borderRadius: Normalize(20) }}
-                        style={styles.backgroundImg}
-                        source={{ uri: "http://lorempixel.com/640/480/technics" }}
-                    />
-                    <View style={{ top: (Normalize(85) - (Normalize(30) / 2)), backgroundColor: AppStyle.sub_main_color, position: 'absolute', padding: Normalize(7), width: Normalize(50), height: Normalize(30), borderRadius: Normalize(10), alignSelf: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>#5512</Text>
-                    </View>
-                </View>
-                <View style={{ justifyContent: 'space-evenly', marginLeft: AppStyle.windowSize.width * 0.05, width: '33%' }}>
-                    <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>Mimin Oh</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <Entypo name="location" size={Normalize(18)} color="white" />
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>DKI Jakarta</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', borderRadius: Normalize(12), backgroundColor: AppStyle.male_color, padding: Normalize(5), justifyContent: 'center', alignItems: 'center' }}>
-                        <Ionicons name="male" size={Normalize(18)} color="white" />
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>Male</Text>
-                    </View>
-                </View>
-                <View style={{ width: '33%', justifyContent: 'center' }}>
-                    <EvilIcons style={{ alignSelf: 'flex-end' }} name="gear" size={Normalize(24)} color="white" />
-                </View>
-            </View>
-            <View style={{ borderRadius: Normalize(20), marginTop: Normalize(30), backgroundColor: '#352952', height: Normalize(125), width: AppStyle.windowSize.width * 0.9, alignSelf: 'center' }}>
+    if (data === null || error) {
 
+        if (error) {
+
+            if (status === 401)
+                navigation.replace('WelcomeStack');
+            else {
+                if (flag < 10) {
+                    setTimeout(() => {
+                        setFlag(flag + 1)
+                    }, 2000);
+                }
+            }
+
+        }
+
+        return (
+            <View style={styles.nameWrapper}>
+                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
+                    <SkeletonLoading />
+                </View>
+                <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
+                    <SkeletonLoading />
+                </View>
             </View>
-            <View style={{ marginTop: Normalize(30), alignSelf: 'center' }}>
-                <FlatList
-                    data={flatListMenu}
-                    renderItem={_renderFlatMenu}
-                    keyExtractor={(item, index) => index.toString()}
-                    numColumns={3}
-                />
-            </View>
-        </UserProfileBackground>
-    )
+        );
+    }
+    else {
+        return (
+            <UserProfileBackground>
+                <View style={{ marginTop: AppStyle.windowSize.height * 0.075, flexDirection: 'row', width: AppStyle.windowSize.width * 0.9, alignSelf: 'center' }}>
+                    <View style={{ height: Normalize(85), width: Normalize(85), borderRadius: Normalize(25), borderWidth: Normalize(5) }}>
+                        <ImageBackground
+                            imageStyle={{ borderRadius: Normalize(20) }}
+                            style={styles.backgroundImg}
+                            source={{ uri: data.profile_picture }}
+                        />
+                        <View style={{ top: (Normalize(85) - (Normalize(30) / 2)), backgroundColor: AppStyle.sub_main_color, position: 'absolute', padding: Normalize(7), width: Normalize(50), height: Normalize(30), borderRadius: Normalize(10), alignSelf: 'center', alignItems: 'center' }}>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>#{GetZero(data.id)}</Text>
+                        </View>
+                    </View>
+                    <View style={{ justifyContent: 'space-evenly', marginLeft: AppStyle.windowSize.width * 0.05 }}>
+                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>{data.displayname}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            <Entypo name="location" size={Normalize(18)} color="white" style={{ marginRight: Normalize(10) }} />
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>{data.city === null || data.city === "" ? "Not set yet" : data.city}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', borderRadius: Normalize(12), backgroundColor: AppStyle.male_color, padding: Normalize(5), justifyContent: 'center', alignItems: 'center' }}>
+                            <Ionicons name="male" size={Normalize(18)} color="white" />
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>Male</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity style={{ width: '100%', height: '100%', justifyContent: 'center', position: 'absolute' }}>
+                        <EvilIcons style={{ alignSelf: 'flex-end' }} name="gear" size={Normalize(24)} color="white" />
+                    </TouchableOpacity>
+                </View>
+                <View style={{ borderRadius: Normalize(20), marginTop: Normalize(30), backgroundColor: '#352952', height: Normalize(125), width: AppStyle.windowSize.width * 0.9, alignSelf: 'center' }}>
+
+                </View>
+                <View style={{ marginTop: Normalize(30), alignSelf: 'center' }}>
+                    <FlatList
+                        data={flatListMenu}
+                        renderItem={_renderFlatMenu}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={3}
+                    />
+                </View>
+            </UserProfileBackground>
+        )
+    }
 }
 
 const styles = StyleSheet.create({

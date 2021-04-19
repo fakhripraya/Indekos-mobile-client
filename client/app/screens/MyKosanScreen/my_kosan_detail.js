@@ -10,6 +10,7 @@ import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { RoomDetailStatusString, RoomDetailStatusColor } from '../../functions/status';
 import { MyKosanDetailBackground } from '../../components/Backgrounds/my_kosan_background';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableNativeFeedback, ImageBackground, ActivityIndicator, FlatList } from 'react-native';
+import { GetZero } from '../../functions/string';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -58,7 +59,7 @@ export default function MyKosanDetail({ route, navigation }) {
                                     <View style={{ height: Normalize(40), alignSelf: 'center', marginLeft: Normalize(5) }}>
                                         <View style={{ height: '100%', alignSelf: 'center', justifyContent: 'flex-start' }}>
                                             <Text style={{ fontSize: NormalizeFont(12) }}>{props.kostRoomDetail.booker.displayname.length > 10 ? props.kostRoomDetail.booker.displayname.substring(0, 10).replace(/\s*$/, "") + '...' : props.kostRoomDetail.booker.displayname}</Text>
-                                            <Text style={{ fontSize: NormalizeFont(12) }}>{'#' + (props.kostRoomDetail.booker.id.length > 4 ? props.kostRoomDetail.booker.id.substring(0, 3) : props.kostRoomDetail.booker.id)}</Text>
+                                            <Text style={{ fontSize: NormalizeFont(12) }}>{'#' + GetZero(props.kostRoomDetail.booker.id)}</Text>
                                         </View>
                                     </View>
                                 </View>
