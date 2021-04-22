@@ -1,8 +1,8 @@
 export function GetZero(id) {
-    let finalResult
+    let finalResult;
 
-    if (id > 4) {
-        id = id.substring(0, 3)
+    if (id > 9999) {
+        id = id.toString().substring(0, 3)
     }
 
     if (id < 10) {
