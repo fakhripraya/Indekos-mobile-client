@@ -197,8 +197,8 @@ export default function OTP({ route, navigation }) {
     return (
         <OTPBackground>
             <Text style={styles.title}>
-                Register
-                </Text>
+                {otpType === 0 ? "Register" : "Login"}
+            </Text>
             <View style={styles.inputContainer}>
                 <View style={styles.otpWrapper}>
                     <Text style={styles.otpWrapperText}>

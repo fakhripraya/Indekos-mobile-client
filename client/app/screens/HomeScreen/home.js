@@ -79,7 +79,7 @@ export default function Home({ navigation }) {
         [
             {
                 uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Testis",
+                nama: "Kost Jawa",
                 alamat: "Kebon Jeruk",
                 harga: "Rp. 2100.000",
             },
@@ -120,7 +120,7 @@ export default function Home({ navigation }) {
         [
             {
                 uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Testis",
+                nama: "Kost Jawa",
                 alamat: "Kebon Jeruk",
                 harga: "Rp. 2100.000",
             },
@@ -161,7 +161,7 @@ export default function Home({ navigation }) {
         [
             {
                 uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Testis",
+                nama: "Kost Jawa",
                 alamat: "Kebon Jeruk",
                 harga: "Rp. 2100.000",
             },
