@@ -41,22 +41,22 @@ const styles = StyleSheet.create({
 
     header: {
         width: AppStyle.windowSize.width,
-        height: Normalize(100),
-        backgroundColor: 'gray',
+        height: Normalize(60),
+        backgroundColor: 'white',
     },
     body: {
         position: 'absolute',
-        top: Normalize(100),
-        backgroundColor: 'black',
+        top: Normalize(60),
+        backgroundColor: '#F4F5F9',
         width: AppStyle.windowSize.width,
-        height: AppStyle.windowSize.height - Normalize(100) + Normalize(60),
+        height: AppStyle.windowSize.height - Normalize(80) + Normalize(60),
     },
     footer: {
         position: 'absolute',
-        top: AppStyle.windowSize.height - Normalize(60),
+        top: AppStyle.windowSize.height - Normalize(80),
         width: AppStyle.windowSize.width,
-        height: Normalize(60),
-        backgroundColor: 'pink',
+        height: Normalize(80),
+        backgroundColor: 'white',
     }
 })
 
