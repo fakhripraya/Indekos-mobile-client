@@ -18,7 +18,7 @@ export default function Chats({ navigation }) {
     let contact_dummy = [
         {
             profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "Johannes Kontol tau ga kontol??????",
+            title: "Johannes Kont..",
             body: "Titit lagi apa lau",
             time: "12:31 PM",
             unread_count: "14",
@@ -101,7 +101,7 @@ export default function Chats({ navigation }) {
 
     function TabContent() {
 
-        function ChatBodyComponent(childItem){
+        function ChatBodyComponent(childItem) {
 
             if (childItem.childItem.last_chat_sender === 0) {
                 return (
@@ -111,7 +111,7 @@ export default function Chats({ navigation }) {
                 )
             } else {
                 return (
-                    <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(12)}}>
+                    <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(12) }}>
                         You: <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>{childItem.childItem.body}</Text>
                     </Text>
                 )
@@ -129,7 +129,7 @@ export default function Chats({ navigation }) {
                         }
                     })
                 }} >
-                    <View style={{ height: Normalize(60), width: AppStyle.windowSize.width, flexDirection: 'row' }}>
+                    <View style={{ height: Normalize(60) + Normalize(12) + Normalize(12), width: AppStyle.windowSize.width, flexDirection: 'row' }}>
                         <View style={styles.chatPicContainer}>
                             <View style={styles.chatPic}>
                                 <ImageBackground
@@ -141,12 +141,12 @@ export default function Chats({ navigation }) {
                         </View>
                         <View style={styles.chatContent}>
                             <View style={styles.chatTitle}>
-                                <Text style={{fontSize: NormalizeFont(15),fontWeight:'bold',color:'black'}}>
+                                <Text style={{ fontSize: NormalizeFont(15), fontWeight: 'bold', color: 'black' }}>
                                     {item.title}
                                 </Text>
                             </View>
                             <View style={styles.chatBody}>
-                                <ChatBodyComponent childItem={item}/>
+                                <ChatBodyComponent childItem={item} />
                             </View>
                         </View>
                         <View style={styles.chatTimestamp}>
@@ -177,9 +177,9 @@ export default function Chats({ navigation }) {
                 renderItem={_renderChatList}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={1}
-                ItemSeparatorComponent={() => {
-                    return (<View style={{ height: 1, width: AppStyle.windowSize.width, backgroundColor: 'rgb(0,0,0,0.1)' }} />);
-                }}
+                // ItemSeparatorComponent={() => {
+                //     return (<View style={{ marginTop: Normalize(12), marginBottom: Normalize(12) }} />);
+                // }}
                 onEndReached={() => {
                     handleScroll();
                 }}
@@ -250,17 +250,17 @@ const styles = StyleSheet.create({
     },
     chatTitle: {
         flex: 0.50,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignSelf: 'flex-start',
     },
     chatBody: {
         flex: 0.50,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignSelf: 'flex-start',
     },
     chatSuffix: {
         flex: 0.50,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignSelf: 'flex-end',
     },
     chatTime: {
