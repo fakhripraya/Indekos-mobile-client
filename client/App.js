@@ -3,7 +3,6 @@ import axios from 'axios';
 import store from './app/redux/store';
 import { Provider } from 'react-redux';
 import BookStack from './app/route/book_stack';
-import { StyleSheet, View } from 'react-native';
 import AppStack from './app/route/app_stack.js';
 import LoginStack from './app/route/login_stack';
 import SplashStack from './app/route/splash_stack';
@@ -11,6 +10,7 @@ import ChatStack from './app/route/chat_stack';
 import { enableScreens } from 'react-native-screens';
 import WelcomeStack from './app/route/welcome_stack';
 import MyKosanStack from './app/route/my_kosan_stack.js';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import PromiseSpinner from './app/promise/promise_tracker';
 import CreateUserStack from './app/route/create_user_stack';
 import RegistrationStack from './app/route/registration_stack';
@@ -33,6 +33,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
+      <StatusBar hidden />
       <View style={styles.container}>
         <NavigationContainer>
           {/* <RootStack.Navigator initialRouteName="BookStack"> */}
