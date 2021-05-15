@@ -1,4 +1,4 @@
-import { io } from "socket.io-client";
+import io from "socket.io-client";
 import React, { useState, useEffect } from 'react';
 import { AppStyle } from '../../config/app.config';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
@@ -7,53 +7,19 @@ import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput } from 're
 
 export default function ChatMessager() {
 
+    // Socket initialization
+    const socket = io("http://192.168.0.27:3000");
+
     // Function Hooks
     const [chatMessage, setChatMessage] = useState("")
-
-    // sender is 0 -> me
-    // sender is 1 -> you
-    let dummyChat =
-        [
-            {
-                sender: 0,
-                chat_body: "Gua maho lu mau ga jadi mahoan gua"
-            },
-            {
-                sender: 1,
-                chat_body: "Ga mau aku masih suka cewe!!"
-            },
-            {
-                sender: 1,
-                chat_body: "tai kau"
-            },
-            {
-                sender: 0,
-                chat_body: "Gua maho maho maho"
-            },
-            {
-                sender: 0,
-                chat_body: "Adit anjing"
-            },
-            {
-                sender: 1,
-                chat_body: "Gua maho"
-            },
-            {
-                sender: 1,
-                chat_body: "Gua maho"
-            },
-            {
-                sender: 0,
-                chat_body: "Gua maho"
-            },
-        ]
+    const [chatMessages, setChatMessages] = useState([])
 
     useEffect(() => {
-        effect
-        return () => {
-            cleanup
-        }
-    }, [input])
+
+        socket.on("chat message", msg => {
+            setChatMessages([...chatMessages, msg]);
+        });
+    }, [])
 
     function _renderChatList() {
         return (
@@ -64,7 +30,8 @@ export default function ChatMessager() {
     }
 
     function submitChatMessage() {
-
+        socket.emit("chat message", chatMessage);
+        setChatMessage("")
     }
 
     return (
@@ -89,7 +56,7 @@ export default function ChatMessager() {
             </View>
             <View style={styles.body}>
                 <FlatList
-                    data={dummyChat}
+                    data={chatMessages}
                     renderItem={_renderChatList}
                     keyExtractor={(item, index) => index.toString()}
                     numColumns={1}
