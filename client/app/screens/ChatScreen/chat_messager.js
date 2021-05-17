@@ -1,37 +1,109 @@
+import axios from 'axios';
 import io from "socket.io-client";
-import React, { useState, useEffect } from 'react';
-import { AppStyle } from '../../config/app.config';
+import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
+import { AppStyle, GeneralService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput } from 'react-native';
 
+// creates the promised base http client
+const chatAPI = axios.create({
+    baseURL: "http://" + GeneralService.host + GeneralService.port + "/"
+})
+
 export default function ChatMessager() {
 
-    // Socket initialization
-    const socket = io("http://192.168.0.27:3000");
-
     // Function Hooks
-    const [chatMessage, setChatMessage] = useState("")
+    const [chatMessage, setChatMessage] = useState(null)
     const [chatMessages, setChatMessages] = useState([])
+
+    // Function refs
+    const socketRef = useRef()
 
     useEffect(() => {
 
-        socket.on("chat message", msg => {
-            setChatMessages([...chatMessages, msg]);
-        });
-    }, [])
+        // creates the cancel token source
+        var cancelSource = axios.CancelToken.source()
 
-    function _renderChatList() {
+        // prevent update on unmounted component
+        let unmounted = false;
+
+        async function getInitialChatRoom() {
+
+            // triggers the http get request to the / url in General Service to get the expected response 
+            chatAPI.get({
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setData(response.data);
+                        setStatus(response.status)
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                setError(true);
+                                setErrorMessage(error.response.data);
+                                setStatus(error.response.status)
+                            }
+                        }
+                    }
+                });
+        }
+
+        if (chatMessages.length === 0) {
+
+            // check chat room between client
+            getInitialChatRoom()
+        }
+
+        // // Socket initialization
+        socketRef.current = io("ws://192.168.1.106:3001", { forceNode: true });
+
+        socketRef.current.on('connect', function () {
+        });
+
+        socketRef.current.on("set message", (callbackMsg) => {
+
+            const { message, type, senderId } = callbackMsg;
+            console.log(message)
+            let tempArray = [...chatMessages]
+            var arrayLength = tempArray.length;
+
+            let objectMsg = {
+                id: arrayLength + 1,
+                senderId: senderId,
+                type: type,
+                message: message
+            }
+
+            const newArr = [...chatMessages, objectMsg];
+            setChatMessages(newArr)
+
+        })
+
+        return () => {
+            unmounted = true;
+            cancelSource.cancel();
+            socketRef.current.disconnect();
+        }
+
+    }, [chatMessages])
+
+    function _renderChatList({ item }) {
         return (
             <View style={styles.chatBubble}>
-
+                <Text>{item.message}</Text>
             </View>
         )
     }
 
     function submitChatMessage() {
-        socket.emit("chat message", chatMessage);
-        setChatMessage("")
+        socketRef.current.emit("send message", { type: "text", senderId: 1, message: chatMessage });
+        setChatMessage(null)
     }
 
     return (
@@ -62,7 +134,7 @@ export default function ChatMessager() {
                     numColumns={1}
                     inverted={true}
                     onEndReached={() => {
-                        handleScroll();
+                        // handleScroll();
                     }}
                     onEndReachedThreshold={0.1}
                 />
@@ -141,5 +213,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'rgba(0,0,0,0.2)'
     },
+    chatBubble: {
+        width: AppStyle.windowSize.width,
+        height: Normalize(100),
+        backgroundColor: 'gray',
+        borderColor: 'black',
+        borderWidth: 1
+    }
 })
 
