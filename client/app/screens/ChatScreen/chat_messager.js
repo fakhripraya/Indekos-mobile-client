@@ -2,18 +2,23 @@ import axios from 'axios';
 import io from "socket.io-client";
 import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
-import { AppStyle, GeneralService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
+import { AppStyle, GeneralService, ChatWebsocket } from '../../config/app.config';
 import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput } from 'react-native';
 
-// creates the promised base http client
+// creates the promised base http chat client
 const chatAPI = axios.create({
     baseURL: "http://" + GeneralService.host + GeneralService.port + "/"
 })
 
-export default function ChatMessager() {
+export default function ChatMessager({ route }) {
+
+    // get navigation parameter
+    const user = route.params.user;
 
     // Function Hooks
+    const [flag, setFlag] = useState(0);
+    const [room, setRoom] = useState('');
     const [chatMessage, setChatMessage] = useState(null)
     const [chatMessages, setChatMessages] = useState([])
 
@@ -22,54 +27,33 @@ export default function ChatMessager() {
 
     useEffect(() => {
 
-        // creates the cancel token source
-        var cancelSource = axios.CancelToken.source()
-
-        // prevent update on unmounted component
-        let unmounted = false;
-
-        async function getInitialChatRoom() {
-
-            // triggers the http get request to the / url in General Service to get the expected response 
-            chatAPI.get({
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        setData(response.data);
-                        setStatus(response.status)
-                    }
-                })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setError(true);
-                                setErrorMessage(error.response.data);
-                                setStatus(error.response.status)
-                            }
-                        }
-                    }
-                });
-        }
-
-        if (chatMessages.length === 0) {
-
-            // check chat room between client
-            getInitialChatRoom()
-        }
-
         // // Socket initialization
-        socketRef.current = io("ws://192.168.1.106:3001", { forceNode: true });
+        socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
 
         socketRef.current.on('connect', function () {
+            socketRef.current.emit('join room', user.displayname, ({ error, user }) => {
+                if (error) {
+                    console.log(error)
+                    return;
+                }
+
+                console.log(user.room)
+                setRoom(user.room);
+            });
         });
+
+        return () => {
+            socketRef.current.disconnect();
+        }
+
+    }, [])
+
+    useEffect(() => {
 
         socketRef.current.on("set message", (callbackMsg) => {
 
             const { message, type, senderId } = callbackMsg;
-            console.log(message)
+
             let tempArray = [...chatMessages]
             var arrayLength = tempArray.length;
 
@@ -81,28 +65,40 @@ export default function ChatMessager() {
             }
 
             const newArr = [...chatMessages, objectMsg];
-            setChatMessages(newArr)
+            setChatMessages(newArr.reverse())
 
         })
-
-        return () => {
-            unmounted = true;
-            cancelSource.cancel();
-            socketRef.current.disconnect();
-        }
-
-    }, [chatMessages])
+    }, [chatMessages]);
 
     function _renderChatList({ item }) {
-        return (
-            <View style={styles.chatBubble}>
-                <Text>{item.message}</Text>
-            </View>
-        )
+        if (item.senderId === user.id) {
+            return (
+                <View style={[styles.chatBubble, { alignSelf: 'flex-end', left: -AppStyle.windowSize.width * 0.05 }]}>
+                    <View style={styles.upperText}>
+                        <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.message}</Text>
+                    </View>
+                    <View style={styles.lowerText}>
+                        <Text style={{ fontSize: NormalizeFont(12), color: 'white' }}>11:44PM</Text>
+                    </View>
+                </View>
+            )
+        } else {
+            return (
+                <View style={[styles.chatBubble, { alignSelf: 'flex-start', left: AppStyle.windowSize.width * 0.05 }]}>
+                    <View style={styles.upperText}>
+                        <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.message}</Text>
+                    </View>
+                    <View style={styles.lowerText}>
+                        <Text style={{ fontSize: NormalizeFont(12), color: 'white' }}>11:44PM</Text>
+                    </View>
+                </View>
+            )
+        }
+
     }
 
     function submitChatMessage() {
-        socketRef.current.emit("send message", { type: "text", senderId: 1, message: chatMessage });
+        socketRef.current.emit("send message", { type: "text", senderId: user.id, message: chatMessage, room: room });
         setChatMessage(null)
     }
 
@@ -163,35 +159,35 @@ const styles = StyleSheet.create({
 
     header: {
         elevation: 5,
-        width: AppStyle.windowSize.width,
+        flexDirection: 'row',
+        alignItems: 'center',
         height: Normalize(70),
         backgroundColor: 'white',
         justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
+        width: AppStyle.windowSize.width,
     },
     body: {
         backgroundColor: '#F4F5F9',
         width: AppStyle.windowSize.width,
-        height: AppStyle.windowSize.height - (Normalize(80) + Normalize(70))
+        height: AppStyle.windowSize.height - (Normalize(80) + Normalize(70)),
     },
     footer: {
         elevation: 5,
-        width: AppStyle.windowSize.width,
-        backgroundColor: 'white',
-        height: Normalize(80),
-        justifyContent: 'space-evenly',
         alignItems: 'center',
         flexDirection: 'row',
+        height: Normalize(80),
+        backgroundColor: 'white',
+        justifyContent: 'space-evenly',
+        width: AppStyle.windowSize.width,
     },
     titlePic: {
         flex: 0.2,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     titlePicContainer: {
-        height: Normalize(45),
         width: Normalize(45),
+        height: Normalize(45),
     },
     backgroundImg: {
         flex: 1,
@@ -202,23 +198,35 @@ const styles = StyleSheet.create({
         flex: 0.65,
     },
     titleMenu: {
-        right: AppStyle.windowSize.width * 0.05,
-        alignItems: 'flex-end',
         flex: 0.15,
+        alignItems: 'flex-end',
+        right: AppStyle.windowSize.width * 0.05,
     },
     chatInput: {
-        width: AppStyle.windowSize.width * 0.65,
+        borderWidth: 1,
         height: Normalize(50),
         borderRadius: Normalize(20),
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0.2)'
+        borderColor: 'rgba(0,0,0,0.2)',
+        width: AppStyle.windowSize.width * 0.65,
     },
     chatBubble: {
-        width: AppStyle.windowSize.width,
-        height: Normalize(100),
-        backgroundColor: 'gray',
-        borderColor: 'black',
-        borderWidth: 1
-    }
+        padding: Normalize(15),
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginBottom: Normalize(25),
+        borderTopLeftRadius: Normalize(20),
+        borderTopRightRadius: Normalize(20),
+        borderBottomLeftRadius: Normalize(20),
+        maxWidth: AppStyle.windowSize.width * 0.9,
+        backgroundColor: 'rgba(78, 82, 174, 0.9)',
+    },
+    upperText: {
+        maxWidth: AppStyle.windowSize.width * 0.9,
+        alignSelf: 'center',
+    },
+    lowerText: {
+        maxWidth: AppStyle.windowSize.width * 0.9,
+        alignSelf: 'flex-end',
+    },
 })
 

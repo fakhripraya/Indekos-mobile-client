@@ -1,109 +1,90 @@
-import React, { useState } from 'react';
-import { AppStyle } from '../../config/app.config';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { ParseTime } from '../../functions/string';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import ChatBackground from '../../components/Backgrounds/chat_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
-import { FlatList, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View, ImageBackground } from 'react-native';
+import { AppStyle, AuthService, GeneralService } from '../../config/app.config';
+import { FlatList, StyleSheet, Text, TouchableNativeFeedback, ActivityIndicator, TouchableOpacity, View, ImageBackground, Button } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 const TouchableNativeFeedbackPrevent = withPreventDoubleClick(TouchableNativeFeedback);
 
+// creates the promised base http auth client
+const authAPI = axios.create({
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
+})
+
+// creates the promised base http auth client
+const GenAPI = axios.create({
+    baseURL: "http://" + GeneralService.host + GeneralService.port + "/"
+})
+
 export default function Chats({ navigation }) {
+
+    // prevent update on unmounted component
+    let unmounted = false;
+    // creates the cancel token source
+    var cancelSource = axios.CancelToken.source()
+
+    // Function Hooks
+    const [rerender, setRerender] = useState(0)
+    const [user, setUser] = useState(null)
+    const [rooms, setRooms] = useState(null)
+
+    useEffect(() => {
+
+        authAPI.get('/', {
+            cancelToken: cancelSource.token,
+            timeout: 10000
+        })
+            .then((parent) => {
+                if (!unmounted) {
+                    GenAPI.get('/' + parent.data.id + '/all')
+                        .then((result) => {
+                            if (!unmounted) {
+                                setUser(parent.data)
+                                setRooms(result.data)
+                            }
+                        })
+                        .catch((err) => {
+                            if (!unmounted) {
+                                if (typeof (err.response) !== 'undefined') {
+                                    if (!axios.isCancel(err)) {
+                                        console.log(err.response.data)
+                                    }
+                                }
+                            }
+                        });
+                }
+            })
+            .catch((err) => {
+                if (!unmounted) {
+                    if (typeof (err.response) !== 'undefined') {
+                        if (!axios.isCancel(err)) {
+                            console.log(err.response.data)
+                        }
+                    }
+                }
+            });
+
+        return () => {
+            unmounted = true;
+            cancelSource.cancel();
+        }
+    }, [rerender])
 
     // if last chat sender is 1, show 'you' as the body prefix, otherwise show nothing  
     // last chat last sent is 0 -> pending  
     // last chat last sent is 1 -> sent
     // last chat last sent is 2 -> read
-    let contact_dummy = [
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "Johannes Kont..",
-            body: "Titit lagi apa lau",
-            time: "12:31 PM",
-            unread_count: "14",
-            last_chat_sent: 0,
-            last_chat_sender: 1,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "Johannes Meki",
-            body: "testis",
-            time: "12:38 PM",
-            unread_count: "32",
-            last_chat_sent: 1,
-            last_chat_sender: 0,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "Johannes Titit",
-            body: "panjang titit gua cuma 2cm",
-            time: "12:32 PM",
-            unread_count: "1",
-            last_chat_sent: 2,
-            last_chat_sender: 0,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "Palkon palmerah",
-            body: "teastausdasdsada",
-            time: "15:38 PM",
-            unread_count: "2",
-            last_chat_sent: 0,
-            last_chat_sender: 0,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "pentolan bonjer",
-            body: "awdajhwkjdhaqkwjhdad",
-            time: "12:38 PM",
-            unread_count: "1",
-            last_chat_sent: 0,
-            last_chat_sender: 1,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "bebeb",
-            body: "Titit lagi apa lau cok",
-            time: "13:00 PM",
-            unread_count: "5",
-            last_chat_sent: 0,
-            last_chat_sender: 1,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "bebeb",
-            body: "Titit lagi apa lau cok",
-            time: "12:38 PM",
-            unread_count: "1",
-            last_chat_sent: 0,
-            last_chat_sender: 1,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "bebeb",
-            body: "Titit lagi apa lau cok",
-            time: "12:11 PM",
-            unread_count: "22",
-            last_chat_sent: 0,
-            last_chat_sender: 1,
-        },
-        {
-            profile_picture: "http://lorempixel.com/640/480/technics",
-            title: "bebeb",
-            body: "Titit lagi apa lau cok",
-            time: "12:23 PM",
-            unread_count: "2",
-            last_chat_sent: 0,
-            last_chat_sender: 1,
-        },
-    ]
 
     function TabContent() {
 
         function ChatBodyComponent(childItem) {
 
-            if (childItem.childItem.last_chat_sender === 0) {
+            if (childItem.childItem.sender_id !== user.id) {
                 return (
                     <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>
                         {childItem.childItem.body}
@@ -112,8 +93,64 @@ export default function Chats({ navigation }) {
             } else {
                 return (
                     <Text style={{ color: AppStyle.fourt_main_color, fontSize: NormalizeFont(12) }}>
-                        You: <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>{childItem.childItem.body}</Text>
+                        You: <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>{childItem.childItem.chat_body}</Text>
                     </Text>
+                )
+            }
+        }
+
+        function ChatThumbnail({ members }) {
+
+            let selected;
+
+            members.forEach((member) => {
+                if (member.user_id !== user.id) {
+                    selected = member;
+                }
+            })
+
+            return (
+                <ImageBackground
+                    imageStyle={{ borderRadius: Normalize(100) }}
+                    style={styles.backgroundImg}
+                    source={{ uri: selected.profile_picture }}
+                />
+            )
+        }
+
+        function ChatTitle({ members }) {
+
+            let selected;
+
+            members.forEach((member) => {
+                if (member.user_id == user.id) {
+                    selected = member;
+                }
+            })
+
+            return (
+                <Text style={{ fontSize: NormalizeFont(15), fontWeight: 'bold', color: 'black' }}>
+                    {selected.displayname}
+                </Text>
+            )
+        }
+
+        function ChatUnread({ unread }) {
+            if (unread !== null && unread !== 0) {
+                return (
+                    <View style={{ backgroundColor: AppStyle.third_main_color, height: Normalize(25), width: Normalize(25), borderRadius: Normalize(100), justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>
+                            {unread}
+                        </Text>
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={{ backgroundColor: 'white', height: Normalize(25), width: Normalize(25), borderRadius: Normalize(100), justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>
+                            {unread}
+                        </Text>
+                    </View>
                 )
             }
         }
@@ -125,41 +162,36 @@ export default function Chats({ navigation }) {
                     navigation.push('ChatStack', {
                         screen: 'ChatMessager',
                         params: {
-                            kost: "placeholder",
+                            user: user,
                         }
                     })
                 }} >
                     <View style={{ height: Normalize(60) + Normalize(12) + Normalize(12), width: AppStyle.windowSize.width, flexDirection: 'row' }}>
                         <View style={styles.chatPicContainer}>
                             <View style={styles.chatPic}>
-                                <ImageBackground
-                                    imageStyle={{ borderRadius: Normalize(100) }}
-                                    style={styles.backgroundImg}
-                                    source={{ uri: item.profile_picture }}
-                                />
+                                <ChatThumbnail members={item.chat_room_members} />
                             </View>
                         </View>
                         <View style={styles.chatContent}>
                             <View style={styles.chatTitle}>
-                                <Text style={{ fontSize: NormalizeFont(15), fontWeight: 'bold', color: 'black' }}>
-                                    {item.title}
-                                </Text>
+                                <ChatTitle members={item.chat_room_members} />
                             </View>
                             <View style={styles.chatBody}>
-                                <ChatBodyComponent childItem={item} />
+                                <ChatBodyComponent childItem={item.chat_room_last_chat} />
                             </View>
                         </View>
                         <View style={styles.chatTimestamp}>
                             <View style={styles.chatSuffix}>
-                                <View style={{ backgroundColor: AppStyle.third_main_color, height: Normalize(25), width: Normalize(25), borderRadius: Normalize(100), justifyContent: 'center', alignItems: 'center' }}>
+                                {/* <View style={{ backgroundColor: AppStyle.third_main_color, height: Normalize(25), width: Normalize(25), borderRadius: Normalize(100), justifyContent: 'center', alignItems: 'center' }}>
                                     <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>
                                         {item.unread_count}
                                     </Text>
-                                </View>
+                                </View> */}
+                                <ChatUnread unread={null} />
                             </View>
                             <View style={styles.chatTime}>
                                 <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>
-                                    {item.time}
+                                    <ParseTime time={item.chat_room_last_chat.created} />
                                 </Text>
                             </View>
                         </View>
@@ -173,7 +205,7 @@ export default function Chats({ navigation }) {
 
         return (
             <FlatList
-                data={contact_dummy}
+                data={rooms}
                 renderItem={_renderChatList}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={1}
@@ -188,20 +220,36 @@ export default function Chats({ navigation }) {
         )
     }
 
-    return (
-        <ChatBackground>
-            <View style={{ height: AppStyle.windowSize.height * 0.3, width: AppStyle.windowSize.width }}></View>
-            <Text style={styles.title}>Chat's</Text>
-            <View style={styles.topBorder} />
-            <View style={styles.tabContainer}>
-                <TabContent />
+    if (rooms === null || user === null) {
+        // Renders the Loading screen
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
             </View>
-        </ChatBackground >
-    )
+        )
+    } else if (rooms !== null && user !== null) {
+        return (
+            <ChatBackground>
+                <View style={{ height: AppStyle.windowSize.height * 0.3, width: AppStyle.windowSize.width }}></View>
+                <Text style={styles.title}>Chat's</Text>
+                <View style={styles.topBorder} />
+                <View style={styles.tabContainer}>
+                    <TabContent />
+                </View>
+            </ChatBackground >
+        )
+    }
+
 }
 
 const styles = StyleSheet.create({
 
+    loadingContainer: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'white',
+        justifyContent: 'center',
+    },
     title: {
         color: 'white',
         fontWeight: 'bold',

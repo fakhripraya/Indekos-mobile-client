@@ -17,3 +17,12 @@ export function GetZero(id) {
 
     return finalResult
 }
+
+export function ParseTime({ time }) {
+    let parsedTime;
+
+    parsedTime = new Date(time)
+    parsedTime = parsedTime.toLocaleTimeString()
+
+    return parsedTime
+}
