@@ -1,14 +1,14 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import { ParseTime } from '../../functions/string';
+import io from "socket.io-client";
+import { ParseTimeGolang } from '../../functions/string';
+import React, { useState, useEffect, useRef } from 'react';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import ChatBackground from '../../components/Backgrounds/chat_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
-import { AppStyle, AuthService, GeneralService } from '../../config/app.config';
-import { FlatList, StyleSheet, Text, TouchableNativeFeedback, ActivityIndicator, TouchableOpacity, View, ImageBackground, Button } from 'react-native';
+import { AppStyle, AuthService, GeneralService, ChatWebsocket } from '../../config/app.config';
+import { FlatList, StyleSheet, Text, TouchableNativeFeedback, ActivityIndicator, View, ImageBackground, LogBox } from 'react-native';
 
 // a HOC to throttle button click
-const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 const TouchableNativeFeedbackPrevent = withPreventDoubleClick(TouchableNativeFeedback);
 
 // creates the promised base http auth client
@@ -32,6 +32,48 @@ export default function Chats({ navigation }) {
     const [rerender, setRerender] = useState(0)
     const [user, setUser] = useState(null)
     const [rooms, setRooms] = useState(null)
+
+    // Function refs
+    const socketRef = useRef()
+
+    useEffect(() => {
+        LogBox.ignoreLogs(["Can't perform a React state update on an unmounted component."]);
+    }, [])
+
+    useEffect(() => {
+        if (user !== null) {
+            socketRef.current.on("trigger" + user.id, () => {
+                if (rerender === 0) {
+                    setRerender(1);
+                } else {
+                    setRerender(0);
+                }
+            })
+        }
+
+        return () => { }
+    })
+
+    useEffect(() => {
+
+        // // Socket initialization
+        socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
+
+        socketRef.current.on("connect", () => {
+            socketRef.current.on("trigger rerender", () => {
+                if (rerender === 0) {
+                    setRerender(1);
+                } else {
+                    setRerender(0);
+                }
+            })
+        });
+
+        return () => {
+            socketRef.current.disconnect();
+        }
+
+    }, [])
 
     useEffect(() => {
 
@@ -87,7 +129,7 @@ export default function Chats({ navigation }) {
             if (childItem.childItem.sender_id !== user.id) {
                 return (
                     <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>
-                        {childItem.childItem.body}
+                        {childItem.childItem.chat_body}
                     </Text>
                 )
             } else {
@@ -162,7 +204,10 @@ export default function Chats({ navigation }) {
                     navigation.push('ChatStack', {
                         screen: 'ChatMessager',
                         params: {
+                            selectedRoom: item.chat_room,
                             user: user,
+                            users: null,
+                            socketRef: socketRef
                         }
                     })
                 }} >
@@ -182,16 +227,11 @@ export default function Chats({ navigation }) {
                         </View>
                         <View style={styles.chatTimestamp}>
                             <View style={styles.chatSuffix}>
-                                {/* <View style={{ backgroundColor: AppStyle.third_main_color, height: Normalize(25), width: Normalize(25), borderRadius: Normalize(100), justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ color: 'white', fontSize: NormalizeFont(14) }}>
-                                        {item.unread_count}
-                                    </Text>
-                                </View> */}
-                                <ChatUnread unread={null} />
+                                <ChatUnread unread={item.unread_count} />
                             </View>
                             <View style={styles.chatTime}>
                                 <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>
-                                    <ParseTime time={item.chat_room_last_chat.created} />
+                                    <ParseTimeGolang time={item.chat_room_last_chat.created} />
                                 </Text>
                             </View>
                         </View>

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import io from "socket.io-client";
 import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
+import { AppStyle, GeneralService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import { AppStyle, GeneralService, ChatWebsocket } from '../../config/app.config';
-import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput, LogBox } from 'react-native';
+import { ParseTime } from '../../functions/string';
 
 // creates the promised base http chat client
 const chatAPI = axios.create({
@@ -15,36 +15,42 @@ export default function ChatMessager({ route }) {
 
     // get navigation parameter
     const user = route.params.user;
+    const users = route.params.users;
+    const socketRef = route.params.socketRef;
+    const selectedRoom = route.params.selectedRoom;
 
     // Function Hooks
-    const [flag, setFlag] = useState(0);
-    const [room, setRoom] = useState('');
+    const [chatRoom, setChatRoom] = useState(null);
+    const [chatMembers, setChatMembers] = useState(null);
     const [chatMessage, setChatMessage] = useState(null)
     const [chatMessages, setChatMessages] = useState([])
 
-    // Function refs
-    const socketRef = useRef()
+    useEffect(() => {
+        LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
+    }, [])
+
+    useEffect(() => {
+        if (user !== null) {
+            socketRef.current.on("trigger" + user.id, () => {
+
+            })
+        }
+
+        return () => { }
+    })
 
     useEffect(() => {
 
-        // // Socket initialization
-        socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
+        socketRef.current.emit('join room', selectedRoom, user.displayname, users, ({ error, callbackUsers, callbackRoom, callbackChats }) => {
+            if (error) {
+                console.log(error)
+                return;
+            }
 
-        socketRef.current.on('connect', function () {
-            socketRef.current.emit('join room', user.displayname, ({ error, user }) => {
-                if (error) {
-                    console.log(error)
-                    return;
-                }
-
-                console.log(user.room)
-                setRoom(user.room);
-            });
+            setChatRoom(callbackRoom);
+            setChatMembers(callbackUsers);
+            setChatMessages(callbackChats.reverse())
         });
-
-        return () => {
-            socketRef.current.disconnect();
-        }
 
     }, [])
 
@@ -52,44 +58,34 @@ export default function ChatMessager({ route }) {
 
         socketRef.current.on("set message", (callbackMsg) => {
 
-            const { message, type, senderId } = callbackMsg;
+            const { message } = callbackMsg;
 
-            let tempArray = [...chatMessages]
-            var arrayLength = tempArray.length;
-
-            let objectMsg = {
-                id: arrayLength + 1,
-                senderId: senderId,
-                type: type,
-                message: message
-            }
-
-            const newArr = [...chatMessages, objectMsg];
+            const newArr = [...chatMessages.reverse(), message];
             setChatMessages(newArr.reverse())
 
         })
     }, [chatMessages]);
 
     function _renderChatList({ item }) {
-        if (item.senderId === user.id) {
+        if (item.senderId !== user.id) {
             return (
-                <View style={[styles.chatBubble, { alignSelf: 'flex-end', left: -AppStyle.windowSize.width * 0.05 }]}>
+                <View style={[styles.chatBubble, { borderBottomLeftRadius: Normalize(20), alignSelf: 'flex-end', left: -AppStyle.windowSize.width * 0.05 }]}>
                     <View style={styles.upperText}>
-                        <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.message}</Text>
+                        <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.chat_body}</Text>
                     </View>
                     <View style={styles.lowerText}>
-                        <Text style={{ fontSize: NormalizeFont(12), color: 'white' }}>11:44PM</Text>
+                        <Text style={{ fontSize: NormalizeFont(12), color: 'white' }}><ParseTime time={item.created} /></Text>
                     </View>
                 </View>
             )
         } else {
             return (
-                <View style={[styles.chatBubble, { alignSelf: 'flex-start', left: AppStyle.windowSize.width * 0.05 }]}>
+                <View style={[styles.chatBubble, { borderBottomRightRadius: Normalize(20), alignSelf: 'flex-start', left: AppStyle.windowSize.width * 0.05 }]}>
                     <View style={styles.upperText}>
-                        <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.message}</Text>
+                        <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.chat_body}</Text>
                     </View>
                     <View style={styles.lowerText}>
-                        <Text style={{ fontSize: NormalizeFont(12), color: 'white' }}>11:44PM</Text>
+                        <Text style={{ fontSize: NormalizeFont(12), color: 'white' }}><ParseTime time={item.created} /></Text>
                     </View>
                 </View>
             )
@@ -98,7 +94,16 @@ export default function ChatMessager({ route }) {
     }
 
     function submitChatMessage() {
-        socketRef.current.emit("send message", { type: "text", senderId: user.id, message: chatMessage, room: room });
+
+        let receiver;
+
+        chatMembers.forEach((member) => {
+            if (member.id !== user.id) {
+                receiver = member;
+            }
+        })
+
+        socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, room: chatRoom });
         setChatMessage(null)
     }
 
@@ -216,7 +221,6 @@ const styles = StyleSheet.create({
         marginBottom: Normalize(25),
         borderTopLeftRadius: Normalize(20),
         borderTopRightRadius: Normalize(20),
-        borderBottomLeftRadius: Normalize(20),
         maxWidth: AppStyle.windowSize.width * 0.9,
         backgroundColor: 'rgba(78, 82, 174, 0.9)',
     },
