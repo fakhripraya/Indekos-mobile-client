@@ -21,55 +21,72 @@ export default function ChatMessager({ route }) {
 
     // Function Hooks
     const [chatRoom, setChatRoom] = useState(null);
-    const [chatMembers, setChatMembers] = useState(null);
-    const [chatMessage, setChatMessage] = useState(null)
-    const [chatMessages, setChatMessages] = useState([])
+    const [chatMessage, setChatMessage] = useState(null);
+    const [chatMessages, setChatMessages] = useState([]);
+
+    function getOtherMember(members) {
+
+        let receiver;
+
+        members.forEach((member) => {
+            if (member.user_id !== user.id) {
+                receiver = member;
+            }
+        })
+
+        return receiver;
+    }
+
+    function submitChatMessage() {
+
+        let receiver = getOtherMember(users);
+        console.log(receiver)
+        socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, messages: chatMessages, room: chatRoom });
+        setChatMessage(null)
+    }
 
     useEffect(() => {
         LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
-    }, [])
+    }, []);
 
     useEffect(() => {
-        if (user !== null) {
-            socketRef.current.on("trigger" + user.id, () => {
-
-            })
-        }
-
-        return () => { }
-    })
-
-    useEffect(() => {
-
-        socketRef.current.emit('join room', selectedRoom, user.displayname, users, ({ error, callbackUsers, callbackRoom, callbackChats }) => {
+        socketRef.current.emit('join room', selectedRoom, user, users, ({ error, callbackRoom, callbackChats }) => {
             if (error) {
                 console.log(error)
                 return;
             }
 
             setChatRoom(callbackRoom);
-            setChatMembers(callbackUsers);
             setChatMessages(callbackChats.reverse())
         });
 
-    }, [])
+        return () => {
+
+            let receiver = getOtherMember(users);
+
+            socketRef.current.removeAllListeners("join room")
+            socketRef.current.removeAllListeners("set message" + receiver.id)
+            socketRef.current.removeAllListeners("send message")
+        }
+    }, []);
 
     useEffect(() => {
+        let receiver = getOtherMember(users);
+        socketRef.current.on("set message" + receiver.user_id, (callbackMsg) => {
+            console.log('masuk sih')
 
-        socketRef.current.on("set message", (callbackMsg) => {
+            const { message, messages } = callbackMsg;
 
-            const { message } = callbackMsg;
-
-            const newArr = [...chatMessages.reverse(), message];
+            const newArr = [...messages.reverse(), message];
             setChatMessages(newArr.reverse())
-
         })
-    }, [chatMessages]);
+    }, []);
 
     function _renderChatList({ item }) {
-        if (item.senderId !== user.id) {
+
+        if (item.sender_id === user.id) {
             return (
-                <View style={[styles.chatBubble, { borderBottomLeftRadius: Normalize(20), alignSelf: 'flex-end', left: -AppStyle.windowSize.width * 0.05 }]}>
+                <View style={[styles.chatBubble, { backgroundColor: 'rgba(78, 82, 174, 0.9)', borderBottomLeftRadius: Normalize(20), alignSelf: 'flex-end', left: -AppStyle.windowSize.width * 0.05 }]}>
                     <View style={styles.upperText}>
                         <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.chat_body}</Text>
                     </View>
@@ -80,7 +97,7 @@ export default function ChatMessager({ route }) {
             )
         } else {
             return (
-                <View style={[styles.chatBubble, { borderBottomRightRadius: Normalize(20), alignSelf: 'flex-start', left: AppStyle.windowSize.width * 0.05 }]}>
+                <View style={[styles.chatBubble, { backgroundColor: '#463275', borderBottomRightRadius: Normalize(20), alignSelf: 'flex-start', left: AppStyle.windowSize.width * 0.05 }]}>
                     <View style={styles.upperText}>
                         <Text style={{ fontSize: NormalizeFont(16), color: 'white' }}>{item.chat_body}</Text>
                     </View>
@@ -93,19 +110,7 @@ export default function ChatMessager({ route }) {
 
     }
 
-    function submitChatMessage() {
-
-        let receiver;
-
-        chatMembers.forEach((member) => {
-            if (member.id !== user.id) {
-                receiver = member;
-            }
-        })
-
-        socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, room: chatRoom });
-        setChatMessage(null)
-    }
+    let otherMessager = getOtherMember(users);
 
     return (
         <View>
@@ -115,13 +120,12 @@ export default function ChatMessager({ route }) {
                         <ImageBackground
                             imageStyle={{ borderRadius: Normalize(100) }}
                             style={styles.backgroundImg}
-                            source={{ uri: "http://lorempixel.com/640/480/technics" }}
+                            source={{ uri: otherMessager.profile_picture }}
                         />
                     </View>
                 </View>
                 <View style={styles.titleBody}>
-                    <Text style={{ fontSize: NormalizeFont(16), fontWeight: 'bold' }}>Johannes</Text>
-                    <Text style={{ fontSize: NormalizeFont(14), color: AppStyle.third_main_color }}>Last online 18:00 PM</Text>
+                    <Text style={{ fontSize: NormalizeFont(16), fontWeight: 'bold' }}>{otherMessager.displayname}</Text>
                 </View>
                 <View style={styles.titleMenu}>
                     <Feather name="menu" size={NormalizeFont(24)} color={AppStyle.main_color} />
@@ -222,7 +226,6 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: Normalize(20),
         borderTopRightRadius: Normalize(20),
         maxWidth: AppStyle.windowSize.width * 0.9,
-        backgroundColor: 'rgba(78, 82, 174, 0.9)',
     },
     upperText: {
         maxWidth: AppStyle.windowSize.width * 0.9,

@@ -29,30 +29,28 @@ export default function Chats({ navigation }) {
     var cancelSource = axios.CancelToken.source()
 
     // Function Hooks
-    const [rerender, setRerender] = useState(0)
     const [user, setUser] = useState(null)
     const [rooms, setRooms] = useState(null)
 
     // Function refs
     const socketRef = useRef()
 
+    function getOtherMember(members) {
+
+        let receiver;
+
+        members.forEach((member) => {
+            if (member.user_id !== user.id) {
+                receiver = member;
+            }
+        })
+
+        return receiver;
+    }
+
     useEffect(() => {
         LogBox.ignoreLogs(["Can't perform a React state update on an unmounted component."]);
-    }, [])
-
-    useEffect(() => {
-        if (user !== null) {
-            socketRef.current.on("trigger" + user.id, () => {
-                if (rerender === 0) {
-                    setRerender(1);
-                } else {
-                    setRerender(0);
-                }
-            })
-        }
-
-        return () => { }
-    })
+    }, []);
 
     useEffect(() => {
 
@@ -61,11 +59,39 @@ export default function Chats({ navigation }) {
 
         socketRef.current.on("connect", () => {
             socketRef.current.on("trigger rerender", () => {
-                if (rerender === 0) {
-                    setRerender(1);
-                } else {
-                    setRerender(0);
-                }
+                console.log('trigger rerender')
+                authAPI.get('/', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
+                })
+                    .then((parent) => {
+                        if (!unmounted) {
+                            GenAPI.get('/' + parent.data.id + '/all')
+                                .then((result) => {
+                                    if (!unmounted) {
+                                        setRooms(result.data)
+                                    }
+                                })
+                                .catch((err) => {
+                                    if (!unmounted) {
+                                        if (typeof (err.response) !== 'undefined') {
+                                            if (!axios.isCancel(err)) {
+                                                console.log(err.response.data)
+                                            }
+                                        }
+                                    }
+                                });
+                        }
+                    })
+                    .catch((err) => {
+                        if (!unmounted) {
+                            if (typeof (err.response) !== 'undefined') {
+                                if (!axios.isCancel(err)) {
+                                    console.log(err.response.data)
+                                }
+                            }
+                        }
+                    });
             })
         });
 
@@ -73,7 +99,48 @@ export default function Chats({ navigation }) {
             socketRef.current.disconnect();
         }
 
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (user !== null) {
+            console.log('gak null')
+            socketRef.current.on("trigger" + user.id, () => {
+                console.log('trigger normal')
+                authAPI.get('/', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
+                })
+                    .then((parent) => {
+                        if (!unmounted) {
+                            GenAPI.get('/' + parent.data.id + '/all')
+                                .then((result) => {
+                                    if (!unmounted) {
+                                        setRooms(result.data)
+                                    }
+                                })
+                                .catch((err) => {
+                                    if (!unmounted) {
+                                        if (typeof (err.response) !== 'undefined') {
+                                            if (!axios.isCancel(err)) {
+                                                console.log(err.response.data)
+                                            }
+                                        }
+                                    }
+                                });
+                        }
+                    })
+                    .catch((err) => {
+                        if (!unmounted) {
+                            if (typeof (err.response) !== 'undefined') {
+                                if (!axios.isCancel(err)) {
+                                    console.log(err.response.data)
+                                }
+                            }
+                        }
+                    });
+            })
+        }
+    }, [user]);
 
     useEffect(() => {
 
@@ -115,12 +182,7 @@ export default function Chats({ navigation }) {
             unmounted = true;
             cancelSource.cancel();
         }
-    }, [rerender])
-
-    // if last chat sender is 1, show 'you' as the body prefix, otherwise show nothing  
-    // last chat last sent is 0 -> pending  
-    // last chat last sent is 1 -> sent
-    // last chat last sent is 2 -> read
+    }, []);
 
     function TabContent() {
 
@@ -143,13 +205,7 @@ export default function Chats({ navigation }) {
 
         function ChatThumbnail({ members }) {
 
-            let selected;
-
-            members.forEach((member) => {
-                if (member.user_id !== user.id) {
-                    selected = member;
-                }
-            })
+            let selected = getOtherMember(members);
 
             return (
                 <ImageBackground
@@ -162,13 +218,7 @@ export default function Chats({ navigation }) {
 
         function ChatTitle({ members }) {
 
-            let selected;
-
-            members.forEach((member) => {
-                if (member.user_id == user.id) {
-                    selected = member;
-                }
-            })
+            let selected = getOtherMember(members);
 
             return (
                 <Text style={{ fontSize: NormalizeFont(15), fontWeight: 'bold', color: 'black' }}>
@@ -206,7 +256,7 @@ export default function Chats({ navigation }) {
                         params: {
                             selectedRoom: item.chat_room,
                             user: user,
-                            users: null,
+                            users: item.chat_room_members,
                             socketRef: socketRef
                         }
                     })

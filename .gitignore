@@ -3,7 +3,7 @@ client/babel.config.js
 client/.expo-shared
 client/node_modules
 client/app.json
-
+client/.expo/web/cache/development/babel-loader
 client/.vscode/launch.json
 client/.vscode/.react/node_modules%5Cexpo%5CAppEntry.bundle
 client/.vscode/.react/debuggerWorker.js
