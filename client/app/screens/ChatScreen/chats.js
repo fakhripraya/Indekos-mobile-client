@@ -40,12 +40,37 @@ export default function Chats({ navigation }) {
         let receiver;
 
         members.forEach((member) => {
-            if (member.user_id !== user.id) {
+            if (member.user_id !== user.id)
                 receiver = member;
-            }
         })
 
         return receiver;
+    }
+
+    const PromiseProperty = {
+        cancelToken: cancelSource.token,
+        timeout: 10000
+    }
+
+    const catchError = (err) => {
+        if (!unmounted)
+            if (typeof (err.response) !== 'undefined')
+                if (!axios.isCancel(err))
+                    console.log(err.response.data)
+    }
+
+    function getAllRoomPromiseAsync() {
+        authAPI.get('/', PromiseProperty)
+            .then(() => {
+                if (!unmounted)
+                    GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
+                        .then((result) => {
+                            if (!unmounted)
+                                setRooms(result.data)
+                        })
+                        .catch((err) => catchError(err));
+            })
+            .catch((err2) => catchError(err2));
     }
 
     useEffect(() => {
@@ -54,44 +79,13 @@ export default function Chats({ navigation }) {
 
     useEffect(() => {
 
-        // // Socket initialization
+        // Socket initialization
         socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
 
+        // Socket connected listener
         socketRef.current.on("connect", () => {
             socketRef.current.on("trigger rerender", () => {
-                console.log('trigger rerender')
-                authAPI.get('/', {
-                    cancelToken: cancelSource.token,
-                    timeout: 10000
-                })
-                    .then((parent) => {
-                        if (!unmounted) {
-                            GenAPI.get('/' + parent.data.id + '/all')
-                                .then((result) => {
-                                    if (!unmounted) {
-                                        setRooms(result.data)
-                                    }
-                                })
-                                .catch((err) => {
-                                    if (!unmounted) {
-                                        if (typeof (err.response) !== 'undefined') {
-                                            if (!axios.isCancel(err)) {
-                                                console.log(err.response.data)
-                                            }
-                                        }
-                                    }
-                                });
-                        }
-                    })
-                    .catch((err) => {
-                        if (!unmounted) {
-                            if (typeof (err.response) !== 'undefined') {
-                                if (!axios.isCancel(err)) {
-                                    console.log(err.response.data)
-                                }
-                            }
-                        }
-                    });
+                getAllRoomPromiseAsync();
             })
         });
 
@@ -102,81 +96,28 @@ export default function Chats({ navigation }) {
     }, []);
 
     useEffect(() => {
-        if (user !== null) {
-            console.log('gak null')
+        if (user !== null)
             socketRef.current.on("trigger" + user.id, () => {
-                console.log('trigger normal')
-                authAPI.get('/', {
-                    cancelToken: cancelSource.token,
-                    timeout: 10000
-                })
-                    .then((parent) => {
-                        if (!unmounted) {
-                            GenAPI.get('/' + parent.data.id + '/all')
-                                .then((result) => {
-                                    if (!unmounted) {
-                                        setRooms(result.data)
-                                    }
-                                })
-                                .catch((err) => {
-                                    if (!unmounted) {
-                                        if (typeof (err.response) !== 'undefined') {
-                                            if (!axios.isCancel(err)) {
-                                                console.log(err.response.data)
-                                            }
-                                        }
-                                    }
-                                });
-                        }
-                    })
-                    .catch((err) => {
-                        if (!unmounted) {
-                            if (typeof (err.response) !== 'undefined') {
-                                if (!axios.isCancel(err)) {
-                                    console.log(err.response.data)
-                                }
-                            }
-                        }
-                    });
+                getAllRoomPromiseAsync();
             })
-        }
     }, [user]);
 
     useEffect(() => {
 
-        authAPI.get('/', {
-            cancelToken: cancelSource.token,
-            timeout: 10000
-        })
+        authAPI.get('/', PromiseProperty)
             .then((parent) => {
                 if (!unmounted) {
-                    GenAPI.get('/' + parent.data.id + '/all')
+                    GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
                         .then((result) => {
                             if (!unmounted) {
                                 setUser(parent.data)
                                 setRooms(result.data)
                             }
                         })
-                        .catch((err) => {
-                            if (!unmounted) {
-                                if (typeof (err.response) !== 'undefined') {
-                                    if (!axios.isCancel(err)) {
-                                        console.log(err.response.data)
-                                    }
-                                }
-                            }
-                        });
+                        .catch((err) => catchError(err));
                 }
             })
-            .catch((err) => {
-                if (!unmounted) {
-                    if (typeof (err.response) !== 'undefined') {
-                        if (!axios.isCancel(err)) {
-                            console.log(err.response.data)
-                        }
-                    }
-                }
-            });
+            .catch((err2) => catchError(err2));
 
         return () => {
             unmounted = true;

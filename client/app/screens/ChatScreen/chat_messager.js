@@ -1,15 +1,13 @@
-import axios from 'axios';
+import { AppStyle } from '../../config/app.config';
+import { ParseTime } from '../../functions/string';
 import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
-import { AppStyle, GeneralService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput, LogBox } from 'react-native';
-import { ParseTime } from '../../functions/string';
+import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput, LogBox, TouchableOpacity } from 'react-native';
 
-// creates the promised base http chat client
-const chatAPI = axios.create({
-    baseURL: "http://" + GeneralService.host + GeneralService.port + "/"
-})
+// a HOC to throttle button click
+const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 export default function ChatMessager({ route }) {
 
@@ -40,9 +38,11 @@ export default function ChatMessager({ route }) {
     function submitChatMessage() {
 
         let receiver = getOtherMember(users);
-        console.log(receiver)
-        socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, messages: chatMessages, room: chatRoom });
-        setChatMessage(null)
+
+        if (chatMessage !== null) {
+            socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, messages: chatMessages, room: chatRoom });
+            setChatMessage(null)
+        }
     }
 
     useEffect(() => {
@@ -65,20 +65,24 @@ export default function ChatMessager({ route }) {
             let receiver = getOtherMember(users);
 
             socketRef.current.removeAllListeners("join room")
-            socketRef.current.removeAllListeners("set message" + receiver.id)
+            socketRef.current.removeAllListeners("set message" + receiver.user_id)
             socketRef.current.removeAllListeners("send message")
+            socketRef.current.removeAllListeners("read message")
         }
     }, []);
 
     useEffect(() => {
         let receiver = getOtherMember(users);
         socketRef.current.on("set message" + receiver.user_id, (callbackMsg) => {
-            console.log('masuk sih')
 
-            const { message, messages } = callbackMsg;
+            const { message, messages, serverSender, serverReceiver, roomId } = callbackMsg;
 
-            const newArr = [...messages.reverse(), message];
-            setChatMessages(newArr.reverse())
+            if (("setmessage" + user.id + "-" + receiver.user_id === "setmessage" + serverSender.id + "-" + serverReceiver.user_id) || ("setmessage" + receiver.user_id + "-" + user.id === "setmessage" + serverSender.id + "-" + serverReceiver.user_id)) {
+                const newArr = [...messages.reverse(), message];
+                setChatMessages(newArr.reverse())
+                socketRef.current.emit("read messages", { reader: user, roomId: roomId });
+            }
+
         })
     }, []);
 
@@ -158,7 +162,9 @@ export default function ChatMessager({ route }) {
                         }}
                     />
                 </View>
-                <Ionicons name="send-sharp" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                <TouchableOpacityPrevent onPress={() => submitChatMessage()}>
+                    <Ionicons name="send-sharp" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                </TouchableOpacityPrevent>
             </View>
         </View>
     )
