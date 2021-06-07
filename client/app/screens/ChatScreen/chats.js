@@ -40,8 +40,9 @@ export default function Chats({ navigation }) {
         let receiver;
 
         members.forEach((member) => {
-            if (member.user_id !== user.id)
+            if (member.user_id !== user.id) {
                 receiver = member;
+            }
         })
 
         return receiver;
@@ -53,24 +54,13 @@ export default function Chats({ navigation }) {
     }
 
     const catchError = (err) => {
-        if (!unmounted)
-            if (typeof (err.response) !== 'undefined')
-                if (!axios.isCancel(err))
+        if (!unmounted) {
+            if (typeof (err.response) !== 'undefined') {
+                if (!axios.isCancel(err)) {
                     console.log(err.response.data)
-    }
-
-    function getAllRoomPromiseAsync() {
-        authAPI.get('/', PromiseProperty)
-            .then(() => {
-                if (!unmounted)
-                    GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
-                        .then((result) => {
-                            if (!unmounted)
-                                setRooms(result.data)
-                        })
-                        .catch((err) => catchError(err));
-            })
-            .catch((err2) => catchError(err2));
+                }
+            }
+        }
     }
 
     useEffect(() => {
@@ -79,51 +69,73 @@ export default function Chats({ navigation }) {
 
     useEffect(() => {
 
-        // Socket initialization
+        // // Socket initialization
         socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
 
-        // Socket connected listener
         socketRef.current.on("connect", () => {
+
+            authAPI.get('/', PromiseProperty)
+                .then((parent) => {
+                    if (!unmounted) {
+                        GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
+                            .then((result) => {
+                                if (!unmounted) {
+                                    setUser(parent.data)
+                                    setRooms(result.data)
+                                }
+                            })
+                            .catch((err) => catchError(err));
+                    }
+                })
+                .catch((err2) => catchError(err2));
+
             socketRef.current.on("trigger rerender", () => {
-                getAllRoomPromiseAsync();
+
+                authAPI.get('/', PromiseProperty)
+                    .then(() => {
+                        if (!unmounted) {
+                            GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
+                                .then((result) => {
+                                    if (!unmounted) {
+                                        setRooms(result.data)
+                                    }
+                                })
+                                .catch((err) => catchError(err));
+                        }
+                    })
+                    .catch((err2) => catchError(err2));
             })
         });
 
         return () => {
             socketRef.current.disconnect();
-        }
-
-    }, []);
-
-    useEffect(() => {
-        if (user !== null)
-            socketRef.current.on("trigger" + user.id, () => {
-                getAllRoomPromiseAsync();
-            })
-    }, [user]);
-
-    useEffect(() => {
-
-        authAPI.get('/', PromiseProperty)
-            .then((parent) => {
-                if (!unmounted) {
-                    GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
-                        .then((result) => {
-                            if (!unmounted) {
-                                setUser(parent.data)
-                                setRooms(result.data)
-                            }
-                        })
-                        .catch((err) => catchError(err));
-                }
-            })
-            .catch((err2) => catchError(err2));
-
-        return () => {
             unmounted = true;
             cancelSource.cancel();
         }
+
     }, []);
+
+    useEffect(() => {
+        if (user !== null) {
+
+            socketRef.current.on("trigger" + user.id, () => {
+
+                authAPI.get('/', PromiseProperty)
+                    .then((parent) => {
+                        if (!unmounted) {
+                            GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
+                                .then((result) => {
+                                    if (!unmounted) {
+                                        setRooms(result.data)
+                                    }
+                                })
+                                .catch((err) => catchError(err));
+                        }
+                    })
+                    .catch((err2) => catchError(err2));
+            })
+        }
+    }, [user]);
 
     function TabContent() {
 

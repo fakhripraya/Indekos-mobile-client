@@ -67,7 +67,7 @@ export default function ChatMessager({ route }) {
             socketRef.current.removeAllListeners("join room")
             socketRef.current.removeAllListeners("set message" + receiver.user_id)
             socketRef.current.removeAllListeners("send message")
-            socketRef.current.removeAllListeners("read message")
+            socketRef.current.removeAllListeners("read messages")
         }
     }, []);
 
