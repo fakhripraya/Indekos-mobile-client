@@ -40,7 +40,14 @@ export default function ChatMessager({ route }) {
         let receiver = getOtherMember(users);
 
         if (chatMessage !== null) {
+
+            const newMessage = {
+
+            }
+
+            const newArr = [...chatMessages.reverse(), newMessage];
             socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, messages: chatMessages, room: chatRoom });
+            setChatMessages(newArr.reverse())
             setChatMessage(null)
         }
     }
@@ -149,8 +156,12 @@ export default function ChatMessager({ route }) {
                 />
             </View>
             <View style={styles.footer}>
-                <Entypo name="attachment" size={NormalizeFont(24)} color={AppStyle.main_color} />
-                <Feather name="smile" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                <TouchableOpacityPrevent onPress={ }>
+                    <Entypo name="attachment" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                </TouchableOpacityPrevent>
+                <TouchableOpacityPrevent onPress={ }>
+                    <Feather name="smile" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                </TouchableOpacityPrevent>
                 <View style={styles.chatInput}>
                     <TextInput
                         style={{ height: '100%', width: '100%' }}
