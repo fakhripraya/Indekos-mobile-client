@@ -234,7 +234,7 @@ export default function MemberDetails({ route, navigation }) {
         <View style={{ flex: 1, backgroundColor: 'white', width: '100%', height: '100%' }}>
             <ScrollView style={{ flex: 1 }}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => { navigation.pop(1) }} style={styles.headerIcon}>
+                    <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.headerIcon}>
                         <AntDesign name="left" size={Normalize(24)} color="black" />
                     </TouchableOpacity>
                     <View>

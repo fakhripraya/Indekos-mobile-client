@@ -69,7 +69,7 @@ export default function KTPVerification({ navigation }) {
     return (
         <>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => { navigation.pop(1) }} style={styles.headerIcon}>
+                <TouchableOpacity onPress={() => { navigation.goBack() }} style={styles.headerIcon}>
                     <AntDesign name="left" size={Normalize(24)} color="black" />
                 </TouchableOpacity>
                 <View>
