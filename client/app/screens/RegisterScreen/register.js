@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import * as WebBrowser from "expo-web-browser";
 import { AppStyle } from '../../config/app.config';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
@@ -23,7 +24,7 @@ import RegisterBackground from '../../components/Backgrounds/registration_backgr
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
-const api = axios.create({
+const AuthAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/",
 })
 
@@ -96,7 +97,7 @@ export default function Register({ navigation }) {
 
         // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
         trackPromise(
-            api.post(
+            AuthAPI.post(
                 '/register',
                 { username: inputValue }
             )
@@ -107,6 +108,33 @@ export default function Register({ navigation }) {
                             tempPassword: '',
                             otpType: 0
                         });
+                    }
+                })
+                .catch(error => {
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            if (error.response.status !== 200) {
+                                // dispatch the popUpModalChange actions to store the generic message modal state
+                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                            }
+                        }
+                    }
+                })
+        );
+    }
+
+    // handle O2Auth registration
+    function handleO2Auth(provider) {
+
+        // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
+        trackPromise(
+            AuthAPI.get(
+                '/' + provider
+            )
+                .then(response => {
+                    if (response.status >= 200 && response.status < 300) {
+                        console.log(response.data)
+                        WebBrowser.openAuthSessionAsync(response.data, "http://" + AuthService.host + ".nip.io:" + AuthService.port + "/google/callback")
                     }
                 })
                 .catch(error => {
@@ -153,10 +181,14 @@ export default function Register({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.o2AuthWrapper}>
-                    <TouchableOpacityPrevent >
+                    <TouchableOpacityPrevent onPress={() => {
+                        handleO2Auth('google')
+                    }}>
                         <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
                     </TouchableOpacityPrevent>
-                    <TouchableOpacityPrevent >
+                    <TouchableOpacityPrevent onPress={() => {
+                        handleO2Auth('facebook')
+                    }}>
                         <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
                     </TouchableOpacityPrevent>
                 </View>

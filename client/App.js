@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import store from './app/redux/store';
 import { Provider } from 'react-redux';
+import * as WebBrowser from "expo-web-browser";
 import BookStack from './app/route/book_stack';
 import AppStack from './app/route/app_stack.js';
 import LoginStack from './app/route/login_stack';
@@ -27,6 +28,9 @@ const RootStack = createStackNavigator();
 
 // set axios default configuration
 axios.defaults.withCredentials = true;
+
+// set the listener to redirect back to the app after O2Auth authentication complete
+WebBrowser.maybeCompleteAuthSession();
 
 // the root of all the applications stack
 export default function App() {
