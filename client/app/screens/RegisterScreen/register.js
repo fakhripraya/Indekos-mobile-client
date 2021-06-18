@@ -11,11 +11,11 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import * as WebBrowser from "expo-web-browser";
-import { AppStyle } from '../../config/app.config';
+import * as Google from 'expo-google-app-auth';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
+import { AppStyle, GoogleClientID } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import RegisterBackground from '../../components/Backgrounds/registration_background';
@@ -123,33 +123,6 @@ export default function Register({ navigation }) {
         );
     }
 
-    // handle O2Auth registration
-    function handleO2Auth(provider) {
-
-        // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
-        trackPromise(
-            AuthAPI.get(
-                '/' + provider
-            )
-                .then(response => {
-                    if (response.status >= 200 && response.status < 300) {
-                        console.log(response.data)
-                        WebBrowser.openAuthSessionAsync(response.data, "http://" + AuthService.host + ".nip.io:" + AuthService.port + "/google/callback")
-                    }
-                })
-                .catch(error => {
-                    if (typeof (error.response) !== 'undefined') {
-                        if (!axios.isCancel(error)) {
-                            if (error.response.status !== 200) {
-                                // dispatch the popUpModalChange actions to store the generic message modal state
-                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                            }
-                        }
-                    }
-                })
-        );
-    }
-
     // Renders the Register screen
     return (
         <RegisterBackground>
@@ -181,13 +154,50 @@ export default function Register({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.o2AuthWrapper}>
-                    <TouchableOpacityPrevent onPress={() => {
-                        handleO2Auth('google')
+                    <TouchableOpacityPrevent onPress={async () => {
+                        try {
+                            const result = await Google.logInAsync(
+                                {
+                                    clientId: GoogleClientID,
+                                    scopes: ['profile', 'email']
+                                }
+                            )
+
+                            if (result.type === 'success') {
+                                console.log(result.accessToken)
+                                // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
+                                trackPromise(
+                                    AuthAPI.get(
+                                        '/google/callback?accessToken=' + result.accessToken,
+                                    )
+                                        .then(response => {
+                                            if (response.status >= 200 && response.status < 300) {
+
+                                            }
+                                        })
+                                        .catch(error => {
+                                            if (typeof (error.response) !== 'undefined') {
+                                                if (!axios.isCancel(error)) {
+                                                    if (error.response.status !== 200) {
+                                                        // dispatch the popUpModalChange actions to store the generic message modal state
+                                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                                    }
+                                                }
+                                            }
+                                        })
+                                );
+                            } else {
+                                return;
+                            }
+                        } catch (error) {
+                            console.log(error)
+                        }
+
                     }}>
                         <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
                     </TouchableOpacityPrevent>
                     <TouchableOpacityPrevent onPress={() => {
-                        handleO2Auth('facebook')
+                        // handleO2Auth('facebook')
                     }}>
                         <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
                     </TouchableOpacityPrevent>
