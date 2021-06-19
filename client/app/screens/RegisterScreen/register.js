@@ -9,16 +9,19 @@ import {
     popUpModalChange,
 } from '../../redux';
 import axios from 'axios';
-import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import * as Google from 'expo-google-app-auth';
+import * as WebBrowser from 'expo-web-browser';
+import { ResponseType } from 'expo-auth-session';
+import React, { useEffect, useState } from 'react';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
 import { AuthService } from '../../config/app.config';
-import { AppStyle, GoogleClientID } from '../../config/app.config';
+import * as Google from 'expo-auth-session/providers/google';
+import * as Facebook from 'expo-auth-session/providers/facebook';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import RegisterBackground from '../../components/Backgrounds/registration_background';
+import { AppStyle, StandaloneGoogleClientID, ExpoGoogleClientID, FacebookAppID } from '../../config/app.config';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -27,6 +30,8 @@ const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 const AuthAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/",
 })
+
+WebBrowser.maybeCompleteAuthSession();
 
 // Register is the root of registration stack
 export default function Register({ navigation }) {
@@ -123,6 +128,97 @@ export default function Register({ navigation }) {
         );
     }
 
+    function GoogleSignInButton() {
+
+        const [request, response, promptAsync] = Google.useAuthRequest({
+            expoClientId: ExpoGoogleClientID,
+        });
+
+        useEffect(() => {
+            if (response?.type === 'success') {
+                const { authentication } = response;
+                try {
+                    // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
+                    trackPromise(
+                        AuthAPI.get(
+                            '/google/callback?accessToken=' + authentication.accessToken,
+                        )
+                            .then(response => {
+                                if (response.status >= 200 && response.status < 300) {
+                                    navigation.replace('AppStack');
+                                }
+                            })
+                            .catch(error => {
+                                if (typeof (error.response) !== 'undefined') {
+                                    if (!axios.isCancel(error)) {
+                                        if (error.response.status !== 200) {
+                                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                        }
+                                    }
+                                }
+                            })
+                    );
+                } catch ({ message }) {
+                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Google Login Error: ${message}` }));
+                }
+            }
+        }, [response]);
+
+        return (
+            <TouchableOpacityPrevent onPress={() => {
+                promptAsync();
+            }}>
+                <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
+            </TouchableOpacityPrevent>
+        )
+    }
+
+    function FacebookSignInButton() {
+
+        const [request, response, promptAsync] = Facebook.useAuthRequest({
+            clientId: FacebookAppID,
+            responseType: ResponseType.Code,
+        });
+
+        useEffect(() => {
+            if (response?.type === 'success') {
+                const { code } = response.params;
+                try {
+                    // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
+                    trackPromise(
+                        AuthAPI.get(
+                            '/facebook/callback?code=' + code,
+                        )
+                            .then(response => {
+                                if (response.status >= 200 && response.status < 300) {
+                                    navigation.replace('AppStack');
+                                }
+                            })
+                            .catch(error => {
+                                if (typeof (error.response) !== 'undefined') {
+                                    if (!axios.isCancel(error)) {
+                                        if (error.response.status !== 200) {
+                                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                        }
+                                    }
+                                }
+                            })
+                    );
+                } catch ({ message }) {
+                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Google Login Error: ${message}` }));
+                }
+            }
+        }, [response]);
+
+        return (
+            <TouchableOpacityPrevent onPress={async () => {
+                promptAsync();
+            }}>
+                <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
+            </TouchableOpacityPrevent>
+        )
+    }
+
     // Renders the Register screen
     return (
         <RegisterBackground>
@@ -154,53 +250,8 @@ export default function Register({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.o2AuthWrapper}>
-                    <TouchableOpacityPrevent onPress={async () => {
-                        try {
-                            const result = await Google.logInAsync(
-                                {
-                                    clientId: GoogleClientID,
-                                    scopes: ['profile', 'email']
-                                }
-                            )
-
-                            if (result.type === 'success') {
-                                console.log(result.accessToken)
-                                // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
-                                trackPromise(
-                                    AuthAPI.get(
-                                        '/google/callback?accessToken=' + result.accessToken,
-                                    )
-                                        .then(response => {
-                                            if (response.status >= 200 && response.status < 300) {
-
-                                            }
-                                        })
-                                        .catch(error => {
-                                            if (typeof (error.response) !== 'undefined') {
-                                                if (!axios.isCancel(error)) {
-                                                    if (error.response.status !== 200) {
-                                                        // dispatch the popUpModalChange actions to store the generic message modal state
-                                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                                    }
-                                                }
-                                            }
-                                        })
-                                );
-                            } else {
-                                return;
-                            }
-                        } catch (error) {
-                            console.log(error)
-                        }
-
-                    }}>
-                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
-                    </TouchableOpacityPrevent>
-                    <TouchableOpacityPrevent onPress={() => {
-                        // handleO2Auth('facebook')
-                    }}>
-                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
-                    </TouchableOpacityPrevent>
+                    <GoogleSignInButton />
+                    <FacebookSignInButton />
                 </View>
             </View>
             <View style={styles.submitBtn}>
