@@ -1,7 +1,7 @@
-import { AppStyle } from '../../config/app.config';
 import { ParseTime } from '../../functions/string';
 import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
+import { AppStyle, ChatWebsocket } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput, LogBox, TouchableOpacity } from 'react-native';
@@ -16,6 +16,7 @@ export default function ChatMessager({ route }) {
     const users = route.params.users;
     const socketRef = route.params.socketRef;
     const selectedRoom = route.params.selectedRoom;
+    const socketRefConnection = route.params.socketRefConnection;
 
     // Function Hooks
     const [chatRoom, setChatRoom] = useState(null);
@@ -50,6 +51,13 @@ export default function ChatMessager({ route }) {
     }, []);
 
     useEffect(() => {
+
+        // Socket initialization
+        // if false, connect to the websocket
+        if (socketRefConnection === false) {
+            socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
+        }
+
         socketRef.current.emit('join room', selectedRoom, user, users, ({ error, callbackRoom, callbackChats }) => {
             if (error) {
                 console.log(error)
@@ -63,6 +71,10 @@ export default function ChatMessager({ route }) {
         return () => {
 
             let receiver = getOtherMember(users);
+
+            if (socketRefConnection === false) {
+                socketRef.current.disconnect();
+            }
 
             socketRef.current.removeAllListeners("join room")
             socketRef.current.removeAllListeners("set message" + receiver.user_id)

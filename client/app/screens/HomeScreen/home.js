@@ -78,40 +78,40 @@ export default function Home({ navigation }) {
     let bookCaraouselData = [
         [
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Jawa",
-                alamat: "Kebon Jeruk",
-                harga: "Rp. 2100.000",
+                id: 9,
+                owner_id: 3,
+                kost_name: "Kost Pertamina",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/nature",
+                price: 1100000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
+                id: 16,
+                owner_id: 3,
+                kost_name: "Kost Pertamax",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/nature",
+                price: 1500000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
+                id: 4,
+                owner_id: 3,
+                kost_name: "Kost kosan bapak fakhri",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/people",
+                price: 1800000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
+                id: 11,
+                owner_id: 3,
+                kost_name: "Kost kosan bapak ari",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/people",
+                price: 1800000,
+                currency: "rupiah"
             },
         ],
     ];
@@ -119,40 +119,40 @@ export default function Home({ navigation }) {
     let promoCaraouselData = [
         [
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Jawa",
-                alamat: "Kebon Jeruk",
-                harga: "Rp. 2100.000",
+                id: 9,
+                owner_id: 3,
+                kost_name: "Kost Pertamina",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/nature",
+                price: 1100000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
+                id: 16,
+                owner_id: 3,
+                kost_name: "Kost Pertamax",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/nature",
+                price: 1500000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
+                id: 4,
+                owner_id: 3,
+                kost_name: "Kost kosan bapak fakhri",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/people",
+                price: 1800000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
+                id: 11,
+                owner_id: 3,
+                kost_name: "Kost kosan bapak ari",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/people",
+                price: 1800000,
+                currency: "rupiah"
             },
         ],
     ];
@@ -160,40 +160,40 @@ export default function Home({ navigation }) {
     let recCaraouselData = [
         [
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Jawa",
-                alamat: "Kebon Jeruk",
-                harga: "Rp. 2100.000",
+                id: 9,
+                owner_id: 3,
+                kost_name: "Kost Pertamina",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/nature",
+                price: 1100000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
+                id: 16,
+                owner_id: 3,
+                kost_name: "Kost Pertamax",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/nature",
+                price: 1500000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
+                id: 4,
+                owner_id: 3,
+                kost_name: "Kost kosan bapak fakhri",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/people",
+                price: 1800000,
+                currency: "rupiah"
             },
             {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost TasTus",
-                alamat: "Pekayon",
-                harga: "Rp. 2200.000",
-            },
-            {
-                uri: "https://reactjs.org/logo-og.png",
-                nama: "Kost Majapahit",
-                alamat: "Tanah Abang",
-                harga: "Rp. 2000.000",
+                id: 11,
+                owner_id: 3,
+                kost_name: "Kost kosan bapak ari",
+                city: "Jakarta Selatan",
+                thumbnail_url: "http://lorempixel.com/640/480/people",
+                price: 1800000,
+                currency: "rupiah"
             },
         ],
     ];
@@ -317,9 +317,7 @@ export default function Home({ navigation }) {
                                 navigation.push('BookStack', {
                                     screen: 'KostDetail',
                                     params: {
-                                        kostID: 3,
-                                        kostName: "Kost Abang Ade",
-                                        city: "Jakarta Barat",
+                                        kost: item
                                     }
                                 })
                             }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
@@ -406,7 +404,14 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                            <TouchableOpacity onPress={() => {
+                                navigation.push('BookStack', {
+                                    screen: 'KostDetail',
+                                    params: {
+                                        kost: item
+                                    }
+                                })
+                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
                                 <View style={{ height: '50%' }}>
                                     <ImageBackground
                                         imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
@@ -536,9 +541,7 @@ export default function Home({ navigation }) {
                                 navigation.push('BookStack', {
                                     screen: 'KostDetail',
                                     params: {
-                                        kostID: item.id,
-                                        kostName: item.kost_name,
-                                        city: item.city,
+                                        kost: item
                                     }
                                 })
                             }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
@@ -608,7 +611,14 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                            <TouchableOpacity onPress={() => {
+                                navigation.push('BookStack', {
+                                    screen: 'KostDetail',
+                                    params: {
+                                        kost: item
+                                    }
+                                })
+                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
                                 <View style={{ height: '50%' }}>
                                     <ImageBackground
                                         imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}

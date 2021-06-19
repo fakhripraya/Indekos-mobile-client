@@ -7,13 +7,13 @@ import { useAxiosGet } from '../../promise/axios_get';
 import { CurrencyPrefix } from '../../functions/currency';
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
-import { AppStyle, KostService } from '../../config/app.config';
 import withDelay from '../../components/HOC/prevent_spam_click';
 import { useAxiosGetArray } from '../../promise/axios_get_array';
 import { MappedFacilities } from '../../components/Icons/facilities';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import BookBackground from '../../components/Backgrounds/book_background';
+import { AppStyle, KostService, AuthService } from '../../config/app.config';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, InteractionManager, ActivityIndicator } from 'react-native';
 
@@ -25,14 +25,24 @@ const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
 })
 
+// creates the promised base http auth client
+const authAPI = axios.create({
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
+})
+
 export default function KostDetail({ route, navigation }) {
 
+    // creates the cancel token source
+    var cancelSource = axios.CancelToken.source()
+
     // get navigation parameter
-    const kostID = route.params.kostID;
-    const kostName = route.params.kostName;
-    const kostCity = route.params.city;
+    const kostOwnerID = route.params.kost.owner_id;
+    const kostID = route.params.kost.id;
+    const kostName = route.params.kost.kost_name;
+    const kostCity = route.params.kost.city;
 
     // Function refs
+    const socketRef = useRef() // for chat websocket connection reference
     const kostPictRef = useRef(null);
     const roomPictRef = useRef(null);
     const bottomSheetRef = useRef(null);
@@ -45,18 +55,12 @@ export default function KostDetail({ route, navigation }) {
     let selectedKostRoom = null
 
     useEffect(() => {
-
-        // prevent update on unmounted component
-        let unmounted = false;
-
-        if (unmounted === false) {
-            InteractionManager.runAfterInteractions(() => {
-                setIsReady(true);
-            });
-        }
+        InteractionManager.runAfterInteractions(() => {
+            setIsReady(true);
+        });
 
         return () => {
-            unmounted = true;
+            cancelSource.cancel();
         }
     }, [])
 
@@ -1341,7 +1345,34 @@ export default function KostDetail({ route, navigation }) {
                             </TouchableOpacityPrevent>
                         </View>
                         <View style={styles.toolsRight}>
-                            <TouchableOpacityPrevent style={styles.toolsIcon}>
+                            <TouchableOpacityPrevent onPress={async () => {
+                                await authAPI.get('/', {
+                                    cancelToken: cancelSource.token,
+                                    timeout: 10000
+                                }).then((result) => {
+                                    let users = [
+                                        {
+                                            user_id: result.data.id
+                                        },
+                                        {
+                                            user_id: kostOwnerID
+                                        },
+                                    ]
+
+                                    navigation.push('ChatStack', {
+                                        screen: 'ChatMessager',
+                                        params: {
+                                            selectedRoom: null,
+                                            user: result.data,
+                                            users: users,
+                                            socketRef: socketRef,
+                                            socketRefConnection: false
+                                        }
+                                    })
+                                }).catch((error) => {
+                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Navigating through chat Error: ${error.message}` }));
+                                })
+                            }} style={styles.toolsIcon}>
                                 <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={'black'} />
                             </TouchableOpacityPrevent>
                             <TouchableOpacityPrevent style={styles.toolsIcon}>

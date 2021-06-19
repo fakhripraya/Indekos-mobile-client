@@ -48,7 +48,7 @@ export default function Chats({ navigation }) {
         return receiver;
     }
 
-    const PromiseProperty = {
+    const promiseProperty = {
         cancelToken: cancelSource.token,
         timeout: 10000
     }
@@ -74,10 +74,10 @@ export default function Chats({ navigation }) {
 
         socketRef.current.on("connect", () => {
 
-            authAPI.get('/', PromiseProperty)
+            authAPI.get('/', promiseProperty)
                 .then((parent) => {
                     if (!unmounted) {
-                        GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
+                        GenAPI.get('/' + parent.data.id + '/all', promiseProperty)
                             .then((result) => {
                                 if (!unmounted) {
                                     setUser(parent.data)
@@ -91,10 +91,10 @@ export default function Chats({ navigation }) {
 
             socketRef.current.on("trigger rerender", () => {
 
-                authAPI.get('/', PromiseProperty)
+                authAPI.get('/', promiseProperty)
                     .then(() => {
                         if (!unmounted) {
-                            GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
+                            GenAPI.get('/' + parent.data.id + '/all', promiseProperty)
                                 .then((result) => {
                                     if (!unmounted) {
                                         setRooms(result.data)
@@ -120,10 +120,10 @@ export default function Chats({ navigation }) {
 
             socketRef.current.on("trigger" + user.id, () => {
 
-                authAPI.get('/', PromiseProperty)
+                authAPI.get('/', promiseProperty)
                     .then((parent) => {
                         if (!unmounted) {
-                            GenAPI.get('/' + parent.data.id + '/all', PromiseProperty)
+                            GenAPI.get('/' + parent.data.id + '/all', promiseProperty)
                                 .then((result) => {
                                     if (!unmounted) {
                                         setRooms(result.data)
@@ -210,7 +210,8 @@ export default function Chats({ navigation }) {
                             selectedRoom: item.chat_room,
                             user: user,
                             users: item.chat_room_members,
-                            socketRef: socketRef
+                            socketRef: socketRef,
+                            socketRefConnection: true
                         }
                     })
                 }} >
