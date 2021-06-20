@@ -313,36 +313,35 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity onPress={() => {
-                                navigation.push('BookStack', {
-                                    screen: 'KostDetail',
-                                    params: {
-                                        kost: item
-                                    }
-                                })
-                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
-                                <View style={{ height: '50%' }}>
-                                    <ImageBackground
-                                        imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
-                                        style={styles.backgroundImg}
-                                        source={{ uri: item.uri }}
-                                    />
-                                </View>
-                                <View style={{ height: '50%' }}>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => {
+                                    navigation.push('BookStack', {
+                                        screen: 'KostDetail',
+                                        params: {
+                                            kost: item
+                                        }
+                                    })
+                                }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                                    <View style={{ height: '50%' }}>
+                                        <ImageBackground
+                                            imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
+                                            style={styles.backgroundImg}
+                                            source={{ uri: item.thumbnail_url }}
+                                        />
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                                        <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
+                                        </View>
+                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
+                                        </View>
+                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                    </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
+                            </View>
                         )
 
                     })}
@@ -404,36 +403,35 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity onPress={() => {
-                                navigation.push('BookStack', {
-                                    screen: 'KostDetail',
-                                    params: {
-                                        kost: item
-                                    }
-                                })
-                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
-                                <View style={{ height: '50%' }}>
-                                    <ImageBackground
-                                        imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
-                                        style={styles.backgroundImg}
-                                        source={{ uri: item.uri }}
-                                    />
-                                </View>
-                                <View style={{ height: '50%' }}>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => {
+                                    navigation.push('BookStack', {
+                                        screen: 'KostDetail',
+                                        params: {
+                                            kost: item
+                                        }
+                                    })
+                                }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                                    <View style={{ height: '50%' }}>
+                                        <ImageBackground
+                                            imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
+                                            style={styles.backgroundImg}
+                                            source={{ uri: item.thumbnail_url }}
+                                        />
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                                        <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
+                                        </View>
+                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
+                                        </View>
+                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                    </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
+                            </View>
                         )
 
                     })}
@@ -611,36 +609,35 @@ export default function Home({ navigation }) {
                     {item.map((item, index) => {
 
                         return (
-                            <TouchableOpacity onPress={() => {
-                                navigation.push('BookStack', {
-                                    screen: 'KostDetail',
-                                    params: {
-                                        kost: item
-                                    }
-                                })
-                            }} key={index} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
-                                <View style={{ height: '50%' }}>
-                                    <ImageBackground
-                                        imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
-                                        style={styles.backgroundImg}
-                                        source={{ uri: item.uri }}
-                                    />
-                                </View>
-                                <View style={{ height: '50%' }}>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.nama}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => {
+                                    navigation.push('BookStack', {
+                                        screen: 'KostDetail',
+                                        params: {
+                                            kost: item
+                                        }
+                                    })
+                                }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                                    <View style={{ height: '50%' }}>
+                                        <ImageBackground
+                                            imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
+                                            style={styles.backgroundImg}
+                                            source={{ uri: item.thumbnail_url }}
+                                        />
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.alamat}</Text>
+                                    <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                                        <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
+                                        </View>
+                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
+                                        </View>
+                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                    </View>
-                                    <View style={{ left: Normalize(10), height: '25%' }}>
-                                        <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.harga}</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
+                            </View>
                         )
 
                     })}

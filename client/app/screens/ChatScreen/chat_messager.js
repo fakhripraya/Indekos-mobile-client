@@ -1,3 +1,5 @@
+import io from "socket.io-client";
+import { useDispatch } from 'react-redux';
 import { ParseTime } from '../../functions/string';
 import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
@@ -10,6 +12,9 @@ import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput, LogBox, T
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 export default function ChatMessager({ route }) {
+
+    // Hooks
+    const dispatch = useDispatch()
 
     // get navigation parameter
     const user = route.params.user;
@@ -60,7 +65,7 @@ export default function ChatMessager({ route }) {
 
         socketRef.current.emit('join room', selectedRoom, user, users, ({ error, callbackRoom, callbackChats }) => {
             if (error) {
-                console.log(error)
+                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Error joining room: ${error.message}` }));
                 return;
             }
 

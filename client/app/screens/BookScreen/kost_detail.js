@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import Icons from '../../components/Icons/icons';
 import Carousel from 'react-native-snap-carousel';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -34,6 +35,9 @@ export default function KostDetail({ route, navigation }) {
 
     // creates the cancel token source
     var cancelSource = axios.CancelToken.source()
+
+    // Hooks
+    const dispatch = useDispatch()
 
     // get navigation parameter
     const kostOwnerID = route.params.kost.owner_id;
