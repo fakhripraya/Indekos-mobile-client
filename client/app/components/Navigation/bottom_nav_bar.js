@@ -1,15 +1,146 @@
-import React from 'react';
-import { AppStyle } from '../../config/app.config';
+import io from "socket.io-client";
+import React, { useEffect, useRef } from 'react';
 import { Normalize } from '../../functions/normalize';
+import { useSelector, useDispatch } from 'react-redux';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
+import { AppStyle, ChatWebsocket, AuthService } from '../../config/app.config';
+
+// creates the promised base http auth client
+const authAPI = axios.create({
+    baseURL: "http://" + AuthService.host + AuthService.port + "/"
+})
 
 function BottomNavBar({ state, descriptors, navigation }) {
+
+    // prevent update on unmounted component
+    let unmounted = false;
+    // creates the cancel token source
+    var cancelSource = axios.CancelToken.source()
+    // Hooks
+    const dispatch = useDispatch()
+    // Function refs
+    const socketRef = useRef()
+    // Function Hooks
+    const [user, setUser] = useState(null)
+
+    // get all chats info
+    let myChatRooms = useSelector(state => state.chatRoomsReducer.chat_rooms);
+    let myChatRoomMembers = useSelector(state => state.chatRoomMembersReducer.chat_room_members);
+    let myChatRoomChats = useSelector(state => state.chatRoomChatsReducer.chat_room_chats);
+
     const focusedOptions = descriptors[state.routes[state.index].key].options;
 
     if (focusedOptions.tabBarVisible === false) {
         return null;
     }
+
+    useEffect(() => {
+
+        // // Socket initialization
+        socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
+
+        socketRef.current.on("connect", () => {
+            authAPI.get('/', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then((result) => {
+                    if (!unmounted) {
+                        setUser(result.data)
+                    }
+                })
+                .catch((err) => {
+                    if (!unmounted) {
+                        if (typeof (err.response) !== 'undefined') {
+                            if (!axios.isCancel(err)) {
+                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Error joining room: ${err.response.data}` }));
+                            }
+                        }
+                    }
+                });
+        });
+
+        return () => {
+            socketRef.current.disconnect();
+            unmounted = true;
+            cancelSource.cancel();
+        }
+
+    }, []);
+
+    useEffect(() => {
+        if (user !== null) {
+            socketRef.current.on("set message root" + user.id, (callbackMsg) => {
+
+                const { message, senderId, receiverId, roomDesc } = callbackMsg;
+
+                const newChat = {
+                    room_id = myChatRooms.length + 1,
+                    sender_id = senderId,
+                    chat_body: message,
+                    attachment: attachment,
+                    pic_url: pic_url
+                }
+
+                let roomAvailability = myChatRoomMembers.find(x => x.user_id === receiverId)
+                if (roomAvailability === null || typeof (roomAvailability) === 'undefined') {
+                    // if room not available
+                    const newRoom = {
+                        room_id = myChatRooms.length + 1,
+                        chat_room: {
+                            room_desc: roomDesc,
+                        },
+                        chat_room_last_chat: message,
+                        chat_room_members: users,
+                        unread_count: 0,
+                    }
+
+                    const roomMembers = [{
+                        room_id = myChatRooms.length + 1,
+                        user_id = senderId
+                    },
+                    {
+                        room_id = myChatRooms.length + 1,
+                        user_id = receiverId
+                    }]
+
+                    // create room
+                    dispatch(chatRoomsChange({
+                        chat_rooms: myChatRooms.push(newRoom)
+                    }));
+
+                    dispatch(chatRoomMembersChange({
+                        chat_room_members: myChatRoomMembers.concat(roomMembers)
+                    }));
+
+                    dispatch(chatRoomChatsChange({
+                        chat_room_chats: myChatRoomChats.push(newChat)
+                    }));
+                } else {
+                    // if room available
+                    dispatch(chatRoomChatsChange({
+                        chat_room_chats: myChatRoomChats.push(newChat)
+                    }));
+
+                    for (var i in myChatRooms) {
+                        if (myChatRooms[i].room_id === roomAvailability.room_id) {
+                            myChatRooms[i].chat_room_last_chat = message;
+                            break; //Stop this loop, we found it!
+                        }
+                    }
+
+                    // update room
+                    dispatch(chatRoomsChange({
+                        chat_rooms: [...myChatRooms]
+                    }));
+                }
+
+                // trigger rerender
+                socketRef.current.emit('trigger rerender self', user)
+            })
+        }
+    }, [user]);
 
     return (
         <View style={{ flexDirection: 'row' }}>
@@ -32,7 +163,11 @@ function BottomNavBar({ state, descriptors, navigation }) {
                     });
 
                     if (!isFocused && !event.defaultPrevented) {
-                        navigation.navigate(route.name);
+                        navigation.navigate(route.name, {
+                            params: {
+                                socketRef: socketRef,
+                            }
+                        });
                     }
                 };
 

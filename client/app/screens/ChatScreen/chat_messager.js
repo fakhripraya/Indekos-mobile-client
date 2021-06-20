@@ -1,6 +1,12 @@
 import io from "socket.io-client";
 import { useDispatch } from 'react-redux';
 import { ParseTime } from '../../functions/string';
+import {
+    chatRoomsChange,
+    popUpModalChange,
+    chatRoomChatsChange,
+    chatRoomMembersChange
+} from '../../redux';
 import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 import { AppStyle, ChatWebsocket } from '../../config/app.config';
@@ -21,10 +27,14 @@ export default function ChatMessager({ route }) {
     const users = route.params.users;
     const socketRef = route.params.socketRef;
     const selectedRoom = route.params.selectedRoom;
-    const socketRefConnection = route.params.socketRefConnection;
+
+    // get all chats info
+    let myChatRooms = useSelector(state => state.chatRoomsReducer.chat_rooms);
+    let myChatRoomMembers = useSelector(state => state.chatRoomMembersReducer.chat_room_members);
+    let myChatRoomChats = useSelector(state => state.chatRoomChatsReducer.chat_room_chats);
 
     // Function Hooks
-    const [chatRoom, setChatRoom] = useState(null);
+    const [chatRoomDesc, setChatRoomDesc] = useState(null);
     const [chatMessage, setChatMessage] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
 
@@ -46,7 +56,7 @@ export default function ChatMessager({ route }) {
         let receiver = getOtherMember(users);
 
         if (chatMessage !== null) {
-            socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, messages: chatMessages, room: chatRoom });
+            socketRef.current.emit("send message", { sender: user, receiver: receiver, message: chatMessage, roomDesc: chatRoomDesc });
             setChatMessage(null)
         }
     }
@@ -56,50 +66,118 @@ export default function ChatMessager({ route }) {
     }, []);
 
     useEffect(() => {
-
-        // Socket initialization
-        // if false, connect to the websocket
-        if (socketRefConnection === false) {
-            socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
-        }
-
-        socketRef.current.emit('join room', selectedRoom, user, users, ({ error, callbackRoom, callbackChats }) => {
+        socketRef.current.emit('join room', ({ error, room_desc }) => {
             if (error) {
                 dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Error joining room: ${error.message}` }));
                 return;
             }
 
-            setChatRoom(callbackRoom);
-            setChatMessages(callbackChats.reverse())
+            let roomAvailability = myChatRoomMembers.find(x => x.user_id === receiver.user_id)
+            if (roomAvailability === null || typeof (roomAvailability) === 'undefined') {
+                setChatRoomDesc(room_desc)
+            } else {
+                for (var i in myChatRooms) {
+                    if (myChatRooms[i].room_id === roomAvailability.room_id) {
+                        myChatRooms[i].unread_count = 0;
+                        break; //Stop this loop, we found it!
+                    }
+                }
+
+                // update room
+                dispatch(chatRoomsChange({
+                    chat_rooms: [...myChatRooms]
+                }));
+            }
+
+            var filtered = myChatRoomChats.filter(function (value) {
+                return value.room_id >= roomAvailability.room_id;
+            });
+
+            setChatMessages(filtered)
+
+            // trigger rerender
+            socketRef.current.emit('trigger rerender self', user)
         });
 
         return () => {
-
-            let receiver = getOtherMember(users);
-
-            if (socketRefConnection === false) {
-                socketRef.current.disconnect();
-            }
-
             socketRef.current.removeAllListeners("join room")
-            socketRef.current.removeAllListeners("set message" + receiver.user_id)
+            socketRef.current.removeAllListeners("trigger rerender self")
+            socketRef.current.removeAllListeners("set message" + user.id)
             socketRef.current.removeAllListeners("send message")
             socketRef.current.removeAllListeners("read messages")
         }
     }, []);
 
     useEffect(() => {
-        let receiver = getOtherMember(users);
-        socketRef.current.on("set message" + receiver.user_id, (callbackMsg) => {
+        socketRef.current.on("set message" + user.id, (callbackMsg) => {
 
-            const { message, messages, serverSender, serverReceiver, roomId } = callbackMsg;
+            const { message, senderId, receiverId, roomDesc } = callbackMsg;
 
-            if (("setmessage" + user.id + "-" + receiver.user_id === "setmessage" + serverSender.id + "-" + serverReceiver.user_id) || ("setmessage" + receiver.user_id + "-" + user.id === "setmessage" + serverSender.id + "-" + serverReceiver.user_id)) {
-                const newArr = [...messages.reverse(), message];
-                setChatMessages(newArr.reverse())
-                socketRef.current.emit("read messages", { reader: user, roomId: roomId });
+            const newChat = {
+                room_id = myChatRooms.length + 1,
+                sender_id = senderId,
+                chat_body: message,
+                attachment: attachment,
+                pic_url: pic_url
             }
 
+            let roomAvailability = myChatRoomMembers.find(x => x.user_id === receiverId)
+            if (roomAvailability === null || typeof (roomAvailability) === 'undefined') {
+                // if room not available
+                const newRoom = {
+                    room_id = myChatRooms.length + 1,
+                    chat_room: {
+                        room_desc: roomDesc,
+                    },
+                    chat_room_last_chat: message,
+                    chat_room_members: users,
+                    unread_count: 0,
+                }
+
+                const roomMembers = [{
+                    room_id = myChatRooms.length + 1,
+                    user_id = senderId
+                },
+                {
+                    room_id = myChatRooms.length + 1,
+                    user_id = receiverId
+                }]
+
+                // create room
+                dispatch(chatRoomsChange({
+                    chat_rooms: myChatRooms.push(newRoom)
+                }));
+
+                dispatch(chatRoomMembersChange({
+                    chat_room_members: myChatRoomMembers.concat(roomMembers)
+                }));
+
+                dispatch(chatRoomChatsChange({
+                    chat_room_chats: myChatRoomChats.push(newChat)
+                }));
+            } else {
+                // if room available
+                dispatch(chatRoomChatsChange({
+                    chat_room_chats: myChatRoomChats.push(newChat)
+                }));
+
+                for (var i in myChatRooms) {
+                    if (myChatRooms[i].room_id === roomAvailability.room_id) {
+                        myChatRooms[i].chat_room_last_chat = message;
+                        break; //Stop this loop, we found it!
+                    }
+                }
+
+                // update room
+                dispatch(chatRoomsChange({
+                    chat_rooms: [...myChatRooms]
+                }));
+            }
+
+            setChatMessages(chatMessages.push(newChat))
+
+            // trigger rerender
+            socketRef.current.emit('trigger rerender self', user)
         })
     }, []);
 

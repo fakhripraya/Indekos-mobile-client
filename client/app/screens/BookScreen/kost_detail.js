@@ -40,13 +40,13 @@ export default function KostDetail({ route, navigation }) {
     const dispatch = useDispatch()
 
     // get navigation parameter
+    const socketRef = route.params.socketRef;
     const kostOwnerID = route.params.kost.owner_id;
     const kostID = route.params.kost.id;
     const kostName = route.params.kost.kost_name;
     const kostCity = route.params.kost.city;
 
     // Function refs
-    const socketRef = useRef() // for chat websocket connection reference
     const kostPictRef = useRef(null);
     const roomPictRef = useRef(null);
     const bottomSheetRef = useRef(null);
@@ -1369,8 +1369,7 @@ export default function KostDetail({ route, navigation }) {
                                             selectedRoom: null,
                                             user: result.data,
                                             users: users,
-                                            socketRef: socketRef,
-                                            socketRefConnection: false
+                                            socketRef: socketRef
                                         }
                                     })
                                 }).catch((error) => {

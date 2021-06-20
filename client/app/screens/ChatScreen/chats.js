@@ -1,5 +1,6 @@
 import axios from 'axios';
 import io from "socket.io-client";
+import { useSelector, useDispatch } from 'react-redux';
 import { ParseTimeGolang } from '../../functions/string';
 import React, { useState, useEffect, useRef } from 'react';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
@@ -16,24 +17,19 @@ const authAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
-// creates the promised base http auth client
-const GenAPI = axios.create({
-    baseURL: "http://" + GeneralService.host + GeneralService.port + "/"
-})
+export default function Chats({ navigation, route }) {
 
-export default function Chats({ navigation }) {
-
-    // prevent update on unmounted component
-    let unmounted = false;
-    // creates the cancel token source
-    var cancelSource = axios.CancelToken.source()
+    // get navigation parameter
+    const socketRef = route.params.socketRef;
 
     // Function Hooks
     const [user, setUser] = useState(null)
-    const [rooms, setRooms] = useState(null)
+    const [refreshPage, setRefreshPage] = useState(false);
 
-    // Function refs
-    const socketRef = useRef()
+    // get all chats info
+    let myChatRooms = useSelector(state => state.chatRoomsReducer.chat_rooms);
+    let myChatRoomMembers = useSelector(state => state.chatRoomMembersReducer.chat_room_members);
+    let myChatRoomChats = useSelector(state => state.chatRoomChatsReducer.chat_room_chats);
 
     function getOtherMember(members) {
 
@@ -48,92 +44,22 @@ export default function Chats({ navigation }) {
         return receiver;
     }
 
-    const promiseProperty = {
-        cancelToken: cancelSource.token,
-        timeout: 10000
-    }
-
-    const catchError = (err) => {
-        if (!unmounted) {
-            if (typeof (err.response) !== 'undefined') {
-                if (!axios.isCancel(err)) {
-                    console.log(err.response.data)
-                }
-            }
-        }
-    }
-
     useEffect(() => {
         LogBox.ignoreLogs(["Can't perform a React state update on an unmounted component."]);
     }, []);
 
     useEffect(() => {
-
-        // // Socket initialization
-        socketRef.current = io(ChatWebsocket.host + ChatWebsocket.port, { forceNode: true });
-
-        socketRef.current.on("connect", () => {
-
-            authAPI.get('/', promiseProperty)
-                .then((parent) => {
-                    if (!unmounted) {
-                        GenAPI.get('/' + parent.data.id + '/all', promiseProperty)
-                            .then((result) => {
-                                if (!unmounted) {
-                                    setUser(parent.data)
-                                    setRooms(result.data)
-                                }
-                            })
-                            .catch((err) => catchError(err));
-                    }
-                })
-                .catch((err2) => catchError(err2));
-
-            socketRef.current.on("trigger rerender", () => {
-
-                authAPI.get('/', promiseProperty)
-                    .then(() => {
-                        if (!unmounted) {
-                            GenAPI.get('/' + parent.data.id + '/all', promiseProperty)
-                                .then((result) => {
-                                    if (!unmounted) {
-                                        setRooms(result.data)
-                                    }
-                                })
-                                .catch((err) => catchError(err));
-                        }
-                    })
-                    .catch((err2) => catchError(err2));
+        if (user !== null) {
+            socketRef.current.on("trigger" + user.id, () => {
+                if (refreshPage === false)
+                    setRefreshPage(true);
+                else
+                    setRefreshPage(false)
             })
-        });
-
-        return () => {
-            socketRef.current.disconnect();
-            unmounted = true;
-            cancelSource.cancel();
         }
 
-    }, []);
-
-    useEffect(() => {
-        if (user !== null) {
-
-            socketRef.current.on("trigger" + user.id, () => {
-
-                authAPI.get('/', promiseProperty)
-                    .then((parent) => {
-                        if (!unmounted) {
-                            GenAPI.get('/' + parent.data.id + '/all', promiseProperty)
-                                .then((result) => {
-                                    if (!unmounted) {
-                                        setRooms(result.data)
-                                    }
-                                })
-                                .catch((err) => catchError(err));
-                        }
-                    })
-                    .catch((err2) => catchError(err2));
-            })
+        return () => {
+            socketRef.current.removeAllListeners("trigger" + user.id)
         }
     }, [user]);
 
@@ -210,8 +136,7 @@ export default function Chats({ navigation }) {
                             selectedRoom: item.chat_room,
                             user: user,
                             users: item.chat_room_members,
-                            socketRef: socketRef,
-                            socketRefConnection: true
+                            socketRef: socketRef
                         }
                     })
                 }} >
@@ -249,7 +174,7 @@ export default function Chats({ navigation }) {
 
         return (
             <FlatList
-                data={rooms}
+                data={myChatRooms}
                 renderItem={_renderChatList}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={1}
@@ -264,14 +189,14 @@ export default function Chats({ navigation }) {
         )
     }
 
-    if (rooms === null || user === null) {
+    if (myChatRooms.length === 0 || user === null) {
         // Renders the Loading screen
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#0000ff" />
             </View>
         )
-    } else if (rooms !== null && user !== null) {
+    } else if (myChatRooms.length !== 0 && user !== null) {
         return (
             <ChatBackground>
                 <View style={{ height: AppStyle.windowSize.height * 0.3, width: AppStyle.windowSize.width }}></View>
