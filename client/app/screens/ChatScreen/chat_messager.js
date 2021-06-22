@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import { ParseTime } from '../../functions/string';
-import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 import { AppStyle, ChatWebsocket } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
@@ -46,8 +46,14 @@ export default function ChatMessager({ route }) {
         let receiver = getOtherMember(users);
 
         if (chatMessage !== null) {
-            socketRef.current.emit("send message", { type: "text", sender: user, receiver: receiver, message: chatMessage, messages: chatMessages, room: chatRoom });
-            setChatMessage(null)
+            socketRef.current.emit("send message", { sender: user, receiver: receiver, message: chatMessage, messages: chatMessages, room: chatRoom }, (error) => {
+                if (error) {
+                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Error sending message: ${error.message}` }));
+                    return;
+                }
+
+                setChatMessage(null)
+            })
         }
     }
 
@@ -70,7 +76,8 @@ export default function ChatMessager({ route }) {
             }
 
             setChatRoom(callbackRoom);
-            setChatMessages(callbackChats.reverse())
+            if (callbackChats !== null)
+                setChatMessages(callbackChats.reverse())
         });
 
         return () => {
@@ -97,7 +104,12 @@ export default function ChatMessager({ route }) {
             if (("setmessage" + user.id + "-" + receiver.user_id === "setmessage" + serverSender.id + "-" + serverReceiver.user_id) || ("setmessage" + receiver.user_id + "-" + user.id === "setmessage" + serverSender.id + "-" + serverReceiver.user_id)) {
                 const newArr = [...messages.reverse(), message];
                 setChatMessages(newArr.reverse())
-                socketRef.current.emit("read messages", { reader: user, roomId: roomId });
+                socketRef.current.emit("read messages", { reader: user, roomId: roomId }, (error) => {
+                    if (error) {
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Error reading message: ${error.message}` }));
+                        return;
+                    }
+                });
             }
 
         })

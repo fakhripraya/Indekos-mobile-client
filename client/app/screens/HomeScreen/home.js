@@ -76,126 +76,120 @@ export default function Home({ navigation }) {
     }, [])
 
     let bookCaraouselData = [
-        [
-            {
-                id: 9,
-                owner_id: 3,
-                kost_name: "Kost Pertamina",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/nature",
-                price: 1100000,
-                currency: "rupiah"
-            },
-            {
-                id: 16,
-                owner_id: 3,
-                kost_name: "Kost Pertamax",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/nature",
-                price: 1500000,
-                currency: "rupiah"
-            },
-            {
-                id: 4,
-                owner_id: 3,
-                kost_name: "Kost kosan bapak fakhri",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/people",
-                price: 1800000,
-                currency: "rupiah"
-            },
-            {
-                id: 11,
-                owner_id: 3,
-                kost_name: "Kost kosan bapak ari",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/people",
-                price: 1800000,
-                currency: "rupiah"
-            },
-        ],
+        {
+            id: 9,
+            owner_id: 3,
+            kost_name: "Kost Pertamina",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/nature",
+            price: 1100000,
+            currency: "rupiah"
+        },
+        {
+            id: 16,
+            owner_id: 3,
+            kost_name: "Kost Pertamax",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/nature",
+            price: 1500000,
+            currency: "rupiah"
+        },
+        {
+            id: 4,
+            owner_id: 14,
+            kost_name: "Kost kosan bapak fakhri",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/people",
+            price: 1800000,
+            currency: "rupiah"
+        },
+        {
+            id: 11,
+            owner_id: 3,
+            kost_name: "Kost kosan bapak ari",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/people",
+            price: 1800000,
+            currency: "rupiah"
+        },
     ];
 
     let promoCaraouselData = [
-        [
-            {
-                id: 9,
-                owner_id: 3,
-                kost_name: "Kost Pertamina",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/nature",
-                price: 1100000,
-                currency: "rupiah"
-            },
-            {
-                id: 16,
-                owner_id: 3,
-                kost_name: "Kost Pertamax",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/nature",
-                price: 1500000,
-                currency: "rupiah"
-            },
-            {
-                id: 4,
-                owner_id: 3,
-                kost_name: "Kost kosan bapak fakhri",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/people",
-                price: 1800000,
-                currency: "rupiah"
-            },
-            {
-                id: 11,
-                owner_id: 3,
-                kost_name: "Kost kosan bapak ari",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/people",
-                price: 1800000,
-                currency: "rupiah"
-            },
-        ],
+        {
+            id: 9,
+            owner_id: 3,
+            kost_name: "Kost Pertamina",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/nature",
+            price: 1100000,
+            currency: "rupiah"
+        },
+        {
+            id: 16,
+            owner_id: 3,
+            kost_name: "Kost Pertamax",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/nature",
+            price: 1500000,
+            currency: "rupiah"
+        },
+        {
+            id: 4,
+            owner_id: 14,
+            kost_name: "Kost kosan bapak fakhri",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/people",
+            price: 1800000,
+            currency: "rupiah"
+        },
+        {
+            id: 11,
+            owner_id: 3,
+            kost_name: "Kost kosan bapak ari",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/people",
+            price: 1800000,
+            currency: "rupiah"
+        },
     ];
 
     let recCaraouselData = [
-        [
-            {
-                id: 9,
-                owner_id: 3,
-                kost_name: "Kost Pertamina",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/nature",
-                price: 1100000,
-                currency: "rupiah"
-            },
-            {
-                id: 16,
-                owner_id: 3,
-                kost_name: "Kost Pertamax",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/nature",
-                price: 1500000,
-                currency: "rupiah"
-            },
-            {
-                id: 4,
-                owner_id: 3,
-                kost_name: "Kost kosan bapak fakhri",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/people",
-                price: 1800000,
-                currency: "rupiah"
-            },
-            {
-                id: 11,
-                owner_id: 3,
-                kost_name: "Kost kosan bapak ari",
-                city: "Jakarta Selatan",
-                thumbnail_url: "http://lorempixel.com/640/480/people",
-                price: 1800000,
-                currency: "rupiah"
-            },
-        ],
+        {
+            id: 9,
+            owner_id: 3,
+            kost_name: "Kost Pertamina",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/nature",
+            price: 1100000,
+            currency: "rupiah"
+        },
+        {
+            id: 16,
+            owner_id: 3,
+            kost_name: "Kost Pertamax",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/nature",
+            price: 1500000,
+            currency: "rupiah"
+        },
+        {
+            id: 4,
+            owner_id: 14,
+            kost_name: "Kost kosan bapak fakhri",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/people",
+            price: 1800000,
+            currency: "rupiah"
+        },
+        {
+            id: 11,
+            owner_id: 3,
+            kost_name: "Kost kosan bapak ari",
+            city: "Jakarta Selatan",
+            thumbnail_url: "http://lorempixel.com/640/480/people",
+            price: 1800000,
+            currency: "rupiah"
+        },
     ];
 
     function NameWrapper() {
@@ -278,7 +272,6 @@ export default function Home({ navigation }) {
 
             // Carousel Items
             function _renderNewsItem({ item }) {
-
                 return (
                     <ImageBackground
                         imageStyle={{ borderRadius: Normalize(15) }}
@@ -306,45 +299,35 @@ export default function Home({ navigation }) {
     function BookCarousel() {
 
         function _renderBookList({ item }) {
-
             return (
-
                 <View style={{ flexDirection: 'row' }}>
-                    {item.map((item, index) => {
-
-                        return (
-                            <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.push('BookStack', {
-                                        screen: 'KostDetail',
-                                        params: {
-                                            kost: item
-                                        }
-                                    })
-                                }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
-                                    <View style={{ height: '50%' }}>
-                                        <ImageBackground
-                                            imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
-                                            style={styles.backgroundImg}
-                                            source={{ uri: item.thumbnail_url }}
-                                        />
-                                    </View>
-                                    <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
-                                        <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
-                                        </View>
-                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
-                                        </View>
-                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        navigation.push('BookStack', {
+                            screen: 'KostDetail',
+                            params: {
+                                kost: item
+                            }
+                        })
+                    }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                        <View style={{ height: '50%' }}>
+                            <ImageBackground
+                                imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
+                                style={styles.backgroundImg}
+                                source={{ uri: item.thumbnail_url }}
+                            />
+                        </View>
+                        <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                            <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
                             </View>
-                        )
-
-                    })}
+                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
+                            </View>
+                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             )
         }
@@ -396,45 +379,35 @@ export default function Home({ navigation }) {
     function PromoCarousel() {
 
         function _renderPromoList({ item }) {
-
             return (
-
                 <View style={{ flexDirection: 'row' }}>
-                    {item.map((item, index) => {
-
-                        return (
-                            <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.push('BookStack', {
-                                        screen: 'KostDetail',
-                                        params: {
-                                            kost: item
-                                        }
-                                    })
-                                }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
-                                    <View style={{ height: '50%' }}>
-                                        <ImageBackground
-                                            imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
-                                            style={styles.backgroundImg}
-                                            source={{ uri: item.thumbnail_url }}
-                                        />
-                                    </View>
-                                    <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
-                                        <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
-                                        </View>
-                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
-                                        </View>
-                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        navigation.push('BookStack', {
+                            screen: 'KostDetail',
+                            params: {
+                                kost: item
+                            }
+                        })
+                    }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                        <View style={{ height: '50%' }}>
+                            <ImageBackground
+                                imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
+                                style={styles.backgroundImg}
+                                source={{ uri: item.thumbnail_url }}
+                            />
+                        </View>
+                        <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                            <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
                             </View>
-                        )
-
-                    })}
+                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
+                            </View>
+                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             )
         }
@@ -602,45 +575,35 @@ export default function Home({ navigation }) {
     function RecommendedCarousel() {
 
         function _renderRecList({ item }) {
-
             return (
-
                 <View style={{ flexDirection: 'row' }}>
-                    {item.map((item, index) => {
-
-                        return (
-                            <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.push('BookStack', {
-                                        screen: 'KostDetail',
-                                        params: {
-                                            kost: item
-                                        }
-                                    })
-                                }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
-                                    <View style={{ height: '50%' }}>
-                                        <ImageBackground
-                                            imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
-                                            style={styles.backgroundImg}
-                                            source={{ uri: item.thumbnail_url }}
-                                        />
-                                    </View>
-                                    <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
-                                        <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
-                                        </View>
-                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
-                                        </View>
-                                        <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        navigation.push('BookStack', {
+                            screen: 'KostDetail',
+                            params: {
+                                kost: item
+                            }
+                        })
+                    }} style={{ marginRight: Normalize(15), width: AppStyle.windowSize.width * 0.33, height: AppStyle.windowSize.height * 0.26, borderWidth: 1, borderRadius: Normalize(10), borderColor: '#BBBBBB' }}>
+                        <View style={{ height: '50%' }}>
+                            <ImageBackground
+                                imageStyle={{ borderTopLeftRadius: Normalize(10), borderTopRightRadius: Normalize(10) }}
+                                style={styles.backgroundImg}
+                                source={{ uri: item.thumbnail_url }}
+                            />
+                        </View>
+                        <View style={{ height: '50%', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: Normalize(10), paddingRight: Normalize(10) }}>
+                            <View style={{ height: '40%', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>{item.kost_name}</Text>
                             </View>
-                        )
-
-                    })}
+                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{item.city}</Text>
+                            </View>
+                            <View style={{ height: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: NormalizeFont(10), fontWeight: 'bold' }}>{CurrencyFormat(CurrencyPrefix(item.currency), item.price).length > 15 ? CurrencyFormat(CurrencyPrefix(item.currency), item.price).substring(0, 15).replace(/\s*$/, "") + '...' : CurrencyFormat(CurrencyPrefix(item.currency), item.price)}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             )
         }

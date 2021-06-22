@@ -178,9 +178,7 @@ export default function Search({ navigation }) {
                     navigation.push('BookStack', {
                         screen: 'KostDetail',
                         params: {
-                            kostID: item.kost.id,
-                            kostName: item.kost.kost_name,
-                            city: item.kost.city,
+                            kost: item.kost
                         }
                     })
                 }} >

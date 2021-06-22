@@ -11,12 +11,12 @@ import { FlatList, StyleSheet, Text, TouchableNativeFeedback, ActivityIndicator,
 // a HOC to throttle button click
 const TouchableNativeFeedbackPrevent = withPreventDoubleClick(TouchableNativeFeedback);
 
-// creates the promised base http auth client
+// creates the promised base http auth API
 const authAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
-// creates the promised base http auth client
+// creates the promised base http general API
 const GenAPI = axios.create({
     baseURL: "http://" + GeneralService.host + GeneralService.port + "/"
 })
@@ -202,46 +202,48 @@ export default function Chats({ navigation }) {
 
         function _renderChatList({ item }) {
 
-            return (
-                <TouchableNativeFeedbackPrevent onPress={() => {
-                    navigation.push('ChatStack', {
-                        screen: 'ChatMessager',
-                        params: {
-                            selectedRoom: item.chat_room,
-                            user: user,
-                            users: item.chat_room_members,
-                            socketRef: socketRef,
-                            socketRefConnection: true
-                        }
-                    })
-                }} >
-                    <View style={{ height: Normalize(60) + Normalize(12) + Normalize(12), width: AppStyle.windowSize.width, flexDirection: 'row' }}>
-                        <View style={styles.chatPicContainer}>
-                            <View style={styles.chatPic}>
-                                <ChatThumbnail members={item.chat_room_members} />
+            if (item.chat_room_last_chat.chat_body !== "") {
+                return (
+                    <TouchableNativeFeedbackPrevent onPress={() => {
+                        navigation.push('ChatStack', {
+                            screen: 'ChatMessager',
+                            params: {
+                                selectedRoom: item.chat_room,
+                                user: user,
+                                users: item.chat_room_members,
+                                socketRef: socketRef,
+                                socketRefConnection: true
+                            }
+                        })
+                    }} >
+                        <View style={{ height: Normalize(60) + Normalize(12) + Normalize(12), width: AppStyle.windowSize.width, flexDirection: 'row' }}>
+                            <View style={styles.chatPicContainer}>
+                                <View style={styles.chatPic}>
+                                    <ChatThumbnail members={item.chat_room_members} />
+                                </View>
+                            </View>
+                            <View style={styles.chatContent}>
+                                <View style={styles.chatTitle}>
+                                    <ChatTitle members={item.chat_room_members} />
+                                </View>
+                                <View style={styles.chatBody}>
+                                    <ChatBodyComponent childItem={item.chat_room_last_chat} />
+                                </View>
+                            </View>
+                            <View style={styles.chatTimestamp}>
+                                <View style={styles.chatSuffix}>
+                                    <ChatUnread unread={item.unread_count} />
+                                </View>
+                                <View style={styles.chatTime}>
+                                    <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>
+                                        <ParseTimeGolang time={item.chat_room_last_chat.created} />
+                                    </Text>
+                                </View>
                             </View>
                         </View>
-                        <View style={styles.chatContent}>
-                            <View style={styles.chatTitle}>
-                                <ChatTitle members={item.chat_room_members} />
-                            </View>
-                            <View style={styles.chatBody}>
-                                <ChatBodyComponent childItem={item.chat_room_last_chat} />
-                            </View>
-                        </View>
-                        <View style={styles.chatTimestamp}>
-                            <View style={styles.chatSuffix}>
-                                <ChatUnread unread={item.unread_count} />
-                            </View>
-                            <View style={styles.chatTime}>
-                                <Text style={{ color: 'black', fontSize: NormalizeFont(12) }}>
-                                    <ParseTimeGolang time={item.chat_room_last_chat.created} />
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableNativeFeedbackPrevent >
-            )
+                    </TouchableNativeFeedbackPrevent >
+                )
+            }
         }
 
         function handleScroll() {
@@ -253,9 +255,6 @@ export default function Chats({ navigation }) {
                 renderItem={_renderChatList}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={1}
-                // ItemSeparatorComponent={() => {
-                //     return (<View style={{ marginTop: Normalize(12), marginBottom: Normalize(12) }} />);
-                // }}
                 onEndReached={() => {
                     handleScroll();
                 }}
@@ -264,14 +263,14 @@ export default function Chats({ navigation }) {
         )
     }
 
-    if (rooms === null || user === null) {
+    if (user === null) {
         // Renders the Loading screen
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#0000ff" />
             </View>
         )
-    } else if (rooms !== null && user !== null) {
+    } else if (user !== null) {
         return (
             <ChatBackground>
                 <View style={{ height: AppStyle.windowSize.height * 0.3, width: AppStyle.windowSize.width }}></View>

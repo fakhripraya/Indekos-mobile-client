@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { popUpModalChange } from '../../redux';
 import Icons from '../../components/Icons/icons';
 import Carousel from 'react-native-snap-carousel';
 import RBSheet from "react-native-raw-bottom-sheet";
 import MapShow from '../../components/Maps/map_show';
+import { trackPromise } from 'react-promise-tracker';
 import { useAxiosGet } from '../../promise/axios_get';
 import { CurrencyPrefix } from '../../functions/currency';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -14,16 +16,21 @@ import { MappedFacilities } from '../../components/Icons/facilities';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import BookBackground from '../../components/Backgrounds/book_background';
-import { AppStyle, KostService, AuthService } from '../../config/app.config';
+import { AppStyle, KostService, AuthService, UserService } from '../../config/app.config';
 import { AntDesign, Ionicons, MaterialIcons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, InteractionManager, ActivityIndicator } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withDelay(TouchableOpacity);
 
-// creates the promised base http client
+// creates the promised base http kost client
 const kostAPI = axios.create({
     baseURL: "http://" + KostService.host + KostService.port + "/"
+})
+
+// creates the promised base http user client
+const userAPI = axios.create({
+    baseURL: "http://" + UserService.host + UserService.port + "/"
 })
 
 // creates the promised base http auth client
@@ -33,6 +40,8 @@ const authAPI = axios.create({
 
 export default function KostDetail({ route, navigation }) {
 
+    // prevent update on unmounted component
+    let unmounted = false;
     // creates the cancel token source
     var cancelSource = axios.CancelToken.source()
 
@@ -40,10 +49,10 @@ export default function KostDetail({ route, navigation }) {
     const dispatch = useDispatch()
 
     // get navigation parameter
-    const kostOwnerID = route.params.kost.owner_id;
     const kostID = route.params.kost.id;
-    const kostName = route.params.kost.kost_name;
     const kostCity = route.params.kost.city;
+    const kostName = route.params.kost.kost_name;
+    const kostOwnerID = route.params.kost.owner_id;
 
     // Function refs
     const socketRef = useRef() // for chat websocket connection reference
@@ -54,17 +63,40 @@ export default function KostDetail({ route, navigation }) {
 
     // Function Hooks
     const [isReady, setIsReady] = useState(false)
+    const [kostOwner, setKostOwner] = useState(null)
 
     // Global variable
     let selectedKostRoom = null
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
-            setIsReady(true);
+            // get kost owner data
+            userAPI.get('/' + kostOwnerID, {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            }).then(response => {
+                if (!unmounted) {
+                    setKostOwner(response.data);
+                    setIsReady(true)
+                }
+            }).catch(error => {
+                if (!unmounted) {
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Error fetching kost owner: ${error.message}` }));
+                            navigation.pop();
+                        }
+                    } else {
+                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Error fetching kost owner: undefined error` }));
+                        navigation.pop();
+                    }
+                }
+            });
         });
 
         return () => {
             cancelSource.cancel();
+            unmounted = true;
         }
     }, [])
 
@@ -1349,33 +1381,35 @@ export default function KostDetail({ route, navigation }) {
                             </TouchableOpacityPrevent>
                         </View>
                         <View style={styles.toolsRight}>
-                            <TouchableOpacityPrevent onPress={async () => {
-                                await authAPI.get('/', {
-                                    cancelToken: cancelSource.token,
-                                    timeout: 10000
-                                }).then((result) => {
-                                    let users = [
-                                        {
-                                            user_id: result.data.id
-                                        },
-                                        {
-                                            user_id: kostOwnerID
-                                        },
-                                    ]
-
-                                    navigation.push('ChatStack', {
-                                        screen: 'ChatMessager',
-                                        params: {
-                                            selectedRoom: null,
-                                            user: result.data,
-                                            users: users,
-                                            socketRef: socketRef,
-                                            socketRefConnection: false
-                                        }
+                            <TouchableOpacityPrevent onPress={() => {
+                                trackPromise(
+                                    authAPI.get('/', {
+                                        cancelToken: cancelSource.token,
+                                        timeout: 10000
+                                    }).then((result) => {
+                                        navigation.push('ChatStack', {
+                                            screen: 'ChatMessager',
+                                            params: {
+                                                selectedRoom: null,
+                                                user: result.data,
+                                                users: [
+                                                    {
+                                                        user_id: result.data.id
+                                                    },
+                                                    {
+                                                        user_id: kostOwnerID,
+                                                        displayname: kostOwner.displayname,
+                                                        profile_picture: kostOwner.profile_picture,
+                                                    },
+                                                ],
+                                                socketRef: socketRef,
+                                                socketRefConnection: false
+                                            }
+                                        })
+                                    }).catch((error) => {
+                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Navigating through chat Error: ${error.message}` }));
                                     })
-                                }).catch((error) => {
-                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Navigating through chat Error: ${error.message}` }));
-                                })
+                                )
                             }} style={styles.toolsIcon}>
                                 <Ionicons name="chatbubbles-outline" size={Normalize(18)} color={'black'} />
                             </TouchableOpacityPrevent>
@@ -1536,9 +1570,9 @@ const styles = StyleSheet.create({
     locationContainer: {
         top: -Normalize(10),
         marginTop: Normalize(15),
-        marginLeft: Normalize(15),
         marginBottom: Normalize(15),
         width: AppStyle.windowSize.width * 0.9,
+        marginLeft: AppStyle.windowSize.width * 0.05,
     },
     locationTitle: {
         marginBottom: Normalize(10),
