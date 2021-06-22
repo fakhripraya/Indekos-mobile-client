@@ -164,7 +164,7 @@ export default function Chats({ navigation }) {
                 <ImageBackground
                     imageStyle={{ borderRadius: Normalize(100) }}
                     style={styles.backgroundImg}
-                    source={{ uri: selected.profile_picture }}
+                    source={{ uri: selected.profile_picture === "" ? "http://lorempixel.com/640/480/technics" : selected.profile_picture }}
                 />
             )
         }

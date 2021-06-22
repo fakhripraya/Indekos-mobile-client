@@ -93,7 +93,7 @@ export default function UserProfile() {
                         <ImageBackground
                             imageStyle={{ borderRadius: Normalize(20) }}
                             style={styles.backgroundImg}
-                            source={{ uri: data.profile_picture }}
+                            source={{ uri: data.profile_picture === "" ? "http://lorempixel.com/640/480/technics" : data.profile_picture }}
                         />
                         <View style={{ top: (Normalize(85) - (Normalize(30) / 2)), backgroundColor: AppStyle.sub_main_color, position: 'absolute', padding: Normalize(7), width: Normalize(50), height: Normalize(30), borderRadius: Normalize(10), alignSelf: 'center', alignItems: 'center' }}>
                             <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>#{GetZero(data.id)}</Text>

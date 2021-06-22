@@ -27,6 +27,7 @@ export default function ChatMessager({ route }) {
     const [chatRoom, setChatRoom] = useState(null);
     const [chatMessage, setChatMessage] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
 
     const KeyboardEffect = useRef(new Animated.Value(0)).current;
 
@@ -59,7 +60,11 @@ export default function ChatMessager({ route }) {
         }
     }
 
-    function KeyboardShow() {
+    function KeyboardShow(e) {
+        // set the keyboard height
+        setKeyboardHeight(e.endCoordinates.height)
+
+        // animate the textinput
         Animated.timing(KeyboardEffect, {
             toValue: 1,
             duration: 100,
@@ -68,6 +73,7 @@ export default function ChatMessager({ route }) {
     }
 
     function KeyboardHide() {
+        // animate the textinput
         Animated.timing(KeyboardEffect, {
             toValue: 0,
             duration: 100,
@@ -180,7 +186,7 @@ export default function ChatMessager({ route }) {
                         <ImageBackground
                             imageStyle={{ borderRadius: Normalize(100) }}
                             style={styles.backgroundImg}
-                            source={{ uri: otherMessager.profile_picture }}
+                            source={{ uri: otherMessager.profile_picture === "" ? "http://lorempixel.com/640/480/technics" : otherMessager.profile_picture }}
                         />
                     </View>
                 </View>
@@ -194,7 +200,7 @@ export default function ChatMessager({ route }) {
             <Animated.View style={[styles.body, {
                 bottom: KeyboardEffect.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, 250],
+                    outputRange: [0, keyboardHeight],
                 })
             }]}>
                 <FlatList
