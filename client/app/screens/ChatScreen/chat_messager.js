@@ -1,12 +1,12 @@
 import io from "socket.io-client";
 import { useDispatch } from 'react-redux';
-import React, { useState, useEffect } from 'react';
 import { ParseTime } from '../../functions/string';
+import React, { useState, useEffect, useRef } from 'react';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 import { AppStyle, ChatWebsocket } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
-import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput, LogBox, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ImageBackground, TextInput, LogBox, Keyboard, Animated, TouchableOpacity } from 'react-native';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
@@ -27,6 +27,8 @@ export default function ChatMessager({ route }) {
     const [chatRoom, setChatRoom] = useState(null);
     const [chatMessage, setChatMessage] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
+
+    const KeyboardEffect = useRef(new Animated.Value(0)).current;
 
     function getOtherMember(members) {
 
@@ -56,6 +58,31 @@ export default function ChatMessager({ route }) {
             })
         }
     }
+
+    function KeyboardShow() {
+        Animated.timing(KeyboardEffect, {
+            toValue: 1,
+            duration: 100,
+            useNativeDriver: false
+        }).start();
+    }
+
+    function KeyboardHide() {
+        Animated.timing(KeyboardEffect, {
+            toValue: 0,
+            duration: 100,
+            useNativeDriver: false
+        }).start();
+    }
+
+    useEffect(() => {
+        Keyboard.addListener("keyboardDidShow", KeyboardShow)
+        Keyboard.addListener("keyboardDidHide", KeyboardHide)
+        return () => {
+            Keyboard.removeAllListeners("keyboardDidShow")
+            Keyboard.removeAllListeners("keyboardDidHide")
+        }
+    }, [])
 
     useEffect(() => {
         LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
@@ -146,7 +173,7 @@ export default function ChatMessager({ route }) {
     let otherMessager = getOtherMember(users);
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={styles.header}>
                 <View style={styles.titlePic}>
                     <View style={styles.titlePicContainer}>
@@ -164,7 +191,12 @@ export default function ChatMessager({ route }) {
                     <Feather name="menu" size={NormalizeFont(24)} color={AppStyle.main_color} />
                 </View>
             </View>
-            <View style={styles.body}>
+            <Animated.View style={[styles.body, {
+                bottom: KeyboardEffect.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 250],
+                })
+            }]}>
                 <FlatList
                     data={chatMessages}
                     renderItem={_renderChatList}
@@ -174,28 +206,29 @@ export default function ChatMessager({ route }) {
                     onEndReached={() => {
                         // handleScroll();
                     }}
+                    ListHeaderComponentStyle={{ flex: 1, justifyContent: 'flex-start', flexGrow: 1 }}
+                    ListHeaderComponent={<View style={styles.footer}>
+                        <Entypo name="attachment" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                        <Feather name="smile" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                        <TextInput
+                            textAlign="left"
+                            style={{ height: '100%', width: '100%' }}
+                            autoCorrect={false}
+                            value={chatMessage}
+                            style={[styles.chatInput, { paddingLeft: Normalize(10), fontSize: NormalizeFont(14) }]}
+                            onSubmitEditing={() => submitChatMessage()}
+                            onChangeText={chatMessage => {
+                                setChatMessage(chatMessage);
+                            }}
+                        />
+                        <TouchableOpacityPrevent onPress={() => submitChatMessage()}>
+                            <Ionicons name="send-sharp" size={NormalizeFont(24)} color={AppStyle.main_color} />
+                        </TouchableOpacityPrevent>
+                    </View>}
                     ListFooterComponent={<View style={{ marginTop: Normalize(25) }} />}
                     onEndReachedThreshold={0.1}
                 />
-            </View>
-            <View style={styles.footer}>
-                <Entypo name="attachment" size={NormalizeFont(24)} color={AppStyle.main_color} />
-                <Feather name="smile" size={NormalizeFont(24)} color={AppStyle.main_color} />
-                <View style={styles.chatInput}>
-                    <TextInput
-                        style={{ height: '100%', width: '100%' }}
-                        autoCorrect={false}
-                        value={chatMessage}
-                        onSubmitEditing={() => submitChatMessage()}
-                        onChangeText={chatMessage => {
-                            setChatMessage(chatMessage);
-                        }}
-                    />
-                </View>
-                <TouchableOpacityPrevent onPress={() => submitChatMessage()}>
-                    <Ionicons name="send-sharp" size={NormalizeFont(24)} color={AppStyle.main_color} />
-                </TouchableOpacityPrevent>
-            </View>
+            </Animated.View>
         </View>
     )
 }
@@ -212,17 +245,19 @@ const styles = StyleSheet.create({
         width: AppStyle.windowSize.width,
     },
     body: {
-        backgroundColor: '#F4F5F9',
+        backgroundColor: '#ffffff',
         width: AppStyle.windowSize.width,
-        height: AppStyle.windowSize.height - (Normalize(80) + Normalize(70)),
+        height: AppStyle.windowSize.height - Normalize(70),
     },
     footer: {
-        elevation: 5,
+        elevation: 10,
+        borderWidth: 1,
         alignItems: 'center',
         flexDirection: 'row',
         height: Normalize(80),
         backgroundColor: 'white',
         justifyContent: 'space-evenly',
+        borderColor: 'rgba(0,0,0,0.1)',
         width: AppStyle.windowSize.width,
     },
     titlePic: {
@@ -251,7 +286,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         height: Normalize(50),
         borderRadius: Normalize(20),
-        borderColor: 'rgba(0,0,0,0.2)',
+        borderColor: 'rgba(70,50,117,0.15)',
+        backgroundColor: 'rgba(70,50,117,0.15)',
         width: AppStyle.windowSize.width * 0.65,
     },
     chatBubble: {
