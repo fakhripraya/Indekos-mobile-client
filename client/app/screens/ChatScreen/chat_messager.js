@@ -174,6 +174,7 @@ export default function ChatMessager({ route }) {
                     onEndReached={() => {
                         // handleScroll();
                     }}
+                    ListFooterComponent={<View style={{ marginTop: Normalize(25) }} />}
                     onEndReachedThreshold={0.1}
                 />
             </View>
