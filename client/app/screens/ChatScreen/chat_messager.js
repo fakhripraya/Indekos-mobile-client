@@ -212,6 +212,8 @@ export default function ChatMessager({ route }) {
                     onEndReached={() => {
                         // handleScroll();
                     }}
+                    keyboardDismissMode={'on-drag'}
+                    keyboardShouldPersistTaps={'always'}
                     ListHeaderComponentStyle={{ flex: 1, justifyContent: 'flex-start', flexGrow: 1 }}
                     ListHeaderComponent={<View style={styles.footer}>
                         <Entypo name="attachment" size={NormalizeFont(24)} color={AppStyle.main_color} />
