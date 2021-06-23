@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { trackPromise } from 'react-promise-tracker';
 import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { MappedFacilities } from '../../components/Icons/facilities';
@@ -29,7 +28,7 @@ export default function MyKosan({ navigation }) {
     const requestConfig = {
         timeout: 10000
     }
-    let KostList = [];
+    let KostList = {};
     let page = 1;
 
     function MyKosan() {
@@ -147,29 +146,27 @@ export default function MyKosan({ navigation }) {
             }
         } else {
 
-            function handleScroll() {
+            async function handleScroll() {
                 page++;
-                trackPromise(
-                    kostAPI.get('/all/' + 6 + '/' + page, requestConfig)
-                        .then(response => {
-                            response.data.forEach(function (item, index) {
-                                KostList.push(item)
-                            });
-                        })
-                        .catch(error => {
-                            if (typeof (error.response) !== 'undefined') {
-                                if (!axios.isCancel(error)) {
-                                    if (error.response.status !== 200) {
-                                        // dispatch the popUpModalChange actions to store the generic message modal state
-                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                    }
+                await kostAPI.get('/all/' + 6 + '/' + page, requestConfig)
+                    .then(response => {
+                        response.data.kost_list.forEach(function (item, index) {
+                            KostList.kost_list.push(item)
+                        });
+                    })
+                    .catch(error => {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                if (error.response.status !== 200) {
+                                    // dispatch the popUpModalChange actions to store the generic message modal state
+                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
                                 }
                             }
-                        })
-                );
+                        }
+                    })
             }
 
-            if (KostList.length === 0) {
+            if (KostList.kost_list === null) {
                 return (
                     <>
                         <View style={styles.addKosanWrapper}>
@@ -187,29 +184,35 @@ export default function MyKosan({ navigation }) {
                 return (
                     <>
                         <View style={styles.addKosanWrapper}>
-                            <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList.length}</Text>
+                            <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList.kost_count}</Text>
                             <TouchableOpacityPrevent style={styles.addKosanButton}>
                                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
                             </TouchableOpacityPrevent>
                         </View>
                         <FlatList
-                            data={KostList}
+                            data={KostList.kost_list}
                             renderItem={_renderSearchList}
                             keyExtractor={(item, index) => index.toString()}
                             numColumns={1}
-                            ListFooterComponent={
-                                <View style={{
-                                    alignSelf: 'center',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    height: Normalize(50),
-                                    justifyContent: 'center',
-                                    marginBottom: Normalize(15),
-                                    width: AppStyle.windowSize.width * 0.9,
-                                }} >
-                                    <ActivityIndicator size="large" color={AppStyle.main_color} />
-                                </View >
-                            }
+                            ListFooterComponent={() => {
+                                if (KostList.kost_list.length === KostList.kost_count) {
+                                    return null
+                                } else {
+                                    return (
+                                        <View style={{
+                                            alignSelf: 'center',
+                                            alignItems: 'center',
+                                            flexDirection: 'row',
+                                            height: Normalize(50),
+                                            justifyContent: 'center',
+                                            marginBottom: Normalize(15),
+                                            width: AppStyle.windowSize.width * 0.9,
+                                        }} >
+                                            <ActivityIndicator size="large" color={AppStyle.main_color} />
+                                        </View >
+                                    )
+                                }
+                            }}
                             onEndReached={() => {
                                 handleScroll();
                             }}

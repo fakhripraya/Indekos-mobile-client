@@ -143,9 +143,27 @@ export default function MyKosanDetail({ route, navigation }) {
         if (RoomList === null) {
             if (status === 200) {
                 return (
-                    <View style={styles.tabNullContainer}>
-                        <Text>No Room found</Text>
-                    </View>
+                    <>
+                        <View style={styles.pickerWrapper}>
+                            <View style={styles.pickerContainer}>
+                                <View style={styles.pickerTextContainer}>
+                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14), marginLeft: Normalize(10) }}>All</Text>
+                                </View>
+                                <View style={styles.pickerArrowContainer}>
+                                    <AntDesign name="caretdown" size={Normalize(18)} color="white" />
+                                </View>
+                            </View>
+                            <View style={styles.roomCounterWrapper}>
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.kost_room_detail_sum}</Text>
+                                <View style={styles.addRoomButton}>
+                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.tabNullContainer}>
+                            <Text>No Room found</Text>
+                        </View>
+                    </>
                 )
             } else if (status === null) {
                 return (
@@ -163,9 +181,9 @@ export default function MyKosanDetail({ route, navigation }) {
             }
         } else {
 
-            function handleScroll() {
+            async function handleScroll() {
                 page++;
-                kostAPI.get(kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig)
+                await kostAPI.get(kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig)
                     .then(response => {
                         response.data.kost_room_detail.forEach(function (item, index) {
                             RoomList.kost_room_detail.push(item)
@@ -183,11 +201,29 @@ export default function MyKosanDetail({ route, navigation }) {
                     })
             }
 
-            if (RoomList.length === 0) {
+            if (RoomList.kost_room_detail_sum === 0) {
                 return (
-                    <View style={styles.tabNullContainer}>
-                        <Text>No Room found</Text>
-                    </View>
+                    <>
+                        <View style={styles.pickerWrapper}>
+                            <View style={styles.pickerContainer}>
+                                <View style={styles.pickerTextContainer}>
+                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14), marginLeft: Normalize(10) }}>All</Text>
+                                </View>
+                                <View style={styles.pickerArrowContainer}>
+                                    <AntDesign name="caretdown" size={Normalize(18)} color="white" />
+                                </View>
+                            </View>
+                            <View style={styles.roomCounterWrapper}>
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.kost_room_detail_sum}</Text>
+                                <View style={styles.addRoomButton}>
+                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.tabNullContainer}>
+                            <Text>No Room found</Text>
+                        </View>
+                    </>
                 )
             } else {
                 return (
@@ -213,19 +249,25 @@ export default function MyKosanDetail({ route, navigation }) {
                             renderItem={_renderSearchList}
                             keyExtractor={(item, index) => index.toString()}
                             numColumns={1}
-                            ListFooterComponent={
-                                <View style={{
-                                    alignSelf: 'center',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    height: Normalize(50),
-                                    justifyContent: 'center',
-                                    marginBottom: Normalize(15),
-                                    width: AppStyle.windowSize.width * 0.9,
-                                }} >
-                                    <ActivityIndicator size="large" color={AppStyle.main_color} />
-                                </View >
-                            }
+                            ListFooterComponent={() => {
+                                if (RoomList.kost_room_detail.length === RoomList.kost_room_detail_sum) {
+                                    return null
+                                } else {
+                                    return (
+                                        <View style={{
+                                            alignSelf: 'center',
+                                            alignItems: 'center',
+                                            flexDirection: 'row',
+                                            height: Normalize(50),
+                                            justifyContent: 'center',
+                                            marginBottom: Normalize(15),
+                                            width: AppStyle.windowSize.width * 0.9,
+                                        }} >
+                                            <ActivityIndicator size="large" color={AppStyle.main_color} />
+                                        </View >
+                                    )
+                                }
+                            }}
                             onEndReached={() => {
                                 handleScroll();
                             }}

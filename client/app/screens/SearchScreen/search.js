@@ -32,6 +32,7 @@ export default function Search({ navigation }) {
 
     // Function states
     const [filters, setFilters] = useState(null)
+    var [flagGetLoc, setFlagGetLoc] = useState(false)
     // 0 = all kost // Initial val
     // 1 = Near You
     // 2 = Most Popular
@@ -44,8 +45,8 @@ export default function Search({ navigation }) {
     })
 
     // Global Variable
-    let KostList = [];
     let page = 1;
+    let KostList = {};
 
     let initialFilter = [
         [
@@ -115,6 +116,9 @@ export default function Search({ navigation }) {
             // validate if the user location enabled or not
             if (filters[parent][index].id === 1) {
                 (async () => {
+                    // trigger get loc flag
+                    setFlagGetLoc(true)
+
                     // first permission
                     let { status } = await Location.requestPermissionsAsync();
                     if (status !== 'granted') {
@@ -133,8 +137,10 @@ export default function Search({ navigation }) {
                             },
                             timeout: 10000
                         });
+                        setFlagGetLoc(false)
                     } catch (e) {
                         // if user didn't get to the second permission
+                        setFlagGetLoc(false)
                         setFilters(initialFilter);
                         setSelectedFilters(0);
                         return;
@@ -167,12 +173,12 @@ export default function Search({ navigation }) {
         const { dataArray, status } = useAxiosGetArrayParams(kostAPI, '/all/' + selectedFilter + '/' + page, requestConfig);
         KostList = dataArray;
 
-        function handleScroll() {
+        async function handleScroll() {
             page++;
-            kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
+            await kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
                 .then(response => {
-                    response.data.forEach(function (item, index) {
-                        KostList.push(item)
+                    response.data.kost_list.forEach(function (item, index) {
+                        KostList.kost_list.push(item)
                     });
                 })
                 .catch(error => {
@@ -239,11 +245,19 @@ export default function Search({ navigation }) {
         }
         if (KostList === null) {
             if (status === 200) {
-                return (
-                    <View style={styles.flatListContainer}>
-                        <Text>No kosan found</Text>
-                    </View>
-                )
+                if (flagGetLoc === true) {
+                    return (
+                        <View style={styles.flatListContainer}>
+                            <ActivityIndicator size="large" color={AppStyle.main_color} />
+                        </View>
+                    )
+                } else {
+                    return (
+                        <View style={styles.flatListContainer}>
+                            <Text>No kosan found</Text>
+                        </View>
+                    )
+                }
             }
             else if (status === null) {
                 return (
@@ -261,7 +275,7 @@ export default function Search({ navigation }) {
             }
         }
         else {
-            if (KostList.length === 0) {
+            if (KostList.kost_list === null) {
                 return (
                     <View style={styles.flatListContainer}>
                         <Text>No kosan found</Text>
@@ -272,26 +286,32 @@ export default function Search({ navigation }) {
                 return (
                     <View style={styles.flatListContainer}>
                         <FlatList
-                            data={KostList}
+                            data={KostList.kost_list}
                             renderItem={_renderSearchList}
                             keyExtractor={(item, index) => index.toString()}
                             numColumns={1}
                             onEndReached={() => {
                                 handleScroll();
                             }}
-                            ListFooterComponent={
-                                <View style={{
-                                    alignSelf: 'center',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    height: Normalize(50),
-                                    justifyContent: 'center',
-                                    marginBottom: Normalize(15),
-                                    width: AppStyle.windowSize.width * 0.9,
-                                }} >
-                                    <ActivityIndicator size="large" color={AppStyle.main_color} />
-                                </View >
-                            }
+                            ListFooterComponent={() => {
+                                if (KostList.kost_list.length === KostList.kost_count) {
+                                    return null
+                                } else {
+                                    return (
+                                        <View style={{
+                                            alignSelf: 'center',
+                                            alignItems: 'center',
+                                            flexDirection: 'row',
+                                            height: Normalize(50),
+                                            justifyContent: 'center',
+                                            marginBottom: Normalize(15),
+                                            width: AppStyle.windowSize.width * 0.9,
+                                        }} >
+                                            <ActivityIndicator size="large" color={AppStyle.main_color} />
+                                        </View >
+                                    )
+                                }
+                            }}
                             onEndReachedThreshold={1}
                         />
                     </View>
