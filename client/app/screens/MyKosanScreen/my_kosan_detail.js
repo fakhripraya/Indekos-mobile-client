@@ -1,6 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
-import { trackPromise } from 'react-promise-tracker';
+import React from 'react';
 import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { useAxiosGetArrayParams } from '../../promise/axios_get_array';
@@ -166,56 +165,75 @@ export default function MyKosanDetail({ route, navigation }) {
 
             function handleScroll() {
                 page++;
-                trackPromise(
-                    kostAPI.get(kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig)
-                        .then(response => {
-                            response.data.kost_room_detail.forEach(function (item, index) {
-                                RoomList.kost_room_detail.push(item)
-                            });
-                        })
-                        .catch(error => {
-                            if (typeof (error.response) !== 'undefined') {
-                                if (!axios.isCancel(error)) {
-                                    if (error.response.status !== 200) {
-                                        // dispatch the popUpModalChange actions to store the generic message modal state
-                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                    }
+                kostAPI.get(kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig)
+                    .then(response => {
+                        response.data.kost_room_detail.forEach(function (item, index) {
+                            RoomList.kost_room_detail.push(item)
+                        });
+                    })
+                    .catch(error => {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                if (error.response.status !== 200) {
+                                    // dispatch the popUpModalChange actions to store the generic message modal state
+                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
                                 }
                             }
-                        })
-                );
+                        }
+                    })
             }
 
-            return (
-                <>
-                    <View style={styles.pickerWrapper}>
-                        <View style={styles.pickerContainer}>
-                            <View style={styles.pickerTextContainer}>
-                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14), marginLeft: Normalize(10) }}>All</Text>
-                            </View>
-                            <View style={styles.pickerArrowContainer}>
-                                <AntDesign name="caretdown" size={Normalize(18)} color="white" />
-                            </View>
-                        </View>
-                        <View style={styles.roomCounterWrapper}>
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.kost_room_detail_sum}</Text>
-                            <View style={styles.addRoomButton}>
-                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
-                            </View>
-                        </View>
+            if (RoomList.length === 0) {
+                return (
+                    <View style={styles.tabNullContainer}>
+                        <Text>No Room found</Text>
                     </View>
-                    <FlatList
-                        data={RoomList.kost_room_detail}
-                        renderItem={_renderSearchList}
-                        keyExtractor={(item, index) => index.toString()}
-                        numColumns={1}
-                        onEndReached={() => {
-                            handleScroll();
-                        }}
-                        onEndReachedThreshold={0.1}
-                    />
-                </>
-            )
+                )
+            } else {
+                return (
+                    <>
+                        <View style={styles.pickerWrapper}>
+                            <View style={styles.pickerContainer}>
+                                <View style={styles.pickerTextContainer}>
+                                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14), marginLeft: Normalize(10) }}>All</Text>
+                                </View>
+                                <View style={styles.pickerArrowContainer}>
+                                    <AntDesign name="caretdown" size={Normalize(18)} color="white" />
+                                </View>
+                            </View>
+                            <View style={styles.roomCounterWrapper}>
+                                <Text style={{ fontWeight: 'bold', color: 'black', fontSize: NormalizeFont(14) }}>Your Room: {RoomList.kost_room_detail_sum}</Text>
+                                <View style={styles.addRoomButton}>
+                                    <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Room</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <FlatList
+                            data={RoomList.kost_room_detail}
+                            renderItem={_renderSearchList}
+                            keyExtractor={(item, index) => index.toString()}
+                            numColumns={1}
+                            ListFooterComponent={
+                                <View style={{
+                                    alignSelf: 'center',
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    height: Normalize(50),
+                                    justifyContent: 'center',
+                                    marginBottom: Normalize(15),
+                                    width: AppStyle.windowSize.width * 0.9,
+                                }} >
+                                    <ActivityIndicator size="large" color={AppStyle.main_color} />
+                                </View >
+                            }
+                            onEndReached={() => {
+                                handleScroll();
+                            }}
+                            onEndReachedThreshold={1}
+                        />
+                    </>
+                )
+            }
         }
     }
 

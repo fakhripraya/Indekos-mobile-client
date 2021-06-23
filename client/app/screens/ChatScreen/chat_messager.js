@@ -234,7 +234,7 @@ export default function ChatMessager({ route }) {
                         </TouchableOpacityPrevent>
                     </View>}
                     ListFooterComponent={<View style={{ marginTop: Normalize(25) }} />}
-                    onEndReachedThreshold={0.1}
+                    onEndReachedThreshold={1}
                 />
             </Animated.View>
         </View>

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
 import { popUpModalChange } from '../../redux';
-import { trackPromise } from 'react-promise-tracker';
 import React, { useRef, useState, useEffect } from 'react';
 import { AppStyle, KostService } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
@@ -170,25 +169,22 @@ export default function Search({ navigation }) {
 
         function handleScroll() {
             page++;
-            trackPromise(
-                kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
-                    .then(response => {
-                        console.log("masuk")
-                        response.data.forEach(function (item, index) {
-                            KostList.push(item)
-                        });
-                    })
-                    .catch(error => {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                if (error.response.status !== 200) {
-                                    // dispatch the popUpModalChange actions to store the generic message modal state
-                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                }
+            kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
+                .then(response => {
+                    response.data.forEach(function (item, index) {
+                        KostList.push(item)
+                    });
+                })
+                .catch(error => {
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            if (error.response.status !== 200) {
+                                // dispatch the popUpModalChange actions to store the generic message modal state
+                                dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
                             }
                         }
-                    })
-            );
+                    }
+                })
         }
 
         function _renderSearchList({ item }) {
@@ -241,36 +237,66 @@ export default function Search({ navigation }) {
                 </TouchableNativeFeedbackPrevent>
             )
         }
-
-        if (status === null) {
-            return (
-                <View style={styles.flatListContainer}>
-                    <ActivityIndicator size="large" color={AppStyle.main_color} />
-                </View>
-            )
-        }
-        else if (status !== 200) {
-            return (
-                <View style={styles.flatListContainer}>
-                    <Text>Retry Pls</Text>
-                </View>
-            )
+        if (KostList === null) {
+            if (status === 200) {
+                return (
+                    <View style={styles.flatListContainer}>
+                        <Text>No kosan found</Text>
+                    </View>
+                )
+            }
+            else if (status === null) {
+                return (
+                    <View style={styles.flatListContainer}>
+                        <ActivityIndicator size="large" color={AppStyle.main_color} />
+                    </View>
+                )
+            }
+            else if (status !== 200) {
+                return (
+                    <View style={styles.flatListContainer}>
+                        <Text>Retry Pls</Text>
+                    </View>
+                )
+            }
         }
         else {
-            return (
-                <View style={styles.flatListContainer}>
-                    <FlatList
-                        data={KostList}
-                        renderItem={_renderSearchList}
-                        keyExtractor={(item, index) => index.toString()}
-                        numColumns={1}
-                        onEndReached={() => {
-                            handleScroll();
-                        }}
-                        onEndReachedThreshold={0.1}
-                    />
-                </View>
-            )
+            if (KostList.length === 0) {
+                return (
+                    <View style={styles.flatListContainer}>
+                        <Text>No kosan found</Text>
+                    </View>
+                )
+            }
+            else {
+                return (
+                    <View style={styles.flatListContainer}>
+                        <FlatList
+                            data={KostList}
+                            renderItem={_renderSearchList}
+                            keyExtractor={(item, index) => index.toString()}
+                            numColumns={1}
+                            onEndReached={() => {
+                                handleScroll();
+                            }}
+                            ListFooterComponent={
+                                <View style={{
+                                    alignSelf: 'center',
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    height: Normalize(50),
+                                    justifyContent: 'center',
+                                    marginBottom: Normalize(15),
+                                    width: AppStyle.windowSize.width * 0.9,
+                                }} >
+                                    <ActivityIndicator size="large" color={AppStyle.main_color} />
+                                </View >
+                            }
+                            onEndReachedThreshold={1}
+                        />
+                    </View>
+                )
+            }
         }
 
     }

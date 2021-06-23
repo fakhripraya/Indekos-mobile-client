@@ -169,26 +169,55 @@ export default function MyKosan({ navigation }) {
                 );
             }
 
-            return (
-                <>
-                    <View style={styles.addKosanWrapper}>
-                        <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList.length}</Text>
-                        <TouchableOpacityPrevent style={styles.addKosanButton}>
-                            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
-                        </TouchableOpacityPrevent>
-                    </View>
-                    <FlatList
-                        data={KostList}
-                        renderItem={_renderSearchList}
-                        keyExtractor={(item, index) => index.toString()}
-                        numColumns={1}
-                        onEndReached={() => {
-                            handleScroll();
-                        }}
-                        onEndReachedThreshold={0.1}
-                    />
-                </>
-            )
+            if (KostList.length === 0) {
+                return (
+                    <>
+                        <View style={styles.addKosanWrapper}>
+                            <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: 0</Text>
+                            <TouchableOpacityPrevent style={styles.addKosanButton}>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
+                            </TouchableOpacityPrevent>
+                        </View>
+                        <View style={styles.tabNullContainer}>
+                            <Text>No kosan found</Text>
+                        </View>
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <View style={styles.addKosanWrapper}>
+                            <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: {KostList.length}</Text>
+                            <TouchableOpacityPrevent style={styles.addKosanButton}>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
+                            </TouchableOpacityPrevent>
+                        </View>
+                        <FlatList
+                            data={KostList}
+                            renderItem={_renderSearchList}
+                            keyExtractor={(item, index) => index.toString()}
+                            numColumns={1}
+                            ListFooterComponent={
+                                <View style={{
+                                    alignSelf: 'center',
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    height: Normalize(50),
+                                    justifyContent: 'center',
+                                    marginBottom: Normalize(15),
+                                    width: AppStyle.windowSize.width * 0.9,
+                                }} >
+                                    <ActivityIndicator size="large" color={AppStyle.main_color} />
+                                </View >
+                            }
+                            onEndReached={() => {
+                                handleScroll();
+                            }}
+                            onEndReachedThreshold={1}
+                        />
+                    </>
+                )
+            }
         }
     }
 

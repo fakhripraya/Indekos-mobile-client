@@ -258,7 +258,7 @@ export default function Chats({ navigation }) {
                 onEndReached={() => {
                     handleScroll();
                 }}
-                onEndReachedThreshold={0.1}
+                onEndReachedThreshold={1}
             />
         )
     }
