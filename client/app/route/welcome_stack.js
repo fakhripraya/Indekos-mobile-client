@@ -1,7 +1,7 @@
 import React from 'react';
 import Welcome from '../screens/WelcomeScreen';
 import { enableScreens } from 'react-native-screens';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 // Optimize navigation
 enableScreens();
@@ -12,7 +12,10 @@ const NestedStack = createStackNavigator();
 // export the WelcomeStack
 export default function WelcomeStack() {
     return (
-        <NestedStack.Navigator screenOptions={{ headerShown: false }}>
+        <NestedStack.Navigator screenOptions={{
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            headerShown: false
+        }}>
             <NestedStack.Screen name="Welcome" component={Welcome} />
         </NestedStack.Navigator>
     );

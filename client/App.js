@@ -15,8 +15,8 @@ import PromiseSpinner from './app/promise/promise_tracker';
 import CreateUserStack from './app/route/create_user_stack';
 import RegistrationStack from './app/route/registration_stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { PopUpMessage } from './app/components/Modal/pop_up_message';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 // TODO: white background disetiap imagebackground
 
@@ -38,7 +38,13 @@ export default function App() {
       <View style={styles.container}>
         <NavigationContainer>
           {/* <RootStack.Navigator initialRouteName="BookStack"> */}
-          <RootStack.Navigator initialRouteName="SplashStack">
+          <RootStack.Navigator
+            screenOptions={{
+              gestureEnabled: true,
+              gestureDirection: "horizontal",
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+            }}
+            initialRouteName="SplashStack">
             {/* <RootStack.Navigator initialRouteName="AppStack"> */}
             <RootStack.Screen
               name="SplashStack"

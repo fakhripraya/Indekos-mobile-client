@@ -60,7 +60,6 @@ export default function KostDetail({ route, navigation }) {
     const sheetCarouselRef = useRef(null);
 
     // Function Hooks
-    const [isReady, setIsReady] = useState(false)
     const [kostOwner, setKostOwner] = useState(null)
 
     // Global variable
@@ -75,7 +74,6 @@ export default function KostDetail({ route, navigation }) {
             }).then(response => {
                 if (!unmounted) {
                     setKostOwner(response.data);
-                    setIsReady(true)
                 }
             }).catch(error => {
                 if (!unmounted) {
@@ -1673,7 +1671,7 @@ export default function KostDetail({ route, navigation }) {
         );
     }
 
-    if (isReady === false) {
+    if (kostOwner === null) {
         // loading screen
         return (
             <View style={styles.loadingScreen}>
