@@ -30,11 +30,12 @@ export default function MyKosan({ navigation }) {
     }
     let KostList = {};
     let page = 1;
+    const category = 6;
 
     function MyKosan() {
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, status } = useAxiosGetArrayParams(kostAPI, '/all/' + 6 + '/' + page, requestConfig);
+        const { dataArray, status } = useAxiosGetArrayParams(kostAPI, '/all/' + category + '/' + page, requestConfig);
         KostList = dataArray;
 
         function _renderSearchList({ item }) {
@@ -148,7 +149,7 @@ export default function MyKosan({ navigation }) {
 
             async function handleScroll() {
                 page++;
-                await kostAPI.get('/all/' + 6 + '/' + page, requestConfig)
+                await kostAPI.get('/all/' + category + '/' + page, requestConfig)
                     .then(response => {
                         response.data.kost_list.forEach(function (item, index) {
                             KostList.kost_list.push(item)

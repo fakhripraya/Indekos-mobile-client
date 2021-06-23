@@ -15,13 +15,12 @@ import { ResponseType } from 'expo-auth-session';
 import React, { useEffect, useState } from 'react';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
-import { AuthService } from '../../config/app.config';
 import * as Google from 'expo-auth-session/providers/google';
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
 import RegisterBackground from '../../components/Backgrounds/registration_background';
-import { AppStyle, StandaloneGoogleClientID, ExpoGoogleClientID, FacebookAppID } from '../../config/app.config';
+import { AppStyle, AuthService, ExpoGoogleClientID, FacebookAppID } from '../../config/app.config';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);

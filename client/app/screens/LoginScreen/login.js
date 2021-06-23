@@ -5,24 +5,32 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
+import {
+    popUpModalChange,
+} from '../../redux';
 import axios from 'axios';
-import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { popUpModalChange, } from '../../redux';
+import * as WebBrowser from 'expo-web-browser';
+import { ResponseType } from 'expo-auth-session';
+import React, { useEffect, useState } from 'react';
 import { SocialIcon } from 'react-native-elements';
 import { trackPromise } from 'react-promise-tracker';
+import * as Google from 'expo-auth-session/providers/google';
+import * as Facebook from 'expo-auth-session/providers/facebook';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import { AppStyle, AuthService } from '../../config/app.config';
 import LoginBackground from '../../components/Backgrounds/login_background';
 import withPreventDoubleClick from '../../components/HOC/prevent_double_click';
+import { AppStyle, AuthService, ExpoGoogleClientID, FacebookAppID } from '../../config/app.config';
 
 // a HOC to throttle button click
 const TouchableOpacityPrevent = withPreventDoubleClick(TouchableOpacity);
 
 // creates the promised base http client
-const api = axios.create({
+const AuthAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
+
+WebBrowser.maybeCompleteAuthSession();
 
 // Login is the root of Login stack
 export default function Login({ navigation }) {
@@ -39,7 +47,7 @@ export default function Login({ navigation }) {
 
         // triggers the http post request to /register url in the authentication service to process the registration
         trackPromise(
-            api.post(
+            AuthAPI.post(
                 '/login',
                 {
                     username: inputUsername,
@@ -68,17 +76,108 @@ export default function Login({ navigation }) {
         );
     }
 
+    function GoogleSignInButton() {
+
+        const [request, response, promptAsync] = Google.useAuthRequest({
+            expoClientId: ExpoGoogleClientID,
+        });
+
+        useEffect(() => {
+            if (response?.type === 'success') {
+                const { authentication } = response;
+                try {
+                    // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
+                    trackPromise(
+                        AuthAPI.get(
+                            '/google/callback?accessToken=' + authentication.accessToken,
+                        )
+                            .then(response => {
+                                if (response.status >= 200 && response.status < 300) {
+                                    navigation.replace('AppStack');
+                                }
+                            })
+                            .catch(error => {
+                                if (typeof (error.response) !== 'undefined') {
+                                    if (!axios.isCancel(error)) {
+                                        if (error.response.status !== 200) {
+                                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                        }
+                                    }
+                                }
+                            })
+                    );
+                } catch ({ message }) {
+                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Google Login Error: ${message}` }));
+                }
+            }
+        }, [response]);
+
+        return (
+            <TouchableOpacityPrevent onPress={() => {
+                promptAsync();
+            }}>
+                <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
+            </TouchableOpacityPrevent>
+        )
+    }
+
+    function FacebookSignInButton() {
+
+        const [request, response, promptAsync] = Facebook.useAuthRequest({
+            clientId: FacebookAppID,
+            responseType: ResponseType.Code,
+        });
+
+        useEffect(() => {
+            if (response?.type === 'success') {
+                const { code } = response.params;
+                try {
+                    // triggers the http post request to /register url to send an OTP to either WhatsApp or Email based on user input
+                    trackPromise(
+                        AuthAPI.get(
+                            '/facebook/callback?code=' + code,
+                        )
+                            .then(response => {
+                                if (response.status >= 200 && response.status < 300) {
+                                    navigation.replace('AppStack');
+                                }
+                            })
+                            .catch(error => {
+                                if (typeof (error.response) !== 'undefined') {
+                                    if (!axios.isCancel(error)) {
+                                        if (error.response.status !== 200) {
+                                            dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                        }
+                                    }
+                                }
+                            })
+                    );
+                } catch ({ message }) {
+                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: `Google Login Error: ${message}` }));
+                }
+            }
+        }, [response]);
+
+        return (
+            <TouchableOpacityPrevent onPress={async () => {
+                promptAsync();
+            }}>
+                <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
+            </TouchableOpacityPrevent>
+        )
+    }
+
     // Renders the Login screen
     return (
         <LoginBackground >
             <Text style={styles.title}>
                 Login
-                </Text>
+            </Text>
             <View style={styles.inputContainer}>
                 <View style={styles.authInputWrapper}>
                     <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: Normalize(5) }}>
                         Username
-                    </Text>
+                </Text>
                     <View style={styles.authInput}>
                         <TextInput
                             onChangeText={(newVal) => setInputUsername(newVal)}
@@ -90,7 +189,7 @@ export default function Login({ navigation }) {
                 <View style={styles.authInputWrapper}>
                     <Text style={{ fontWeight: 'bold', fontSize: NormalizeFont(14), alignSelf: 'flex-start', bottom: Normalize(5) }}>
                         Password
-                    </Text>
+                </Text>
                     <View style={styles.authInput}>
                         <TextInput
                             secureTextEntry={true}
@@ -101,19 +200,15 @@ export default function Login({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.o2AuthWrapper}>
-                    <TouchableOpacityPrevent >
-                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100), marginRight: Normalize(5) }} button type='google' />
-                    </TouchableOpacityPrevent>
-                    <TouchableOpacityPrevent >
-                        <SocialIcon iconSize={Normalize(24)} style={{ width: Normalize(40), height: Normalize(40), borderRadius: Normalize(100) }} button type='facebook' />
-                    </TouchableOpacityPrevent>
+                    <GoogleSignInButton />
+                    <FacebookSignInButton />
                 </View>
             </View>
             <View style={styles.submitBtn}>
                 <TouchableOpacityPrevent style={{ width: Normalize(125) }} onPress={() => handleSubmit()}>
                     <Text style={[styles.button, { fontWeight: 'bold', backgroundColor: AppStyle.sub_main_color, fontSize: NormalizeFont(16) }]}>
                         Submit
-                    </Text>
+                </Text>
                 </TouchableOpacityPrevent>
             </View>
             <View style={styles.loginBtn}>
