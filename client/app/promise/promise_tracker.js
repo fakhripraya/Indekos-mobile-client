@@ -15,6 +15,7 @@ const PromiseSpinner = () => {
 
     // Function Hooks
     const { promiseInProgress } = usePromiseTracker();
+
     // Renders the Promise Spinner component
     return (
         promiseInProgress &&
@@ -33,7 +34,6 @@ const PromiseSpinner = () => {
 
 // the render elements style
 const styles = StyleSheet.create({
-
     modal: {
         flex: 1,
     },

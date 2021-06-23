@@ -16,6 +16,9 @@ const authAPI = axios.create({
 
 export default function UserProfile() {
 
+    // Function Hooks
+    let [flag, setFlag] = useState(false)
+
     let flatListMenu = [
         {
             id: 0,
@@ -44,7 +47,7 @@ export default function UserProfile() {
     ]
 
     // get the data via axios get request
-    const { data, error, status } = useAxiosGet(authAPI, '/', 10000);
+    const { data } = useAxiosGet(authAPI, '/', 10000);
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -58,34 +61,31 @@ export default function UserProfile() {
         )
     }
 
-    if (data === null || error) {
+    const timeout = setTimeout(() => {
+        setFlag(true)
+    }, 10000);
 
-        if (error) {
-
-            if (status === 401)
-                navigation.replace('WelcomeStack');
-            else {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
-            }
+    if (data === null) {
+        if (flag === false) {
+            return (
+                <View style={styles.nameWrapper}>
+                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
+                        <SkeletonLoading />
+                    </View>
+                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
+                        <SkeletonLoading />
+                    </View>
+                </View>
+            );
+        } else {
 
         }
-
-        return (
-            <View style={styles.nameWrapper}>
-                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
-                    <SkeletonLoading />
-                </View>
-                <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
-                    <SkeletonLoading />
-                </View>
-            </View>
-        );
     }
     else {
+
+        // clear timeout after successfully fetch item
+        clearTimeout(timeout);
+
         return (
             <UserProfileBackground>
                 <View style={{ marginTop: AppStyle.windowSize.height * 0.075, flexDirection: 'row', width: AppStyle.windowSize.width * 0.9, alignSelf: 'center' }}>

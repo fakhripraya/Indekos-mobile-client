@@ -6,12 +6,10 @@ import Carousel from 'react-native-snap-carousel';
 import RBSheet from "react-native-raw-bottom-sheet";
 import MapShow from '../../components/Maps/map_show';
 import { trackPromise } from 'react-promise-tracker';
-import { useAxiosGet } from '../../promise/axios_get';
 import { CurrencyPrefix } from '../../functions/currency';
 import { ScrollView } from 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
 import withDelay from '../../components/HOC/prevent_spam_click';
-import { useAxiosGetArray } from '../../promise/axios_get_array';
 import { MappedFacilities } from '../../components/Icons/facilities';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
@@ -103,32 +101,64 @@ export default function KostDetail({ route, navigation }) {
     function KostPictList() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/picts', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (dataArray === null || error) {
+            // Get the data via axios get request
+            kostAPI.get('/' + kostID + '/picts', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={[styles.kostCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb' }]}>
-                    <SkeletonLoading />
-                </View>
-            );
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
 
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={[styles.kostCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb' }]}>
+                        <SkeletonLoading />
+                    </View>
+                );
+            } else {
+                return (
+                    <Text>Retry pls</Text>
+                )
+            }
         } else {
 
-            // Carousel items
-            function _renderKostPict({ item }) {
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
 
+            function _renderKostPict({ item }) {
                 return (
                     <ImageBackground
                         style={styles.backgroundImg}
@@ -154,34 +184,70 @@ export default function KostDetail({ route, navigation }) {
 
     function KostDescription() {
 
+        console.log("render kost description")
+
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [data, setData] = useState(null)
 
-        // Get the data via axios get request
-        const { data, error } = useAxiosGet(kostAPI, '/' + kostID, 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (data === null || error) {
+            kostAPI.get('/' + kostID, {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setData(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.descContainer} >
-                    <View style={styles.descTitle}>
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Description</Text>
-                    </View>
-                    <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                        <SkeletonLoading />
-                    </View>
-                </View>
-            );
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
 
+        if (data === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.descContainer} >
+                        <View style={styles.descTitle}>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Description</Text>
+                        </View>
+                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                            <SkeletonLoading />
+                        </View>
+                    </View>
+                );
+            } else {
+                return (
+                    <Text>Retry pls</Text>
+                )
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.descContainer} >
                     <View style={styles.descTitle}>
@@ -200,34 +266,70 @@ export default function KostDetail({ route, navigation }) {
 
     function KostFacilities() {
 
+        console.log("render facilities")
+
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/facilities', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (dataArray === null || error) {
+            kostAPI.get('/' + kostID + '/facilities', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.facilitiesContainer} >
-                    <View style={styles.facilitiesTitle}>
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Main Facilities</Text>
-                    </View>
-                    <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                        <SkeletonLoading />
-                    </View>
-                </View>
-            );
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
 
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.facilitiesContainer} >
+                        <View style={styles.facilitiesTitle}>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Main Facilities</Text>
+                        </View>
+                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                            <SkeletonLoading />
+                        </View>
+                    </View>
+                );
+            } else {
+                return (
+                    <Text>Retry pls</Text>
+                )
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.facilitiesContainer} >
                     <View style={styles.facilitiesTitle}>
@@ -243,34 +345,70 @@ export default function KostDetail({ route, navigation }) {
 
     function KostLocation() {
 
+        console.log("render location")
+
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [data, setData] = useState(null)
 
-        // Get the data via axios get request
-        const { data, error } = useAxiosGet(kostAPI, '/' + kostID, 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (data === null || error) {
+            kostAPI.get('/' + kostID, {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setData(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.locationContainer} >
-                    <View style={styles.locationTitle}>
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Location</Text>
-                    </View>
-                    <View style={[styles.locationBody, { backgroundColor: '#ebebeb', overflow: 'hidden' }]}>
-                        <SkeletonLoading />
-                    </View>
-                </View>
-            );
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
 
+        if (data === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.locationContainer} >
+                        <View style={styles.locationTitle}>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Location</Text>
+                        </View>
+                        <View style={[styles.locationBody, { backgroundColor: '#ebebeb', overflow: 'hidden' }]}>
+                            <SkeletonLoading />
+                        </View>
+                    </View>
+                );
+            } else {
+                return (
+                    <Text>Retry pls</Text>
+                )
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.locationContainer} >
                     <View style={styles.locationTitle}>
@@ -287,36 +425,68 @@ export default function KostDetail({ route, navigation }) {
     function KostBenchmark() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/benchmark', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (dataArray === null || error) {
+            kostAPI.get('/' + kostID + '/benchmark', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.benchmarkContainer}>
-                    <View style={styles.benchmarkTitle}>
-                        <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                        <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Benchmark</Text>
-                    </View >
-                    <View style={{ flexDirection: 'column' }}>
-                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                            <SkeletonLoading />
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.benchmarkContainer}>
+                        <View style={styles.benchmarkTitle}>
+                            <AntDesign name="flag" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                            <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Benchmark</Text>
+                        </View >
+                        <View style={{ flexDirection: 'column' }}>
+                            <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                <SkeletonLoading />
+                            </View>
                         </View>
                     </View>
-                </View>
-            );
-
+                );
+            } else {
+                <Text>Retry pls</Text>
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.benchmarkContainer}>
                     <View style={styles.benchmarkTitle}>
@@ -344,36 +514,70 @@ export default function KostDetail({ route, navigation }) {
     function KostAccessibility() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/access', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (dataArray === null || error) {
+            kostAPI.get('/' + kostID + '/access', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.accessibilityContainer}>
-                    <View style={styles.accessibilityTitle}>
-                        <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
-                        <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Accessibility</Text>
-                    </View>
-                    <View style={{ flexDirection: 'column' }}>
-                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                            <SkeletonLoading />
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.accessibilityContainer}>
+                        <View style={styles.accessibilityTitle}>
+                            <Ionicons name="ios-paper-plane-outline" size={Normalize(24)} color="gray" style={{ marginRight: Normalize(10) }} />
+                            <Text style={{ color: 'gray', fontSize: NormalizeFont(18) }}>Accessibility</Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.4, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                <SkeletonLoading />
+                            </View>
                         </View>
                     </View>
-                </View>
-            );
-
+                );
+            } else {
+                return (
+                    <Text>Retry pls</Text>
+                )
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.accessibilityContainer}>
                     <View style={styles.accessibilityTitle}>
@@ -401,35 +605,67 @@ export default function KostDetail({ route, navigation }) {
     function KostAround() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/around', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (dataArray === null || error) {
+            kostAPI.get('/' + kostID + '/around', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.aroundKostContainer}>
-                    <View style={styles.aroundKostTitle}>
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Around Kost</Text>
-                    </View>
-                    <View style={styles.aroundKostBody}>
-                        <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
-                            <SkeletonLoading />
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.aroundKostContainer}>
+                        <View style={styles.aroundKostTitle}>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Around Kost</Text>
+                        </View>
+                        <View style={styles.aroundKostBody}>
+                            <View style={{ height: Normalize(24), width: AppStyle.windowSize.width * 0.9, marginTop: Normalize(3), marginBottom: Normalize(3), backgroundColor: '#ebebeb', overflow: 'hidden' }}>
+                                <SkeletonLoading />
+                            </View>
                         </View>
                     </View>
-                </View>
-            );
-
+                );
+            } else {
+                <Text>Retry pls</Text>
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             function MappedAroundKost() {
                 return (
                     dataArray.map((item, index) => {
@@ -460,50 +696,79 @@ export default function KostDetail({ route, navigation }) {
     function KostRating() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/review', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        var cleanliness = 0
-        var convenience = 0
-        var security = 0
-        var facilities = 0
-        var avgTotal = 0
+            kostAPI.get('/' + kostID + '/review', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-        if (dataArray === null || error) {
-
-            //TODO: add filter response status to determine the dataArray null value before and after the response
-
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.ratingContainer}>
-                    <View style={styles.ratingTitle}>
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Rating</Text>
-                    </View>
-                    <View style={styles.ratingBody}>
-                        <View style={styles.ratingBodyLeft}>
-                            <View style={{ flexDirection: 'row', height: Normalize(24), width: AppStyle.windowSize.width * 0.4, overflow: 'hidden', backgroundColor: '#ebebeb' }}>
-                                <SkeletonLoading />
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.ratingContainer}>
+                        <View style={styles.ratingTitle}>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Rating</Text>
+                        </View>
+                        <View style={styles.ratingBody}>
+                            <View style={styles.ratingBodyLeft}>
+                                <View style={{ flexDirection: 'row', height: Normalize(24), width: AppStyle.windowSize.width * 0.4, overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                    <SkeletonLoading />
+                                </View>
+                            </View>
+                            <View style={styles.ratingBodyRight}>
+                                <View style={{ flexDirection: 'row', height: Normalize(24 * 4), marginTop: Normalize(3), marginBottom: Normalize(3), width: AppStyle.windowSize.width * 0.4, overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                    <SkeletonLoading />
+                                </View>
                             </View>
                         </View>
-                        <View style={styles.ratingBodyRight}>
-                            <View style={{ flexDirection: 'row', height: Normalize(24 * 4), marginTop: Normalize(3), marginBottom: Normalize(3), width: AppStyle.windowSize.width * 0.4, overflow: 'hidden', backgroundColor: '#ebebeb' }}>
-                                <SkeletonLoading />
-                            </View>
-                        </View>
                     </View>
-                </View>
-            );
-
+                );
+            } else {
+                <Text>Retry pls</Text>
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
+            var cleanliness = 0
+            var convenience = 0
+            var security = 0
+            var facilities = 0
+            var avgTotal = 0
 
             if (dataArray.length !== 0) {
                 dataArray.forEach(element => {
@@ -568,51 +833,83 @@ export default function KostDetail({ route, navigation }) {
     function KostReview() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/review', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (dataArray === null || error) {
+            kostAPI.get('/' + kostID + '/review', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.reviewContainer}>
-                    <View style={styles.reviewTitle}>
-                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.reviewContainer}>
+                        <View style={styles.reviewTitle}>
+                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
+                                <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Review</Text>
+                            </View>
+                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <TouchableOpacityPrevent>
+                                    <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                </TouchableOpacityPrevent>
+                            </View>
                         </View>
-                        <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <TouchableOpacityPrevent>
-                                <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                            </TouchableOpacityPrevent>
+                        <View style={styles.reviewBody}>
+                            <View style={styles.reviewBodyContainer}>
+                                <View style={[styles.reviewUserPict, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
+                                    <SkeletonLoading />
+                                </View>
+                                <View style={[styles.reviewUserHeader, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
+                                    <SkeletonLoading />
+                                </View>
+                                <View style={[styles.reviewUserBody, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
+                                    <SkeletonLoading />
+                                </View>
+                            </View>
                         </View>
                     </View>
-                    <View style={styles.reviewBody}>
-                        <View style={styles.reviewBodyContainer}>
-                            <View style={[styles.reviewUserPict, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
-                                <SkeletonLoading />
-                            </View>
-                            <View style={[styles.reviewUserHeader, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
-                                <SkeletonLoading />
-                            </View>
-                            <View style={[styles.reviewUserBody, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(10.12) }]}>
-                                <SkeletonLoading />
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            )
-
+                )
+            } else {
+                <Text>Retry pls</Text>
+            }
         }
         else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.reviewContainer}>
                     <View style={styles.reviewTitle}>
@@ -667,6 +964,46 @@ export default function KostDetail({ route, navigation }) {
 
     function KostRooms() {
 
+        // Function Hooks
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
+
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
+
+            kostAPI.get('/' + kostID + '/rooms', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
+
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
+            }
+        }, []);
+
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
         // Skeleton Placeholder Function
         function RoomSkeleton() {
             return (
@@ -706,61 +1043,89 @@ export default function KostDetail({ route, navigation }) {
             )
         }
 
-        // Function Hooks
-        const [flag, setFlag] = useState(0)
-
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/' + kostID + '/rooms', 10000);
-
-        if (dataArray === null || error) {
-
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <>
+                        <View style={styles.roomTitle}>
+                            <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
+                        </View>
+                        <RoomSkeleton />
+                    </>
+                )
+            } else {
+                <Text>Retry Pls</Text>
             }
-
-            return (
-                <>
-                    <View style={styles.roomTitle}>
-                        <Text style={{ fontSize: NormalizeFont(14), color: 'black', fontWeight: 'bold' }}>Room</Text>
-                    </View>
-                    <RoomSkeleton />
-                </>
-            )
-
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
 
             function KostRoomList(props) {
 
                 // Function Hooks
-                const [flag, setFlag] = useState(0)
+                let [flag2, setFlag2] = useState(false)
+                const [data, setData] = useState(null)
 
-                // Get the data via axios get request
-                const { data, error } = useAxiosGet(kostAPI, '/' + kostID + '/rooms/' + props.kostRoom.id + '/details', 10000);
+                useEffect(() => {
+                    // prevent update on unmounted component
+                    let unmounted = false;
+                    // creates the cancel token source
+                    var cancelSource = axios.CancelToken.source()
 
-                if (data === null || error) {
+                    kostAPI.get('/' + kostID + '/rooms/' + props.kostRoom.id + '/details', {
+                        cancelToken: cancelSource.token,
+                        timeout: 10000
+                    })
+                        .then(response => {
+                            if (!unmounted) {
+                                setData(response.data);
+                            }
+                        })
+                        .catch(error => {
+                            if (!unmounted) {
+                                if (typeof (error.response) !== 'undefined') {
+                                    if (!axios.isCancel(error)) {
+                                        // TODO: nanti pasang sesuatu
+                                        setFlag2(true);
+                                    }
+                                }
+                            }
+                        });
 
-                    if (error) {
-                        if (flag < 10) {
-                            setTimeout(() => {
-                                setFlag(flag + 1)
-                            }, 2000);
-                        }
+                    return () => {
+                        unmounted = true;
+                        cancelSource.cancel();
+                    }
+                }, []);
+
+                const timeout2 = setTimeout(() => {
+                    setFlag2(true)
+                }, 10000);
+
+                if (data === null) {
+                    if (flag2 === false) {
+                        return (
+                            <RoomSkeleton />
+                        )
+                    } else {
+                        <Text>Retry pls</Text>
+                    }
+                } else {
+
+                    // clear timeout after successfully fetch item
+                    clearTimeout(timeout2);
+
+                    var roomBookedCount = 0
+                    if (data.room_booked !== null) {
+                        roomBookedCount = data.room_booked.length
                     }
 
-                    return (
-                        <RoomSkeleton />
-                    )
-
-                } else {
+                    var roomAvailability = data.room_details.length - roomBookedCount
 
                     function RoomPicts(props) {
 
                         function _renderRoomPict({ item }) {
-
                             return (
                                 <ImageBackground
                                     imageStyle={{ borderRadius: Normalize(10) }}
@@ -781,13 +1146,6 @@ export default function KostDetail({ route, navigation }) {
                             />
                         )
                     }
-
-                    var roomBookedCount = 0
-                    if (data.room_booked !== null) {
-                        roomBookedCount = data.room_booked.length
-                    }
-
-                    var roomAvailability = data.room_details.length - roomBookedCount
 
                     return (
                         <View style={styles.roomBody}>
@@ -854,48 +1212,82 @@ export default function KostDetail({ route, navigation }) {
     function KostOwner() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [data, setData] = useState(null)
 
-        // Get the data via axios get request
-        const { data, error } = useAxiosGet(kostAPI, '/' + kostID + '/owner', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (data === null || error) {
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            kostAPI.get('/' + kostID + '/owner', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setData(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
+
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.ownerContainer}>
-                    <View style={styles.ownerTitle}>
-                        <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Owner</Text>
-                    </View>
-                    <View style={styles.ownerBody}>
-                        <View style={styles.ownerBodyContainer}>
-                            <View style={[styles.ownerUserPict, { overflow: 'hidden', backgroundColor: '#ebebeb' }]}>
-                                <SkeletonLoading />
-                            </View>
-                            <View style={styles.ownerUserHeader}>
-                                <View style={{ width: AppStyle.windowSize.width * 0.2, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
+        if (data === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.ownerContainer}>
+                        <View style={styles.ownerTitle}>
+                            <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold' }}>Owner</Text>
+                        </View>
+                        <View style={styles.ownerBody}>
+                            <View style={styles.ownerBodyContainer}>
+                                <View style={[styles.ownerUserPict, { overflow: 'hidden', backgroundColor: '#ebebeb' }]}>
                                     <SkeletonLoading />
                                 </View>
-                                <View style={{ width: AppStyle.windowSize.width * 0.2, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
-                                    <SkeletonLoading />
+                                <View style={styles.ownerUserHeader}>
+                                    <View style={{ width: AppStyle.windowSize.width * 0.2, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                        <SkeletonLoading />
+                                    </View>
+                                    <View style={{ width: AppStyle.windowSize.width * 0.2, height: Normalize(24), marginBottom: Normalize(3), marginTop: Normalize(3), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                        <SkeletonLoading />
+                                    </View>
                                 </View>
-                            </View>
-                            <View style={styles.ownerUserBody}>
-                                <View style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', borderRadius: Normalize(10), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
-                                    <SkeletonLoading />
+                                <View style={styles.ownerUserBody}>
+                                    <View style={{ flexDirection: 'row', height: Normalize(40), width: Normalize(120), alignSelf: 'flex-end', borderRadius: Normalize(10), overflow: 'hidden', backgroundColor: '#ebebeb' }}>
+                                        <SkeletonLoading />
+                                    </View>
                                 </View>
                             </View>
                         </View>
                     </View>
-                </View>
-            )
+                )
+            } else {
+                <Text>Retry pls</Text>
+            }
         } else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.ownerContainer}>
                     <View style={styles.ownerTitle}>
@@ -934,13 +1326,13 @@ export default function KostDetail({ route, navigation }) {
         var [kostFacilities, setKostFacilities] = useState(null)
 
         // triggers when the bottom sheet starts opening
-        function _getRoomData() {
+        async function _getRoomData() {
             if (selectedKostRoom !== null) {
 
                 // creates the cancel token source
                 var cancelSource = axios.CancelToken.source()
 
-                axios.all([
+                await axios.all([
                     kostAPI.get('/' + kostID + '/rooms/' + selectedKostRoom.id + '/details', {
                         cancelToken: cancelSource.token
                     }).catch(error => {

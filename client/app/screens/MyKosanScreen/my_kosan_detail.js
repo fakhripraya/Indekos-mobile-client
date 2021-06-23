@@ -26,20 +26,17 @@ export default function MyKosanDetail({ route, navigation }) {
     // get navigation parameter
     const kost = route.params.kost;
 
-    // Function Hooks
-    const [requestConfig, setRequestConfig] = useState({
-        cancelToken: axios.CancelToken.source().token,
-        timeout: 10000
-    })
-
     // Global Variable
+    const requestConfig = {
+        timeout: 10000
+    }
     let RoomList = {};
     let page = 1;
 
     function MyKosanRoomList() {
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig);
+        const { dataArray, status } = useAxiosGetArrayParams(kostAPI, kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig);
         RoomList = dataArray;
 
         function RoomBody(props) {
@@ -144,30 +141,6 @@ export default function MyKosanDetail({ route, navigation }) {
             )
         }
 
-        function handleScroll() {
-
-            page++;
-            trackPromise(
-                kostAPI.get(kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig)
-                    .then(response => {
-                        response.data.kost_room_detail.forEach(function (item, index) {
-                            RoomList.kost_room_detail.push(item)
-                        });
-                    })
-                    .catch(error => {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                if (error.response.status !== 200) {
-                                    // dispatch the popUpModalChange actions to store the generic message modal state
-                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                }
-                            }
-                        }
-                    })
-            );
-
-        }
-
         if (RoomList === null) {
             if (status === 200) {
                 return (
@@ -182,7 +155,37 @@ export default function MyKosanDetail({ route, navigation }) {
                     </View>
                 )
             }
+            else if (status !== 200) {
+                return (
+                    <View style={styles.tabNullContainer}>
+                        <Text>Retry Pls</Text>
+                    </View>
+                )
+            }
         } else {
+
+            function handleScroll() {
+                page++;
+                trackPromise(
+                    kostAPI.get(kost.id + '/rooms/' + 'all/' + page + '/details', requestConfig)
+                        .then(response => {
+                            response.data.kost_room_detail.forEach(function (item, index) {
+                                RoomList.kost_room_detail.push(item)
+                            });
+                        })
+                        .catch(error => {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    if (error.response.status !== 200) {
+                                        // dispatch the popUpModalChange actions to store the generic message modal state
+                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                    }
+                                }
+                            }
+                        })
+                );
+            }
+
             return (
                 <>
                     <View style={styles.pickerWrapper}>

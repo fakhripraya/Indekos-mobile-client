@@ -40,12 +40,11 @@ export default function Search({ navigation }) {
     // 4 = Most Expensive
     // 5 = Most Cheap
     const [selectedFilter, setSelectedFilters] = useState(0)
-    const [requestConfig, setRequestConfig] = useState({
-        cancelToken: axios.CancelToken.source().token,
-        timeout: 10000
-    })
 
     // Global Variable
+    const requestConfig = {
+        timeout: 10000
+    }
     let KostList = [];
     let page = 1;
 
@@ -168,11 +167,10 @@ export default function Search({ navigation }) {
 
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/' + selectedFilter + '/' + page, requestConfig);
+        const { dataArray, status } = useAxiosGetArrayParams(kostAPI, '/all/' + selectedFilter + '/' + page, requestConfig);
         KostList = dataArray;
 
         function _renderSearchList({ item }) {
-
             return (
                 <TouchableNativeFeedbackPrevent onPress={() => {
                     navigation.push('BookStack', {
@@ -223,31 +221,6 @@ export default function Search({ navigation }) {
             )
         }
 
-        function handleScroll() {
-
-            page++;
-
-            trackPromise(
-                kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
-                    .then(response => {
-                        response.data.forEach(function (item, index) {
-                            KostList.push(item)
-                        });
-                    })
-                    .catch(error => {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                if (error.response.status !== 200) {
-                                    // dispatch the popUpModalChange actions to store the generic message modal state
-                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                }
-                            }
-                        }
-                    })
-            );
-
-        }
-
         if (KostList === null) {
             return (
                 <View style={styles.flatListContainer}>
@@ -255,6 +228,29 @@ export default function Search({ navigation }) {
                 </View>
             )
         } else {
+
+            function handleScroll() {
+                page++;
+                trackPromise(
+                    kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
+                        .then(response => {
+                            response.data.forEach(function (item, index) {
+                                KostList.push(item)
+                            });
+                        })
+                        .catch(error => {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    if (error.response.status !== 200) {
+                                        // dispatch the popUpModalChange actions to store the generic message modal state
+                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                    }
+                                }
+                            }
+                        })
+                );
+            }
+
             return (
                 <View style={styles.flatListContainer}>
                     <FlatList
@@ -276,9 +272,6 @@ export default function Search({ navigation }) {
     useEffect(() => {
         if (filters === null)
             setFilters(initialFilter)
-
-        return () => {
-        }
     }, [])
 
     if (filters === null) {

@@ -24,19 +24,18 @@ export default function MyKosan({ navigation }) {
 
     // Function Hooks
     const [tabIndex, setTabIndex] = useState(0)
-    const [requestConfig, setRequestConfig] = useState({
-        cancelToken: axios.CancelToken.source().token,
-        timeout: 10000
-    })
 
     // Global Variable
+    const requestConfig = {
+        timeout: 10000
+    }
     let KostList = [];
     let page = 1;
 
     function MyKosan() {
         // Get the kost data from the server
         // 1 page of kost list is 10 kost 
-        const { dataArray, error, status } = useAxiosGetArrayParams(kostAPI, '/all/' + 6 + '/' + page, requestConfig);
+        const { dataArray, status } = useAxiosGetArrayParams(kostAPI, '/all/' + 6 + '/' + page, requestConfig);
         KostList = dataArray;
 
         function _renderSearchList({ item }) {
@@ -110,31 +109,6 @@ export default function MyKosan({ navigation }) {
             )
         }
 
-        function handleScroll() {
-
-            page++;
-
-            trackPromise(
-                kostAPI.get('/all/' + 6 + '/' + page, requestConfig)
-                    .then(response => {
-                        response.data.forEach(function (item, index) {
-                            KostList.push(item)
-                        });
-                    })
-                    .catch(error => {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                if (error.response.status !== 200) {
-                                    // dispatch the popUpModalChange actions to store the generic message modal state
-                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                }
-                            }
-                        }
-                    })
-            );
-
-        }
-
         if (KostList === null) {
             if (status === 200) {
                 return (
@@ -156,8 +130,45 @@ export default function MyKosan({ navigation }) {
                         <ActivityIndicator size="large" color={AppStyle.main_color} />
                     </View>
                 )
+            } else if (status !== 200) {
+                return (
+                    <>
+                        <View style={styles.addKosanWrapper}>
+                            <Text style={{ position: 'absolute', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', fontSize: NormalizeFont(14) }}>Your Kosan: 0</Text>
+                            <TouchableOpacityPrevent style={styles.addKosanButton}>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: NormalizeFont(14) }}>Add Kosan</Text>
+                            </TouchableOpacityPrevent>
+                        </View>
+                        <View style={styles.tabNullContainer}>
+                            <Text>Retry Pls</Text>
+                        </View>
+                    </>
+                )
             }
         } else {
+
+            function handleScroll() {
+                page++;
+                trackPromise(
+                    kostAPI.get('/all/' + 6 + '/' + page, requestConfig)
+                        .then(response => {
+                            response.data.forEach(function (item, index) {
+                                KostList.push(item)
+                            });
+                        })
+                        .catch(error => {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    if (error.response.status !== 200) {
+                                        // dispatch the popUpModalChange actions to store the generic message modal state
+                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                    }
+                                }
+                            }
+                        })
+                );
+            }
+
             return (
                 <>
                     <View style={styles.addKosanWrapper}>

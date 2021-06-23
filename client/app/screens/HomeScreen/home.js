@@ -3,14 +3,12 @@ import * as Location from 'expo-location';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
-import { useAxiosGet } from '../../promise/axios_get';
 import React, { useRef, useState, useEffect } from 'react';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import { CurrencyPrefix, CurrencyFormat } from '../../functions/currency';
 import HomeBackground from '../../components/Backgrounds/home_background';
 import { AppStyle, AuthService, KostService } from '../../config/app.config';
-import { useAxiosGetArray, useAxiosGetArrayParams } from '../../promise/axios_get_array';
 import { Text, View, FlatList, StyleSheet, ImageBackground, InteractionManager, ActivityIndicator } from 'react-native';
 
 // creates the promised base http auth client
@@ -195,39 +193,66 @@ export default function Home({ navigation }) {
     function NameWrapper() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [data, setData] = useState(null)
 
-        // get the data via axios get request
-        const { data, error, status } = useAxiosGet(authAPI, '/', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (data === null || error) {
-
-            if (error) {
-
-                if (status === 401)
-                    navigation.replace('WelcomeStack');
-                else {
-                    if (flag < 10) {
-                        setTimeout(() => {
-                            setFlag(flag + 1)
-                        }, 2000);
+            authAPI.get('/', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setData(response.data);
                     }
-                }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={styles.nameWrapper}>
-                    <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
-                        <SkeletonLoading />
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
+
+        if (data === null) {
+            if (flag === false) {
+                return (
+                    <View style={styles.nameWrapper}>
+                        <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
+                            <SkeletonLoading />
+                        </View>
+                        <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
+                            <SkeletonLoading />
+                        </View>
                     </View>
-                    <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
-                        <SkeletonLoading />
-                    </View>
-                </View>
-            );
+                );
+            } else {
+                <Text>Retry pls</Text>
+            }
         }
         else {
+
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             return (
                 <View style={styles.nameWrapper}>
                     <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
@@ -246,31 +271,63 @@ export default function Home({ navigation }) {
     function NewsCarousel() {
 
         // Function Hooks
-        const [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Get the data via axios get request
-        const { dataArray, error } = useAxiosGetArray(kostAPI, '/event/all', 10000);
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        if (dataArray === null || error) {
+            kostAPI.get('/event/all', {
+                cancelToken: cancelSource.token,
+                timeout: 10000
+            })
+                .then(response => {
+                    if (!unmounted) {
+                        setDataArray(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (!unmounted) {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                // TODO: nanti pasang sesuatu
+                                setFlag(true);
+                            }
+                        }
+                    }
+                });
 
-            if (error) {
-                if (flag < 10) {
-                    setTimeout(() => {
-                        setFlag(flag + 1)
-                    }, 2000);
-                }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
             }
+        }, []);
 
-            return (
-                <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(15) }]}>
-                    <SkeletonLoading />
-                </View>
-            );
+        const timeout = setTimeout(() => {
+            setFlag(true)
+        }, 10000);
 
+        if (dataArray === null) {
+            if (flag === false) {
+                return (
+                    <View style={[styles.newsCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderRadius: Normalize(15) }]}>
+                        <SkeletonLoading />
+                    </View>
+                );
+            } else {
+                return (
+                    <Text>Retry pls</Text>
+                )
+            }
         }
         else {
 
-            // Carousel Items
+            // clear timeout after successfully fetch item
+            clearTimeout(timeout);
+
             function _renderNewsItem({ item }) {
                 return (
                     <ImageBackground
@@ -443,70 +500,93 @@ export default function Home({ navigation }) {
     function NearYouCarousel() {
 
         // Function Hooks
-        let [flag, setFlag] = useState(0)
+        let [flag, setFlag] = useState(false)
+        const [dataArray, setDataArray] = useState(null)
 
-        // Variables
-        let nearYouList = null;
-        let errorFlag = false;
+        useEffect(() => {
+            // prevent update on unmounted component
+            let unmounted = false;
+            // creates the cancel token source
+            var cancelSource = axios.CancelToken.source()
 
-        // Get the data via axios get request
-        if (userLocationPermission === true) {
-            const { dataArray, error } = useAxiosGetArrayParams(kostAPI, '/all/near', {
-                params: {
-                    latitude: userLocation.coords.latitude,
-                    longitude: userLocation.coords.longitude
-                },
-                cancelToken: axios.CancelToken.source().token,
-                timeout: 10000
-            });
+            // Get the data via axios get request
+            if (userLocationPermission === true) {
+                kostAPI.get('/all/near', {
+                    params: {
+                        latitude: userLocation.coords.latitude,
+                        longitude: userLocation.coords.longitude
+                    },
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
+                })
+                    .then(response => {
+                        if (!unmounted) {
+                            setDataArray(response.data);
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    // TODO: nanti pasang sesuatu
+                                    setFlag(true);
+                                }
+                            }
+                        }
+                    });
+            }
 
-            nearYouList = dataArray; errorFlag = error;
-        }
+            return () => {
+                unmounted = true;
+                cancelSource.cancel();
+            }
+        }, []);
 
         if (userLocationPermission === false) {
             return null
         } else {
-            if (nearYouList === null || errorFlag) {
 
-                if (errorFlag) {
-                    if (flag < 10) {
-                        setTimeout(() => {
-                            setFlag(flag + 1)
-                        }, 2000);
-                    }
-                }
+            const timeout = setTimeout(() => {
+                setFlag(true)
+            }, 10000);
 
-                //TODO: make a counter to count the ammount of rerender caused by the error
-                //TODO: make a manual retry policy if the auto retry get past 10 count
+            if (dataArray === null) {
+                if (flag === false) {
 
-                return (
-                    <>
-                        <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
-                            <Text style={{ fontSize: NormalizeFont(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
-                        </View>
-                        <View style={styles.nearYouListHeader}>
-                            <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: Normalize(10) }}>
+                    //TODO: make a counter to count the ammount of rerender caused by the error
+                    //TODO: make a manual retry policy if the auto retry get past 10 count
+                    return (
+                        <>
+                            <View style={{ width: '100%', top: Normalize(20), justifyContent: 'center', alignItems: 'flex-start', marginBottom: Normalize(10) }}>
+                                <Text style={{ fontSize: NormalizeFont(18), color: 'black', left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold', marginBottom: Normalize(5) }}>Near You</Text>
+                            </View>
+                            <View style={styles.nearYouListHeader}>
+                                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.05, borderRadius: Normalize(10) }}>
+                                    <SkeletonLoading />
+                                </View>
+                                <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
+                                    <TouchableOpacity disabled={true} style={{ right: AppStyle.windowSize.width * 0.05 }}>
+                                        <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderTopLeftRadius: Normalize(10), borderBottomLeftRadius: Normalize(10) }]}>
                                 <SkeletonLoading />
                             </View>
-                            <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <TouchableOpacity disabled={true} style={{ right: AppStyle.windowSize.width * 0.05 }}>
-                                    <Text style={{ fontSize: NormalizeFont(12), color: AppStyle.sub_main_color, fontWeight: 'bold' }}>See All</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={[styles.nearYouListCarouselContainer, { overflow: 'hidden', backgroundColor: '#ebebeb', borderTopLeftRadius: Normalize(10), borderBottomLeftRadius: Normalize(10) }]}>
-                            <SkeletonLoading />
-                        </View>
-                    </>
-                )
-
+                        </>
+                    )
+                } else {
+                    return (
+                        <Text>Retry pls</Text>
+                    )
+                }
             } else {
 
-                // Carousel items
+                // clear timeout after successfully fetch item
+                clearTimeout(timeout);
+
                 function _renderNearYouList({ item }) {
-
                     return (
-
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity onPress={() => {
                                 navigation.push('BookStack', {
@@ -546,7 +626,7 @@ export default function Home({ navigation }) {
                         </View>
                         <View style={styles.nearYouListHeader}>
                             <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-start' }}>
-                                <Text style={{ fontSize: NormalizeFont(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{nearYouList === null ? "" : (nearYouList.length === 0 ? "" : nearYouList[0].city)}</Text>
+                                <Text style={{ fontSize: NormalizeFont(14), color: AppStyle.third_main_color, left: AppStyle.windowSize.width * 0.05, fontWeight: 'bold' }}>{dataArray === null ? "" : (dataArray.length === 0 ? "" : dataArray[0].city)}</Text>
                             </View>
                             <View style={{ width: '100%', position: 'absolute', justifyContent: 'center', alignItems: 'flex-end' }}>
                                 <TouchableOpacity style={{ right: AppStyle.windowSize.width * 0.05 }}>
@@ -557,7 +637,7 @@ export default function Home({ navigation }) {
                         <View style={styles.nearYouListCarouselContainer}>
                             <FlatList
                                 ref={nearYouCarouselRef}
-                                data={nearYouList}
+                                data={dataArray}
                                 renderItem={_renderNearYouList}
                                 keyExtractor={(item, index) => index.toString()}
                                 numColumns={1}
