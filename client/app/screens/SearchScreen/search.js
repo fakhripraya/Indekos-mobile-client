@@ -40,11 +40,11 @@ export default function Search({ navigation }) {
     // 4 = Most Expensive
     // 5 = Most Cheap
     const [selectedFilter, setSelectedFilters] = useState(0)
+    const [requestConfig, setRequestConfig] = useState({
+        timeout: 10000
+    })
 
     // Global Variable
-    const requestConfig = {
-        timeout: 10000
-    }
     let KostList = [];
     let page = 1;
 
@@ -132,7 +132,6 @@ export default function Search({ navigation }) {
                                 latitude: location.coords.latitude,
                                 longitude: location.coords.longitude
                             },
-                            cancelToken: axios.CancelToken.source().token,
                             timeout: 10000
                         });
                     } catch (e) {
@@ -157,7 +156,6 @@ export default function Search({ navigation }) {
         }
 
         setRequestConfig({
-            cancelToken: axios.CancelToken.source().token,
             timeout: 10000
         });
         setFilters(newArr);
@@ -221,13 +219,19 @@ export default function Search({ navigation }) {
             )
         }
 
-        if (KostList === null) {
+        if (status === null) {
             return (
                 <View style={styles.flatListContainer}>
                     <ActivityIndicator size="large" color={AppStyle.main_color} />
                 </View>
             )
-        } else {
+        }
+        else if (status !== 200) {
+            return (
+                <Text>Retry pls</Text>
+            )
+        }
+        else {
 
             function handleScroll() {
                 page++;
