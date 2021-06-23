@@ -42,7 +42,7 @@ export const useAxiosGetArrayParams = (service, url, config) => {
             unmounted = true;
             cancelSource.cancel();
         }
-    }, [dataArray]);
+    }, [service, url, config]);
 
     return { dataArray, error, errorMessage, status };
 };

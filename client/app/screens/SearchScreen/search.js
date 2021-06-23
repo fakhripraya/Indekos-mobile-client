@@ -168,6 +168,29 @@ export default function Search({ navigation }) {
         const { dataArray, status } = useAxiosGetArrayParams(kostAPI, '/all/' + selectedFilter + '/' + page, requestConfig);
         KostList = dataArray;
 
+        function handleScroll() {
+            page++;
+            trackPromise(
+                kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
+                    .then(response => {
+                        console.log("masuk")
+                        response.data.forEach(function (item, index) {
+                            KostList.push(item)
+                        });
+                    })
+                    .catch(error => {
+                        if (typeof (error.response) !== 'undefined') {
+                            if (!axios.isCancel(error)) {
+                                if (error.response.status !== 200) {
+                                    // dispatch the popUpModalChange actions to store the generic message modal state
+                                    dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
+                                }
+                            }
+                        }
+                    })
+            );
+        }
+
         function _renderSearchList({ item }) {
             return (
                 <TouchableNativeFeedbackPrevent onPress={() => {
@@ -228,33 +251,12 @@ export default function Search({ navigation }) {
         }
         else if (status !== 200) {
             return (
-                <Text>Retry pls</Text>
+                <View style={styles.flatListContainer}>
+                    <Text>Retry Pls</Text>
+                </View>
             )
         }
         else {
-
-            function handleScroll() {
-                page++;
-                trackPromise(
-                    kostAPI.get('/all/' + selectedFilter + '/' + page, requestConfig)
-                        .then(response => {
-                            response.data.forEach(function (item, index) {
-                                KostList.push(item)
-                            });
-                        })
-                        .catch(error => {
-                            if (typeof (error.response) !== 'undefined') {
-                                if (!axios.isCancel(error)) {
-                                    if (error.response.status !== 200) {
-                                        // dispatch the popUpModalChange actions to store the generic message modal state
-                                        dispatch(popUpModalChange({ show: true, title: 'ERROR', message: error.response.data.message }));
-                                    }
-                                }
-                            }
-                        })
-                );
-            }
-
             return (
                 <View style={styles.flatListContainer}>
                     <FlatList
