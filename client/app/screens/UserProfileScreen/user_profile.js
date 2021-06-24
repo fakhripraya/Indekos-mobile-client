@@ -5,9 +5,8 @@ import { useAxiosGet } from '../../promise/axios_get';
 import { AppStyle, AuthService } from '../../config/app.config';
 import { EvilIcons, Ionicons, Entypo } from '@expo/vector-icons';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
-import SkeletonLoading from '../../components/Feedback/skeleton_loading';
 import UserProfileBackground from '../../components/Backgrounds/user_profile_background';
-import { FlatList, LogBox, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, LogBox, ImageBackground, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 
 // creates the promised base http auth client
 const authAPI = axios.create({
@@ -63,7 +62,7 @@ export default function UserProfile() {
         return (
             <View style={styles.loadingScreen}>
                 <ActivityIndicator size="large" color="#0000ff" />
-                <Text style={{ fontSize: NormalizeFont(12) }}>Loading Kost...</Text>
+                <Text style={{ fontSize: NormalizeFont(12) }}>Loading Profile...</Text>
             </View>
         )
     }
