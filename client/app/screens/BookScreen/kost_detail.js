@@ -108,29 +108,30 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            // Get the data via axios get request
-            kostAPI.get('/' + kostID + '/picts', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status);
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                // Get the data via axios get request
+                kostAPI.get('/' + kostID + '/picts', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status);
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status);
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -185,26 +186,27 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID, {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        setData(response.data);
-                        setStatus(response.status);
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID, {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status);
+                    .then(response => {
+                        if (!unmounted) {
+                            setData(response.data);
+                            setStatus(response.status);
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -258,28 +260,29 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/facilities', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status);
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/facilities', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status);
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status);
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -330,26 +333,27 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID, {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        setData(response.data);
-                        setStatus(response.status);
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID, {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            setData(response.data);
+                            setStatus(response.status);
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -400,28 +404,29 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/benchmark', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status);
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/benchmark', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status);
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -486,28 +491,29 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/access', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status);
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/access', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status);
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -572,28 +578,29 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/around', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status)
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/around', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status)
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -660,28 +667,29 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/review', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status)
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/review', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status)
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -795,28 +803,29 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/review', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status)
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/review', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status)
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -923,28 +932,29 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/rooms', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        if (response.data !== null)
-                            setDataArray(response.data);
-
-                        setStatus(response.status)
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/rooms', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            if (response.data !== null)
+                                setDataArray(response.data);
+
+                            setStatus(response.status)
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;
@@ -1013,31 +1023,33 @@ export default function KostDetail({ route, navigation }) {
                 var [status2, setStatus2] = useState(null)
                 var [data, setData] = useState(null)
 
-                useEffect(() => {
-                    // prevent update on unmounted component
-                    let unmounted = false;
-                    // creates the cancel token source
-                    var cancelSource = axios.CancelToken.source()
+                // prevent update on unmounted component
+                let unmounted = false;
+                // creates the cancel token source
+                var cancelSource = axios.CancelToken.source()
 
-                    kostAPI.get('/' + kostID + '/rooms/' + props.kostRoom.id + '/details', {
-                        cancelToken: cancelSource.token,
-                        timeout: 10000
-                    })
-                        .then(response => {
-                            if (!unmounted) {
-                                setData(response.data);
-                                setStatus2(response.status)
-                            }
+                useEffect(() => {
+                    InteractionManager.runAfterInteractions(() => {
+                        kostAPI.get('/' + kostID + '/rooms/' + props.kostRoom.id + '/details', {
+                            cancelToken: cancelSource.token,
+                            timeout: 10000
                         })
-                        .catch(error => {
-                            if (!unmounted) {
-                                if (typeof (error.response) !== 'undefined') {
-                                    if (!axios.isCancel(error)) {
-                                        setStatus2(error.response.status)
+                            .then(response => {
+                                if (!unmounted) {
+                                    setData(response.data);
+                                    setStatus2(response.status)
+                                }
+                            })
+                            .catch(error => {
+                                if (!unmounted) {
+                                    if (typeof (error.response) !== 'undefined') {
+                                        if (!axios.isCancel(error)) {
+                                            setStatus2(error.response.status)
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                    });
 
                     return () => {
                         unmounted = true;
@@ -1160,26 +1172,27 @@ export default function KostDetail({ route, navigation }) {
         var cancelSource = axios.CancelToken.source()
 
         useEffect(() => {
-
-            kostAPI.get('/' + kostID + '/owner', {
-                cancelToken: cancelSource.token,
-                timeout: 10000
-            })
-                .then(response => {
-                    if (!unmounted) {
-                        setData(response.data);
-                        setStatus(response.status)
-                    }
+            InteractionManager.runAfterInteractions(() => {
+                kostAPI.get('/' + kostID + '/owner', {
+                    cancelToken: cancelSource.token,
+                    timeout: 10000
                 })
-                .catch(error => {
-                    if (!unmounted) {
-                        if (typeof (error.response) !== 'undefined') {
-                            if (!axios.isCancel(error)) {
-                                setStatus(error.response.status)
+                    .then(response => {
+                        if (!unmounted) {
+                            setData(response.data);
+                            setStatus(response.status)
+                        }
+                    })
+                    .catch(error => {
+                        if (!unmounted) {
+                            if (typeof (error.response) !== 'undefined') {
+                                if (!axios.isCancel(error)) {
+                                    setStatus(error.response.status)
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            });
 
             return () => {
                 unmounted = true;

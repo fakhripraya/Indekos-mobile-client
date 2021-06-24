@@ -59,16 +59,13 @@ export default function UserProfile() {
     }
 
     if (status === null) {
+        // loading screen
         return (
-            <View style={styles.nameWrapper}>
-                <View style={{ width: '40%', height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
-                    <SkeletonLoading />
-                </View>
-                <View style={{ width: Normalize(24), height: Normalize(24), position: 'absolute', justifyContent: 'center', alignItems: 'flex-end', backgroundColor: '#ebebeb', overflow: 'hidden', left: AppStyle.windowSize.width - Normalize(24) - AppStyle.windowSize.width * 0.075, borderRadius: Normalize(25) }}>
-                    <SkeletonLoading />
-                </View>
+            <View style={styles.loadingScreen}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text style={{ fontSize: NormalizeFont(12) }}>Loading Kost...</Text>
             </View>
-        );
+        )
     }
     else if (status !== 200) {
         return (
@@ -121,6 +118,12 @@ export default function UserProfile() {
 }
 
 const styles = StyleSheet.create({
+    loadingScreen: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'white',
+        justifyContent: 'center',
+    },
     backgroundImg: {
         flex: 1,
         resizeMode: "cover",

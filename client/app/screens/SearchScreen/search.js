@@ -48,7 +48,7 @@ export default function Search({ navigation }) {
     let page = 1;
     let KostList = {};
 
-    let initialFilter = [
+    const initialFilter = [
         [
             {
                 id: 1,
