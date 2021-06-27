@@ -4,6 +4,9 @@ import { AppStyle } from '../../config/app.config';
 import { Normalize, NormalizeFont } from '../../functions/normalize';
 import { AntDesign, MaterialCommunityIcons, MaterialIcons, FontAwesome, Entypo, Ionicons, Feather } from '@expo/vector-icons';
 
+//TODO: ganti semua key yang pake index menjadi shortid.generate() memakai shortid module agar data dinamis tidak salah render
+//TODO: hapus semua function inline dan dibuat object saja
+
 export function MappedFacilities(props) {
     return (
         props.facilities.map((item, index) => {

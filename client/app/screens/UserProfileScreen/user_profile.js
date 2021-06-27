@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { GetZero } from '../../functions/string';
+import { trackPromise } from 'react-promise-tracker';
 import { useAxiosGet } from '../../promise/axios_get';
 import { AppStyle, AuthService } from '../../config/app.config';
 import { EvilIcons, Ionicons, Entypo } from '@expo/vector-icons';
@@ -13,7 +14,9 @@ const authAPI = axios.create({
     baseURL: "http://" + AuthService.host + AuthService.port + "/"
 })
 
-export default function UserProfile() {
+export default function UserProfile({ navigation }) {
+
+    const cancelToken = axios.CancelToken.source();
 
     let flatListMenu = [
         {
@@ -47,6 +50,9 @@ export default function UserProfile() {
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+        return () => {
+            cancelToken.cancel();
+        }
     })
 
     function _renderFlatMenu({ item, index }) {
@@ -72,6 +78,28 @@ export default function UserProfile() {
         )
     }
     else {
+
+        function handleLogout() {
+            trackPromise(
+                authAPI('/logout', {
+                    cancelToken: cancelToken.token,
+                    timeout: 10000
+                }).then(() => {
+                    // go to login/registration screen
+                    navigation.replace('RegistrationStack');
+                }).catch((error) => {
+                    if (typeof (error.response) !== 'undefined') {
+                        if (!axios.isCancel(error)) {
+                            if (error.response.status === 401) {
+                                // go to login/registration screen
+                                navigation.replace('RegistrationStack');
+                            }
+                        }
+                    }
+                })
+            )
+        }
+
         return (
             <UserProfileBackground>
                 <View style={{ marginTop: AppStyle.windowSize.height * 0.075, flexDirection: 'row', width: AppStyle.windowSize.width * 0.9, alignSelf: 'center' }}>
@@ -96,7 +124,7 @@ export default function UserProfile() {
                             <Text style={{ fontSize: NormalizeFont(14), fontWeight: 'bold', color: 'white' }}>Male</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={{ width: '100%', height: '100%', justifyContent: 'center', position: 'absolute' }}>
+                    <TouchableOpacity onPressOut={handleLogout} style={{ width: '100%', height: '100%', justifyContent: 'center', position: 'absolute' }}>
                         <EvilIcons style={{ alignSelf: 'flex-end' }} name="gear" size={Normalize(24)} color="white" />
                     </TouchableOpacity>
                 </View>
